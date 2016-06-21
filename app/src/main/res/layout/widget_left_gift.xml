@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="5dp"
+    android:background="@drawable/left_gift_anim_bg">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:layout_width="40.0dip"
+        android:layout_height="40.0dip"
+        android:src="@drawable/ease_default_avatar"
+        app:ease_shape_type="round"
+        android:id="@+id/avatar"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:text="张小娴"
+            android:textColor="#fff"
+            android:lines="1"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="送了一个校园之星"
+            android:textColor="#4d73ff"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/gift_image"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/gift_default"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="15dp"
+        />
+
+
+</LinearLayout>

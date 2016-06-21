@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/container_send"
+        />
+
+    <LinearLayout
+        android:id="@+id/container_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:padding="4dp"
+        android:gravity="center_vertical"
+        android:visibility="invisible"
+        >
+        <ImageView
+            android:id="@+id/close_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/live_close"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="9dp"
+            android:clickable="true"
+            />
+        <ImageView
+            android:id="@+id/danmu_image"
+            android:layout_width="45dp"
+            android:layout_height="28dp"
+            android:src="@drawable/danmu_bg"
+            android:clickable="true"
+            android:layout_marginRight="4dp"
+            />
+
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="说点什么吧..."
+            android:textColorHint="#fff"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:maxLines="3"
+            android:minHeight="40dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="3dp"
+            android:textSize="18sp"
+            />
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="54dp"
+            android:layout_height="32dp"
+            android:text="发送"
+            android:layout_weight="0"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="4dp"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            android:background="@drawable/ease_chat_send_btn_selector"
+            />
+    </LinearLayout>
+</RelativeLayout>

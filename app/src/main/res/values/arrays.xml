@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="bitrate_types">
+        <item>200</item>
+        <item>400</item>
+        <item>600</item>
+        <item>800</item>
+
+    </string-array>
+
+
+</resources>

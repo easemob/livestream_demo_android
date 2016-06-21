@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="5dp"
+    android:background="@drawable/barrage_show_anim_bg">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:layout_width="36.0dip"
+        android:layout_height="36.0dip"
+        android:src="@drawable/ease_default_avatar"
+        app:ease_shape_type="round"
+        android:id="@+id/avatar"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="11dp"
+        android:minWidth="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:text="张三"
+            android:textColor="#fff"
+            android:lines="1"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4d73ff"
+            android:textSize="13sp"
+            android:text="你好你好啊"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
