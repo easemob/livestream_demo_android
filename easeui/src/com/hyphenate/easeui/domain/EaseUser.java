@@ -14,15 +14,16 @@
 package com.hyphenate.easeui.domain;
 
 import com.hyphenate.chat.EMContact;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 public class EaseUser extends EMContact {
     
     /**
-     * 昵称首字母
+     * initial letter for nickname
      */
 	protected String initialLetter;
 	/**
-	 * 用户头像
+	 * avatar of the user
 	 */
 	protected String avatar;
 	
@@ -31,6 +32,9 @@ public class EaseUser extends EMContact {
 	}
 
 	public String getInitialLetter() {
+	    if(initialLetter == null){
+            EaseCommonUtils.setUserInitialLetter(this);
+        }
 		return initialLetter;
 	}
 

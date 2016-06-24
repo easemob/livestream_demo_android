@@ -3,6 +3,7 @@ package com.easemob.livedemo.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.ucloud.common.util.DeviceUtils;
 import com.ucloud.live.UEasyStreaming;
 import com.ucloud.live.UStreamingProfile;
 import com.ucloud.live.widget.UAspectFrameLayout;
@@ -52,6 +54,8 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     protected boolean isShutDownCountdown = false;
     private LiveSettings mSettings;
     private UStreamingProfile mStreamingProfile;
+    UEasyStreaming.UEncodingType encodingType;
+
 
     String roomId = "em_" + 10001;
 
@@ -69,8 +73,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
 
     //203138620012364216
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_start_live);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
@@ -100,10 +103,10 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
                 .setVideoEncodingFrameRate(mSettings.getVideoFrameRate())
                 .setStream(stream).build();
 
-        UEasyStreaming.UEncodingType encodingType = UEasyStreaming.UEncodingType.MEDIA_X264;
-//        if(DeviceUtils.hasJellyBeanMr2()){
-//            encodingType = UEasyStreaming.UEncodingType.MEDIA_CODEC;
-//        }
+        encodingType = UEasyStreaming.UEncodingType.MEDIA_X264;
+        if(DeviceUtils.hasJellyBeanMr2()){
+            encodingType = UEasyStreaming.UEncodingType.MEDIA_CODEC;
+        }
         mEasyStreaming = new UEasyStreaming(this, encodingType);
         mEasyStreaming.setStreamingStateListener(this);
         mEasyStreaming.setAspectWithStreamingProfile(mPreviewContainer, mStreamingProfile);
@@ -162,6 +165,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
         EMClient.getInstance().chatroomManager().joinChatRoom(roomChatId, new EMValueCallBack<EMChatRoom>() {
             @Override
             public void onSuccess(EMChatRoom emChatRoom) {
+                chatroom = emChatRoom;
                 addChatRoomChangeListenr();
                 onMessageListInit();
             }
@@ -233,6 +237,12 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
         }
     }
 
+
+    @Override
+    void onChatImageClck() {
+        if(encodingType == UEasyStreaming.UEncodingType.MEDIA_CODEC)
+          mEasyStreaming.toggleFilter();
+    }
 
     @Override
     protected void onPause() {

@@ -23,17 +23,30 @@
         app:navigationIcon="@drawable/ic_arrow_back"
         app:titleTextColor="#fff">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            >
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontal_recycle_view"
+            android:layout_toLeftOf="@+id/img_bt_switch_camera"
+            android:layout_centerVertical="true"
+            ></android.support.v7.widget.RecyclerView>
         <ImageButton
             android:id="@+id/img_bt_switch_camera"
             android:layout_width="@dimen/dp_80"
             android:layout_height="@dimen/dp_80"
             android:layout_centerVertical="true"
-            android:layout_gravity="right"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="@dimen/dp_10"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/live_selecter_room_switch_camera_button"
             android:visibility="visible" />
-
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
@@ -75,12 +88,6 @@
             android:layout_marginTop="10dp"
             android:text="开始直播" />
 
-            <com.hyphenate.easeui.widget.EaseChatInputMenu
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-
-                />
     </RelativeLayout>
 
     <TextView
@@ -121,8 +128,16 @@
         android:layout_height="190dp"/>
 
     <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+        android:id="@+id/left_gift_view1"
+        android:layout_marginBottom="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_above="@+id/left_gift_view2"
+        />
+    <com.easemob.livedemo.ui.widget.LiveLeftGiftView
         android:layout_centerVertical="true"
-        android:id="@+id/left_gift_view"
+        android:id="@+id/left_gift_view2"
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

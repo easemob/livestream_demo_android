@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseConversationAdapater;
 
@@ -61,12 +62,18 @@ public class EaseConversationList extends ListView {
         ta.recycle();
         
     }
-    
+
     public void init(List<EMConversation> conversationList){
-    	passedListRef = conversationList;
-        conversations.addAll(conversationList);
-        
-        adapter = new EaseConversationAdapater(context, 0, conversations);
+        this.init(conversationList, null);
+    }
+
+    public void init(List<EMConversation> conversationList, EaseConversationListHelper helper){
+        conversations = conversationList;
+        if(helper != null){
+            this.conversationListHelper = helper;
+        }
+        adapter = new EaseConversationAdapater(context, 0, conversationList);
+        adapter.setCvsListHelper(conversationListHelper);
         adapter.setPrimaryColor(primaryColor);
         adapter.setPrimarySize(primarySize);
         adapter.setSecondaryColor(secondaryColor);
@@ -82,9 +89,6 @@ public class EaseConversationList extends ListView {
             switch (message.what) {
             case MSG_REFRESH_ADAPTER_DATA:
                 if (adapter != null) {
-                	adapter.clear();
-                    conversations.clear();
-                    conversations.addAll(passedListRef);
                     adapter.notifyDataSetChanged();
                 }
                 break;
@@ -96,22 +100,18 @@ public class EaseConversationList extends ListView {
     
 
     /**
-     * 获取所有会话
+     * load conversations
      * 
      * @param context
      * @return
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         +    */
     private List<EMConversation> loadConversationsWithRecentChat() {
-        // 获取所有会话，包括陌生人
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
-        // 过滤掉messages size为0的conversation
-        /**
-         * 如果在排序过程中有新消息收到，lastMsgTime会发生变化
-         * 影响排序过程，Collection.sort会产生异常
-         * 保证Conversation在Sort过程中最后一条消息的时间不变 
-         * 避免并发问题
-         */
         List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
+        /**
+         * lastMsgTime will change if there is new message during sorting
+         * so use synchronized to make sure timestamp of last message won't change.
+         */
         synchronized (conversations) {
             for (EMConversation conversation : conversations.values()) {
                 if (conversation.getAllMessages().size() != 0) {
@@ -133,7 +133,7 @@ public class EaseConversationList extends ListView {
     }
 
     /**
-     * 根据最后一条消息的时间排序
+     * sorting according timestamp of last message
      * 
      * @param usernames
      */
@@ -167,7 +167,19 @@ public class EaseConversationList extends ListView {
     public void filter(CharSequence str) {
         adapter.getFilter().filter(str);
     }
-    
-    
-    
+
+
+    private EaseConversationListHelper conversationListHelper;
+
+    public interface EaseConversationListHelper{
+        /**
+         * set content of second line
+         * @param lastMessage
+         * @return
+         */
+        String onSetItemSecondaryText(EMMessage lastMessage);
+    }
+    public void setConversationListHelper(EaseConversationListHelper helper){
+        conversationListHelper = helper;
+    }
 }

@@ -6,13 +6,20 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="5dp"
-    android:background="@drawable/left_gift_anim_bg">
-
+    android:gravity="center_vertical"
+    >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/left_gift_anim_bg"
+        >
     <com.hyphenate.easeui.widget.EaseImageView
         android:layout_width="40.0dip"
         android:layout_height="40.0dip"
         android:src="@drawable/ease_default_avatar"
         app:ease_shape_type="round"
+        app:ease_border_width="1dp"
+        app:ease_border_color="#fff"
         android:id="@+id/avatar"
         />
 
@@ -50,6 +57,26 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="15dp"
         />
+    </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="x"
+        android:textColor="@color/btn_blue_normal"
+        android:layout_marginLeft="5dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="1"
+        android:textColor="@color/btn_blue_normal"
+        android:layout_marginLeft="5dp"
+        android:textStyle="bold"
+        />
 
 </LinearLayout>

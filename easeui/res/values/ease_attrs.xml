@@ -49,7 +49,8 @@
             <enum name="close" value="1"/>
         </attr>
     </declare-styleable>
-    <declare-styleable name="EaseImageView">
+    
+     <declare-styleable name="EaseImageView">
         <attr name="ease_border_color" format="color" />
         <attr name="ease_border_width" format="dimension" />
         <attr name="ease_press_alpha" format="integer" />
@@ -61,4 +62,5 @@
             <enum name="rectangle" value="2" />
         </attr>
     </declare-styleable>
+    
 </resources>

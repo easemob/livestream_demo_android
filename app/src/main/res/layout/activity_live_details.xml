@@ -18,6 +18,14 @@
         app:navigationIcon="@drawable/ic_arrow_back"
         android:layout_alignParentTop="true"
         app:titleTextColor="#fff">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontal_recycle_view"
+            android:layout_gravity="right"
+            ></android.support.v7.widget.RecyclerView>
+
     </android.support.v7.widget.Toolbar>
 
    <!-- <ImageButton
@@ -55,8 +63,16 @@
         </com.easemob.livedemo.ui.widget.PeriscopeLayout>
 
     <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+        android:id="@+id/left_gift_view1"
+        android:layout_marginBottom="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_above="@+id/left_gift_view2"
+        />
+    <com.easemob.livedemo.ui.widget.LiveLeftGiftView
         android:layout_centerVertical="true"
-        android:id="@+id/left_gift_view"
+        android:id="@+id/left_gift_view2"
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

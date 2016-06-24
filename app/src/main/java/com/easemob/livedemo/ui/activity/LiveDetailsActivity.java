@@ -27,8 +27,7 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_live_details);
         ButterKnife.bind(this);
 
@@ -58,6 +57,7 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
         EMClient.getInstance().chatroomManager().joinChatRoom(roomChatId, new EMValueCallBack<EMChatRoom>() {
             @Override
             public void onSuccess(EMChatRoom emChatRoom) {
+                chatroom = emChatRoom;
                 addChatRoomChangeListenr();
                 onMessageListInit();
             }
@@ -67,9 +67,7 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
 
             }
         });
-
     }
-
 
 
     @Override
