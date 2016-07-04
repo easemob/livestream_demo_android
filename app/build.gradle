@@ -37,6 +37,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.jakewharton:butterknife:8.0.1'
-    compile 'com.android.support:support-v4:23.4.0'
     compile 'com.github.florent37:viewanimator:1.0.4'
 }

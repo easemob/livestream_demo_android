@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.data.TestAvatarRepository;
 import com.easemob.livedemo.ui.widget.BarrageLayout;
 import com.easemob.livedemo.ui.widget.LiveLeftGiftView;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
@@ -406,9 +408,11 @@ public abstract class LiveBaseActivity extends BaseActivity{
     private static class AvatarAdapter extends RecyclerView.Adapter<AvatarViewHolder>{
         List<String> namelist;
         Context context;
+        TestAvatarRepository avatarRepository;
         public AvatarAdapter(Context context, List<String> namelist){
             this.namelist = namelist;
             this.context = context;
+            avatarRepository = new TestAvatarRepository();
         }
 
         @Override
@@ -418,6 +422,8 @@ public abstract class LiveBaseActivity extends BaseActivity{
 
         @Override
         public void onBindViewHolder(AvatarViewHolder holder, int position) {
+            //暂时使用测试数据
+            Glide.with(context).load(avatarRepository.getAvatar()).placeholder(R.drawable.ease_default_avatar).into(holder.Avatar);
         }
 
         @Override
@@ -435,4 +441,5 @@ public abstract class LiveBaseActivity extends BaseActivity{
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/common_bg"
     tools:context="com.easemob.livedemo.ui.activity.MessageListFragment">
 
     <android.support.v7.widget.Toolbar

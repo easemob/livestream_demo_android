@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:background="@color/common_bg"
     tools:context=".ui.activity.LiveSquareFragment">
     
     <android.support.v7.widget.Toolbar

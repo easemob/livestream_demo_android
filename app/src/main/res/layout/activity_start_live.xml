@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/message_view"
         android:id="@+id/barrage_layout"
-
+        android:layout_marginBottom="10dp"
         />
 
     <com.easemob.livedemo.ui.widget.PeriscopeLayout
@@ -129,7 +129,7 @@
 
     <com.easemob.livedemo.ui.widget.LiveLeftGiftView
         android:id="@+id/left_gift_view1"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"

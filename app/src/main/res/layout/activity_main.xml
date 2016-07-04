@@ -10,24 +10,22 @@
   <LinearLayout
       android:id="@+id/main_bottom"
       android:layout_width="match_parent"
-      android:layout_height="52dp"
+      android:layout_height="54dp"
       android:layout_alignParentBottom="true"
-      android:background="@color/bottom_bar_normal_bg"
       android:gravity="center_vertical"
       android:orientation="horizontal" >
 
     <RelativeLayout
-        android:id="@+id/btn_container_conversation"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
 
       <Button
-          android:id="@+id/btn_conversation"
+          android:id="@+id/btn_square"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_chat_bg"
+          android:drawableTop="@drawable/em_tab_publish_bg"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"
@@ -61,7 +59,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_chat_bg"
+          android:drawableTop="@drawable/em_tab_square_bg"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"
@@ -73,17 +71,16 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/btn_container_address_list"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
 
       <Button
-          android:id="@+id/btn_address_list"
+          android:id="@+id/btn_conversation_list"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_contact_list_bg"
+          android:drawableTop="@drawable/em_tab_conversation_list_bg"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"

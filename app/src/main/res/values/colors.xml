@@ -4,10 +4,13 @@
   <color name="colorPrimaryDark">#303F9F</color>
   <color name="colorAccent">#FF4081</color>
 
-  <color name="common_bottom_bar_normal_bg">#2d2f31</color>
-  <color name="common_bottom_bar_selected_bg">#161718</color>
+  <color name="common_bottom_bar_normal_bg">#323232</color>
+  <color name="common_bottom_bar_selected_bg">#fff</color>
+  <color name="common_botton_bar_text_noral">#5E5E5E</color>
   <color name="placeholder">#ddd</color>
   <color name="author_background">#66000000</color>
+
+  <color name="common_bg">#E6E6EB</color>
 
   <color name="color_progress">#2196F3</color>
 

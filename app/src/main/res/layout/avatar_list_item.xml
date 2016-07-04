@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.hyphenate.easeui.widget.EaseImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="32dp"
-    android:layout_height="32dp"
+    android:layout_width="33dp"
+    android:layout_height="33dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/avatar"
     android:src="@drawable/ease_default_avatar"
     android:scaleType="centerInside"
     android:layout_marginRight="4dp"
     app:ease_shape_type="round"
-    app:ease_border_width="0.5dp"
-    app:ease_border_color="#fff"
     >
 
 </com.hyphenate.easeui.widget.EaseImageView>

@@ -42,8 +42,8 @@ public class MainActivity extends BaseActivity {
    */
   private void initView() {
     mTabs = new Button[3];
-    mTabs[0] = (Button) findViewById(R.id.btn_conversation);
-    mTabs[1] = (Button) findViewById(R.id.btn_address_list);
+    mTabs[0] = (Button) findViewById(R.id.btn_square);
+    mTabs[1] = (Button) findViewById(R.id.btn_conversation_list);
     mTabs[2] = (Button) findViewById(R.id.btn_setting);
     // 把第一个tab设为选中状态
     mTabs[0].setSelected(true);
@@ -56,10 +56,10 @@ public class MainActivity extends BaseActivity {
    */
   public void onTabClicked(View view) {
     switch (view.getId()) {
-      case R.id.btn_conversation:
+      case R.id.btn_square:
         index = 0;
         break;
-      case R.id.btn_address_list:
+      case R.id.btn_conversation_list:
         index = 1;
         break;
       case R.id.btn_setting:
