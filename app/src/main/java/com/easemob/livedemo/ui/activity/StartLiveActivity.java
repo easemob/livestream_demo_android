@@ -278,7 +278,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
         if(mSettings.isOpenLogRecoder()) {
             Log2FileUtil.getInstance().stopLog();
         }
-        mEasyStreaming.onDestory();
+        mEasyStreaming.onDestroy();
 
         EMClient.getInstance().chatroomManager().leaveChatRoom(roomChatId);
 

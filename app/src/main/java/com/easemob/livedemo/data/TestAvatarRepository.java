@@ -25,6 +25,10 @@ public class TestAvatarRepository {
     }
 
     public TestAvatarRepository(){
+        fillIndexList();
+    }
+
+    private void fillIndexList(){
         for(int i = 0; i < SIZE; i++){
             indexList.add(i);
         }
@@ -36,7 +40,8 @@ public class TestAvatarRepository {
             int gotIndex = indexList.remove(index);
             return avatarlist.get(gotIndex);
         }else{
-            return avatarlist.get(new Random().nextInt(SIZE));
+            fillIndexList();
+            return getAvatar();
         }
 
     }

@@ -341,8 +341,9 @@ public abstract class LiveBaseActivity extends BaseActivity{
             public void run() {
                 try {
                     chatroom = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomChatId, true);
-                    int ii = chatroom.getAffiliationsCount();
-                    List<String> list = chatroom.getMemberList();
+//                    int ii = chatroom.getAffiliationsCount();
+//                    String owner = chatroom.getOwner();
+//                    List<String> list = chatroom.getMemberList();
                     memberList.addAll(chatroom.getMemberList());
 
                 } catch (HyphenateException e) {
@@ -425,6 +426,8 @@ public abstract class LiveBaseActivity extends BaseActivity{
             //暂时使用测试数据
             Glide.with(context).load(avatarRepository.getAvatar()).placeholder(R.drawable.ease_default_avatar).into(holder.Avatar);
         }
+
+
 
         @Override
         public int getItemCount() {
