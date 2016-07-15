@@ -58,7 +58,14 @@ public abstract class LiveBaseActivity extends BaseActivity{
     @BindView(R.id.horizontal_recycle_view)
     RecyclerView horizontalRecyclerView;
 
-    protected String roomChatId = "";
+  /**
+   * 环信聊天室id
+   */
+    protected String chatroomId = "";
+  /**
+   * ucloud直播id
+   */
+    protected String liveId = "";
     protected boolean isMessageListInited;
     protected EMChatRoomChangeListener chatRoomChangeListener;
 
@@ -179,7 +186,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
 
             @Override
             public void onChatRoomDestroyed(String roomId, String roomName) {
-                if (roomId.equals(roomChatId)) {
+                if (roomId.equals(chatroomId)) {
                     EMLog.e(TAG, " room : " + roomId + " with room name : " + roomName + " was destroyed");
                 }
             }
@@ -187,7 +194,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
             @Override
             public void onMemberJoined(String roomId, String participant) {
                 EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-                message.setReceipt(roomChatId);
+                message.setReceipt(chatroomId);
                 message.setFrom(participant);
                 EMTextMessageBody textMessageBody = new EMTextMessageBody("来了");
                 message.addBody(textMessageBody);
@@ -206,7 +213,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
 
             @Override
             public void onMemberKicked(String roomId, String roomName, String participant) {
-                if (roomId.equals(roomChatId)) {
+                if (roomId.equals(chatroomId)) {
                     String curUser = EMClient.getInstance().getCurrentUser();
                     if (curUser.equals(participant)) {
                         EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
@@ -240,7 +247,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
                     username = message.getFrom();
                 }
                 // 如果是当前会话的消息，刷新聊天页面
-                if (username.equals(roomChatId)) {
+                if (username.equals(chatroomId)) {
                     if(message.getBooleanAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, false)){
                         barrageLayout.addBarrage(((EMTextMessageBody)message.getBody()).getMessage(), message.getFrom());
                     }
@@ -287,11 +294,11 @@ public abstract class LiveBaseActivity extends BaseActivity{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                messageView.init(roomChatId);
+                messageView.init(chatroomId);
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override
                     public void onMessageSend(String content) {
-                        EMMessage message = EMMessage.createTxtSendMessage(content, roomChatId);
+                        EMMessage message = EMMessage.createTxtSendMessage(content, chatroomId);
                         if(messageView.isBarrageShow){
                             message.setAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, true);
                             barrageLayout.addBarrage(content, EMClient.getInstance().getCurrentUser());
@@ -340,10 +347,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
             @Override
             public void run() {
                 try {
-                    chatroom = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomChatId, true);
-//                    int ii = chatroom.getAffiliationsCount();
-//                    String owner = chatroom.getOwner();
-//                    List<String> list = chatroom.getMemberList();
+                    chatroom = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(chatroomId, true);
                     memberList.addAll(chatroom.getMemberList());
 
                 } catch (HyphenateException e) {
@@ -393,7 +397,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
     }
     @OnClick(R.id.present_image) void onPresentImageClick(){
         EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
-        message.setReceipt(roomChatId);
+        message.setReceipt(chatroomId);
         EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(DemoConstants.CMD_GIFT);
         message.addBody(cmdMessageBody);
         message.setChatType(EMMessage.ChatType.ChatRoom);

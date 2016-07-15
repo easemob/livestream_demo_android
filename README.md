@@ -159,7 +159,8 @@
 
 
 ###发送弹幕
-设置扩展字段实现，UI上根据相应字段做弹幕的显示
+通过设置消息扩展字段实现，UI上根据相应扩展字段做弹幕的显示，demo这里使用的是`is_barrage_msg`即`DemoConstants.EXTRA_IS_BARRAGE_MSG`，
+如果为true则为弹幕消息
 
 	EMMessage message = EMMessage.createTxtSendMessage(content, roomChatId);
     if(messageView.isBarrageShow){
@@ -188,7 +189,8 @@
 
 ###发送礼物
 
-通过发送透传消息实现礼物的发送，UI上根据礼物类型做相应的显示
+通过发送透传消息实现礼物的发送，UI上根据礼物类型做相应的显示，demo这里使用的是action为`cmd_gift`即`DemoConstants.CMD_GIFT`的透传消息，
+
 
 	EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
     message.setReceipt(roomChatId);
@@ -197,7 +199,7 @@
     message.setChatType(EMMessage.ChatType.ChatRoom);
     EMClient.getInstance().chatManager().sendMessage(message);
 
-这里只是做一个简单演示，可通过设置扩展消息设置礼物的具体类型及数量等
+这里只是做一个简单演示，礼物的类型、数量等都可以类似弹幕消息一样，通过设置扩展字段实现
 
 
 > 环信及ucloud文档地址：[http://docs.easemob.com/im/200androidclientintegration/50singlechat](http://docs.easemob.com/im/200androidclientintegration/50singlechat)，

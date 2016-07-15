@@ -68,8 +68,7 @@ public class LiveListFragment extends Fragment {
                     final int position = holder.getAdapterPosition();
                     if (position == RecyclerView.NO_POSITION) return;
                     context.startActivity(new Intent(context, LiveDetailsActivity.class)
-                        .putExtra("liveId", liveRoomList.get(position).getId())
-                        .putExtra("chatroomId", liveRoomList.get(position).getChatroomId()));
+                            .putExtra("liveroom", liveRoomList.get(position)));
                 }
             });
             return holder;

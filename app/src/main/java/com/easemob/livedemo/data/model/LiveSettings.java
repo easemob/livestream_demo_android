@@ -1,4 +1,4 @@
-package com.easemob.livedemo.data;
+package com.easemob.livedemo.data.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;

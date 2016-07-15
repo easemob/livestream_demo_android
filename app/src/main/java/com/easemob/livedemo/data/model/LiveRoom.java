@@ -1,9 +1,12 @@
 package com.easemob.livedemo.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by wei on 2016/5/27.
  */
-public class LiveRoom {
+public class LiveRoom implements Parcelable {
     private String id;
     private String name;
     private int audienceNum;
@@ -49,4 +52,40 @@ public class LiveRoom {
     public void setChatroomId(String chatroomId) {
         this.chatroomId = chatroomId;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeInt(this.audienceNum);
+        dest.writeInt(this.cover);
+        dest.writeString(this.chatroomId);
+    }
+
+    public LiveRoom() {
+    }
+
+    protected LiveRoom(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.audienceNum = in.readInt();
+        this.cover = in.readInt();
+        this.chatroomId = in.readString();
+    }
+
+    public static final Parcelable.Creator<LiveRoom> CREATOR = new Parcelable.Creator<LiveRoom>() {
+        public LiveRoom createFromParcel(Parcel source) {
+            return new LiveRoom(source);
+        }
+
+        public LiveRoom[] newArray(int size) {
+            return new LiveRoom[size];
+        }
+    };
 }

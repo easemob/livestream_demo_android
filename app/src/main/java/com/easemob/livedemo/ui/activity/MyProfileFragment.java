@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.LiveSettings;
+import com.easemob.livedemo.data.model.LiveSettings;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 

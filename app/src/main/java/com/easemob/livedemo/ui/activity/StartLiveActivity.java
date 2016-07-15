@@ -14,26 +14,24 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.LiveSettings;
+import com.easemob.livedemo.data.TestDataRepository;
+import com.easemob.livedemo.data.model.LiveSettings;
 import com.easemob.livedemo.utils.Log2FileUtil;
 import com.easemob.livedemo.utils.Utils;
-import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.ucloud.common.util.DeviceUtils;
 import com.ucloud.live.UEasyStreaming;
 import com.ucloud.live.UStreamingProfile;
 import com.ucloud.live.widget.UAspectFrameLayout;
-
 import java.util.Random;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class StartLiveActivity extends LiveBaseActivity implements UEasyStreaming.UStreamingStateListener{
     private static final String TAG = StartLiveActivity.class.getSimpleName();
@@ -57,8 +55,6 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     UEasyStreaming.UEncodingType encodingType;
 
 
-    String roomId = "em_" + 10001;
-
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -69,7 +65,6 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
             }
         }
     };
-    private EMChatRoomChangeListener chatRoomChangeListener;
 
     //203138620012364216
     @Override
@@ -80,7 +75,8 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        roomChatId = "203138578711052716";
+        liveId = TestDataRepository.getLiveRoomId(EMClient.getInstance().getCurrentUser());
+        chatroomId = TestDataRepository.getChatRoomId(EMClient.getInstance().getCurrentUser());
 
         initEnv();
     }
@@ -94,7 +90,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
 
 //        UStreamingProfile.Stream stream = new UStreamingProfile.Stream(rtmpPushStreamDomain, "ucloud/" + mSettings.getPusblishStreamId());
         //hardcode
-        UStreamingProfile.Stream stream = new UStreamingProfile.Stream(rtmpPushStreamDomain, "ucloud/" + roomId);
+        UStreamingProfile.Stream stream = new UStreamingProfile.Stream(rtmpPushStreamDomain, "ucloud/" + liveId);
 
         mStreamingProfile = new UStreamingProfile.Builder()
                 .setVideoCaptureWidth(mSettings.getVideoCaptureWidth())
@@ -162,19 +158,19 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
             Toast.makeText(this, "直播标题不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        EMClient.getInstance().chatroomManager().joinChatRoom(roomChatId, new EMValueCallBack<EMChatRoom>() {
-            @Override
-            public void onSuccess(EMChatRoom emChatRoom) {
-                chatroom = emChatRoom;
-                addChatRoomChangeListenr();
-                onMessageListInit();
+        //demo为了测试方便，只有指定的账号才能开启直播
+        if(liveId == null){
+            String[] anchorIds = TestDataRepository.anchorIds;
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < anchorIds.length; i++){
+                sb.append(anchorIds[i]);
+                if(i != (anchorIds.length-1))
+                    sb.append(",");
             }
+            new EaseAlertDialog(this,"demo中只有"+sb.toString()+"这几个账户才能开启直播").show();
+            return;
+        }
 
-            @Override
-            public void onError(int i, String s) {
-                showToast("加入聊天室失败");
-            }
-        });
         startContainer.setVisibility(View.INVISIBLE);
         Utils.hideKeyboard(titleEdit);
         new Thread(){
@@ -217,6 +213,19 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     countdownView.setVisibility(View.GONE);
+                    EMClient.getInstance().chatroomManager().joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
+                        @Override
+                        public void onSuccess(EMChatRoom emChatRoom) {
+                            chatroom = emChatRoom;
+                            addChatRoomChangeListenr();
+                            onMessageListInit();
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+                            showToast("加入聊天室失败");
+                        }
+                    });
 
                     if (count == COUNTDOWN_END_INDEX && mEasyStreaming != null && !isShutDownCountdown) {
                         showToast("直播开始！");
@@ -280,7 +289,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
         }
         mEasyStreaming.onDestroy();
 
-        EMClient.getInstance().chatroomManager().leaveChatRoom(roomChatId);
+        EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
 
         if(chatRoomChangeListener != null){
             EMClient.getInstance().chatroomManager().removeChatRoomChangeListener(chatRoomChangeListener);
