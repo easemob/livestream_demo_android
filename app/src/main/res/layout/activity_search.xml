@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.easemob.livedemo.ui.activity.SearchActivity">
+
+    <android.support.v7.widget.Toolbar
+        style="@style/ToolbarNormal"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        >
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="20dp"
+            android:background="#E6E6EB"
+            android:imeActionLabel="发送"
+            />
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recView"
+        />
+
+</LinearLayout>
