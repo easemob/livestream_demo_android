@@ -8,10 +8,10 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
-  <style name="ToolbarNormal" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+  <style name="ToolbarNormal">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">?attr/actionBarSize</item>
-    <item name="android:background">@color/colorPrimary</item>
+    <item name="android:background">?attr/colorPrimary</item>
   </style>
 
   <style name="TitleNormal">

@@ -5,150 +5,207 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.easemob.livedemo.ui.activity.StartLiveActivity">
+    tools:context="com.easemob.livedemo.ui.activity.StartLiveActivity"
+    >
 
-    <com.ucloud.live.widget.UAspectFrameLayout
-        android:id="@+id/container"
+  <com.ucloud.live.widget.UAspectFrameLayout
+      android:id="@+id/container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:background="@color/color_progress"
+      >
+
+  </com.ucloud.live.widget.UAspectFrameLayout>
+
+  <!--android:background="@android:color/transparent"-->
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:background="@drawable/live_title_gradient"
+      app:titleTextColor="#fff"
+      style="@style/ToolbarNormal"
+      >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        >
+      <com.hyphenate.easeui.widget.EaseImageView
+          android:layout_width="36dp"
+          android:layout_height="36dp"
+          app:ease_shape_type="round"
+          android:src="@drawable/ease_default_avatar"
+          />
+
+      <TextView
+          android:id="@+id/tv_username"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="16sp"
+          android:layout_marginLeft="10dp"
+          android:text="usernmae"
+          android:textColor="@color/common_white"
+          />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@color/color_progress">
+        android:gravity="right|center_vertical"
+        >
 
-    </com.ucloud.live.widget.UAspectFrameLayout>
+      <ImageButton
+          android:id="@+id/img_bt_switch_voice"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="5dp"
+          android:layout_marginRight="10dp"
+          android:background="@drawable/live_voice_switch"
+          />
+      <ImageButton
+          android:id="@+id/img_bt_switch_light"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="10dp"
+          android:layout_marginLeft="5dp"
+          android:background="@drawable/live_light_switch"
+          />
+      <ImageButton
+          android:id="@+id/img_bt_switch_camera"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="10dp"
+          android:layout_marginLeft="5dp"
+          android:background="@drawable/live_cam"
+          />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/ToolbarNormal"
-        android:background="@android:color/transparent"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:titleTextColor="#fff">
+      <ImageButton
+          android:id="@+id/img_bt_close"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="5dp"
+          android:layout_marginRight="15dp"
+          android:background="@drawable/live_close"
+          />
+    </LinearLayout>
+  </android.support.v7.widget.Toolbar>
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/horizontal_recycle_view"
+      android:layout_width="220dp"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/toolbar"
+      android:layout_centerVertical="true"
+      ></android.support.v7.widget.RecyclerView>
+  <RelativeLayout
+      android:id="@+id/start_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/toolbar"
+      >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            >
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/horizontal_recycle_view"
-            android:layout_toLeftOf="@+id/img_bt_switch_camera"
-            android:layout_centerVertical="true"
-            ></android.support.v7.widget.RecyclerView>
-        <ImageButton
-            android:id="@+id/img_bt_switch_camera"
-            android:layout_width="@dimen/dp_80"
-            android:layout_height="@dimen/dp_80"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/live_selecter_room_switch_camera_button"
-            android:visibility="visible" />
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
-
-    <RelativeLayout
-        android:id="@+id/start_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar">
-
-        <LinearLayout
-            android:id="@+id/edit_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:src="@drawable/ease_default_avatar" />
-
-            <EditText
-                android:id="@+id/et_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:gravity="top|left"
-                android:textColorHint="#fff"
-                android:hint="给你的直播写个标题吧"
-                android:textColor="#fff" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/edit_container"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="10dp"
-            android:text="开始直播" />
-
-    </RelativeLayout>
-
-    <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/countdown_txtv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3"
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        android:textColor="@android:color/white"
-        android:textSize="136.0sp"
-        android:textStyle="bold" />
-
-    <com.easemob.livedemo.ui.widget.RoomMessagesView
-        android:visibility="invisible"
-        android:id="@+id/message_view"
-        android:layout_width="match_parent"
-        android:paddingLeft="8dp"
-        android:layout_height="174dp"
-        android:layout_alignParentBottom="true"
-        />
-
-    <com.easemob.livedemo.ui.widget.BarrageLayout
+    <LinearLayout
+        android:id="@+id/edit_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/message_view"
-        android:id="@+id/barrage_layout"
-        android:layout_marginBottom="10dp"
-        />
+        android:padding="20dp"
+        >
 
-    <com.easemob.livedemo.ui.widget.PeriscopeLayout
-        android:id="@+id/periscope_layout"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="42dp"
-        android:layout_width="150dp"
-        android:layout_height="190dp"/>
+      <ImageView
+          android:layout_width="90dp"
+          android:layout_height="90dp"
+          android:src="@drawable/ease_default_avatar"
+          />
 
-    <com.easemob.livedemo.ui.widget.LiveLeftGiftView
-        android:id="@+id/left_gift_view1"
-        android:layout_marginBottom="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_above="@+id/left_gift_view2"
-        />
-    <com.easemob.livedemo.ui.widget.LiveLeftGiftView
-        android:layout_centerVertical="true"
-        android:id="@+id/left_gift_view2"
-        android:layout_marginBottom="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        />
+      <EditText
+          android:id="@+id/et_title"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="10dp"
+          android:gravity="top|left"
+          android:hint="给你的直播写个标题吧"
+          android:textColor="#fff"
+          android:textColorHint="#fff"
+          />
 
-    <include layout="@layout/layout_live_bottom_bar"
-        android:id="@+id/bottom_bar"
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"
+        android:layout_below="@id/edit_container"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:text="开始直播"
         />
+
+  </RelativeLayout>
+
+  <TextView
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/countdown_txtv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="3"
+      android:textColor="@android:color/white"
+      android:textSize="136.0sp"
+      android:textStyle="bold"
+      android:visibility="gone"
+      />
+
+  <com.easemob.livedemo.ui.widget.RoomMessagesView
+      android:id="@+id/message_view"
+      android:layout_width="match_parent"
+      android:layout_height="174dp"
+      android:layout_alignParentBottom="true"
+      android:paddingLeft="8dp"
+      android:visibility="invisible"
+      />
+
+  <com.easemob.livedemo.ui.widget.BarrageLayout
+      android:id="@+id/barrage_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@id/message_view"
+      android:layout_marginBottom="10dp"
+      />
+
+  <com.easemob.livedemo.ui.widget.PeriscopeLayout
+      android:id="@+id/periscope_layout"
+      android:layout_width="150dp"
+      android:layout_height="190dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentRight="true"
+      android:layout_marginBottom="42dp"
+      />
+
+  <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+      android:id="@+id/left_gift_view1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/left_gift_view2"
+      android:layout_marginBottom="4dp"
+      android:visibility="invisible"
+      />
+  <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+      android:id="@+id/left_gift_view2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_marginBottom="5dp"
+      android:visibility="invisible"
+      />
+
+  <include
+      layout="@layout/layout_live_bottom_bar"
+      android:id="@+id/bottom_bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:visibility="invisible"
+      />
 </RelativeLayout>

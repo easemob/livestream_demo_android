@@ -2,6 +2,7 @@ package com.easemob.livedemo.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import butterknife.Unbinder;
 
 /**
  * Created by wei on 2016/5/27.
+ * 直播广场
  */
 public class LiveSquareFragment extends Fragment{
     private Unbinder unbinder;
@@ -46,14 +48,18 @@ public class LiveSquareFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupViewPager();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Snackbar.make(toolbar,"sfd",Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.tab_indicator));
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private void setupViewPager(){
         Adapter adapter = new Adapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new LiveListFragment(), "热门");
-        adapter.addFragment(new LiveListFragment(), "最新");
-        adapter.addFragment(new LiveListFragment(), "明星");
         adapter.addFragment(new LiveListFragment(), "女神");
         adapter.addFragment(new LiveListFragment(), "男神");
         viewPager.setAdapter(adapter);

@@ -40,6 +40,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     @BindView(R.id.start_container) RelativeLayout startContainer;
     @BindView(R.id.et_title) EditText titleEdit;
     @BindView(R.id.countdown_txtv) TextView countdownView;
+    @BindView(R.id.tv_username) TextView usernameView;
 
     protected UEasyStreaming mEasyStreaming;
     protected String rtmpPushStreamDomain = "publish3.cdn.ucloud.com.cn";
@@ -71,15 +72,13 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_start_live);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         liveId = TestDataRepository.getLiveRoomId(EMClient.getInstance().getCurrentUser());
         chatroomId = TestDataRepository.getChatRoomId(EMClient.getInstance().getCurrentUser());
-
+        usernameView.setText(EMClient.getInstance().getCurrentUser());
         initEnv();
     }
+
 
     public void initEnv() {
         mSettings = new LiveSettings(this);
@@ -192,6 +191,13 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
         }.start();
     }
 
+    @OnClick(R.id.img_bt_close) void closeLive(){
+        onBackPressed();
+    }
+
+    @OnClick(R.id.img_bt_switch_light) void switchLight(){
+        mEasyStreaming.toggleFlashMode();
+    }
 
 
 

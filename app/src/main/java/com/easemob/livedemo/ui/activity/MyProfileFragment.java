@@ -1,36 +1,29 @@
 package com.easemob.livedemo.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.LiveSettings;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
 public class MyProfileFragment extends Fragment {
     Unbinder unbinder;
-    @BindView(R.id.spinner)
-    Spinner spinner;
-    @BindView(R.id.frame_rate)
-    TextView frameRateText;
+    //@BindView(R.id.spinner)
+    //Spinner spinner;
+    //@BindView(R.id.frame_rate)
+    //TextView frameRateText;
+    @BindView(R.id.tv_username) TextView usernameView;
 
     LiveSettings liveSettings;
 
@@ -45,25 +38,30 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        liveSettings = new LiveSettings(getContext());
-        final String[] bitrateArr = getResources().getStringArray(R.array.bitrate_types);
-        String curBitrate = String.valueOf(liveSettings.getVideoEncodingBitRate());
-        for(int i = 0; i < bitrateArr.length; i++){
-            if(curBitrate.equals(bitrateArr[i]))
-                spinner.setSelection(i);
-        }
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                liveSettings.setVideoEncodingBitRate(Integer.parseInt(bitrateArr[position]));
-            }
+        usernameView.setText(EMClient.getInstance().getCurrentUser());
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+        //liveSettings = new LiveSettings(getContext());
+        //final String[] bitrateArr = getResources().getStringArray(R.array.bitrate_types);
+        //String curBitrate = String.valueOf(liveSettings.getVideoEncodingBitRate());
+        //for(int i = 0; i < bitrateArr.length; i++){
+        //    if(curBitrate.equals(bitrateArr[i]))
+        //        spinner.setSelection(i);
+        //}
+        //
+        //spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //    @Override
+        //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //        liveSettings.setVideoEncodingBitRate(Integer.parseInt(bitrateArr[position]));
+        //    }
+        //
+        //    @Override
+        //    public void onNothingSelected(AdapterView<?> parent) {
+        //
+        //    }
+        //});
+
     }
 
     @OnClick(R.id.btn_logout) void onLogout(){
@@ -86,22 +84,22 @@ public class MyProfileFragment extends Fragment {
         });
     }
 
-    @OnClick(R.id.frame_rate_container) void onFramrateClick(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final EditText editText = new EditText(getContext());
-        editText.setText(frameRateText.getText());
-        editText.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
-        builder.setTitle("修改直播帧率").setView(editText)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        frameRateText.setText(editText.getText());
-                        liveSettings.setVideoFrameRate(Integer.parseInt(editText.getText().toString()));
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
-    }
+    //@OnClick(R.id.frame_rate_container) void onFramrateClick(){
+    //    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    //    final EditText editText = new EditText(getContext());
+    //    editText.setText(frameRateText.getText());
+    //    editText.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+    //    builder.setTitle("修改直播帧率").setView(editText)
+    //            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+    //                @Override
+    //                public void onClick(DialogInterface dialog, int which) {
+    //                    frameRateText.setText(editText.getText());
+    //                    liveSettings.setVideoFrameRate(Integer.parseInt(editText.getText().toString()));
+    //                }
+    //            })
+    //            .setNegativeButton("取消", null)
+    //            .show();
+    //}
 
     @Override
     public void onDestroyView() {
