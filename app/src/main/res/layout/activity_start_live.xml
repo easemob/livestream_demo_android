@@ -18,10 +18,10 @@
 
   </com.ucloud.live.widget.UAspectFrameLayout>
 
-  <!--android:background="@android:color/transparent"-->
+<!--  android:background="@drawable/live_title_gradient"-->
   <android.support.v7.widget.Toolbar
       android:id="@+id/toolbar"
-      android:background="@drawable/live_title_gradient"
+      android:background="@android:color/transparent"
       app:titleTextColor="#fff"
       style="@style/ToolbarNormal"
       >
@@ -91,58 +91,13 @@
           />
     </LinearLayout>
   </android.support.v7.widget.Toolbar>
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/horizontal_recycle_view"
-      android:layout_width="220dp"
+
+  <include layout="@layout/room_user_list_layout"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/toolbar"
-      android:layout_centerVertical="true"
-      ></android.support.v7.widget.RecyclerView>
-  <RelativeLayout
-      android:id="@+id/start_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@+id/toolbar"
-      >
+      />
 
-    <LinearLayout
-        android:id="@+id/edit_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        >
-
-      <ImageView
-          android:layout_width="90dp"
-          android:layout_height="90dp"
-          android:src="@drawable/ease_default_avatar"
-          />
-
-      <EditText
-          android:id="@+id/et_title"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_marginLeft="10dp"
-          android:gravity="top|left"
-          android:hint="给你的直播写个标题吧"
-          android:textColor="#fff"
-          android:textColorHint="#fff"
-          />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edit_container"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
-        android:text="开始直播"
-        />
-
-  </RelativeLayout>
 
   <TextView
       xmlns:android="http://schemas.android.com/apk/res/android"
@@ -162,7 +117,6 @@
       android:layout_width="match_parent"
       android:layout_height="174dp"
       android:layout_alignParentBottom="true"
-      android:paddingLeft="8dp"
       android:visibility="invisible"
       />
 
@@ -208,4 +162,29 @@
       android:layout_alignParentBottom="true"
       android:visibility="invisible"
       />
+
+  <RelativeLayout
+      android:id="@+id/start_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      >
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_normal_height"
+        android:background="@drawable/common_black_btn_bg"
+        android:text="开始直播"
+        android:textColor="#fff"
+        />
+
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="300dp"
+      android:id="@+id/message_container"
+      android:layout_alignParentBottom="true"
+      ></RelativeLayout>
 </RelativeLayout>

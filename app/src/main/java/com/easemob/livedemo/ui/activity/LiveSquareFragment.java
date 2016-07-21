@@ -1,8 +1,8 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.easemob.livedemo.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import com.easemob.livedemo.R;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wei on 2016/5/27.
@@ -50,7 +47,7 @@ public class LiveSquareFragment extends Fragment{
         setupViewPager();
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Snackbar.make(toolbar,"sfd",Snackbar.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), SearchActivity.class));
             }
         });
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.tab_indicator));

@@ -12,6 +12,7 @@ public class LiveRoom implements Parcelable {
     private int audienceNum;
     private int cover;
     private String chatroomId;
+    private String anchorId;
 
     public String getId() {
         return id;
@@ -53,19 +54,25 @@ public class LiveRoom implements Parcelable {
         this.chatroomId = chatroomId;
     }
 
+    public String getAnchorId() {
+        return anchorId;
+    }
 
-    @Override
-    public int describeContents() {
+    public void setAnchorId(String anchorId) {
+        this.anchorId = anchorId;
+    }
+
+    @Override public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    @Override public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeInt(this.audienceNum);
         dest.writeInt(this.cover);
         dest.writeString(this.chatroomId);
+        dest.writeString(this.anchorId);
     }
 
     public LiveRoom() {
@@ -77,9 +84,10 @@ public class LiveRoom implements Parcelable {
         this.audienceNum = in.readInt();
         this.cover = in.readInt();
         this.chatroomId = in.readString();
+        this.anchorId = in.readString();
     }
 
-    public static final Parcelable.Creator<LiveRoom> CREATOR = new Parcelable.Creator<LiveRoom>() {
+    public static final Creator<LiveRoom> CREATOR = new Creator<LiveRoom>() {
         public LiveRoom createFromParcel(Parcel source) {
             return new LiveRoom(source);
         }

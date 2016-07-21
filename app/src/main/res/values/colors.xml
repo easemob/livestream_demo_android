@@ -22,4 +22,8 @@
   <color name="common_btn_white_normal">@color/common_white</color>
   <color name="common_btn_white_pressed">#ccc</color>
 
+  <color name="common_btn_black_normal">#1A1A1A</color>
+  <color name="common_btn_black_pressed">#111010</color>
+  <color name="common_btn_blue_normal">#24AAFF</color>
+  <color name="common_btn_blue_pressed">#1887cd</color>
 </resources>

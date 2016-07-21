@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -57,6 +58,9 @@ public abstract class LiveBaseActivity extends BaseActivity{
     BarrageLayout barrageLayout;
     @BindView(R.id.horizontal_recycle_view)
     RecyclerView horizontalRecyclerView;
+    @BindView(R.id.audience_num) TextView audienceNumView;
+
+    protected String anchorId;
 
   /**
    * 环信聊天室id
@@ -356,6 +360,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        audienceNumView.setText(String.valueOf(memberList.size()));
                        horizontalRecyclerView.getAdapter().notifyDataSetChanged();
                     }
                 });
@@ -406,7 +411,11 @@ public abstract class LiveBaseActivity extends BaseActivity{
     }
 
     @OnClick(R.id.chat_image) void onChatImageClck(){
-
+        ConversationListFragment fragment = new ConversationListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("anchorId",anchorId);
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.message_container, fragment).commit();
     }
 
 

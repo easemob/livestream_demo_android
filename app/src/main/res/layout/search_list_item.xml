@@ -6,7 +6,7 @@
     android:layout_height="54dp">
     <com.hyphenate.easeui.widget.EaseImageView
         android:layout_width="36dp"
-        android:layout_height="3dp"
+        android:layout_height="36dp"
         android:layout_marginLeft="12dp"
         app:ease_shape_type="round"
         android:src="@drawable/ease_default_avatar"

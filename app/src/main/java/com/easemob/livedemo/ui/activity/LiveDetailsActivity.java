@@ -3,13 +3,16 @@ package com.easemob.livedemo.ui.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.hyphenate.EMValueCallBack;
@@ -18,11 +21,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.ucloud.common.logger.L;
 import com.ucloud.player.widget.v2.UVideoView;
-
 import java.util.Random;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.Callback {
 
@@ -30,17 +29,16 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
     private UVideoView mVideoView;
 
     @BindView(R.id.loading_layout) RelativeLayout loadingLayout;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.loading_text) TextView loadingText;
     @BindView(R.id.cover_image) ImageView coverView;
+    @BindView(R.id.tv_username) TextView usernameView;
 
     @Override
     protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_live_details);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
@@ -50,6 +48,9 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
         chatroomId = liveRoom.getChatroomId();
         int coverRes = liveRoom.getCover();
         coverView.setImageResource(coverRes);
+
+        anchorId = liveRoom.getAnchorId();
+        usernameView.setText(anchorId);
 
         mVideoView = (UVideoView) findViewById(R.id.videoview);
 
@@ -154,6 +155,8 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
                 Toast.makeText(this, "DESTORY", Toast.LENGTH_SHORT).show();
                 break;
             case UVideoView.Callback.EVENT_PLAY_ERROR:
+                loadingText.setText("主播尚未开播");
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(this, "主播尚未开播", Toast.LENGTH_LONG).show();
                 break;
             case UVideoView.Callback.EVENT_PLAY_RESUME:
@@ -164,7 +167,7 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
         }
     }
 
-    public void close(View view) {
+    @OnClick(R.id.img_bt_close) void close(){
         finish();
     }
 

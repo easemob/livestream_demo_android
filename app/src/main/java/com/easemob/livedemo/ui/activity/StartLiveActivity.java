@@ -5,12 +5,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +20,6 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.TestDataRepository;
 import com.easemob.livedemo.data.model.LiveSettings;
 import com.easemob.livedemo.utils.Log2FileUtil;
-import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -38,9 +36,9 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.container) UAspectFrameLayout mPreviewContainer;
     @BindView(R.id.start_container) RelativeLayout startContainer;
-    @BindView(R.id.et_title) EditText titleEdit;
     @BindView(R.id.countdown_txtv) TextView countdownView;
     @BindView(R.id.tv_username) TextView usernameView;
+    @BindView(R.id.btn_start) Button startBtn;
 
     protected UEasyStreaming mEasyStreaming;
     protected String rtmpPushStreamDomain = "publish3.cdn.ucloud.com.cn";
@@ -75,7 +73,8 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
 
         liveId = TestDataRepository.getLiveRoomId(EMClient.getInstance().getCurrentUser());
         chatroomId = TestDataRepository.getChatRoomId(EMClient.getInstance().getCurrentUser());
-        usernameView.setText(EMClient.getInstance().getCurrentUser());
+        anchorId = EMClient.getInstance().getCurrentUser();
+        usernameView.setText(anchorId);
         initEnv();
     }
 
@@ -153,10 +152,6 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     }
 
     @OnClick(R.id.btn_start) void startLive(){
-        if(TextUtils.isEmpty(titleEdit.getText())){
-            Toast.makeText(this, "直播标题不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
         //demo为了测试方便，只有指定的账号才能开启直播
         if(liveId == null){
             String[] anchorIds = TestDataRepository.anchorIds;
@@ -171,7 +166,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
         }
 
         startContainer.setVisibility(View.INVISIBLE);
-        Utils.hideKeyboard(titleEdit);
+        //Utils.hideKeyboard(titleEdit);
         new Thread(){
             public void run() {
                 int i = COUNTDOWN_START_INDEX;
@@ -253,11 +248,6 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     }
 
 
-    @Override
-    void onChatImageClck() {
-        if(encodingType == UEasyStreaming.UEncodingType.MEDIA_CODEC)
-          mEasyStreaming.toggleFilter();
-    }
 
     @Override
     protected void onPause() {
