@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.easemob.livedemo.R;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -44,8 +42,6 @@ public class LoginActivity extends BaseActivity {
     setContentView(R.layout.activity_login);
     // Set up the login form.
     mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-    Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(mToolbar);
 
     mPasswordView = (EditText) findViewById(R.id.password);
     mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -72,7 +68,6 @@ public class LoginActivity extends BaseActivity {
       @Override
       public void onClick(View v) {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-        finish();
       }
     });
 

@@ -1,9 +1,5 @@
 package com.hyphenate.easeui.adapter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -16,14 +12,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
-
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -33,6 +26,9 @@ import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.util.DateUtils;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * conversation list adapter
@@ -148,6 +144,13 @@ public class EaseConversationAdapater extends ArrayAdapter<EMConversation> {
                 holder.msgState.setVisibility(View.VISIBLE);
             } else {
                 holder.msgState.setVisibility(View.GONE);
+            }
+        }else{
+            if(cvsListHelper != null){
+                String content = cvsListHelper.onSetItemSecondaryText(null);
+                if(content != null){
+                    holder.message.setText(content);
+                }
             }
         }
         

@@ -376,6 +376,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                audienceNumView.setText(String.valueOf(memberList.size()));
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
             }
         });
@@ -386,6 +387,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                audienceNumView.setText(String.valueOf(memberList.size()));
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
             }
         });
@@ -411,10 +413,7 @@ public abstract class LiveBaseActivity extends BaseActivity{
     }
 
     @OnClick(R.id.chat_image) void onChatImageClck(){
-        ConversationListFragment fragment = new ConversationListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("anchorId",anchorId);
-        fragment.setArguments(bundle);
+        ConversationListFragment fragment = ConversationListFragment.newInstance(anchorId, false);
         getSupportFragmentManager().beginTransaction().replace(R.id.message_container, fragment).commit();
     }
 

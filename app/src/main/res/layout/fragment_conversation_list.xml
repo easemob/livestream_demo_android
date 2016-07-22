@@ -2,18 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    >
   <android.support.v7.widget.Toolbar
       style="@style/ToolbarNormal"
+      android:id="@id/toolbar"
       android:background="@color/common_white"
       >
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/TitleNormal"
+        android:id="@+id/title"
         android:textColor="@color/common_black"
         android:text="消息"
-        android:textSize="18sp"
         />
 
     <ImageView
@@ -27,9 +28,12 @@
 
   </android.support.v7.widget.Toolbar>
     <com.hyphenate.easeui.widget.EaseConversationList
+        android:layout_marginTop="1dp"
         android:id="@+id/conversation_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
         />
 
   </LinearLayout>

@@ -68,7 +68,7 @@ public class EaseImageView extends ImageView {
         pressAlpha = 0x42;
         pressColor = 0x42000000;
         radius = 16;
-        shapeType = 0;
+        shapeType = 1;
 
         // get attribute of EaseImageView
         if (attrs != null) {
@@ -90,7 +90,6 @@ public class EaseImageView extends ImageView {
         pressPaint.setAlpha(0);
         pressPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
 
-        setClickable(true);
         setDrawingCacheEnabled(true);
         setWillNotDraw(false);
     }
@@ -113,7 +112,9 @@ public class EaseImageView extends ImageView {
         Bitmap bitmap = getBitmapFromDrawable(drawable);
         drawDrawable(canvas, bitmap);
 
-        drawPress(canvas);
+        if(isClickable()){
+            drawPress(canvas);
+        }
         drawBorder(canvas);
     }
 
@@ -130,10 +131,10 @@ public class EaseImageView extends ImageView {
         PorterDuffXfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
         // set flags
         int saveFlags = Canvas.MATRIX_SAVE_FLAG
-                | Canvas.CLIP_SAVE_FLAG
-                | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
-                | Canvas.FULL_COLOR_LAYER_SAVE_FLAG
-                | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
+            | Canvas.CLIP_SAVE_FLAG
+            | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
+            | Canvas.FULL_COLOR_LAYER_SAVE_FLAG
+            | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
         canvas.saveLayer(0, 0, width, height, null, saveFlags);
 
         if (shapeType == 1) {
@@ -190,7 +191,7 @@ public class EaseImageView extends ImageView {
                 canvas.drawCircle(width / 2, height / 2, (width - borderWidth) / 2, paint);
             } else if (shapeType == 2) {
                 RectF rectf = new RectF(borderWidth / 2, borderWidth / 2, getWidth() - borderWidth / 2,
-                        getHeight() - borderWidth / 2);
+                    getHeight() - borderWidth / 2);
                 canvas.drawRoundRect(rectf, radius, radius, paint);
             }
         }

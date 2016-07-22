@@ -63,20 +63,6 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
         mVideoView.setVideoPath(rtmpPlayStreamUrl + liveId);
 //      mVideoView.setVideoPath(rtmpPlayStreamUrl);
 
-
-        EMClient.getInstance().chatroomManager().joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
-            @Override
-            public void onSuccess(EMChatRoom emChatRoom) {
-                chatroom = emChatRoom;
-                addChatRoomChangeListenr();
-                onMessageListInit();
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
     }
 
 
@@ -123,6 +109,19 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
         switch (what) {
             case UVideoView.Callback.EVENT_PLAY_START:
                 loadingLayout.setVisibility(View.INVISIBLE);
+                EMClient.getInstance().chatroomManager().joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
+                    @Override
+                    public void onSuccess(EMChatRoom emChatRoom) {
+                        chatroom = emChatRoom;
+                        addChatRoomChangeListenr();
+                        onMessageListInit();
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+
+                    }
+                });
 
                 new Thread(new Runnable() {
                     @Override

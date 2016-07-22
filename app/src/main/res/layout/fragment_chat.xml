@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f0eb"
+    tools:context="com.easemob.livedemo.ui.activity.ChatFragment"
+    >
+
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:background="@color/common_white"
+      app:navigationIcon="@drawable/ic_black_back"
+      style="@style/ToolbarNormal"
+      >
+    <TextView
+        android:id="@+id/username"
+        style="@style/TitleNormal"
+        android:text="消息"
+        android:textColor="@color/common_black"
+        />
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/popup_close"
+        />
+
+  </android.support.v7.widget.Toolbar>
+
+  <com.hyphenate.easeui.widget.EaseChatMessageList
+      android:id="@+id/message_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="1dp"
+      android:layout_above="@+id/container_send"
+      android:layout_below="@+id/toolbar"
+      />
+
+  <LinearLayout
+      android:id="@+id/container_send"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:layout_alignParentBottom="true"
+      android:background="#E9E9E9"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+
+      >
+
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="3dp"
+        android:layout_weight="1"
+        android:background="#fff"
+        android:hint="说点什么吧..."
+        android:maxLines="3"
+        android:minHeight="36dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="1dp"
+        android:textSize="18sp"
+        />
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="60dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="6dp"
+        android:layout_weight="0"
+        android:background="@drawable/common_blue_btn_bg"
+        android:text="发送"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        />
+  </LinearLayout>
+</RelativeLayout>

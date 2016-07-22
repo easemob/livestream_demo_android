@@ -25,7 +25,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_publish_bg"
+          android:drawableTop="@drawable/em_tab_square_bg"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"
@@ -59,7 +59,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_square_bg"
+          android:drawableTop="@drawable/em_tab_publish_bg"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"
@@ -126,4 +126,10 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@id/main_bottom" />
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/message_container"
+      android:layout_alignParentBottom="true"
+      ></RelativeLayout>
 </RelativeLayout>

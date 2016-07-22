@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.TestDataRepository;
 import com.easemob.livedemo.data.model.LiveSettings;
@@ -39,6 +41,7 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     @BindView(R.id.countdown_txtv) TextView countdownView;
     @BindView(R.id.tv_username) TextView usernameView;
     @BindView(R.id.btn_start) Button startBtn;
+    @BindView(R.id.finish_frame) ViewStub liveEndLayout;
 
     protected UEasyStreaming mEasyStreaming;
     protected String rtmpPushStreamDomain = "publish3.cdn.ucloud.com.cn";
@@ -187,15 +190,23 @@ public class StartLiveActivity extends LiveBaseActivity implements UEasyStreamin
     }
 
     @OnClick(R.id.img_bt_close) void closeLive(){
-        onBackPressed();
+        mEasyStreaming.stopRecording();
+        startContainer.setVisibility(View.VISIBLE);
+        liveEndLayout.inflate();
+    }
+
+    @Optional @OnClick(R.id.live_close_confirm) void closeConfirmed(){
+        finish();
     }
 
     @OnClick(R.id.img_bt_switch_light) void switchLight(){
         mEasyStreaming.toggleFlashMode();
     }
 
-
-
+    @Override void onChatImageClck() {
+        ConversationListFragment fragment = ConversationListFragment.newInstance(null,false);
+        getSupportFragmentManager().beginTransaction().replace(R.id.message_container, fragment).commit();
+    }
 
     protected void setListItemClickListener() {}
 

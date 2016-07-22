@@ -2,40 +2,41 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+  compileSdkVersion 23
+  buildToolsVersion "23.0.3"
 
-    defaultConfig {
-        applicationId "com.easemob.livedemo"
-        minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-        ndk {
-            abiFilter 'armeabi'
-        }
+  defaultConfig {
+    applicationId "com.easemob.livedemo"
+    minSdkVersion 15
+    targetSdkVersion 22
+    versionCode 1
+    versionName "1.0"
+    ndk {
+      abiFilter 'armeabi'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile (project(':easeui')){
-        exclude module: 'support-v4'
-    }
-    compile (project(':ulive-android-sdk')){
-        exclude module: 'support-v4'
-    }
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  testCompile 'junit:junit:4.12'
+  compile(project(':easeui')) {
+    exclude module: 'support-v4'
+  }
+  compile(project(':ulive-android-sdk')) {
+    exclude module: 'support-v4'
+  }
 
-    apt 'com.jakewharton:butterknife-compiler:8.0.1'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.jakewharton:butterknife:8.0.1'
-    compile 'com.github.florent37:viewanimator:1.0.4'
+  apt 'com.jakewharton:butterknife-compiler:8.0.1'
+  compile 'com.android.support:appcompat-v7:23.4.0'
+  compile 'com.android.support:design:23.4.0'
+  compile 'com.jakewharton:butterknife:8.0.1'
+  compile 'com.github.florent37:viewanimator:1.0.4'
+  compile 'com.android.support:support-v4:23.4.0'
 }

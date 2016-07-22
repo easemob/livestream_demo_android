@@ -21,4 +21,12 @@
     <item name="android:textColor">#fff</item>
     <item name="android:textSize">20sp</item>
   </style>
+
+  <style name="LiveEndTextStyle">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">#fff</item>
+    <item name="android:textSize">18sp</item>
+    <item name="android:layout_gravity">center</item>
+  </style>
 </resources>

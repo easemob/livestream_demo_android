@@ -187,4 +187,11 @@
       android:id="@+id/message_container"
       android:layout_alignParentBottom="true"
       ></RelativeLayout>
+
+  <ViewStub
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/finish_frame"
+      android:layout="@layout/live_finish_layout"
+      />
 </RelativeLayout>

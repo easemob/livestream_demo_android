@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity {
     ButterKnife.bind(this);
     initView();
 
-    fragments = new Fragment[] { new LiveSquareFragment(), new MessageListFragment(), new MyProfileFragment()};
+    fragments = new Fragment[] { new LiveSquareFragment(), ConversationListFragment.newInstance(null, true), new MyProfileFragment()};
     // 添加显示第一个fragment
     getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragments[0])
             .commit();

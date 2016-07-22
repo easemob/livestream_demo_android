@@ -17,7 +17,6 @@
       android:textColor="@color/common_white"
       android:layout_gravity="center_vertical"
       android:layout_weight="0"
-      android:text="1"
       android:layout_marginLeft="10dp"
       android:layout_marginRight="10dp"
       />
