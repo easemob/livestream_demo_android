@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    >
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="#FEFEFF"
+      android:layout_marginTop="30dp"
+      ></LinearLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:gravity="center_horizontal"
+      android:background="@android:color/transparent"
+      >
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ease_default_avatar"
+        />
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="username"
+        android:textColor="@color/common_black"
+        android:layout_marginTop="3dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        >
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="关注"
+          android:textSize="16sp"
+          android:textColor="#909090"
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="16sp"
+          android:text="23"
+          android:textColor="#909090"
+          android:layout_marginLeft="10dp"
+          />
+
+      <TextView
+          android:layout_marginLeft="35dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="粉丝"
+          android:textSize="16sp"
+          android:textColor="#909090"
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="16sp"
+          android:text="433"
+          android:textColor="#909090"
+          android:layout_marginLeft="10dp"
+          />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/common_black"
+        android:text="这个家伙很懒，什么都没有写！"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="#323232"
+        >
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:gravity="center"
+          >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/live_white_follow"
+            />
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/btn_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关注"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            />
+
+      </LinearLayout>
+
+      <View
+          android:layout_width="1dp"
+          android:layout_height="30dp"
+          android:background="#636363"
+          android:layout_gravity="center_vertical"
+        />
+
+      <Button
+          android:id="@+id/btn_message"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:background="@null"
+          android:text="私信"
+          android:textColor="#fff"
+          android:textSize="18sp"
+        />
+      <View
+          android:layout_width="1dp"
+          android:layout_height="30dp"
+          android:background="#636363"
+          android:layout_gravity="center_vertical"
+          />
+      <Button
+          android:id="@+id/btn_mentions"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:background="@null"
+          android:textColor="#fff"
+          android:textSize="18sp"
+          />
+
+    </LinearLayout>
+  </LinearLayout>
+
+</FrameLayout>

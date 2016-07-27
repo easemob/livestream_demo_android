@@ -65,6 +65,7 @@
             android:layout_marginLeft="4dp"
             android:textColor="#fff"
             android:textSize="16sp"
+            style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/common_blue_btn_bg"
             />
     </LinearLayout>

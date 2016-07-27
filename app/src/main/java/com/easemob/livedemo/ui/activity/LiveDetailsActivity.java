@@ -134,7 +134,7 @@ public class LiveDetailsActivity extends LiveBaseActivity implements UVideoView.
                                 }
                             });
                             try {
-                                Thread.sleep(new Random().nextInt(400) + 100);
+                                Thread.sleep(new Random().nextInt(400) + 200);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }

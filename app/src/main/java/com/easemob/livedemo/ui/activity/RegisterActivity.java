@@ -38,9 +38,6 @@ public class RegisterActivity extends BaseActivity {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override

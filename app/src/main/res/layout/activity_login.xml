@@ -26,6 +26,7 @@
         android:layout_gravity="right"
         android:background="@null"
         android:text="注册"
+        android:textSize="14sp"
         android:textColor="@color/common_white"
         />
   </android.support.v7.widget.Toolbar>

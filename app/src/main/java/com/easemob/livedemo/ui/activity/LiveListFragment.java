@@ -12,17 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.TestDataRepository;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.GridMarginDecoration;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,7 +40,7 @@ public class LiveListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
 //        GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new GridMarginDecoration(1));
+        recyclerView.addItemDecoration(new GridMarginDecoration(6));
         recyclerView.setAdapter(new PhotoAdapter(getActivity(), TestDataRepository.getLiveRoomList()));
 
     }

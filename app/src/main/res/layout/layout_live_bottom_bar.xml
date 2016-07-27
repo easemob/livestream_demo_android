@@ -14,7 +14,7 @@
       android:layout_gravity="right"
       android:layout_marginBottom="30dp"
       android:layout_marginRight="5dp"
-      android:src="@drawable/live_button_screenshot_normal"
+      android:src="@drawable/live_button_screenshot_selector"
       />
   <RelativeLayout
       android:layout_width="match_parent"
@@ -40,15 +40,31 @@
         android:src="@drawable/live_button_present_selector"
         />
 
-    <ImageView
-        android:id="@+id/chat_image"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
-        android:clickable="true"
-        android:src="@drawable/live_button_chat_selector"
-        />
+        >
+      <ImageView
+          android:id="@+id/chat_image"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:clickable="true"
+          android:src="@drawable/live_button_chat_selector"
+          />
+
+      <ImageView
+          android:id="@+id/new_messages_warn"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/warn_new_messages"
+          android:layout_gravity="right"
+          android:layout_marginTop="6dp"
+          android:layout_marginRight="5dp"
+          android:visibility="invisible"
+          />
+    </FrameLayout>
   </RelativeLayout>
 </LinearLayout>

@@ -18,6 +18,7 @@ import butterknife.Unbinder;
 import com.easemob.livedemo.R;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.controller.EaseUI;
@@ -82,6 +83,9 @@ public class ChatFragment extends Fragment implements EMMessageListener {
     }
     messageListView.init(toChatUsername, EaseConstant.CHATTYPE_SINGLE, null);
 
+    // 获取当前conversation对象
+    EMConversation conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername);
+    conversation.markAllMessagesAsRead();
 
 
   }
@@ -131,6 +135,19 @@ public class ChatFragment extends Fragment implements EMMessageListener {
   @Override public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
+    if(getActivity() != null && (getActivity() instanceof LiveBaseActivity)){
+      ((LiveBaseActivity) getActivity()).updateUnreadMsgView();
+    }
+  }
+
+  private ChatFragmentListener listener;
+
+  public void setChatFragmentListener(ChatFragmentListener listener){
+    this.listener = listener;
+  }
+
+  interface ChatFragmentListener{
+    void onDestory();
   }
 
   @Override public void onMessageReceived(List<EMMessage> messages) {

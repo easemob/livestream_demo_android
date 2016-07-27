@@ -26,8 +26,8 @@
                 android:gravity="center_vertical"
                 >
                 <com.hyphenate.easeui.widget.EaseImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     app:ease_shape_type="round"
                     android:src="@drawable/ease_default_avatar"
                     />
@@ -36,7 +36,7 @@
                     android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:layout_marginLeft="10dp"
                     android:text="usernmae"
                     android:textColor="@color/common_white"

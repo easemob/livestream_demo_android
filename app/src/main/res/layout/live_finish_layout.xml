@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/author_background"
+    android:background="#88000000"
     >
 
   <LinearLayout
@@ -17,21 +17,34 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/ease_default_avatar"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         />
     <TextView
+        android:id="@+id/tv_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="username"
         android:textColor="@color/common_white"
         android:textSize="18sp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
+        />
+
+
+    <TextView
+        android:layout_marginTop="26dp"
+        style="@style/LiveEndTitleStyle"
+        android:text="直播时间"
+        />
+    <TextView
+        style="@style/LiveEndTextStyle"
+        android:text="32:21"
+        android:layout_marginTop="5dp"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         >
       <LinearLayout
@@ -39,78 +52,38 @@
           android:layout_height="wrap_content"
           android:orientation="vertical"
           >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/live_end_audience"
-            />
         <TextView
-            style="@style/LiveEndTextStyle"
-            android:text="观众"
+            style="@style/LiveEndTitleStyle"
+            android:text="观看人数"
             android:layout_marginTop="2dp"
             />
         <TextView
             style="@style/LiveEndTextStyle"
+            android:layout_marginTop="5dp"
             android:text="2342"
             />
       </LinearLayout>
       <LinearLayout
+          android:id="@+id/like_container"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:orientation="vertical"
-          android:layout_marginLeft="35dp"
+          android:layout_marginLeft="100dp"
           >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/live_end_like"
-            />
         <TextView
-            style="@style/LiveEndTextStyle"
-            android:text="赞"
+            style="@style/LiveEndTitleStyle"
+            android:text="喜欢"
             android:layout_marginTop="2dp"
             />
         <TextView
             style="@style/LiveEndTextStyle"
+            android:layout_marginTop="5dp"
             android:text="8312"
-            />
-      </LinearLayout>
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:layout_marginLeft="35dp"
-          >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/live_comments"
-            />
-        <TextView
-            style="@style/LiveEndTextStyle"
-            android:text="评论"
-            android:layout_marginTop="2dp"
-            />
-        <TextView
-            style="@style/LiveEndTextStyle"
-            android:text="234122"
             />
       </LinearLayout>
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/live_end_time"
-        />
-
-    <TextView
-        style="@style/LiveEndTextStyle"
-        android:text="32:21"
-        android:layout_marginTop="5dp"
-        />
 
   </LinearLayout>
 

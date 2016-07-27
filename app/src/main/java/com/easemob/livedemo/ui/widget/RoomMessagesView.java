@@ -64,6 +64,10 @@ public class RoomMessagesView extends RelativeLayout{
 
     }
 
+    public EditText getInputView(){
+        return editview;
+    }
+
     public void init(String chatroomId){
         conversation = EMClient.getInstance().chatManager().getConversation(chatroomId, EMConversation.EMConversationType.ChatRoom, true);
         adapter = new ListAdapter(getContext(), conversation);
@@ -85,6 +89,7 @@ public class RoomMessagesView extends RelativeLayout{
         closeView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                setShowInputView(false);
                 if(messageViewListener != null){
                     messageViewListener.onHiderBottomBar();
                 }
@@ -114,9 +119,10 @@ public class RoomMessagesView extends RelativeLayout{
         }
     }
 
-    MessageViewListener messageViewListener;
+    private MessageViewListener messageViewListener;
     public interface MessageViewListener{
         void onMessageSend(String content);
+        void onItemClickListener(EMMessage message);
         void onHiderBottomBar();
     }
 
@@ -156,9 +162,16 @@ public class RoomMessagesView extends RelativeLayout{
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            EMMessage message = messages[position];
+            final EMMessage message = messages[position];
             holder.name.setText(message.getFrom());
             holder.content.setText(((EMTextMessageBody)message.getBody()).getMessage());
+            holder.itemView.setOnClickListener(new OnClickListener() {
+                @Override public void onClick(View v) {
+                    if(messageViewListener != null){
+                        messageViewListener.onItemClickListener(message);
+                    }
+                }
+            });
         }
 
         @Override
@@ -177,6 +190,7 @@ public class RoomMessagesView extends RelativeLayout{
         }
 
     }
+
 
     private class MyViewHolder extends RecyclerView.ViewHolder{
         TextView name;
