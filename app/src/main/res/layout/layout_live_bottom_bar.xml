@@ -15,6 +15,7 @@
       android:layout_marginBottom="30dp"
       android:layout_marginRight="5dp"
       android:src="@drawable/live_button_screenshot_selector"
+      android:visibility="gone"
       />
   <RelativeLayout
       android:layout_width="match_parent"

@@ -71,7 +71,10 @@ public class ChatFragment extends Fragment implements EMMessageListener {
     }
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        getActivity().getSupportFragmentManager().popBackStack();
+        if(!isNormalStyle)
+          getActivity().getSupportFragmentManager().popBackStack();
+        else
+          getActivity().finish();
       }
     });
 

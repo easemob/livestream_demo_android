@@ -1,5 +1,6 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -90,8 +91,12 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
     conversationListView.init(conversationList);
     conversationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ChatFragment chatFragment = ChatFragment.newInstance(conversationList.get(position).getUserName(), isNormalStyle);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.message_container, chatFragment).addToBackStack(null).commit();
+        if(!isNormalStyle) {
+          ChatFragment chatFragment = ChatFragment.newInstance(conversationList.get(position).getUserName(), isNormalStyle);
+          getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.message_container, chatFragment).addToBackStack(null).commit();
+        } else {
+          startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("username", conversationList.get(position).getUserName()));
+        }
       }
     });
   }
@@ -109,11 +114,26 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
   @Override
   public void onResume() {
     super.onResume();
-    conversationListView.refresh();
+    refreshList();
     EaseUI.getInstance().pushActivity(getActivity());
     // register the event listener when enter the foreground
     EMClient.getInstance().chatManager().addMessageListener(this);
   }
+
+
+  @Override public void onHiddenChanged(boolean hidden) {
+    super.onHiddenChanged(hidden);
+    if(!hidden)
+      refreshList();
+  }
+
+
+  private void refreshList(){
+    conversationList.clear();
+    conversationList.addAll(loadConversationList());
+    conversationListView.refresh();
+  }
+
 
   @Override
   public void onStop() {
