@@ -34,19 +34,6 @@
           android:textSize="12sp"
           android:text="广场" />
 
-      <TextView
-          android:id="@+id/unread_msg_number"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:layout_marginRight="10dp"
-          android:layout_marginTop="1dp"
-          android:background="@drawable/em_unread_count_bg"
-          android:gravity="center"
-          android:text="7"
-          android:textColor="@android:color/white"
-          android:textSize="12sp"
-          android:visibility="invisible" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -60,6 +47,7 @@
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
           android:drawableTop="@drawable/em_tab_publish_bg"
+          style="?android:attr/borderlessButtonStyle"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"
@@ -81,6 +69,7 @@
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
           android:drawableTop="@drawable/em_tab_conversation_list_bg"
+          style="?android:attr/borderlessButtonStyle"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"
@@ -90,12 +79,17 @@
           android:textSize="12sp" />
 
       <TextView
-          android:id="@+id/unread_address_number"
+          android:id="@+id/unread_msg_number"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_alignParentRight="true"
           android:layout_marginRight="10dp"
-          android:background="@drawable/em_unread_dot"
+          android:layout_marginTop="1dp"
+          android:background="@drawable/em_unread_count_bg"
+          android:gravity="center"
+          android:text="7"
+          android:textColor="@android:color/white"
+          android:textSize="12sp"
           android:visibility="invisible" />
     </RelativeLayout>
 
@@ -111,6 +105,7 @@
           android:layout_height="match_parent"
           android:background="@drawable/em_main_bottom_item_bg"
           android:drawableTop="@drawable/em_tab_setting_bg"
+          style="?android:attr/borderlessButtonStyle"
           android:onClick="onTabClicked"
           android:paddingBottom="2dip"
           android:paddingTop="7dip"
@@ -126,10 +121,4 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_above="@id/main_bottom" />
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:id="@+id/message_container"
-      android:layout_alignParentBottom="true"
-      ></RelativeLayout>
 </RelativeLayout>

@@ -128,7 +128,7 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
   }
 
 
-  private void refreshList(){
+  public void refreshList(){
     conversationList.clear();
     conversationList.addAll(loadConversationList());
     conversationListView.refresh();

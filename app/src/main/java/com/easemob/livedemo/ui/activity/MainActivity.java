@@ -12,6 +12,11 @@ import com.easemob.livedemo.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
@@ -21,8 +26,6 @@ public class MainActivity extends BaseActivity {
   private Fragment[] fragments;
 
   @BindView(R.id.unread_msg_number) TextView unreadLabel;
-  @BindView(R.id.unread_address_number) TextView unreadAddressLable;
-  @BindView(R.id.btn_publish) Button publishBtn;
   private Button[] mTabs;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,81 @@ public class MainActivity extends BaseActivity {
     // 添加显示第一个fragment
     getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragments[0])
             .commit();
+
+
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    updateUnreadLabel();
+    EMClient.getInstance().chatManager().addMessageListener(messageListener);
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+  }
+
+  EMMessageListener messageListener = new EMMessageListener() {
+    @Override public void onMessageReceived(List<EMMessage> list) {
+      refreshUIWithMessage();
+    }
+    @Override public void onCmdMessageReceived(List<EMMessage> list) {
+    }
+
+    @Override public void onMessageReadAckReceived(List<EMMessage> list) {
+    }
+
+    @Override public void onMessageDeliveryAckReceived(List<EMMessage> list) {
+    }
+
+    @Override public void onMessageChanged(EMMessage emMessage, Object o) {
+      refreshUIWithMessage();
+    }
+  };
+
+  private void refreshUIWithMessage() {
+    runOnUiThread(new Runnable() {
+      public void run() {
+        // refresh unread count
+        updateUnreadLabel();
+        if (currentTabIndex == 1) {
+          // refresh conversation list
+          if (fragments[1] != null) {
+            ((ConversationListFragment)fragments[1]).refreshList();
+          }
+        }
+      }
+    });
+  }
+
+  /**
+   * update unread message count
+   */
+  public void updateUnreadLabel() {
+    int count = getUnreadMsgCountTotal();
+    if (count > 0) {
+      unreadLabel.setText(String.valueOf(count));
+      unreadLabel.setVisibility(View.VISIBLE);
+    } else {
+      unreadLabel.setVisibility(View.INVISIBLE);
+    }
+  }
+
+  /**
+   * get unread message count
+   *
+   * @return
+   */
+  public int getUnreadMsgCountTotal() {
+    int unreadMsgCountTotal = 0;
+    int chatroomUnreadMsgCount = 0;
+    unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
+    for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
+      if(conversation.getType() == EMConversation.EMConversationType.ChatRoom)
+        chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
+    }
+    return unreadMsgCountTotal-chatroomUnreadMsgCount;
   }
 
   /**
