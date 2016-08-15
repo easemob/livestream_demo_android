@@ -154,7 +154,7 @@
     mVideoView.registerCallback(this);
     mVideoView.setVideoPath(rtmpPlayStreamUrl + liveId);
 
-加入聊天室及接发消息通发起直播
+加入聊天室及接发消息同发起直播
 
 
 
