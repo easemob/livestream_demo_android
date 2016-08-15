@@ -202,5 +202,6 @@
 这里只是做一个简单演示，礼物的类型、数量等都可以类似弹幕消息一样，通过设置扩展字段实现
 
 
-> 环信及ucloud文档地址：[http://docs.easemob.com/im/200androidclientintegration/50singlechat](http://docs.easemob.com/im/200androidclientintegration/50singlechat)，
+> 环信及ucloud文档地址：
+> [http://docs.easemob.com/im/200androidclientintegration/50singlechat](http://docs.easemob.com/im/200androidclientintegration/50singlechat)，
 > [https://docs.ucloud.cn/upd-docs/ulive/index.html](https://docs.ucloud.cn/upd-docs/ulive/index.html)
