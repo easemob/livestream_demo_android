@@ -9,7 +9,7 @@ android:
     - build-tools-23.0.3
     - android-23
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-18
+    - sys-img-armeabi-v7a-android-22
 
 jdk:
   - oraclejdk7
@@ -19,13 +19,14 @@ before_install:
 
 before_script:
   # Create and start an emulator for instrumentation tests.
-  - echo no | android create avd --force -n test -t android-18 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82
 
   
 script:
+
  # - ./gradlew build connectedCheck
   - ./gradlew connectedAndroidTest
  
