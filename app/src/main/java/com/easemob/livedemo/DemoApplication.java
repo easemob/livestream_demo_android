@@ -3,6 +3,7 @@ package com.easemob.livedemo;
 import android.app.Application;
 
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.mylibrary.GradleMvnTest;
 import com.ucloud.live.UEasyStreaming;
 
 /**
@@ -17,6 +18,8 @@ public class DemoApplication extends Application{
     instance = this;
     EaseUI.getInstance().init(this, null);
     UEasyStreaming.initStreaming("publish3-key");
+
+    GradleMvnTest.test1();
   }
 
   public static DemoApplication getInstance(){
