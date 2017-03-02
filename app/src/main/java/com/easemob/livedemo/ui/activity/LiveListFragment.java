@@ -40,7 +40,7 @@ public class LiveListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
 //        GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new GridMarginDecoration(6));
+        recyclerView.addItemDecoration(new GridMarginDecoration(3));
         recyclerView.setAdapter(new PhotoAdapter(getActivity(), TestDataRepository.getLiveRoomList()));
 
     }
@@ -64,7 +64,7 @@ public class LiveListFragment extends Fragment {
                 public void onClick(View v) {
                     final int position = holder.getAdapterPosition();
                     if (position == RecyclerView.NO_POSITION) return;
-                    context.startActivity(new Intent(context, LiveDetailsActivity.class)
+                    context.startActivity(new Intent(context, LiveAudienceActivity.class)
                             .putExtra("liveroom", liveRoomList.get(position)));
                 }
             });

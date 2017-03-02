@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
                     android:text="注册"
-                    android:background="@drawable/common_black_btn_bg"
+                    android:background="@drawable/common_blue_btn_bg"
                     android:textStyle="bold"
                     android:textColor="@color/common_white"
                     android:textSize="18sp"

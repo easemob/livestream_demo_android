@@ -5,4 +5,6 @@
 
     <dimen name="button_normal_height">54dp</dimen>
     <dimen name="item_normal_height">54dp</dimen>
+
+    <dimen name="item_small_avatar_size">32dp</dimen>
 </resources>

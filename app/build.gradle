@@ -44,13 +44,8 @@ dependencies {
   compile 'com.jakewharton:butterknife:8.0.1'
   compile 'com.android.support:design:24.2.1'
   compile 'com.github.florent37:viewanimator:1.0.4'
-  compile 'com.github.bumptech.glide:glide:3.7.0'
-  compile 'com.google.android.gms:play-services-gcm:9.4.0'
-  compile 'com.google.android.gms:play-services-places:9.4.0'
-  compile 'com.google.android.gms:play-services-maps:9.4.0'
   compile 'com.squareup.retrofit2:retrofit:2.1.0'
   compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-  compile 'com.hyphenate:hyphenate-sdk-lite:3.2.3'
 
   compile 'org.greenrobot:eventbus:3.0.0'
 }

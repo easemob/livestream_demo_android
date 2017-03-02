@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="4dp"
     >
 
-  <ImageView
-      android:id="@+id/screenshot_image"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_above="@+id/chat_image"
-      android:layout_gravity="right"
-      android:layout_marginBottom="30dp"
-      android:layout_marginRight="5dp"
-      android:src="@drawable/live_button_screenshot_selector"
-      android:visibility="gone"
-      />
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      >
     <ImageView
         android:id="@+id/comment_image"
         android:layout_width="wrap_content"
@@ -28,44 +12,27 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:clickable="true"
-        android:src="@drawable/live_button_comment_selector"
+        android:src="@drawable/live_comment"
         />
 
     <ImageView
-        android:id="@+id/present_image"
+        android:id="@+id/user_manager_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:clickable="true"
-        android:src="@drawable/live_button_present_selector"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/comment_image"
+        android:src="@drawable/live_user_manager"
         />
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/switch_camera_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
-        >
-      <ImageView
-          android:id="@+id/chat_image"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:clickable="true"
-          android:src="@drawable/live_button_chat_selector"
-          />
+        android:src="@drawable/live_switch_camera"
+        />
 
-      <ImageView
-          android:id="@+id/new_messages_warn"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/warn_new_messages"
-          android:layout_gravity="right"
-          android:layout_marginTop="6dp"
-          android:layout_marginRight="5dp"
-          android:visibility="invisible"
-          />
-    </FrameLayout>
-  </RelativeLayout>
-</LinearLayout>
+
+</RelativeLayout>

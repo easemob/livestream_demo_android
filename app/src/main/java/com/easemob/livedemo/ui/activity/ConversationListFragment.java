@@ -92,10 +92,10 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
     conversationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(!isNormalStyle) {
-          ChatFragment chatFragment = ChatFragment.newInstance(conversationList.get(position).getUserName(), isNormalStyle);
+          ChatFragment chatFragment = ChatFragment.newInstance(conversationList.get(position).conversationId(), isNormalStyle);
           getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.message_container, chatFragment).addToBackStack(null).commit();
         } else {
-          startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("username", conversationList.get(position).getUserName()));
+          startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("username", conversationList.get(position).conversationId()));
         }
       }
     });
@@ -209,9 +209,9 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
       @Override
       public int compare(final Pair<Long, EMConversation> con1, final Pair<Long, EMConversation> con2) {
         if(anchorId != null){
-          if(con1.second.getUserName().equals(anchorId)){
+          if(con1.second.conversationId().equals(anchorId)){
             return -1;
-          }else if(con1.second.getUserName().equals(anchorId)){
+          }else if(con1.second.conversationId().equals(anchorId)){
             return 1;
           }else {
             return con1.first.compareTo(con2.first);
@@ -233,13 +233,14 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
 
   }
 
-  @Override public void onMessageReadAckReceived(List<EMMessage> list) {
+  @Override public void onMessageRead(List<EMMessage> messages) {
 
   }
 
-  @Override public void onMessageDeliveryAckReceived(List<EMMessage> list) {
+  @Override public void onMessageDelivered(List<EMMessage> messages) {
 
   }
+
 
   @Override public void onMessageChanged(EMMessage emMessage, Object o) {
 

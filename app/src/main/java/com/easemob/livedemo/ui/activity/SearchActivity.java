@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,8 +28,8 @@ public class SearchActivity extends AppCompatActivity {
     EditText editText;
     @BindView(R.id.recView)
     RecyclerView recyclerView;
-    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.empty_view) TextView emptyView;
+    @BindView(R.id.btn_cancel) TextView cancelView;
     SearchAdapter adapter;
     List<String> searchList;
 
@@ -48,23 +47,23 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
                     if(!TextUtils.isEmpty(v.getText())){
-                        searchUser(v.getText().toString());
+                        searchLiveRoom(v.getText().toString());
                     }else{
-                        Toast.makeText(SearchActivity.this,"请输入搜索关键字", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchActivity.this,"请输入房间号", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;
             }
         });
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        cancelView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 finish();
             }
         });
     }
 
-    private void searchUser(String searchText){
+    private void searchLiveRoom(String searchText){
         //没有实际服务器数据，这里只搜索主播
         searchList.clear();
         String[] anchorIds = TestDataRepository.anchorIds;

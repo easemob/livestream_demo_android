@@ -32,7 +32,7 @@ public class ApiManager {
             e.printStackTrace();
         }
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://121.41.37.18:8090/"+appkey+"/liverooms/")
+                .baseUrl("http://120.26.4.73:81/"+appkey+"/liverooms/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

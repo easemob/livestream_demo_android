@@ -1,7 +1,6 @@
 package com.easemob.livedemo.ui.activity;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -32,7 +31,6 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.exceptions.HyphenateException;
@@ -57,7 +55,12 @@ public abstract class LiveBaseActivity extends BaseActivity {
   @BindView(R.id.barrage_layout) BarrageLayout barrageLayout;
   @BindView(R.id.horizontal_recycle_view) RecyclerView horizontalRecyclerView;
   @BindView(R.id.audience_num) TextView audienceNumView;
-  @BindView(R.id.new_messages_warn) ImageView newMsgNotifyImage;
+  //@BindView(R.id.new_messages_warn) ImageView newMsgNotifyImage;
+
+  @BindView(R.id.user_manager_image) ImageView userManagerView;
+  @BindView(R.id.switch_camera_image) ImageView switchCameraView;
+  @BindView(R.id.txt_live_id) TextView liveIdView;
+  @BindView(R.id.tv_username) TextView usernameView;
 
   protected String anchorId;
 
@@ -82,103 +85,89 @@ public abstract class LiveBaseActivity extends BaseActivity {
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     onActivityCreate(savedInstanceState);
+    usernameView.setText(anchorId);
+    liveIdView.setText(liveId);
+
   }
 
   protected Handler handler = new Handler();
 
   protected abstract void onActivityCreate(@Nullable Bundle savedInstanceState);
 
-  protected synchronized void showLeftGiftVeiw(String name) {
+  protected synchronized void showLeftGiftView(String name) {
     if (!isGift2Showing) {
-      showGift2Derect(name);
+      showGift2Direct(name);
     } else if (!isGiftShowing) {
-      showGift1Derect(name);
+      showGift1Direct(name);
     } else {
       toShowList.add(name);
     }
   }
 
-  private void showGift1Derect(final String name) {
+  private void showGift1Direct(final String name) {
     isGiftShowing = true;
-    runOnUiThread(new Runnable() {
-      @Override public void run() {
-        leftGiftView.setVisibility(View.VISIBLE);
-        leftGiftView.setName(name);
-        leftGiftView.setTranslationY(0);
-        ViewAnimator.animate(leftGiftView)
-            .alpha(0, 1)
-            .translationX(-leftGiftView.getWidth(), 0)
-            .duration(600)
-            .thenAnimate(leftGiftView)
-            .alpha(1, 0)
-            .translationY(-1.5f * leftGiftView.getHeight())
-            .duration(800)
-            .onStop(new AnimationListener.Stop() {
-              @Override public void onStop() {
-                String pollName = null;
-                try {
-                  pollName = toShowList.remove(0);
-                } catch (Exception e) {
+    animateGiftView(name, leftGiftView, new AnimationListener.Stop() {
+      @Override public void onStop() {
+        String pollName = null;
+        try {
+          pollName = toShowList.remove(0);
+        } catch (Exception e) {
 
-                }
-                if (pollName != null) {
-                  showGift1Derect(pollName);
-                } else {
-                  isGiftShowing = false;
-                }
-              }
-            })
-            .startDelay(2000)
-            .start();
-        ViewAnimator.animate(leftGiftView.getGiftImageView())
-            .translationX(-leftGiftView.getGiftImageView().getX(), 0)
-            .duration(1100)
-            .start();
+        }
+        if (pollName != null) {
+          showGift1Direct(pollName);
+        } else {
+          isGiftShowing = false;
+        }
       }
     });
   }
 
-  private void showGift2Derect(final String name) {
+  private void showGift2Direct(final String name) {
     isGift2Showing = true;
+    animateGiftView(name, leftGiftView2, new AnimationListener.Stop() {
+      @Override public void onStop() {
+        String pollName = null;
+        try {
+          pollName = toShowList.remove(0);
+        } catch (Exception e) {
+
+        }
+        if (pollName != null) {
+          showGift2Direct(pollName);
+        } else {
+          isGift2Showing = false;
+        }
+      }
+    });
+  }
+
+  private void animateGiftView(final String name, final LiveLeftGiftView giftView, final AnimationListener.Stop animationStop) {
     runOnUiThread(new Runnable() {
       @Override public void run() {
-        leftGiftView2.setVisibility(View.VISIBLE);
-        leftGiftView2.setName(name);
-        leftGiftView2.setTranslationY(0);
-        ViewAnimator.animate(leftGiftView2)
+        giftView.setVisibility(View.VISIBLE);
+        giftView.setName(name);
+        giftView.setTranslationY(0);
+        ViewAnimator.animate(giftView)
             .alpha(0, 1)
-            .translationX(-leftGiftView2.getWidth(), 0)
+            .translationX(-giftView.getWidth(), 0)
             .duration(600)
-            .thenAnimate(leftGiftView2)
+            .thenAnimate(giftView)
             .alpha(1, 0)
-            .translationY(-1.5f * leftGiftView2.getHeight())
+            .translationY(-1.5f * giftView.getHeight())
             .duration(800)
-            .onStop(new AnimationListener.Stop() {
-              @Override public void onStop() {
-                String pollName = null;
-                try {
-                  pollName = toShowList.remove(0);
-                } catch (Exception e) {
-
-                }
-                if (pollName != null) {
-                  showGift2Derect(pollName);
-                } else {
-                  isGift2Showing = false;
-                }
-              }
-            })
+            .onStop(animationStop)
             .startDelay(2000)
             .start();
-        ViewAnimator.animate(leftGiftView2.getGiftImageView())
-            .translationX(-leftGiftView2.getGiftImageView().getX(), 0)
+        ViewAnimator.animate(giftView.getGiftImageView())
+            .translationX(-giftView.getGiftImageView().getX(), 0)
             .duration(1100)
             .start();
       }
     });
   }
 
-  protected void addChatRoomChangeListenr() {
+  protected void addChatRoomChangeListener() {
     chatRoomChangeListener = new EMChatRoomChangeListener() {
 
       @Override public void onChatRoomDestroyed(String roomId, String roomName) {
@@ -189,7 +178,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
       @Override public void onMemberJoined(String roomId, String participant) {
         EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-        message.setReceipt(chatroomId);
+        message.setTo(chatroomId);
         message.setFrom(participant);
         EMTextMessageBody textMessageBody = new EMTextMessageBody("来了");
         message.addBody(textMessageBody);
@@ -205,7 +194,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
         onRoomMemberExited(participant);
       }
 
-      @Override public void onMemberKicked(String roomId, String roomName, String participant) {
+      @Override
+      public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
         if (roomId.equals(chatroomId)) {
           String curUser = EMClient.getInstance().getCurrentUser();
           if (curUser.equals(participant)) {
@@ -218,6 +208,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
           }
         }
       }
+
     };
 
     EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);
@@ -245,13 +236,13 @@ public abstract class LiveBaseActivity extends BaseActivity {
           }
           messageView.refreshSelectLast();
         } else {
-          if(message.getChatType() == EMMessage.ChatType.Chat && message.getTo().equals(EMClient.getInstance().getCurrentUser())){
-            runOnUiThread(new Runnable() {
-              @Override public void run() {
-                newMsgNotifyImage.setVisibility(View.VISIBLE);
-              }
-            });
-          }
+          //if(message.getChatType() == EMMessage.ChatType.Chat && message.getTo().equals(EMClient.getInstance().getCurrentUser())){
+          //  runOnUiThread(new Runnable() {
+          //    @Override public void run() {
+          //      newMsgNotifyImage.setVisibility(View.VISIBLE);
+          //    }
+          //  });
+          //}
           //// 如果消息不是和当前聊天ID的消息
           //EaseUI.getInstance().getNotifier().onNewMsg(message);
         }
@@ -261,21 +252,18 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @Override public void onCmdMessageReceived(List<EMMessage> messages) {
       EMMessage message = messages.get(messages.size() - 1);
       if (DemoConstants.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
-        showLeftGiftVeiw(message.getFrom());
+        showLeftGiftView(message.getFrom());
       }
     }
 
-    @Override public void onMessageReadAckReceived(List<EMMessage> messages) {
-      if (isMessageListInited) {
-        //                messageList.refresh();
-      }
+    @Override public void onMessageRead(List<EMMessage> messages) {
+
     }
 
-    @Override public void onMessageDeliveryAckReceived(List<EMMessage> message) {
-      if (isMessageListInited) {
-        //                messageList.refresh();
-      }
+    @Override public void onMessageDelivered(List<EMMessage> messages) {
+
     }
+
 
     @Override public void onMessageChanged(EMMessage message, Object change) {
       if (isMessageListInited) {
@@ -335,19 +323,19 @@ public abstract class LiveBaseActivity extends BaseActivity {
   }
 
   protected void updateUnreadMsgView(){
-    if(isMessageListInited) {
-      for (EMConversation conversation : EMClient.getInstance()
-          .chatManager()
-          .getAllConversations()
-          .values()) {
-        if (conversation.getType() == EMConversation.EMConversationType.Chat
-            && conversation.getUnreadMsgCount() > 0) {
-          newMsgNotifyImage.setVisibility(View.VISIBLE);
-          return;
-        }
-      }
-      newMsgNotifyImage.setVisibility(View.INVISIBLE);
-    }
+    //if(isMessageListInited) {
+    //  for (EMConversation conversation : EMClient.getInstance()
+    //      .chatManager()
+    //      .getAllConversations()
+    //      .values()) {
+    //    if (conversation.getType() == EMConversation.EMConversationType.Chat
+    //        && conversation.getUnreadMsgCount() > 0) {
+    //      newMsgNotifyImage.setVisibility(View.VISIBLE);
+    //      return;
+    //    }
+    //  }
+    //  newMsgNotifyImage.setVisibility(View.INVISIBLE);
+    //}
   }
 
 
@@ -429,41 +417,23 @@ public abstract class LiveBaseActivity extends BaseActivity {
     showInputView();
   }
 
-  @OnClick(R.id.present_image) void onPresentImageClick() {
-    EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
-    message.setReceipt(chatroomId);
-    EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(DemoConstants.CMD_GIFT);
-    message.addBody(cmdMessageBody);
-    message.setChatType(EMMessage.ChatType.ChatRoom);
-    EMClient.getInstance().chatManager().sendMessage(message);
-    showLeftGiftVeiw(EMClient.getInstance().getCurrentUser());
-  }
+  //@OnClick(R.id.present_image) void onPresentImageClick() {
+  //  EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
+  //  message.setTo(chatroomId);
+  //  EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(DemoConstants.CMD_GIFT);
+  //  message.addBody(cmdMessageBody);
+  //  message.setChatType(EMMessage.ChatType.ChatRoom);
+  //  EMClient.getInstance().chatManager().sendMessage(message);
+  //  showLeftGiftView(EMClient.getInstance().getCurrentUser());
+  //}
 
-  @OnClick(R.id.chat_image) void onChatImageClick() {
-    ConversationListFragment fragment = ConversationListFragment.newInstance(anchorId, false);
-    getSupportFragmentManager().beginTransaction()
-        .replace(R.id.message_container, fragment)
-        .commit();
-  }
-
-  @OnClick(R.id.screenshot_image) void onScreenshotImageClick(){
-    Bitmap bitmap = screenshot();
-    if (bitmap != null) {
-      ScreenshotDialog dialog = new ScreenshotDialog(this, bitmap);
-      dialog.show();
-    }
-
-  }
-
-  private Bitmap screenshot()
-  {
-    // 获取屏幕
-    View dView = getWindow().getDecorView();
-    dView.setDrawingCacheEnabled(true);
-    dView.buildDrawingCache();
-    Bitmap bmp = dView.getDrawingCache();
-    return bmp;
-  }
+  //@OnClick(R.id.chat_image) void onChatImageClick() {
+  //  ConversationListFragment fragment = ConversationListFragment.newInstance(anchorId, false);
+  //  getSupportFragmentManager().beginTransaction()
+  //      .replace(R.id.message_container, fragment)
+  //      .commit();
+  //
+  //}
 
   @Override protected void onResume() {
     super.onResume();

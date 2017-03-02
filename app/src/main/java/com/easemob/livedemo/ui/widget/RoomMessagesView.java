@@ -165,6 +165,9 @@ public class RoomMessagesView extends RelativeLayout{
             final EMMessage message = messages[position];
             holder.name.setText(message.getFrom());
             holder.content.setText(((EMTextMessageBody)message.getBody()).getMessage());
+            if(EMClient.getInstance().getCurrentUser().equals(message.getFrom())){
+                holder.content.setTextColor(getResources().getColor(R.color.color_room_my_msg));
+            }
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override public void onClick(View v) {
                     if(messageViewListener != null){

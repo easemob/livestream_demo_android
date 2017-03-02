@@ -162,15 +162,14 @@ public class ChatFragment extends Fragment implements EMMessageListener {
 
   }
 
-  @Override
-  public void onMessageReadAckReceived(List<EMMessage> messages) {
-      messageListView.refresh();
-  }
-
-  @Override
-  public void onMessageDeliveryAckReceived(List<EMMessage> messages) {
+  @Override public void onMessageRead(List<EMMessage> messages) {
     messageListView.refresh();
   }
+
+  @Override public void onMessageDelivered(List<EMMessage> messages) {
+    messageListView.refresh();
+  }
+
 
   @Override
   public void onMessageChanged(EMMessage emMessage, Object change) {

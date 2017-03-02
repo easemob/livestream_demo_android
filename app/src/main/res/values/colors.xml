@@ -2,7 +2,8 @@
 <resources>
   <color name="colorPrimary">#323232</color>
   <color name="colorPrimaryDark">#323232</color>
-  <color name="colorAccent">#FF4081</color>
+  <color name="colorAccent">#ff00ba6e</color>
+  <color name="colorTextPrimary">#ffffff</color>
 
   <color name="common_bottom_bar_normal_bg">#323232</color>
   <color name="common_bottom_bar_selected_bg">#fff</color>
@@ -25,6 +26,8 @@
   <color name="common_btn_black_normal">#1A1A1A</color>
   <color name="black_323232">#323232</color>
   <color name="common_btn_black_pressed">#111010</color>
-  <color name="common_btn_blue_normal">#24AAFF</color>
+  <color name="common_btn_blue_normal">#19A3FF</color>
   <color name="common_btn_blue_pressed">#1887cd</color>
+
+  <color name="color_room_my_msg">#1F83C7</color>
 </resources>

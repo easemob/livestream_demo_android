@@ -209,4 +209,8 @@ public class EaseCommonUtils {
         }
     }
 
+    public static boolean isSilentMessage(EMMessage message){
+        return message.getBooleanAttribute("em_ignore_notification", false);
+    }
+
 }

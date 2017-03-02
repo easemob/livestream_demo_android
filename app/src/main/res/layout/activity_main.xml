@@ -4,121 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.activity.MainActivity"
     >
+  <android.support.v7.widget.Toolbar
+      style="@style/ToolbarNormal"
+      android:id="@+id/toolbar_actionbar"
+      app:navigationIcon="@drawable/home_search"
+      >
+    <TextView
+        style="@style/TitleNormal"
+        android:text="环信直播"
+        />
 
-  <LinearLayout
-      android:id="@+id/main_bottom"
-      android:layout_width="match_parent"
-      android:layout_height="54dp"
-      android:layout_alignParentBottom="true"
-      android:gravity="center_vertical"
-      android:orientation="horizontal" >
 
-    <RelativeLayout
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/txt_logout"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:layout_gravity="right"
+        android:gravity="center"
+        android:background="@null"
+        android:text="登出"
+        android:textSize="18sp"
+        android:textColor="@color/common_white"
+        />
+  </android.support.v7.widget.Toolbar>
 
-      <Button
-          android:id="@+id/btn_square"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_square_bg"
-          android:onClick="onTabClicked"
-          android:paddingBottom="2dip"
-          android:paddingTop="7dip"
-          android:scaleType="matrix"
-          android:textColor="@color/em_main_botton_text_color"
-          android:textSize="12sp"
-          android:text="广场" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-      <Button
-          android:id="@+id/btn_publish"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_publish_bg"
-          style="?android:attr/borderlessButtonStyle"
-          android:onClick="onTabClicked"
-          android:paddingBottom="2dip"
-          android:paddingTop="7dip"
-          android:scaleType="matrix"
-          android:text="发起直播"
-          android:textColor="@color/em_main_botton_text_color"
-          android:textSize="12sp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-      <Button
-          android:id="@+id/btn_conversation_list"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_conversation_list_bg"
-          style="?android:attr/borderlessButtonStyle"
-          android:onClick="onTabClicked"
-          android:paddingBottom="2dip"
-          android:paddingTop="7dip"
-          android:scaleType="matrix"
-          android:text="消息"
-          android:textColor="@color/em_main_botton_text_color"
-          android:textSize="12sp" />
-
-      <TextView
-          android:id="@+id/unread_msg_number"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:layout_marginRight="10dp"
-          android:layout_marginTop="1dp"
-          android:background="@drawable/em_unread_count_bg"
-          android:gravity="center"
-          android:text="7"
-          android:textColor="@android:color/white"
-          android:textSize="12sp"
-          android:visibility="invisible" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/btn_container_setting"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-      <Button
-          android:id="@+id/btn_setting"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@drawable/em_main_bottom_item_bg"
-          android:drawableTop="@drawable/em_tab_setting_bg"
-          style="?android:attr/borderlessButtonStyle"
-          android:onClick="onTabClicked"
-          android:paddingBottom="2dip"
-          android:paddingTop="7dip"
-          android:scaleType="matrix"
-          android:text="我"
-          android:textColor="@color/em_main_botton_text_color"
-          android:textSize="12sp" />
-    </RelativeLayout>
-  </LinearLayout>
-
-  <RelativeLayout
-      android:id="@+id/fragment_container"
+  <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_above="@id/main_bottom" />
+      android:id="@+id/fragment_container"
+      android:layout_below="@id/toolbar_actionbar"
+      >
+  </FrameLayout>
+  <android.support.design.widget.FloatingActionButton
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      app:fabSize="normal"
+      app:backgroundTint="#19A3FF"
+      android:id="@+id/floatingActionButton"
+      android:src="@drawable/live_start_img"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentRight="true"
+      android:layout_margin="20dp"
+      />
+  <!--app:srcCompat="@color/holo_blue_bright"-->
+
 </RelativeLayout>

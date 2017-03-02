@@ -517,11 +517,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
 
             @Override
-            public void onMemberKicked(String roomId, String roomName, String participant) {
+            public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
                 if (roomId.equals(toChatUsername)) {
                     String curUser = EMClient.getInstance().getCurrentUser();
                     if (curUser.equals(participant)) {
-                    	EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
+                        EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
                         getActivity().finish();
                     }else{
                         showChatroomToast("member : " + participant + " was kicked from the room : " + roomId + " room name : " + roomName);
@@ -570,15 +570,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     }
 
+
     @Override
-    public void onMessageReadAckReceived(List<EMMessage> messages) {
+    public void onMessageRead(List<EMMessage> messages) {
         if(isMessageListInited) {
             messageList.refresh();
         }
     }
 
     @Override
-    public void onMessageDeliveryAckReceived(List<EMMessage> messages) {
+    public void onMessageDelivered(List<EMMessage> messages) {
         if(isMessageListInited) {
             messageList.refresh();
         }
@@ -959,9 +960,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             });
         }
 
-        @Override
-        public void onGroupDestroy(final String groupId, String groupName) {
-        	// prompt group is dismissed and finish this activity
+        @Override public void onGroupDestroyed(final String groupId, String groupName) {
+            // prompt group is dismissed and finish this activity
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
                     if (toChatUsername.equals(groupId)) {

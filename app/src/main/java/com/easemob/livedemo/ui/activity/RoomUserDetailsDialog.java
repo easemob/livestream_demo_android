@@ -12,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.easemob.livedemo.R;
 
@@ -27,7 +25,6 @@ public class RoomUserDetailsDialog extends DialogFragment {
 
   Unbinder unbinder;
   @BindView(R.id.tv_username) TextView usernameView;
-  @BindView(R.id.btn_mentions) Button mentionBtn;
 
   private String username;
 
@@ -54,23 +51,23 @@ public class RoomUserDetailsDialog extends DialogFragment {
     if (username != null) {
       usernameView.setText(username);
     }
-    mentionBtn.setText("@TA");
+    //mentionBtn.setText("@TA");
   }
 
-  @OnClick(R.id.btn_message) void onMessageBtnClick(){
-    ChatFragment fragment = ChatFragment.newInstance(username, false);
-    dismiss();
-    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.message_container, fragment).commit();
-  }
+  //@OnClick(R.id.btn_message) void onMessageBtnClick(){
+  //  ChatFragment fragment = ChatFragment.newInstance(username, false);
+  //  dismiss();
+  //  getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.message_container, fragment).commit();
+  //}
 
-  @OnClick(R.id.btn_mentions) void onMentionBtnClick(){
-    if(dialogListener != null){
-      dialogListener.onMentionClick(username);
-    }
-  }
-
-  @OnClick(R.id.btn_follow) void onFollowBtnClick(){
-  }
+  //@OnClick(R.id.btn_mentions) void onMentionBtnClick(){
+  //  if(dialogListener != null){
+  //    dialogListener.onMentionClick(username);
+  //  }
+  //}
+  //
+  //@OnClick(R.id.btn_follow) void onFollowBtnClick(){
+  //}
 
   private UserDetailsDialogListener dialogListener;
 
