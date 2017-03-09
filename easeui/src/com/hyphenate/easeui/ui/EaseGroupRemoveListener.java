@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.ui;
 
 import com.hyphenate.EMGroupChangeListener;
+import java.util.List;
 
 /**
  * group change listener
@@ -47,5 +48,25 @@ public abstract class EaseGroupRemoveListener implements EMGroupChangeListener{
     @Override
     public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
         // TODO Auto-generated method stub
+    }
+
+    @Override public void onMuteListAdded(String groupId, List<String> mutes, long muteExpire) {
+
+    }
+
+    @Override public void onMuteListRemoved(String groupId, List<String> mutes) {
+
+    }
+
+    @Override public void onAdminAdded(String groupId, String administrator) {
+
+    }
+
+    @Override public void onAdminRemoved(String groupId, String administrator) {
+
+    }
+
+    @Override public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
+
     }
 }

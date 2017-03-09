@@ -49,8 +49,9 @@
         android:textSize="20sp"
         />
     <TextView
+        android:id="@+id/txt_watched_count"
         style="@style/LiveEndTextStyle"
-        android:text="222人看过"
+        android:text="0人看过"
         android:layout_marginTop="8dp"
         />
 

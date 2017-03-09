@@ -2,50 +2,51 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-  compileSdkVersion 24
-  buildToolsVersion "24.0.2"
-  useLibrary 'org.apache.http.legacy'
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+    useLibrary 'org.apache.http.legacy'
 
-  defaultConfig {
-    applicationId "com.easemob.livedemo"
-    minSdkVersion 15
-    targetSdkVersion 22
-    versionCode 2
-    versionName "2.0"
-//    ndk {
-//      abiFilter 'armeabi'
-//    }
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    defaultConfig {
+        applicationId "com.easemob.livedemo"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 2
+        versionName "2.0"
+            ndk {
+              abiFilter 'armeabi-v7a'
+            }
     }
-  }
-  lintOptions {
-    checkReleaseBuilds false
-    // Or, if you prefer, you can continue to check for errors in release builds,
-    // but continue the build even when errors are found:
-    abortOnError false
-  }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-  testCompile 'junit:junit:4.12'
-  compile(project(':easeui')) {
-    exclude module: 'support-v4'
-  }
-  compile(project(':ulive-android-sdk')) {
-    exclude module: 'support-v4'
-  }
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile(project(':easeui')) {
+        exclude module: 'support-v4'
+    }
+    compile(project(':ulive-android-sdk')) {
+        exclude module: 'support-v4'
+    }
 
-  apt 'com.jakewharton:butterknife-compiler:8.0.1'
-  compile 'com.jakewharton:butterknife:8.0.1'
-  compile 'com.android.support:design:24.2.1'
-  compile 'com.github.florent37:viewanimator:1.0.4'
-  compile 'com.squareup.retrofit2:retrofit:2.1.0'
-  compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
-  compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.jakewharton:butterknife:8.0.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.github.florent37:viewanimator:1.0.4'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    compile 'com.android.support:support-v4:24.2.1'
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
 }

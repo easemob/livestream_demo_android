@@ -50,20 +50,22 @@
         >
 
         <TextView
-        android:id="@+id/empty_view"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="没有搜索到相关信息"
-        android:textColor="@color/gray_normal"
-        android:layout_marginTop="80dp"
-        android:layout_gravity="center_horizontal"
+            android:id="@+id/empty_view"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="没有搜索到相关信息"
+            android:textColor="@color/gray_normal"
+            android:layout_marginTop="80dp"
+            android:layout_gravity="center_horizontal"
         />
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recView"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"
+            app:spanCount="2"
             />
     </FrameLayout>
 </LinearLayout>

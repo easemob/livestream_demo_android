@@ -77,25 +77,27 @@
                 android:paddingRight="30dp"
                 >
                 <EditText
+                    android:id="@+id/edt_live_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="直播名称"
                     android:textSize="18sp"
                     />
                 <EditText
+                    android:id="@+id/edt_live_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:hint="直播描述"
                     android:textSize="18sp"
                     />
-                <EditText
+              <!--  <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:hint="介绍自己"
                     android:textSize="18sp"
-                    />
+                    />-->
 
                 <Button
                     android:id="@+id/btn_start_live"

@@ -1,18 +1,25 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.data.restapi.LiveException;
+import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.restapi.ApiManager;
 import java.io.FileNotFoundException;
 
 public class CreateLiveRoomActivity extends BaseActivity {
@@ -22,6 +29,9 @@ public class CreateLiveRoomActivity extends BaseActivity {
 
     @BindView(R.id.img_live_cover) ImageView coverView;
     @BindView(R.id.txt_cover_hint) TextView hintView;
+    @BindView(R.id.edt_live_name) EditText liveNameView;
+    @BindView(R.id.edt_live_desc) EditText liveDescView;
+
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +51,41 @@ public class CreateLiveRoomActivity extends BaseActivity {
         startActivityForResult(pickIntent, REQUEST_CODE_PICK);
     }
 
-    @OnClick(R.id.btn_start_live) void startLive(){
-        startActivity(new Intent(this, LiveAnchorActivity.class));
-        finish();
+    String name = null;
+    String desc = null;
+    @OnClick(R.id.btn_start_live) void startLive() {
+
+        if (!TextUtils.isEmpty(liveNameView.getText())){
+            name = liveNameView.getText().toString();
+        }
+        if (!TextUtils.isEmpty(liveDescView.getText())){
+            desc = liveDescView.getText().toString();
+        }
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("发起直播...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<LiveRoom>() {
+            @Override public LiveRoom onRequest() throws LiveException {
+                return ApiManager.get().createLiveRoom(name, desc, null);
+            }
+
+            @Override public void onSuccess(LiveRoom liveRoom) {
+                dialog.dismiss();
+                startActivity(new Intent(CreateLiveRoomActivity.this, LiveAnchorActivity.class)
+                        .putExtra("liveroom", liveRoom));
+                finish();
+            }
+
+            @Override public void onError(LiveException exception) {
+                exception.printStackTrace();
+                dialog.dismiss();
+                showToast("发起直播失败");
+            }
+        });
+
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {

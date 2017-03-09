@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -16,8 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.easemob.livedemo.R;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by wei on 2016/5/27.
@@ -55,7 +51,7 @@ public class LiveSquareFragment extends Fragment{
     }
 
     private void setupViewPager(){
-        Adapter adapter = new Adapter(getActivity().getSupportFragmentManager());
+        FragmentAdapter adapter = new FragmentAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new LiveListFragment(), "热门");
         adapter.addFragment(new LiveListFragment(), "女神");
         adapter.addFragment(new LiveListFragment(), "男神");
@@ -68,32 +64,4 @@ public class LiveSquareFragment extends Fragment{
         unbinder.unbind();
     }
 
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
-
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
-    }
 }

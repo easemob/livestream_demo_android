@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.TestAvatarRepository;
+import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.widget.BarrageLayout;
 import com.easemob.livedemo.ui.widget.LiveLeftGiftView;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
@@ -64,6 +65,10 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
   protected String anchorId;
 
+  protected LiveRoom liveRoom;
+
+  protected int beWatchedCount;
+
   /**
    * 环信聊天室id
    */
@@ -84,9 +89,16 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    liveRoom = (LiveRoom) getIntent().getSerializableExtra("liveroom");
+    liveId = liveRoom.getId();
+    chatroomId = liveRoom.getChatroomId();
+    anchorId = liveRoom.getAnchorId();
+
     onActivityCreate(savedInstanceState);
     usernameView.setText(anchorId);
     liveIdView.setText(liveId);
+    audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
+    beWatchedCount = liveRoom.getAudienceNum();
 
   }
 
@@ -209,6 +221,26 @@ public abstract class LiveBaseActivity extends BaseActivity {
         }
       }
 
+      @Override
+      public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+
+      }
+
+      @Override public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+
+      }
+
+      @Override public void onAdminAdded(String chatRoomId, String admin) {
+
+      }
+
+      @Override public void onAdminRemoved(String chatRoomId, String admin) {
+
+      }
+
+      @Override public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+
+      }
     };
 
     EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);
@@ -341,7 +373,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
   private void showUserDetailsDialog(String username) {
     final RoomUserDetailsDialog dialog =
-        RoomUserDetailsDialog.newInstance(username);
+        RoomUserDetailsDialog.newInstance(username, chatroomId);
     dialog.setUserDetailsDialogListener(
         new RoomUserDetailsDialog.UserDetailsDialogListener() {
           @Override public void onMentionClick(String username) {
@@ -368,6 +400,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
   void showMemberList() {
     LinearLayoutManager layoutManager = new LinearLayoutManager(LiveBaseActivity.this);
     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+    layoutManager.setStackFromEnd(true);
     horizontalRecyclerView.setLayoutManager(layoutManager);
     horizontalRecyclerView.setAdapter(new AvatarAdapter(LiveBaseActivity.this, memberList));
     new Thread(new Runnable() {
@@ -381,7 +414,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
         }
         runOnUiThread(new Runnable() {
           @Override public void run() {
-            audienceNumView.setText(String.valueOf(memberList.size()));
             horizontalRecyclerView.getAdapter().notifyDataSetChanged();
           }
         });
@@ -390,6 +422,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
   }
 
   private void onRoomMemberAdded(String name) {
+    beWatchedCount++;
     if (!memberList.contains(name)) memberList.add(name);
     runOnUiThread(new Runnable() {
       @Override public void run() {

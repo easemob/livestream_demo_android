@@ -1,4 +1,4 @@
-package com.easemob.livedemo.data;
+package com.easemob.livedemo.data.restapi;
 
 /**
  * Created by wei on 2017/2/15.

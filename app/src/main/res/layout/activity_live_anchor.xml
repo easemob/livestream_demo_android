@@ -18,8 +18,10 @@
 
   </com.ucloud.live.widget.UAspectFrameLayout>
 
-<!--  android:background="@drawable/live_title_gradient"-->
+  <!-- top layout -->
   <include layout="@layout/layout_live_toolbar"/>
+
+  <!--  android:background="@drawable/live_title_gradient"-->
 
   <!--<include layout="@layout/room_user_list_layout"-->
       <!--android:layout_width="match_parent"-->

@@ -13,10 +13,14 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.easemob.livedemo.R;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wei on 2016/7/25.
@@ -27,11 +31,13 @@ public class RoomUserDetailsDialog extends DialogFragment {
   @BindView(R.id.tv_username) TextView usernameView;
 
   private String username;
+  private String chatroomId;
 
-  public static RoomUserDetailsDialog newInstance(String username) {
+  public static RoomUserDetailsDialog newInstance(String username, String chatroomId) {
     RoomUserDetailsDialog dialog = new RoomUserDetailsDialog();
     Bundle args = new Bundle();
     args.putString("username", username);
+    args.putString("chatroomId", chatroomId);
     dialog.setArguments(args);
     return dialog;
   }
@@ -47,6 +53,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
     super.onActivityCreated(savedInstanceState);
     if (getArguments() != null) {
       username = getArguments().getString("username");
+      chatroomId = getArguments().getString("chatroomId");
     }
     if (username != null) {
       usernameView.setText(username);
@@ -54,6 +61,66 @@ public class RoomUserDetailsDialog extends DialogFragment {
     //mentionBtn.setText("@TA");
   }
 
+  @OnClick(R.id.layout_live_no_talk) void noTalk(){
+    if (chatroomId != null) {
+      //EMClient.getInstance().chatroomManager().asyncMuteChatRoomMembers(chatroomId, getUserList(), 0, new EMValueCallBack<EMChatRoom>() {
+      //  @Override public void onSuccess(EMChatRoom value) {
+      //    showToast("禁言成功");
+      //  }
+      //
+      //  @Override public void onError(int error, String errorMsg) {
+      //    showToast("禁言失败");
+      //  }
+      //});
+    }
+  }
+
+
+  @OnClick(R.id.layout_live_add_blacklist) void addToBlacklist(){
+    if (chatroomId != null) {
+      List<String> users = new ArrayList<>();
+      //EMClient.getInstance().chatroomManager().asyncBlockChatroomMembers(chatroomId, getUserList(),
+      //        new EMValueCallBack<EMChatRoom>() {
+      //          @Override public void onSuccess(EMChatRoom value) {
+      //            showToast("加入黑名单成功");
+      //          }
+      //
+      //          @Override public void onError(int error, String errorMsg) {
+      //            showToast("加入黑名单失败");
+      //          }
+      //        });
+    }
+  }
+  @OnClick(R.id.layout_live_kick) void kickMember(){
+    //EMClient.getInstance().chatroomManager().asyncRemoveChatRoomMembers(chatroomId, getUserList(),
+    //        new EMValueCallBack<EMChatRoom>() {
+    //          @Override public void onSuccess(EMChatRoom value) {
+    //            showToast("踢出成功");
+    //          }
+    //
+    //          @Override public void onError(int error, String errorMsg) {
+    //            showToast("踢出失败");
+    //          }
+    //        });
+  }
+  @OnClick(R.id.btn_set_admin) void setToAdmin(){
+    //EMClient.getInstance().chatroomManager().asyncAddChatRoomAdmin(chatroomId, a);
+  }
+
+
+  private List<String> getUserList(){
+    List<String> users = new ArrayList<>();
+    users.add(username);
+    return users;
+  }
+
+  private void showToast(final String toast){
+    getActivity().runOnUiThread(new Runnable() {
+      @Override public void run() {
+        Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT).show();
+      }
+    });
+  }
   //@OnClick(R.id.btn_message) void onMessageBtnClick(){
   //  ChatFragment fragment = ChatFragment.newInstance(username, false);
   //  dismiss();
@@ -85,7 +152,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     // 使用不带theme的构造器，获得的dialog边框距离屏幕仍有几毫米的缝隙。
     // Dialog dialog = new Dialog(getActivity());
-    Dialog dialog = new Dialog(getActivity(), R.style.room_user_details_dialog);
+    Dialog dialog = super.onCreateDialog(savedInstanceState);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // must be called before set content
     dialog.setContentView(R.layout.fragment_room_user_details);
     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

@@ -18,8 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.TestDataRepository;
-import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.LiveSettings;
 import com.easemob.livedemo.utils.Log2FileUtil;
 import com.hyphenate.EMValueCallBack;
@@ -30,7 +28,6 @@ import com.ucloud.common.util.DeviceUtils;
 import com.ucloud.live.UEasyStreaming;
 import com.ucloud.live.UStreamingProfile;
 import com.ucloud.live.widget.UAspectFrameLayout;
-import java.util.List;
 import java.util.Random;
 
 public class LiveAnchorActivity extends LiveBaseActivity
@@ -72,9 +69,6 @@ public class LiveAnchorActivity extends LiveBaseActivity
   @Override protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
     setContentView(R.layout.activity_live_anchor);
     ButterKnife.bind(this);
-    liveId = TestDataRepository.getLiveRoomId(EMClient.getInstance().getCurrentUser());
-    chatroomId = TestDataRepository.getChatRoomId(EMClient.getInstance().getCurrentUser());
-    anchorId = EMClient.getInstance().getCurrentUser();
     initEnv();
 
     startLive();
@@ -152,22 +146,16 @@ public class LiveAnchorActivity extends LiveBaseActivity
     mEasyStreaming.switchCamera();
   }
 
+  @OnClick(R.id.user_manager_image) void showUserList() {
+    RoomUserManagementDialog managementDialog = new RoomUserManagementDialog();
+    //TODO find by tag
+    managementDialog.show(getSupportFragmentManager(), "RoomUserManagementDialog");
+  }
+
   /**
    * 开始直播
    */
   private void startLive() {
-    //demo为了测试方便，只有指定的账号才能开启直播
-    //if (liveId == null) {
-    //  String[] anchorIds = TestDataRepository.anchorIds;
-    //  StringBuilder sb = new StringBuilder();
-    //  for (int i = 0; i < anchorIds.length; i++) {
-    //    sb.append(anchorIds[i]);
-    //    if (i != (anchorIds.length - 1)) sb.append(",");
-    //  }
-    //  new EaseAlertDialog(this, "demo中只有" + sb.toString() + "这几个账户才能开启直播").show();
-    //  return;
-    //}
-
     //Utils.hideKeyboard(titleEdit);
     new Thread() {
       public void run() {
@@ -226,17 +214,13 @@ public class LiveAnchorActivity extends LiveBaseActivity
   //}
 
   private void showConfirmCloseLayout() {
-    List<LiveRoom> liveRoomList = TestDataRepository.getLiveRoomList();
-    for (LiveRoom liveRoom : liveRoomList) {
-      if (liveRoom.getId().equals(liveId)) {
-        coverImage.setImageResource(liveRoom.getCover());
-      }
-    }
     View view = liveEndLayout.inflate();
     Button liveContinueBtn = (Button) view.findViewById(R.id.live_close_confirm);
     TextView usernameView = (TextView) view.findViewById(R.id.tv_username);
     ImageView closeConfirmView = (ImageView) view.findViewById(R.id.img_finish_confirmed );
+    TextView watchedCountView = (TextView) view.findViewById(R.id.txt_watched_count);
     usernameView.setText(EMClient.getInstance().getCurrentUser());
+
     liveContinueBtn.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         startActivity(new Intent(LiveAnchorActivity.this, CreateLiveRoomActivity.class));

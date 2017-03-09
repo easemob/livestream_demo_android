@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.TestDataRepository;
+import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.restapi.ApiManager;
 import com.easemob.livedemo.ui.GridMarginDecoration;
 import java.util.List;
 
@@ -25,7 +28,8 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class LiveListFragment extends Fragment {
-
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,12 +41,40 @@ public class LiveListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
-//        GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
+        recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
+        //        GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new GridMarginDecoration(3));
-        recyclerView.setAdapter(new PhotoAdapter(getActivity(), TestDataRepository.getLiveRoomList()));
 
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
+                R.color.holo_orange_light, R.color.holo_red_light);
+        showLiveList();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override public void onRefresh() {
+                showLiveList();
+            }
+        });
+
+    }
+
+
+    private void showLiveList(){
+        swipeRefreshLayout.setRefreshing(true);
+        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<List<LiveRoom>>() {
+            @Override public List<LiveRoom> onRequest() throws LiveException {
+                return ApiManager.get().getLiveRoomList(1, 10);
+            }
+
+            @Override public void onSuccess(List<LiveRoom> liveRooms) {
+                swipeRefreshLayout.setRefreshing(false);
+                recyclerView.setAdapter(new PhotoAdapter(getActivity(), liveRooms));
+            }
+
+            @Override public void onError(LiveException exception) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     static class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> {

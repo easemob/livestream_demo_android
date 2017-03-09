@@ -24,7 +24,6 @@ public class MainActivity extends BaseActivity {
     // 添加显示第一个fragment
     getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new LiveListFragment())
             .commit();
-
   }
 
   @OnClick(R.id.floatingActionButton) void createLiveRoom(){

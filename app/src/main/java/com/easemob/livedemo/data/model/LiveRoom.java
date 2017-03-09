@@ -1,18 +1,26 @@
 package com.easemob.livedemo.data.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
 /**
  * Created by wei on 2016/5/27.
  */
-public class LiveRoom implements Parcelable {
+public class LiveRoom implements Serializable {
+    @SerializedName("liveroom_id")
     private String id;
+    @SerializedName("title")
     private String name;
+    @SerializedName("current_user_count")
     private int audienceNum;
-    private int cover;
+    @SerializedName("cover_picture_url")
+    private String cover;
+    @SerializedName("chatroom_id")
     private String chatroomId;
+    @SerializedName("anchor")
     private String anchorId;
+    @SerializedName("desc")
+    private String description;
 
     public String getId() {
         return id;
@@ -38,11 +46,11 @@ public class LiveRoom implements Parcelable {
         this.audienceNum = audienceNum;
     }
 
-    public int getCover() {
+    public String getCover() {
         return cover;
     }
 
-    public void setCover(int cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 
@@ -62,38 +70,11 @@ public class LiveRoom implements Parcelable {
         this.anchorId = anchorId;
     }
 
-    @Override public int describeContents() {
-        return 0;
+    public String getDescription() {
+        return description;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.name);
-        dest.writeInt(this.audienceNum);
-        dest.writeInt(this.cover);
-        dest.writeString(this.chatroomId);
-        dest.writeString(this.anchorId);
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-    public LiveRoom() {
-    }
-
-    protected LiveRoom(Parcel in) {
-        this.id = in.readString();
-        this.name = in.readString();
-        this.audienceNum = in.readInt();
-        this.cover = in.readInt();
-        this.chatroomId = in.readString();
-        this.anchorId = in.readString();
-    }
-
-    public static final Creator<LiveRoom> CREATOR = new Creator<LiveRoom>() {
-        public LiveRoom createFromParcel(Parcel source) {
-            return new LiveRoom(source);
-        }
-
-        public LiveRoom[] newArray(int size) {
-            return new LiveRoom[size];
-        }
-    };
 }

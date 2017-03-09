@@ -13,8 +13,8 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.model.LiveRoom;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -45,13 +45,8 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UVideoView
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
-        LiveRoom liveRoom = getIntent().getParcelableExtra("liveroom");
-        liveId = liveRoom.getId();
-        chatroomId = liveRoom.getChatroomId();
-        int coverRes = liveRoom.getCover();
-        coverView.setImageResource(coverRes);
+        Glide.with(this).load(liveRoom.getCover()).placeholder(R.color.placeholder).into(coverView);
 
-        anchorId = liveRoom.getAnchorId();
 
         mVideoView = (UVideoView) findViewById(R.id.videoview);
 
@@ -135,7 +130,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UVideoView
                                 }
                             });
                             try {
-                                Thread.sleep(new Random().nextInt(400) + 200);
+                                Thread.sleep(new Random().nextInt(500) + 200);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -155,9 +150,9 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UVideoView
                 Toast.makeText(this, "DESTORY", Toast.LENGTH_SHORT).show();
                 break;
             case UVideoView.Callback.EVENT_PLAY_ERROR:
-                loadingText.setText("主播尚未开播");
+                loadingText.setText("主播尚未直播");
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(this, "主播尚未开播", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "主播尚未直播", Toast.LENGTH_LONG).show();
                 break;
             case UVideoView.Callback.EVENT_PLAY_RESUME:
                 break;

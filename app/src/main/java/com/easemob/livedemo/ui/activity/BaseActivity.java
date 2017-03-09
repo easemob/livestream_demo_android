@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.ThreadPoolManager;
 
 /**
  * Created by wei on 2016/5/30.
@@ -38,6 +39,10 @@ public class BaseActivity extends AppCompatActivity{
             }
         }
         return mActionBarToolbar;
+    }
+
+    protected <T> void executeTask(ThreadPoolManager.Task<T> task){
+        ThreadPoolManager.getInstance().executeTask(task);
     }
 
     protected void showToast(final String toastContent){

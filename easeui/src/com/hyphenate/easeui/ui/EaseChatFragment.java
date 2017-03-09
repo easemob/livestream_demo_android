@@ -529,6 +529,27 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 }
             }
 
+            @Override
+            public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+
+            }
+
+            @Override public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+
+            }
+
+            @Override public void onAdminAdded(String chatRoomId, String admin) {
+
+            }
+
+            @Override public void onAdminRemoved(String chatRoomId, String admin) {
+
+            }
+
+            @Override
+            public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+
+            }
         };
         
         EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);

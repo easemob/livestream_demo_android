@@ -51,7 +51,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.hyphenate:hyphenate-sdk-lite:3.2.3'
+    compile 'com.hyphenate:hyphenate-sdk-lite:3.3.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.google.android.gms:play-services-places:9.4.0'
     compile 'com.google.android.gms:play-services-maps:9.4.0'
