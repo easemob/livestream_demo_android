@@ -51,7 +51,7 @@
             android:layout_height="190dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="42dp"></com.easemob.livedemo.ui.widget.PeriscopeLayout>
+            android:layout_marginBottom="42dp"/>
 
         <com.easemob.livedemo.ui.widget.LiveLeftGiftView
             android:id="@+id/left_gift_view1"
@@ -112,10 +112,10 @@
         </LinearLayout>
 
     </RelativeLayout>
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:id="@+id/message_container"
         android:layout_alignParentBottom="true"
-        ></RelativeLayout>
+        ></RelativeLayout>-->
 </RelativeLayout>

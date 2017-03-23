@@ -3,7 +3,9 @@ package com.easemob.livedemo;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import com.easemob.livedemo.data.restapi.LiveException;
+import android.support.annotation.UiThread;
+import android.support.annotation.WorkerThread;
+import com.hyphenate.exceptions.HyphenateException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -40,20 +42,20 @@ public class ThreadPoolManager {
         executor.execute(runnable);
     }
 
-    public <T> void executeTask(final Task<T> task){
+    public <Result> void executeTask(final Task<Result> task){
         executeRunnable(new Runnable() {
             @Override public void run() {
-                final T t;
+                final Result result;
                 try {
-                    t = task.onRequest();
-                    if(t != null) {
+                    result = task.onRequest();
+                    //if(t != null) {
                         handler.post(new Runnable() {
                             @Override public void run() {
-                                task.onSuccess(t);
+                                task.onSuccess(result);
                             }
                         });
-                    }
-                } catch (final LiveException e) {
+                    //}
+                } catch (final HyphenateException e) {
                     handler.post(new Runnable() {
                         @Override public void run() {
                             task.onError(e);
@@ -65,25 +67,29 @@ public class ThreadPoolManager {
         });
     }
 
-    public interface Task<T> {
+    public interface Task<Result> {
         /**
          * execute on background
          * @return
-         * @throws LiveException
+         * @throws HyphenateException
          */
-        T onRequest() throws LiveException;
+        @WorkerThread
+        Result onRequest() throws HyphenateException;
 
         /**
          * execute on ui thread
-         * @param t
+         * @param result
          */
-        void onSuccess(T t);
+        @UiThread
+        void onSuccess(Result result);
 
         /**
          * execute on ui thread
          * @param exception
          */
-        void onError(LiveException exception);
+        @UiThread
+        void onError(HyphenateException exception);
     }
+
 
 }

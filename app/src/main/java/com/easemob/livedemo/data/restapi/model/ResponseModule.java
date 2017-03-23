@@ -6,4 +6,5 @@ package com.easemob.livedemo.data.restapi.model;
 
 public class ResponseModule<T> {
     public T data;
+    public String cursor;
 }

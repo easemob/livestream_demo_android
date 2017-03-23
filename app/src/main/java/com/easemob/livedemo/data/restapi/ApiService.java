@@ -1,10 +1,11 @@
 package com.easemob.livedemo.data.restapi;
 
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.data.restapi.model.GrantAdminModule;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
-import com.easemob.livedemo.data.model.User;
 import java.util.List;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -19,7 +20,7 @@ import retrofit2.http.Query;
  */
 
 interface ApiService {
-    @POST("liverooms")
+    @POST("liverooms?status=ongoing")
     Call<ResponseModule<LiveRoom>> createLiveRoom(@Body LiveRoom module);
 
     @DELETE("liverooms/{id}")
@@ -34,10 +35,14 @@ interface ApiService {
     @GET("liverooms")
     Call<ResponseModule<List<LiveRoom>>> getLiveRoomList(@Query("pagenum") int pageNum, @Query("pagesize") int pageSize);
 
+    @GET("liverooms?ongoing=true")
+    Call<ResponseModule<List<LiveRoom>>> getLivingRoomList(@Query("limit") int limit, @Query("cursor") String cursor);
+
     @GET("liverooms/{id}")
     Call<ResponseModule<LiveRoom>> getLiveRoomDetails(@Path("id") String roomId);
 
-    //=========================================================================================
+    @POST("liverooms/{id}/liveshows?status=ongoing")
+    Call<ResponseModule<LiveRoom>> createLiveShow(@Path("id") String roomId, @Body LiveRoom module);
 
     @POST("liverooms/{id}/anchors")
     Call createAnchor(@Path("id") String roomId, @Body User user);
@@ -55,9 +60,23 @@ interface ApiService {
     Call revokeAnchor(@Path("id") String roomId, @Path("anchor") String userId);
 
     @DELETE("liverooms/{id}/members/{member}")
-    Call kickMember(@Path("id") String roomId, @Path("member") String userId);
+    Call<ResponseModule> kickMember(@Path("id") String roomId, @Path("member") String userId);
+
+    @POST("liverooms/{id}/members")
+    Call<ResponseModule> joinLiveRoom(@Path("id") String roomId, @Body RequestBody body);
+
+    @GET("liverooms/anchors/{username}/joined_liveroom_list")
+    Call<ResponseModule<List<String>>> getAssociatedRoom(@Path("username") String username);
+
+    @POST("liverooms/{id}/counters")
+    Call<ResponseModule> postStatistics(@Path("id") String roomId, @Body RequestBody body);
+
+    @PUT("liverooms/{id}/status")
+    Call<ResponseModule> updateStatus(@Path("id") String roomId, @Body RequestBody body);
+
 
     //=========================================================================================
+
 
 
 }

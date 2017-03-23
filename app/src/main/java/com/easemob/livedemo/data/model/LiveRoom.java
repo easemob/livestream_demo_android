@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Created by wei on 2016/5/27.
  */
 public class LiveRoom implements Serializable {
-    @SerializedName("liveroom_id")
+    @SerializedName(value = "liveroom_id", alternate = {"id"})
     private String id;
     @SerializedName("title")
     private String name;
@@ -21,6 +21,12 @@ public class LiveRoom implements Serializable {
     private String anchorId;
     @SerializedName("desc")
     private String description;
+    @SerializedName("mobile_push_url")
+    private String livePushUrl;
+    @SerializedName("mobile_pull_url")
+    private String livePullUrl;
+    //@SerializedName("liveshow_id")
+    //private String showId;
 
     public String getId() {
         return id;
@@ -77,4 +83,28 @@ public class LiveRoom implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getLivePushUrl() {
+        return livePushUrl;
+    }
+
+    public void setLivePushUrl(String livePushUrl) {
+        this.livePushUrl = livePushUrl;
+    }
+
+    public String getLivePullUrl() {
+        return livePullUrl;
+    }
+
+    public void setLivePullUrl(String livePullUrl) {
+        this.livePullUrl = livePullUrl;
+    }
+
+    //public String getShowId() {
+    //    return showId;
+    //}
+    //
+    //public void setShowId(String showId) {
+    //    this.showId = showId;
+    //}
 }

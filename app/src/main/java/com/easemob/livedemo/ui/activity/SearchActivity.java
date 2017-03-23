@@ -13,9 +13,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
-import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.ApiManager;
+import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class SearchActivity extends BaseActivity {
 
     private void searchLiveRoom(final String searchText){
         executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-            @Override public LiveRoom onRequest() throws LiveException {
+            @Override public LiveRoom onRequest() throws HyphenateException {
                 return ApiManager.get().getLiveRoomDetails(searchText);
             }
 
@@ -82,7 +82,7 @@ public class SearchActivity extends BaseActivity {
                 }
             }
 
-            @Override public void onError(LiveException exception) {
+            @Override public void onError(HyphenateException exception) {
                 emptyView.setVisibility(View.VISIBLE);
             }
         });

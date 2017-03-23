@@ -1,6 +1,5 @@
 package com.easemob.livedemo.ui.activity;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +17,10 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
-import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.ApiManager;
 import com.easemob.livedemo.ui.GridMarginDecoration;
+import com.hyphenate.exceptions.HyphenateException;
 import java.util.List;
 
 /**
@@ -47,8 +46,6 @@ public class LiveListFragment extends Fragment {
         recyclerView.addItemDecoration(new GridMarginDecoration(3));
 
         swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
-        swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
-                R.color.holo_orange_light, R.color.holo_red_light);
         showLiveList();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
@@ -62,8 +59,8 @@ public class LiveListFragment extends Fragment {
     private void showLiveList(){
         swipeRefreshLayout.setRefreshing(true);
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<List<LiveRoom>>() {
-            @Override public List<LiveRoom> onRequest() throws LiveException {
-                return ApiManager.get().getLiveRoomList(1, 10);
+            @Override public List<LiveRoom> onRequest() throws HyphenateException {
+                return ApiManager.get().getLivingRoomList(14, null).data;
             }
 
             @Override public void onSuccess(List<LiveRoom> liveRooms) {
@@ -71,7 +68,7 @@ public class LiveListFragment extends Fragment {
                 recyclerView.setAdapter(new PhotoAdapter(getActivity(), liveRooms));
             }
 
-            @Override public void onError(LiveException exception) {
+            @Override public void onError(HyphenateException exception) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

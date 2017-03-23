@@ -28,6 +28,10 @@
   <color name="common_btn_black_pressed">#111010</color>
   <color name="common_btn_blue_normal">#19A3FF</color>
   <color name="common_btn_blue_pressed">#1887cd</color>
+  <color name="common_btn_blue_disabled">#B9B9B9</color>
 
   <color name="color_room_my_msg">#1F83C7</color>
+  <color name="color_room_manager_orange">#FF8042</color>
+
+  <color name="color_text_primary">#5E5E5E</color>
 </resources>

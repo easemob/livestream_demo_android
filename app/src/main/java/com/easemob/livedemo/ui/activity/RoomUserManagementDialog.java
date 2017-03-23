@@ -23,13 +23,28 @@ import com.easemob.livedemo.R;
 
 public class RoomUserManagementDialog extends DialogFragment {
 
+    private String chatroomId;
     TabLayout tabLayout;
     ViewPager viewPager;
+
+    public RoomUserManagementDialog(){}
+
+    public RoomUserManagementDialog(String chatroomId){
+        this.chatroomId = chatroomId;
+    }
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_room_user_management, container, false);
+        View view =  inflater.inflate(R.layout.dialog_room_user_management, container, false);
+        Window window = getDialog().getWindow();
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+        return view;
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -45,34 +60,12 @@ public class RoomUserManagementDialog extends DialogFragment {
 
     private void setupViewPager() {
         FragmentAdapter adapter = new FragmentAdapter(getChildFragmentManager());
-        adapter.addFragment(RoomUserManagementFragment.newInstance(
-                RoomUserManagementFragment.ManagementType.REMOVE_ADMIN), "房管");
-        adapter.addFragment(RoomUserManagementFragment.newInstance(
-                RoomUserManagementFragment.ManagementType.NO_TALK), "禁言");
-        adapter.addFragment(RoomUserManagementFragment.newInstance(
-                RoomUserManagementFragment.ManagementType.REMOVE_BLACKLIST), "黑名单");
+        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
+                RoomUserManagementFragment.ManagementType.ADMIN), "房管");
+        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
+                RoomUserManagementFragment.ManagementType.MUTE), "禁言");
+        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
+                RoomUserManagementFragment.ManagementType.BLACKLIST), "黑名单");
         viewPager.setAdapter(adapter);
-    }
-    View view;
-    @NonNull @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
-        //view = LayoutInflater.from(getActivity()).inflate(dialog_room_user_management, null);
-
-        //Dialog dialog = super.onCreateDialog(savedInstanceState);
-        Dialog dialog = new Dialog(getActivity(), R.style.room_user_details_dialog);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // must be called before set content
-        dialog.setContentView(R.layout.dialog_room_user_management);
-
-        //不设置不会占满全屏
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCanceledOnTouchOutside(true);
-
-        // 设置宽度为屏宽、靠近屏幕底部。
-        Window window = dialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(wlp);
-
-        return dialog;
     }
 }

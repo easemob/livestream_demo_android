@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/img_avatar"
+            android:layout_width="@dimen/size_avatar"
+            android:layout_height="@dimen/size_avatar"
+            android:layout_margin="10dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ease_default_avatar"
+            />
+
+        <TextView
+            android:id="@+id/txt_usernick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/img_avatar"
+            android:text="@string/app_name"
+            android:textColor="@color/gray_normal"
+            />
+
+        <Button
+            android:id="@+id/btn_manager"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/room_user_manager_btn"
+            android:text="移除房管"
+            android:textColor="#FF8042"
+            />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e0e0e0"
+        />
+</LinearLayout>

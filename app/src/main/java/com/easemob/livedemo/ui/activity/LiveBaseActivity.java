@@ -17,15 +17,17 @@ import butterknife.OnClick;
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.TestAvatarRepository;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveException;
+import com.easemob.livedemo.data.restapi.model.StatisticsType;
 import com.easemob.livedemo.ui.widget.BarrageLayout;
 import com.easemob.livedemo.ui.widget.LiveLeftGiftView;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.utils.Utils;
-import com.github.florent37.viewanimator.AnimationListener;
-import com.github.florent37.viewanimator.ViewAnimator;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMMessageListener;
@@ -36,7 +38,6 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,473 +46,471 @@ import java.util.List;
  * Created by wei on 2016/6/12.
  */
 public abstract class LiveBaseActivity extends BaseActivity {
-  protected static final String TAG = "LiveActivity";
+    protected static final String TAG = "LiveActivity";
 
-  @BindView(R.id.left_gift_view1) LiveLeftGiftView leftGiftView;
-  @BindView(R.id.left_gift_view2) LiveLeftGiftView leftGiftView2;
-  @BindView(R.id.message_view) RoomMessagesView messageView;
-  @BindView(R.id.periscope_layout) PeriscopeLayout periscopeLayout;
-  @BindView(R.id.bottom_bar) View bottomBar;
+    @BindView(R.id.left_gift_view1) LiveLeftGiftView leftGiftView;
+    @BindView(R.id.left_gift_view2) LiveLeftGiftView leftGiftView2;
+    @BindView(R.id.message_view) RoomMessagesView messageView;
+    @BindView(R.id.periscope_layout) PeriscopeLayout periscopeLayout;
+    @BindView(R.id.bottom_bar) View bottomBar;
 
-  @BindView(R.id.barrage_layout) BarrageLayout barrageLayout;
-  @BindView(R.id.horizontal_recycle_view) RecyclerView horizontalRecyclerView;
-  @BindView(R.id.audience_num) TextView audienceNumView;
-  //@BindView(R.id.new_messages_warn) ImageView newMsgNotifyImage;
+    @BindView(R.id.barrage_layout) BarrageLayout barrageLayout;
+    @BindView(R.id.horizontal_recycle_view) RecyclerView horizontalRecyclerView;
+    @BindView(R.id.audience_num) TextView audienceNumView;
+    //@BindView(R.id.new_messages_warn) ImageView newMsgNotifyImage;
 
-  @BindView(R.id.user_manager_image) ImageView userManagerView;
-  @BindView(R.id.switch_camera_image) ImageView switchCameraView;
-  @BindView(R.id.txt_live_id) TextView liveIdView;
-  @BindView(R.id.tv_username) TextView usernameView;
+    @BindView(R.id.user_manager_image) ImageView userManagerView;
+    @BindView(R.id.switch_camera_image) ImageView switchCameraView;
+    @BindView(R.id.like_image) ImageView likeImageView;
+    @BindView(R.id.txt_live_id) TextView liveIdView;
+    @BindView(R.id.tv_username) TextView usernameView;
 
-  protected String anchorId;
+    protected String anchorId;
 
-  protected LiveRoom liveRoom;
+    protected LiveRoom liveRoom;
 
-  protected int beWatchedCount;
+    protected int watchedCount;
+    protected int membersCount;
 
-  /**
-   * 环信聊天室id
-   */
-  protected String chatroomId = "";
-  /**
-   * ucloud直播id
-   */
-  protected String liveId = "";
-  protected boolean isMessageListInited;
-  protected EMChatRoomChangeListener chatRoomChangeListener;
+    protected boolean isAnchor;
 
-  volatile boolean isGiftShowing = false;
-  volatile boolean isGift2Showing = false;
-  List<String> toShowList = Collections.synchronizedList(new LinkedList<String>());
+    /**
+     * 环信聊天室id
+     */
+    protected String chatroomId = "";
+    /**
+     * ucloud直播id
+     */
+    protected String liveId = "";
+    protected boolean isMessageListInited;
+    protected EMChatRoomChangeListener chatRoomChangeListener;
 
-  protected EMChatRoom chatroom;
-  List<String> memberList = new ArrayList<>();
+    volatile boolean isGiftShowing = false;
+    volatile boolean isGift2Showing = false;
+    List<String> toShowList = Collections.synchronizedList(new LinkedList<String>());
 
-  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    liveRoom = (LiveRoom) getIntent().getSerializableExtra("liveroom");
-    liveId = liveRoom.getId();
-    chatroomId = liveRoom.getChatroomId();
-    anchorId = liveRoom.getAnchorId();
+    protected EMChatRoom chatroom;
+    private static final int MAX_SIZE = 10;
+    LinkedList<String> memberList = new LinkedList<>();
 
-    onActivityCreate(savedInstanceState);
-    usernameView.setText(anchorId);
-    liveIdView.setText(liveId);
-    audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
-    beWatchedCount = liveRoom.getAudienceNum();
+    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        liveRoom = (LiveRoom) getIntent().getSerializableExtra("liveroom");
+        liveId = liveRoom.getId();
+        chatroomId = liveRoom.getChatroomId();
+        anchorId = liveRoom.getAnchorId();
 
-  }
-
-  protected Handler handler = new Handler();
-
-  protected abstract void onActivityCreate(@Nullable Bundle savedInstanceState);
-
-  protected synchronized void showLeftGiftView(String name) {
-    if (!isGift2Showing) {
-      showGift2Direct(name);
-    } else if (!isGiftShowing) {
-      showGift1Direct(name);
-    } else {
-      toShowList.add(name);
+        onActivityCreate(savedInstanceState);
+        usernameView.setText(anchorId);
+        liveIdView.setText(liveId);
+        audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
+        watchedCount = liveRoom.getAudienceNum();
+        isAnchor = anchorId.equals(EMClient.getInstance().getCurrentUser()) ? true : false;
     }
-  }
 
-  private void showGift1Direct(final String name) {
-    isGiftShowing = true;
-    animateGiftView(name, leftGiftView, new AnimationListener.Stop() {
-      @Override public void onStop() {
-        String pollName = null;
-        try {
-          pollName = toShowList.remove(0);
-        } catch (Exception e) {
+    protected Handler handler = new Handler();
 
-        }
-        if (pollName != null) {
-          showGift1Direct(pollName);
-        } else {
-          isGiftShowing = false;
-        }
-      }
-    });
-  }
+    protected abstract void onActivityCreate(@Nullable Bundle savedInstanceState);
 
-  private void showGift2Direct(final String name) {
-    isGift2Showing = true;
-    animateGiftView(name, leftGiftView2, new AnimationListener.Stop() {
-      @Override public void onStop() {
-        String pollName = null;
-        try {
-          pollName = toShowList.remove(0);
-        } catch (Exception e) {
 
-        }
-        if (pollName != null) {
-          showGift2Direct(pollName);
-        } else {
-          isGift2Showing = false;
-        }
-      }
-    });
-  }
+    protected void showPraise(final int count){
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                for(int i = 0; i < count; i++){
+                    if(!isFinishing())
+                        periscopeLayout.addHeart();
+                }
+            }
+        });
 
-  private void animateGiftView(final String name, final LiveLeftGiftView giftView, final AnimationListener.Stop animationStop) {
-    runOnUiThread(new Runnable() {
-      @Override public void run() {
-        giftView.setVisibility(View.VISIBLE);
-        giftView.setName(name);
-        giftView.setTranslationY(0);
-        ViewAnimator.animate(giftView)
-            .alpha(0, 1)
-            .translationX(-giftView.getWidth(), 0)
-            .duration(600)
-            .thenAnimate(giftView)
-            .alpha(1, 0)
-            .translationY(-1.5f * giftView.getHeight())
-            .duration(800)
-            .onStop(animationStop)
-            .startDelay(2000)
-            .start();
-        ViewAnimator.animate(giftView.getGiftImageView())
-            .translationX(-giftView.getGiftImageView().getX(), 0)
-            .duration(1100)
-            .start();
-      }
-    });
-  }
+    }
 
-  protected void addChatRoomChangeListener() {
-    chatRoomChangeListener = new EMChatRoomChangeListener() {
 
-      @Override public void onChatRoomDestroyed(String roomId, String roomName) {
-        if (roomId.equals(chatroomId)) {
-          EMLog.e(TAG, " room : " + roomId + " with room name : " + roomName + " was destroyed");
-        }
-      }
+    protected void addChatRoomChangeListener() {
+        chatRoomChangeListener = new EMChatRoomChangeListener() {
 
-      @Override public void onMemberJoined(String roomId, String participant) {
+            @Override public void onChatRoomDestroyed(String roomId, String roomName) {
+                if (roomId.equals(chatroomId)) {
+                    finish();
+                }
+            }
+
+            @Override public void onMemberJoined(String roomId, String participant) {
+                onRoomMemberAdded(participant);
+            }
+
+            @Override
+            public void onMemberExited(String roomId, String roomName, String participant) {
+                //                showChatroomToast("member : " + participant + " leave the room : " + roomId + " room name : " + roomName);
+                onRoomMemberExited(participant);
+            }
+
+            @Override
+            public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
+                if (roomId.equals(chatroomId)) {
+                    String curUser = EMClient.getInstance().getCurrentUser();
+                    if (curUser.equals(participant)) {
+                        EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
+                        postUserChangeEvent(StatisticsType.LEAVE, curUser);
+                        showToast("你已被移除出此房间");
+                        finish();
+                    } else {
+                        //                        showChatroomToast("member : " + participant + " was kicked from the room : " + roomId + " room name : " + roomName);
+                        onRoomMemberExited(participant);
+                    }
+                }
+            }
+
+            @Override
+            public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+                for(String name : mutes){
+                    showMemberChangeEvent(name, "被禁言");
+                }
+            }
+
+            @Override public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+                for(String name : mutes){
+                    showMemberChangeEvent(name, "被解除禁言");
+                }
+            }
+
+            @Override public void onAdminAdded(String chatRoomId, String admin) {
+                showMemberChangeEvent(admin, "被提升为房管");
+            }
+
+            @Override public void onAdminRemoved(String chatRoomId, String admin) {
+                showMemberChangeEvent(admin, "被解除房管");
+            }
+
+            @Override
+            public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+
+            }
+        };
+
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);
+    }
+
+    private void showMemberChangeEvent(String username, String event){
         EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
         message.setTo(chatroomId);
-        message.setFrom(participant);
-        EMTextMessageBody textMessageBody = new EMTextMessageBody("来了");
+        message.setFrom(username);
+        EMTextMessageBody textMessageBody = new EMTextMessageBody(event);
         message.addBody(textMessageBody);
         message.setChatType(EMMessage.ChatType.ChatRoom);
         EMClient.getInstance().chatManager().saveMessage(message);
         messageView.refreshSelectLast();
+    }
 
-        onRoomMemberAdded(participant);
-      }
 
-      @Override public void onMemberExited(String roomId, String roomName, String participant) {
-        //                showChatroomToast("member : " + participant + " leave the room : " + roomId + " room name : " + roomName);
-        onRoomMemberExited(participant);
-      }
+    EMMessageListener msgListener = new EMMessageListener() {
 
-      @Override
-      public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
-        if (roomId.equals(chatroomId)) {
-          String curUser = EMClient.getInstance().getCurrentUser();
-          if (curUser.equals(participant)) {
-            EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
-            showToast("你已被移除出此房间");
-            finish();
-          } else {
-            //                        showChatroomToast("member : " + participant + " was kicked from the room : " + roomId + " room name : " + roomName);
-            onRoomMemberExited(participant);
-          }
+        @Override public void onMessageReceived(List<EMMessage> messages) {
+
+            for (EMMessage message : messages) {
+                String username = null;
+                // 群组消息
+                if (message.getChatType() == EMMessage.ChatType.GroupChat
+                        || message.getChatType() == EMMessage.ChatType.ChatRoom) {
+                    username = message.getTo();
+                } else {
+                    // 单聊消息
+                    username = message.getFrom();
+                }
+                // 如果是当前会话的消息，刷新聊天页面
+                if (username.equals(chatroomId)) {
+                    if (message.getBooleanAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, false)) {
+                        barrageLayout.addBarrage(
+                                ((EMTextMessageBody) message.getBody()).getMessage(),
+                                message.getFrom());
+                    }
+                    messageView.refreshSelectLast();
+                } else {
+                    //if(message.getChatType() == EMMessage.ChatType.Chat && message.getTo().equals(EMClient.getInstance().getCurrentUser())){
+                    //  runOnUiThread(new Runnable() {
+                    //    @Override public void run() {
+                    //      newMsgNotifyImage.setVisibility(View.VISIBLE);
+                    //    }
+                    //  });
+                    //}
+                    //// 如果消息不是和当前聊天ID的消息
+                    //EaseUI.getInstance().getNotifier().onNewMsg(message);
+                }
+            }
         }
-      }
 
-      @Override
-      public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+        @Override public void onCmdMessageReceived(List<EMMessage> messages) {
+            EMMessage message = messages.get(messages.size() - 1);
+            if (DemoConstants.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
+                //showLeftGiftView(message.getFrom());
+            } else if(DemoConstants.CMD_PRAISE.equals(((EMCmdMessageBody) message.getBody()).action())) {
+                showPraise(message.getIntAttribute(DemoConstants.EXTRA_PRAISE_COUNT, 1));
+            }
+        }
 
-      }
+        @Override public void onMessageRead(List<EMMessage> messages) {
 
-      @Override public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+        }
 
-      }
+        @Override public void onMessageDelivered(List<EMMessage> messages) {
 
-      @Override public void onAdminAdded(String chatRoomId, String admin) {
+        }
 
-      }
-
-      @Override public void onAdminRemoved(String chatRoomId, String admin) {
-
-      }
-
-      @Override public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
-
-      }
+        @Override public void onMessageChanged(EMMessage message, Object change) {
+            if (isMessageListInited) {
+                messageView.refresh();
+            }
+        }
     };
 
-    EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);
-  }
-
-  EMMessageListener msgListener = new EMMessageListener() {
-
-    @Override public void onMessageReceived(List<EMMessage> messages) {
-
-      for (EMMessage message : messages) {
-        String username = null;
-        // 群组消息
-        if (message.getChatType() == EMMessage.ChatType.GroupChat
-            || message.getChatType() == EMMessage.ChatType.ChatRoom) {
-          username = message.getTo();
-        } else {
-          // 单聊消息
-          username = message.getFrom();
-        }
-        // 如果是当前会话的消息，刷新聊天页面
-        if (username.equals(chatroomId)) {
-          if (message.getBooleanAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, false)) {
-            barrageLayout.addBarrage(((EMTextMessageBody) message.getBody()).getMessage(),
-                message.getFrom());
-          }
-          messageView.refreshSelectLast();
-        } else {
-          //if(message.getChatType() == EMMessage.ChatType.Chat && message.getTo().equals(EMClient.getInstance().getCurrentUser())){
-          //  runOnUiThread(new Runnable() {
-          //    @Override public void run() {
-          //      newMsgNotifyImage.setVisibility(View.VISIBLE);
-          //    }
-          //  });
-          //}
-          //// 如果消息不是和当前聊天ID的消息
-          //EaseUI.getInstance().getNotifier().onNewMsg(message);
-        }
-      }
-    }
-
-    @Override public void onCmdMessageReceived(List<EMMessage> messages) {
-      EMMessage message = messages.get(messages.size() - 1);
-      if (DemoConstants.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
-        showLeftGiftView(message.getFrom());
-      }
-    }
-
-    @Override public void onMessageRead(List<EMMessage> messages) {
-
-    }
-
-    @Override public void onMessageDelivered(List<EMMessage> messages) {
-
-    }
-
-
-    @Override public void onMessageChanged(EMMessage message, Object change) {
-      if (isMessageListInited) {
-        messageView.refresh();
-      }
-    }
-  };
-
-  protected void onMessageListInit() {
-    runOnUiThread(new Runnable() {
-      @Override public void run() {
-        messageView.init(chatroomId);
-        messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
-          @Override public void onMessageSend(String content) {
-            EMMessage message = EMMessage.createTxtSendMessage(content, chatroomId);
-            if (messageView.isBarrageShow) {
-              message.setAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, true);
-              barrageLayout.addBarrage(content, EMClient.getInstance().getCurrentUser());
-            }
-            message.setChatType(EMMessage.ChatType.ChatRoom);
-            EMClient.getInstance().chatManager().sendMessage(message);
-            message.setMessageStatusCallback(new EMCallBack() {
-              @Override public void onSuccess() {
-                //刷新消息列表
-                messageView.refreshSelectLast();
-              }
-
-              @Override public void onError(int i, String s) {
-                showToast("消息发送失败！");
-              }
-
-              @Override public void onProgress(int i, String s) {
-
-              }
-            });
-          }
-
-          @Override public void onItemClickListener(final EMMessage message) {
-            //if(message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
-            //    return;
-            //}
-            String clickUsername = message.getFrom();
-            showUserDetailsDialog(clickUsername);
-          }
-
-          @Override public void onHiderBottomBar() {
-            bottomBar.setVisibility(View.VISIBLE);
-          }
-        });
-        messageView.setVisibility(View.VISIBLE);
-        bottomBar.setVisibility(View.VISIBLE);
-        isMessageListInited = true;
-        updateUnreadMsgView();
-        showMemberList();
-      }
-    });
-  }
-
-  protected void updateUnreadMsgView(){
-    //if(isMessageListInited) {
-    //  for (EMConversation conversation : EMClient.getInstance()
-    //      .chatManager()
-    //      .getAllConversations()
-    //      .values()) {
-    //    if (conversation.getType() == EMConversation.EMConversationType.Chat
-    //        && conversation.getUnreadMsgCount() > 0) {
-    //      newMsgNotifyImage.setVisibility(View.VISIBLE);
-    //      return;
-    //    }
-    //  }
-    //  newMsgNotifyImage.setVisibility(View.INVISIBLE);
-    //}
-  }
-
-
-  private void showUserDetailsDialog(String username) {
-    final RoomUserDetailsDialog dialog =
-        RoomUserDetailsDialog.newInstance(username, chatroomId);
-    dialog.setUserDetailsDialogListener(
-        new RoomUserDetailsDialog.UserDetailsDialogListener() {
-          @Override public void onMentionClick(String username) {
-            dialog.dismiss();
-            messageView.getInputView().setText("@" + username + " ");
-            showInputView();
-          }
-        });
-    dialog.show(getSupportFragmentManager(), "RoomUserDetailsDialog");
-  }
-
-  private void showInputView() {
-    bottomBar.setVisibility(View.INVISIBLE);
-    messageView.setShowInputView(true);
-    messageView.getInputView().requestFocus();
-    messageView.getInputView().requestFocusFromTouch();
-    handler.postDelayed(new Runnable() {
-      @Override public void run() {
-        Utils.showKeyboard(messageView.getInputView());
-      }
-    }, 200);
-  }
-
-  void showMemberList() {
-    LinearLayoutManager layoutManager = new LinearLayoutManager(LiveBaseActivity.this);
-    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-    layoutManager.setStackFromEnd(true);
-    horizontalRecyclerView.setLayoutManager(layoutManager);
-    horizontalRecyclerView.setAdapter(new AvatarAdapter(LiveBaseActivity.this, memberList));
-    new Thread(new Runnable() {
-      @Override public void run() {
-        try {
-          chatroom =
-              EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(chatroomId, true);
-          memberList.addAll(chatroom.getMemberList());
-        } catch (HyphenateException e) {
-          e.printStackTrace();
-        }
+    protected void onMessageListInit() {
         runOnUiThread(new Runnable() {
-          @Override public void run() {
-            horizontalRecyclerView.getAdapter().notifyDataSetChanged();
-          }
+            @Override public void run() {
+                messageView.init(chatroomId);
+                messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
+                    @Override public void onMessageSend(String content) {
+                        EMMessage message = EMMessage.createTxtSendMessage(content, chatroomId);
+                        if (messageView.isBarrageShow) {
+                            message.setAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, true);
+                            barrageLayout.addBarrage(content,
+                                    EMClient.getInstance().getCurrentUser());
+                        }
+                        message.setChatType(EMMessage.ChatType.ChatRoom);
+                        EMClient.getInstance().chatManager().sendMessage(message);
+                        message.setMessageStatusCallback(new EMCallBack() {
+                            @Override public void onSuccess() {
+                                //刷新消息列表
+                                messageView.refreshSelectLast();
+                            }
+
+                            @Override public void onError(int i, String s) {
+                                showToast("消息发送失败！");
+                            }
+
+                            @Override public void onProgress(int i, String s) {
+
+                            }
+                        });
+                    }
+
+                    @Override public void onItemClickListener(final EMMessage message) {
+                        //if(message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
+                        //    return;
+                        //}
+                        String clickUsername = message.getFrom();
+                        showUserDetailsDialog(clickUsername);
+                    }
+
+                    @Override public void onHiderBottomBar() {
+                        bottomBar.setVisibility(View.VISIBLE);
+                    }
+                });
+                messageView.setVisibility(View.VISIBLE);
+                bottomBar.setVisibility(View.VISIBLE);
+                isMessageListInited = true;
+                updateUnreadMsgView();
+                showMemberList();
+            }
         });
-      }
-    }).start();
-  }
-
-  private void onRoomMemberAdded(String name) {
-    beWatchedCount++;
-    if (!memberList.contains(name)) memberList.add(name);
-    runOnUiThread(new Runnable() {
-      @Override public void run() {
-        audienceNumView.setText(String.valueOf(memberList.size()));
-        horizontalRecyclerView.getAdapter().notifyDataSetChanged();
-      }
-    });
-  }
-
-  private void onRoomMemberExited(String name) {
-    memberList.remove(name);
-    runOnUiThread(new Runnable() {
-      @Override public void run() {
-        audienceNumView.setText(String.valueOf(memberList.size()));
-        horizontalRecyclerView.getAdapter().notifyDataSetChanged();
-      }
-    });
-  }
-
-  @OnClick(R.id.root_layout) void onRootLayoutClick() {
-    periscopeLayout.addHeart();
-  }
-
-  @OnClick(R.id.comment_image) void onCommentImageClick() {
-    showInputView();
-  }
-
-  //@OnClick(R.id.present_image) void onPresentImageClick() {
-  //  EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
-  //  message.setTo(chatroomId);
-  //  EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(DemoConstants.CMD_GIFT);
-  //  message.addBody(cmdMessageBody);
-  //  message.setChatType(EMMessage.ChatType.ChatRoom);
-  //  EMClient.getInstance().chatManager().sendMessage(message);
-  //  showLeftGiftView(EMClient.getInstance().getCurrentUser());
-  //}
-
-  //@OnClick(R.id.chat_image) void onChatImageClick() {
-  //  ConversationListFragment fragment = ConversationListFragment.newInstance(anchorId, false);
-  //  getSupportFragmentManager().beginTransaction()
-  //      .replace(R.id.message_container, fragment)
-  //      .commit();
-  //
-  //}
-
-  @Override protected void onResume() {
-    super.onResume();
-  }
-
-  private class AvatarAdapter extends RecyclerView.Adapter<AvatarViewHolder> {
-    List<String> namelist;
-    Context context;
-    TestAvatarRepository avatarRepository;
-
-    public AvatarAdapter(Context context, List<String> namelist) {
-      this.namelist = namelist;
-      this.context = context;
-      avatarRepository = new TestAvatarRepository();
     }
 
-    @Override public AvatarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      return new AvatarViewHolder(
-          LayoutInflater.from(context).inflate(R.layout.avatar_list_item, parent, false));
+    protected void updateUnreadMsgView() {
+        //if(isMessageListInited) {
+        //  for (EMConversation conversation : EMClient.getInstance()
+        //      .chatManager()
+        //      .getAllConversations()
+        //      .values()) {
+        //    if (conversation.getType() == EMConversation.EMConversationType.Chat
+        //        && conversation.getUnreadMsgCount() > 0) {
+        //      newMsgNotifyImage.setVisibility(View.VISIBLE);
+        //      return;
+        //    }
+        //  }
+        //  newMsgNotifyImage.setVisibility(View.INVISIBLE);
+        //}
     }
 
-    @Override public void onBindViewHolder(AvatarViewHolder holder, final int position) {
-      holder.itemView.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          showUserDetailsDialog(namelist.get(position));
+    private void showUserDetailsDialog(String username) {
+        EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().getChatRoom(chatroomId);
+        RoomUserDetailsDialog dialog = (RoomUserDetailsDialog) getSupportFragmentManager().findFragmentByTag(
+                "RoomUserDetailsDialog");
+        if (dialog == null)
+            dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
+        dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
+            @Override public void onKickMember(String username) {
+                onRoomMemberExited(username);
+            }
+
+            @Override public void onAddBlacklist(String username) {
+                onRoomMemberExited(username);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "RoomUserDetailsDialog");
+    }
+
+    private void showInputView() {
+        bottomBar.setVisibility(View.INVISIBLE);
+        messageView.setShowInputView(true);
+        messageView.getInputView().requestFocus();
+        messageView.getInputView().requestFocusFromTouch();
+        handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                Utils.showKeyboard(messageView.getInputView());
+            }
+        }, 200);
+    }
+
+    void showMemberList() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(LiveBaseActivity.this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        layoutManager.setStackFromEnd(true);
+        horizontalRecyclerView.setLayoutManager(layoutManager);
+        horizontalRecyclerView.setAdapter(new AvatarAdapter(LiveBaseActivity.this, memberList));
+        executeTask(new ThreadPoolManager.Task<Void>() {
+            @Override public Void onRequest() throws HyphenateException {
+                try {
+                    chatroom = EMClient.getInstance()
+                            .chatroomManager()
+                            .fetchChatRoomFromServer(chatroomId, true);
+                    memberList.clear();
+                    //memberList.addAll(chatroom.getAdminList());
+                    memberList.addAll(chatroom.getMemberList());
+                    if(!memberList.contains(chatroom.getOwner())){
+                        memberList.add(chatroom.getOwner());
+                    }
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override public void onSuccess(Void aVoid) {
+                int size = memberList.size();
+                audienceNumView.setText(String.valueOf(size));
+                membersCount = watchedCount = size;
+                horizontalRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override public void onError(HyphenateException exception) {
+
+            }
+        });
+    }
+
+    private synchronized void onRoomMemberAdded(String name) {
+        watchedCount++;
+        if (!memberList.contains(name)) {
+            membersCount++;
+            if(memberList.size() == MAX_SIZE)
+                memberList.removeLast();
+            memberList.addFirst(name);
+            showMemberChangeEvent(name, "来了");
+            EMLog.d(TAG, name + "added");
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    audienceNumView.setText(String.valueOf(membersCount));
+                    horizontalRecyclerView.getAdapter().notifyDataSetChanged();
+                }
+            });
         }
-      });
-      //暂时使用测试数据
-      Glide.with(context)
-          .load(avatarRepository.getAvatar())
-          .placeholder(R.drawable.ease_default_avatar)
-          .into(holder.Avatar);
+
     }
 
-    @Override public int getItemCount() {
-      return namelist.size();
+    private synchronized void onRoomMemberExited(String name) {
+        memberList.remove(name);
+        membersCount--;
+        EMLog.e(TAG, name + "exited");
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                audienceNumView.setText(String.valueOf(membersCount));
+                horizontalRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+        });
     }
-  }
 
-  static class AvatarViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.avatar) ImageView Avatar;
-
-    public AvatarViewHolder(View itemView) {
-      super(itemView);
-      ButterKnife.bind(this, itemView);
+    protected void postUserChangeEvent(final StatisticsType type, final String username) {
+        executeRunnable(new Runnable() {
+            @Override public void run() {
+                try {
+                    ApiManager.get().postStatistics(type, liveId, username);
+                } catch (LiveException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
-  }
+
+
+    //@OnClick(R.id.root_layout) void onRootLayoutClick() {
+    //    periscopeLayout.addHeart();
+    //}
+
+    @OnClick(R.id.comment_image) void onCommentImageClick() {
+        showInputView();
+    }
+
+    //@OnClick(R.id.present_image) void onPresentImageClick() {
+    //  EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
+    //  message.setTo(chatroomId);
+    //  EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(DemoConstants.CMD_GIFT);
+    //  message.addBody(cmdMessageBody);
+    //  message.setChatType(EMMessage.ChatType.ChatRoom);
+    //  EMClient.getInstance().chatManager().sendMessage(message);
+    //  showLeftGiftView(EMClient.getInstance().getCurrentUser());
+    //}
+
+    //@OnClick(R.id.chat_image) void onChatImageClick() {
+    //  ConversationListFragment fragment = ConversationListFragment.newInstance(anchorId, false);
+    //  getSupportFragmentManager().beginTransaction()
+    //      .replace(R.id.message_container, fragment)
+    //      .commit();
+    //
+    //}
+
+    @Override protected void onResume() {
+        super.onResume();
+    }
+
+    private class AvatarAdapter extends RecyclerView.Adapter<AvatarViewHolder> {
+        List<String> namelist;
+        Context context;
+        TestAvatarRepository avatarRepository;
+
+        public AvatarAdapter(Context context, List<String> namelist) {
+            this.namelist = namelist;
+            this.context = context;
+            avatarRepository = new TestAvatarRepository();
+        }
+
+        @Override public AvatarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new AvatarViewHolder(
+                    LayoutInflater.from(context).inflate(R.layout.avatar_list_item, parent, false));
+        }
+
+        @Override public void onBindViewHolder(AvatarViewHolder holder, final int position) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    showUserDetailsDialog(namelist.get(position));
+                }
+            });
+            //暂时使用测试数据
+            Glide.with(context)
+                    .load(avatarRepository.getAvatar())
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .into(holder.Avatar);
+        }
+
+        @Override public int getItemCount() {
+            return namelist.size();
+        }
+    }
+
+    static class AvatarViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.avatar) ImageView Avatar;
+
+        public AvatarViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 }

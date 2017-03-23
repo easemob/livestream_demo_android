@@ -34,7 +34,7 @@ public class RoomMessagesView extends RelativeLayout{
     Button sendBtn;
     View sendContainer;
     ImageView closeView;
-    ImageView danmuImage;
+    //ImageView danmuImage;
 
     public boolean isBarrageShow = false;
 
@@ -60,7 +60,7 @@ public class RoomMessagesView extends RelativeLayout{
         sendBtn = (Button) findViewById(R.id.btn_send);
         closeView = (ImageView) findViewById(R.id.close_image);
         sendContainer = findViewById(R.id.container_send);
-        danmuImage = (ImageView) findViewById(R.id.danmu_image);
+        //danmuImage = (ImageView) findViewById(R.id.danmu_image);
 
     }
 
@@ -96,18 +96,18 @@ public class RoomMessagesView extends RelativeLayout{
             }
         });
 
-        danmuImage.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(danmuImage.isSelected()){
-                    danmuImage.setSelected(false);
-                    isBarrageShow = false;
-                }else {
-                    danmuImage.setSelected(true);
-                    isBarrageShow = true;
-                }
-            }
-        });
+        //danmuImage.setOnClickListener(new OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        if(danmuImage.isSelected()){
+        //            danmuImage.setSelected(false);
+        //            isBarrageShow = false;
+        //        }else {
+        //            danmuImage.setSelected(true);
+        //            isBarrageShow = true;
+        //        }
+        //    }
+        //});
 
     }
 
@@ -167,6 +167,8 @@ public class RoomMessagesView extends RelativeLayout{
             holder.content.setText(((EMTextMessageBody)message.getBody()).getMessage());
             if(EMClient.getInstance().getCurrentUser().equals(message.getFrom())){
                 holder.content.setTextColor(getResources().getColor(R.color.color_room_my_msg));
+            }else {
+                holder.content.setTextColor(getResources().getColor(R.color.common_white));
             }
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override public void onClick(View v) {

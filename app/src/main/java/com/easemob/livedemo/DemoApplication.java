@@ -1,6 +1,10 @@
 package com.easemob.livedemo;
 
 import android.app.Application;
+import android.content.Intent;
+import com.easemob.livedemo.ui.activity.MainActivity;
+import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
@@ -17,6 +21,20 @@ public class DemoApplication extends Application{
   @Override public void onCreate() {
     super.onCreate();
     instance = this;
+
+
+    initChatSdk();
+
+    UEasyStreaming.initStreaming("publish3-key");
+
+
+  }
+
+  public static DemoApplication getInstance(){
+    return instance;
+  }
+
+  private void initChatSdk(){
     EMOptions options = new EMOptions();
     options.enableDNSConfig(false);
     options.setRestServer("120.26.4.73:81");
@@ -26,13 +44,21 @@ public class DemoApplication extends Application{
     EaseUI.getInstance().init(this, options);
     EMClient.getInstance().setDebugMode(true);
 
-    UEasyStreaming.initStreaming("publish3-key");
+    EMClient.getInstance().addConnectionListener(new EMConnectionListener() {
+      @Override public void onConnected() {
 
+      }
 
-  }
-
-  public static DemoApplication getInstance(){
-    return instance;
+      @Override public void onDisconnected(int errorCode) {
+        if(errorCode == EMError.USER_LOGIN_ANOTHER_DEVICE)
+        {
+          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          intent.putExtra("conflict", true);
+          startActivity(intent);
+        }
+      }
+    });
   }
 
 }

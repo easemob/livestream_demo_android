@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.easemob.livedemo.ui.widget.MySwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/refresh_layout"
@@ -16,5 +16,5 @@
             app:layoutManager="android.support.v7.widget.GridLayoutManager"
             app:spanCount="2"
             />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.easemob.livedemo.ui.widget.MySwipeRefreshLayout>
 </FrameLayout>

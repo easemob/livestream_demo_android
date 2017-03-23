@@ -96,7 +96,7 @@
 
   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="300dp"
+      android:layout_height="310dp"
       android:id="@+id/message_container"
       android:layout_alignParentBottom="true"
       ></RelativeLayout>

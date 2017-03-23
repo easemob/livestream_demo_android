@@ -1,10 +1,12 @@
 package com.easemob.livedemo.data.restapi;
 
+import com.hyphenate.exceptions.HyphenateException;
+
 /**
  * Created by wei on 2017/2/15.
  */
 
-public class LiveException extends Exception{
+public class LiveException extends HyphenateException{
     protected int errorCode = -1;
 
     public LiveException(){}
