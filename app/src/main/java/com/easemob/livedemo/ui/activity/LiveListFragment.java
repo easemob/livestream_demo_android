@@ -60,7 +60,7 @@ public class LiveListFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<List<LiveRoom>>() {
             @Override public List<LiveRoom> onRequest() throws HyphenateException {
-                return ApiManager.get().getLivingRoomList(14, null).data;
+                return ApiManager.get().getLivingRoomList(20, null).data;
             }
 
             @Override public void onSuccess(List<LiveRoom> liveRooms) {

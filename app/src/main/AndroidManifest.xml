@@ -18,6 +18,9 @@
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
+    <uses-sdk xmlns:tools="http://schemas.android.com/tools"
+        tools:overrideLibrary="com.ucloud.ulive"/>
+
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"

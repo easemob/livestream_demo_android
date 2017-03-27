@@ -8,15 +8,14 @@
     tools:context="com.easemob.livedemo.ui.activity.LiveAnchorActivity"
     >
 
-  <com.ucloud.live.widget.UAspectFrameLayout
+  <com.easemob.livedemo.ucloud.LiveCameraView
       android:id="@+id/container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center"
-      android:background="@color/color_progress"
       >
 
-  </com.ucloud.live.widget.UAspectFrameLayout>
+  </com.easemob.livedemo.ucloud.LiveCameraView>
 
   <!-- top layout -->
   <include layout="@layout/layout_live_toolbar"/>

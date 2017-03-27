@@ -30,14 +30,20 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile(project(':easeui')) {
         exclude module: 'support-v4'
     }
-    compile(project(':ulive-android-sdk')) {
-        exclude module: 'support-v4'
-    }
+//    compile(project(':ulive-android-sdk')) {
+//        exclude module: 'support-v4'
+//    }
 
 
 
@@ -51,4 +57,8 @@ dependencies {
     compile 'com.weigan:loopView:0.1.1'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
+
+    compile(name: 'ucommon-android-sdk-1.0.0', ext: 'aar')
+    compile(name: 'ulive-android-sdk-1.5.1', ext: 'aar')
+    compile(name: 'uvod-android-sdk-1.5.8', ext: 'aar')
 }

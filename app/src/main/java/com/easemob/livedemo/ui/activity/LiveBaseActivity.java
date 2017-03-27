@@ -38,7 +38,6 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,7 +71,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
     protected int watchedCount;
     protected int membersCount;
 
-    protected boolean isAnchor;
 
     /**
      * 环信聊天室id
@@ -85,9 +83,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
     protected boolean isMessageListInited;
     protected EMChatRoomChangeListener chatRoomChangeListener;
 
-    volatile boolean isGiftShowing = false;
-    volatile boolean isGift2Showing = false;
-    List<String> toShowList = Collections.synchronizedList(new LinkedList<String>());
+    //volatile boolean isGiftShowing = false;
+    //volatile boolean isGift2Showing = false;
+    //List<String> toShowList = Collections.synchronizedList(new LinkedList<String>());
 
     protected EMChatRoom chatroom;
     private static final int MAX_SIZE = 10;
@@ -105,7 +103,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
         liveIdView.setText(liveId);
         audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
         watchedCount = liveRoom.getAudienceNum();
-        isAnchor = anchorId.equals(EMClient.getInstance().getCurrentUser()) ? true : false;
     }
 
     protected Handler handler = new Handler();
@@ -175,10 +172,24 @@ public abstract class LiveBaseActivity extends BaseActivity {
             }
 
             @Override public void onAdminAdded(String chatRoomId, String admin) {
+                if(admin.equals(EMClient.getInstance().getCurrentUser())) {
+                    executeRunnable(new Runnable() {
+                        @Override public void run() {
+                            userManagerView.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
                 showMemberChangeEvent(admin, "被提升为房管");
             }
 
             @Override public void onAdminRemoved(String chatRoomId, String admin) {
+                if(admin.equals(EMClient.getInstance().getCurrentUser())) {
+                    executeRunnable(new Runnable() {
+                        @Override public void run() {
+                            userManagerView.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                }
                 showMemberChangeEvent(admin, "被解除房管");
             }
 
@@ -307,6 +318,10 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 });
                 messageView.setVisibility(View.VISIBLE);
                 bottomBar.setVisibility(View.VISIBLE);
+                if(!chatroom.getAdminList().contains(EMClient.getInstance().getCurrentUser())
+                        && !chatroom.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
+                    userManagerView.setVisibility(View.INVISIBLE);
+                }
                 isMessageListInited = true;
                 updateUnreadMsgView();
                 showMemberList();
@@ -332,10 +347,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
     private void showUserDetailsDialog(String username) {
         EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().getChatRoom(chatroomId);
-        RoomUserDetailsDialog dialog = (RoomUserDetailsDialog) getSupportFragmentManager().findFragmentByTag(
-                "RoomUserDetailsDialog");
-        if (dialog == null)
-            dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
+        RoomUserDetailsDialog dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
         dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
             @Override public void onKickMember(String username) {
                 onRoomMemberExited(username);

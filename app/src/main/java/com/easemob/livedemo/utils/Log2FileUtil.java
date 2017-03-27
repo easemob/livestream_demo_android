@@ -2,9 +2,7 @@ package com.easemob.livedemo.utils;
 
 import android.os.Environment;
 import android.util.Log;
-
-import com.ucloud.common.logger.L;
-
+import com.ucloud.ucommon.xlog.L;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -1,10 +1,8 @@
 package com.easemob.livedemo.ui.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -18,8 +16,8 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.restapi.ApiManager;
-import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
+import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -27,13 +25,15 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.exceptions.HyphenateException;
-import com.ucloud.common.logger.L;
-import com.ucloud.player.widget.v2.UVideoView;
+import com.ucloud.uvod.UMediaProfile;
+import com.ucloud.uvod.UPlayerStateListener;
+import com.ucloud.uvod.widget.UVideoView;
 
-public class LiveAudienceActivity extends LiveBaseActivity implements UVideoView.Callback {
+public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerStateListener {
 
     String rtmpPlayStreamUrl = "rtmp://vlive3.rtmp.cdn.ucloud.com.cn/ucloud/";
     private UVideoView mVideoView;
+    private UMediaProfile profile;
 
     @BindView(R.id.loading_layout) RelativeLayout loadingLayout;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
@@ -44,34 +44,50 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UVideoView
         setContentView(R.layout.activity_live_audience);
         ButterKnife.bind(this);
 
-        userManagerView.setVisibility(View.INVISIBLE);
         switchCameraView.setVisibility(View.INVISIBLE);
         likeImageView.setVisibility(View.VISIBLE);
 
-        InputMethodManager imm =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        //InputMethodManager imm =
+        //        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
         Glide.with(this).load(liveRoom.getCover()).placeholder(R.color.placeholder).into(coverView);
 
         mVideoView = (UVideoView) findViewById(R.id.videoview);
 
-        mVideoView.setPlayType(UVideoView.PlayType.LIVE);
-        mVideoView.setPlayMode(UVideoView.PlayMode.NORMAL);
-        mVideoView.setRatio(UVideoView.VIDEO_RATIO_FILL_PARENT);
-        mVideoView.setDecoder(UVideoView.DECODER_VOD_SW);
+        connect();
+    }
 
-        mVideoView.registerCallback(this);
-        //mVideoView.setVideoPath(rtmpPlayStreamUrl + liveId);
+    private void connect(){
+        profile = new UMediaProfile();
+        profile.setInteger(UMediaProfile.KEY_START_ON_PREPARED, 1);
+        profile.setInteger(UMediaProfile.KEY_ENABLE_BACKGROUND_PLAY, 0);
+        profile.setInteger(UMediaProfile.KEY_LIVE_STREAMING, 1);
+        profile.setInteger(UMediaProfile.KEY_MEDIACODEC, 1);
+
+        profile.setInteger(UMediaProfile.KEY_PREPARE_TIMEOUT, 1000 * 5);
+        profile.setInteger(UMediaProfile.KEY_MIN_READ_FRAME_TIMEOUT_RECONNECT_INTERVAL, 3);
+
+        profile.setInteger(UMediaProfile.KEY_READ_FRAME_TIMEOUT, 1000 * 5);
+        profile.setInteger(UMediaProfile.KEY_MIN_PREPARE_TIMEOUT_RECONNECT_INTERVAL, 3);
+
+        mVideoView.setMediaPorfile(profile);//set before setVideoPath
+        mVideoView.setOnPlayerStateListener(this);//set before setVideoPath
         mVideoView.setVideoPath(liveRoom.getLivePullUrl());
     }
 
     @Override protected void onResume() {
         super.onResume();
+        mVideoView.onResume();
         if (isMessageListInited) messageView.refresh();
         EaseUI.getInstance().pushActivity(this);
         // register the event listener when enter the foreground
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        mVideoView.onPause();
     }
 
     @Override public void onStop() {
@@ -97,18 +113,15 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UVideoView
                     .chatroomManager()
                     .removeChatRoomChangeListener(chatRoomChangeListener);
         }
-        if (mVideoView != null) {
-            mVideoView.setVolume(0, 0);
-            mVideoView.stopPlayback();
-            mVideoView.release(true);
-        }
+
+        mVideoView.onDestroy();
     }
 
-    @Override public void onEvent(int what, String message) {
-        L.d(TAG, "what:" + what + ", message:" + message);
-        switch (what) {
-            case UVideoView.Callback.EVENT_PLAY_START:
+    @Override public void onPlayerStateChanged(State state, int i, Object o) {
+        switch (state) {
+            case START:
                 loadingLayout.setVisibility(View.INVISIBLE);
+                mVideoView.applyAspectRatio(UVideoView.VIDEO_RATIO_FILL_PARENT);//set after start
                 EMClient.getInstance()
                         .chatroomManager()
                         .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
@@ -120,52 +133,44 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UVideoView
                             }
 
                             @Override public void onError(int i, String s) {
-                                showToast("加入聊天室失败");
+                                if(i == EMError.GROUP_PERMISSION_DENIED){
+                                    showLongToast("你没有权限加入此房间");
+                                    finish();
+                                }
+                                showLongToast("加入聊天室失败: " +s);
                             }
                         });
-
-                //new Thread(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        while (!isFinishing()) {
-                //            runOnUiThread(new Runnable() {
-                //                @Override
-                //                public void run() {
-                //                    periscopeLayout.addHeart();
-                //                }
-                //            });
-                //            try {
-                //                Thread.sleep(new Random().nextInt(500) + 200);
-                //            } catch (InterruptedException e) {
-                //                e.printStackTrace();
-                //            }
-                //        }
-                //    }
-                //}).start();
                 break;
-            case UVideoView.Callback.EVENT_PLAY_PAUSE:
+            case VIDEO_SIZE_CHANGED:
                 break;
-            case UVideoView.Callback.EVENT_PLAY_STOP:
-                break;
-            case UVideoView.Callback.EVENT_PLAY_COMPLETION:
+            case COMPLETED:
                 Toast.makeText(this, "直播已结束", Toast.LENGTH_LONG).show();
-                finish();
                 break;
-            case UVideoView.Callback.EVENT_PLAY_DESTORY:
-                Toast.makeText(this, "DESTORY", Toast.LENGTH_SHORT).show();
-                break;
-            case UVideoView.Callback.EVENT_PLAY_ERROR:
-                loadingText.setText("主播尚未直播");
-                progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(this, "主播尚未直播", Toast.LENGTH_LONG).show();
-                break;
-            case UVideoView.Callback.EVENT_PLAY_RESUME:
-                break;
-            case UVideoView.Callback.EVENT_PLAY_INFO_BUFFERING_START:
-                //                Toast.makeText(VideoActivity.this, "unstable network", Toast.LENGTH_SHORT).show();
+            case RECONNECT:
+                System.out.println();
                 break;
         }
     }
+
+    @Override public void onPlayerInfo(Info info, int extra1, Object o) {
+
+    }
+
+    @Override public void onPlayerError(Error error, int extra1, Object o) {
+        switch (error) {
+            case IOERROR:
+                //Toast.makeText(this, "Error: " + extra1, Toast.LENGTH_SHORT).show();
+                break;
+            case PREPARE_TIMEOUT:
+                break;
+            case READ_FRAME_TIMEOUT:
+                break;
+            case UNKNOWN:
+                Toast.makeText(this, "Error: " + extra1, Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
 
 
     @OnClick(R.id.img_bt_close) void close() {

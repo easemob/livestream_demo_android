@@ -8,7 +8,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
-import com.ucloud.live.UEasyStreaming;
+import com.ucloud.ulive.UStreamingContext;
 
 /**
  * Created by wei on 2016/5/27.
@@ -25,9 +25,9 @@ public class DemoApplication extends Application{
 
     initChatSdk();
 
-    UEasyStreaming.initStreaming("publish3-key");
+    //UEasyStreaming.initStreaming("publish3-key");
 
-
+    UStreamingContext.init(getApplicationContext(), "publish3-key");
   }
 
   public static DemoApplication getInstance(){

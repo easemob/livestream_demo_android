@@ -70,9 +70,11 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
             @Override public void onSuccess(List<String> list) {
                 liveIds = list;
-                loopView.setNotLoop();
-                loopView.setItems(liveIds);
-                loopView.setCurrentPosition(Math.round(liveIds.size() / 2));
+                if(liveIds.size() > 0) {
+                    loopView.setNotLoop();
+                    loopView.setItems(liveIds);
+                    loopView.setCurrentPosition(Math.round(liveIds.size() / 2));
+                }
             }
 
             @Override public void onError(HyphenateException exception) {
@@ -91,8 +93,11 @@ public class AssociateLiveRoomActivity extends BaseActivity {
     @OnClick(R.id.txt_save) void save() {
         if(isSelectLayoutShowed) {
             dismissSelectLayout();
-            selectedLiveId = liveIds.get(loopView.getSelectedItem());
             isSelectLayoutShowed = false;
+            if(liveIds.size() == 0) {
+                return;
+            }
+            selectedLiveId = liveIds.get(loopView.getSelectedItem());
 
             showProgressDialog("获取直播间信息...");
             executeTask(new ThreadPoolManager.Task<LiveRoom>() {
@@ -221,7 +226,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
     }
 
-    //TODO 和CreateLiveRoomActivity中相同/类似的功能，需要抽取一下
+    //TODO 和CreateLiveRoomActivity中相同/类似的功能，可以抽取一下
 
     private void startPhotoZoom(Uri uri) {
         cacheFile = new File(getExternalCacheDir(), "cover_temp.jpg");

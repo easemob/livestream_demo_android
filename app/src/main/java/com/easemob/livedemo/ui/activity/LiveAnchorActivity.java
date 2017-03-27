@@ -1,11 +1,9 @@
 package com.easemob.livedemo.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.animation.Animation;
@@ -13,35 +11,31 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.model.LiveSettings;
 import com.easemob.livedemo.data.restapi.ApiManager;
 import com.easemob.livedemo.data.restapi.LiveException;
-import com.easemob.livedemo.utils.Log2FileUtil;
+import com.easemob.livedemo.ucloud.AVOption;
+import com.easemob.livedemo.ucloud.LiveCameraView;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
-import com.ucloud.common.util.DeviceUtils;
-import com.ucloud.live.UEasyStreaming;
-import com.ucloud.live.UStreamingProfile;
-import com.ucloud.live.widget.UAspectFrameLayout;
+import com.ucloud.ulive.UFilterProfile;
+import com.ucloud.ulive.UVideoProfile;
 
-public class LiveAnchorActivity extends LiveBaseActivity
-        implements UEasyStreaming.UStreamingStateListener {
+public class LiveAnchorActivity extends LiveBaseActivity {
     private static final String TAG = LiveAnchorActivity.class.getSimpleName();
-    @BindView(R.id.container) UAspectFrameLayout mPreviewContainer;
+    @BindView(R.id.container) LiveCameraView cameraView;
     @BindView(R.id.countdown_txtv) TextView countdownView;
     @BindView(R.id.finish_frame) ViewStub liveEndLayout;
     @BindView(R.id.cover_image) ImageView coverImage;
     //@BindView(R.id.img_bt_switch_light) ImageButton lightSwitch;
     //@BindView(R.id.img_bt_switch_voice) ImageButton voiceSwitch;
 
-    protected UEasyStreaming mEasyStreaming;
+    //protected UEasyStreaming mEasyStreaming;
     protected String rtmpPushStreamDomain = "publish3.cdn.ucloud.com.cn";
     public static final int MSG_UPDATE_COUNTDOWN = 1;
 
@@ -50,11 +44,13 @@ public class LiveAnchorActivity extends LiveBaseActivity
     public static final int COUNTDOWN_START_INDEX = 3;
     public static final int COUNTDOWN_END_INDEX = 1;
     protected boolean isShutDownCountdown = false;
-    private LiveSettings mSettings;
-    private UStreamingProfile mStreamingProfile;
-    UEasyStreaming.UEncodingType encodingType;
+    //private LiveSettings mSettings;
+    //private UStreamingProfile mStreamingProfile;
+    //UEasyStreaming.UEncodingType encodingType;
 
     boolean isStarted;
+
+    private AVOption mAVOption;
 
     private Handler handler = new Handler() {
         @Override public void handleMessage(Message msg) {
@@ -70,61 +66,71 @@ public class LiveAnchorActivity extends LiveBaseActivity
     @Override protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_live_anchor);
         ButterKnife.bind(this);
-        initEnv();
+        initLiveEnv();
 
         startLive();
     }
 
-    public void initEnv() {
-        mSettings = new LiveSettings(this);
-        if (mSettings.isOpenLogRecoder()) {
-            Log2FileUtil.getInstance().setLogCacheDir(mSettings.getLogCacheDir());
-            Log2FileUtil.getInstance().startLog(); //
-        }
+    public void initLiveEnv() {
+        mAVOption = new AVOption();
+        mAVOption.streamUrl = liveRoom.getLivePushUrl();
+        mAVOption.videoFilterMode = UFilterProfile.FilterMode.GPU;
+        mAVOption.videoCodecType = UVideoProfile.CODEC_MODE_HARD;
+        mAVOption.videoCaptureOrientation = UVideoProfile.ORIENTATION_PORTRAIT;
+        mAVOption.videoFramerate = 20;
+        mAVOption.videoBitrate = UVideoProfile.VIDEO_BITRATE_NORMAL;
+        mAVOption.videoResolution =  UVideoProfile.Resolution.RATIO_AUTO.ordinal();
 
-        String pushUrl = liveRoom.getLivePushUrl();
-        pushUrl = pushUrl.substring(pushUrl.indexOf("://") + 3);
-        String pushDomain = pushUrl.substring(0, pushUrl.indexOf("/"));
-        String pushId = pushUrl.substring(pushUrl.indexOf("/") + 1);
+        cameraView.init(mAVOption);
+
+        //String pushUrl = liveRoom.getLivePushUrl();
+        //pushUrl = pushUrl.substring(pushUrl.indexOf("://") + 3);
+        //String pushDomain = pushUrl.substring(0, pushUrl.indexOf("/"));
+        //String pushId = pushUrl.substring(pushUrl.indexOf("/") + 1);
 
         //        UStreamingProfile.Stream stream = new UStreamingProfile.Stream(rtmpPushStreamDomain, "ucloud/" + mSettings.getPusblishStreamId());
         //hardcode
-        UStreamingProfile.Stream stream = new UStreamingProfile.Stream(pushDomain, pushId);
-
-        mStreamingProfile = new UStreamingProfile.Builder().setVideoCaptureWidth(
-                mSettings.getVideoCaptureWidth())
-                .setVideoCaptureHeight(mSettings.getVideoCaptureHeight())
-                .setVideoEncodingBitrate(
-                        mSettings.getVideoEncodingBitRate()) //UStreamingProfile.VIDEO_BITRATE_NORMAL
-                .setVideoEncodingFrameRate(mSettings.getVideoFrameRate())
-                .setStream(stream)
-                .build();
-
-        encodingType = UEasyStreaming.UEncodingType.MEDIA_X264;
-        if (DeviceUtils.hasJellyBeanMr2()) {
-            encodingType = UEasyStreaming.UEncodingType.MEDIA_CODEC;
-        }
-        mEasyStreaming = new UEasyStreaming(this, encodingType);
-        mEasyStreaming.setStreamingStateListener(this);
-        mEasyStreaming.setAspectWithStreamingProfile(mPreviewContainer, mStreamingProfile);
+        //UStreamingProfile.Stream stream = new UStreamingProfile.Stream(pushDomain, pushId);
+        //
+        //mStreamingProfile = new UStreamingProfile.Builder().setVideoCaptureWidth(
+        //        mSettings.getVideoCaptureWidth())
+        //        .setVideoCaptureHeight(mSettings.getVideoCaptureHeight())
+        //        .setVideoEncodingBitrate(
+        //                mSettings.getVideoEncodingBitRate()) //UStreamingProfile.VIDEO_BITRATE_NORMAL
+        //        .setVideoEncodingFrameRate(mSettings.getVideoFrameRate())
+        //        .setStream(stream)
+        //        .build();
+        //
+        //encodingType = UEasyStreaming.UEncodingType.MEDIA_X264;
+        //if (DeviceUtils.hasJellyBeanMr2()) {
+        //    encodingType = UEasyStreaming.UEncodingType.MEDIA_CODEC;
+        //}
+        //mEasyStreaming = new UEasyStreaming(this, encodingType);
+        //mEasyStreaming.setStreamingStateListener(this);
+        //mEasyStreaming.setAspectWithStreamingProfile(cameraView, mStreamingProfile);
     }
 
-    @Override public void onStateChanged(int type, Object event) {
-        switch (type) {
-            case UEasyStreaming.State.MEDIA_INFO_SIGNATRUE_FAILED:
-                Toast.makeText(this, event.toString(), Toast.LENGTH_LONG).show();
-                break;
-            case UEasyStreaming.State.START_RECORDING:
-                break;
-        }
+    //@Override public void onStateChanged(int type, Object event) {
+    //    switch (type) {
+    //        case UEasyStreaming.State.MEDIA_INFO_SIGNATRUE_FAILED:
+    //            Toast.makeText(this, event.toString(), Toast.LENGTH_LONG).show();
+    //            break;
+    //        case UEasyStreaming.State.START_RECORDING:
+    //            break;
+    //    }
+    //}
+
+    private void startPreview() {
+        cameraView.init(mAVOption);
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    private void stopPreview() {
+        cameraView.stopRecordingAndDismissPreview();
     }
 
     @Override public void onBackPressed() {
-        mEasyStreaming.stopRecording();
+        //mEasyStreaming.();
+        cameraView.stopRecordingAndDismissPreview();
         super.onBackPressed();
     }
 
@@ -132,7 +138,8 @@ public class LiveAnchorActivity extends LiveBaseActivity
      * 切换摄像头
      */
     @OnClick(R.id.switch_camera_image) void switchCamera() {
-        mEasyStreaming.switchCamera();
+        //mEasyStreaming.switchCamera();
+        cameraView.switchCamera();
     }
 
     @OnClick(R.id.user_manager_image) void showUserList() {
@@ -173,7 +180,9 @@ public class LiveAnchorActivity extends LiveBaseActivity
      * 关闭直播显示直播成果
      */
     @OnClick(R.id.img_bt_close) void closeLive() {
-        mEasyStreaming.stopRecording();
+        //mEasyStreaming.stopRecording();
+        cameraView.stopRecording();
+
         if (!isStarted) {
             finish();
             return;
@@ -205,19 +214,22 @@ public class LiveAnchorActivity extends LiveBaseActivity
     //    }
     //  }
     //}
+    private View liveEndView;
     private void showConfirmCloseLayout() {
-        View view = liveEndLayout.inflate();
-        Button liveContinueBtn = (Button) view.findViewById(R.id.live_close_confirm);
-        TextView usernameView = (TextView) view.findViewById(R.id.tv_username);
-        ImageView closeConfirmView = (ImageView) view.findViewById(R.id.img_finish_confirmed);
-        TextView watchedCountView = (TextView) view.findViewById(R.id.txt_watched_count);
+        if(liveEndView == null) {
+            liveEndView = liveEndLayout.inflate();
+        }
+        liveEndView.setVisibility(View.VISIBLE);
+        Button liveContinueBtn = (Button) liveEndView.findViewById(R.id.live_close_confirm);
+        TextView usernameView = (TextView) liveEndView.findViewById(R.id.tv_username);
+        ImageView closeConfirmView = (ImageView) liveEndView.findViewById(R.id.img_finish_confirmed);
+        TextView watchedCountView = (TextView) liveEndView.findViewById(R.id.txt_watched_count);
         usernameView.setText(EMClient.getInstance().getCurrentUser());
         watchedCountView.setText(watchedCount + "人看过");
 
         liveContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                startActivity(new Intent(LiveAnchorActivity.this, CreateLiveRoomActivity.class));
-                finish();
+                liveEndView.setVisibility(View.GONE);
             }
         });
         closeConfirmView.setOnClickListener(new View.OnClickListener() {
@@ -252,6 +264,7 @@ public class LiveAnchorActivity extends LiveBaseActivity
 
                 @Override public void onAnimationEnd(Animation animation) {
                     countdownView.setVisibility(View.GONE);
+                    cameraView.startRecording();
                     EMClient.getInstance()
                             .chatroomManager()
                             .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
@@ -267,10 +280,11 @@ public class LiveAnchorActivity extends LiveBaseActivity
                             });
 
                     if (count == COUNTDOWN_END_INDEX
-                            && mEasyStreaming != null
+                            //&& mEasyStreaming != null
                             && !isShutDownCountdown) {
                         showToast("直播开始！");
-                        mEasyStreaming.startRecording();
+                        //mEasyStreaming.startRecording();
+                        cameraView.startRecording();
                         isStarted = true;
                     }
                 }
@@ -289,12 +303,18 @@ public class LiveAnchorActivity extends LiveBaseActivity
 
     @Override protected void onPause() {
         super.onPause();
-        mEasyStreaming.onPause();
+        //mEasyStreaming.onPause();
+        cameraView.onPause();
+        stopPreview();
     }
 
     @Override protected void onResume() {
         super.onResume();
-        mEasyStreaming.onResume();
+        //mEasyStreaming.onResume();
+        startPreview();
+        if(isStarted){
+            cameraView.startRecording();
+        }
         if (isMessageListInited) messageView.refresh();
         EaseUI.getInstance().pushActivity(this);
         // register the event listener when enter the foreground
@@ -305,6 +325,8 @@ public class LiveAnchorActivity extends LiveBaseActivity
         super.onStop();
         // unregister this event listener when this activity enters the
         // background
+        //stopPreview();
+
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);
 
         // 把此activity 从foreground activity 列表里移除
@@ -313,10 +335,8 @@ public class LiveAnchorActivity extends LiveBaseActivity
 
     @Override protected void onDestroy() {
         super.onDestroy();
-        if (mSettings.isOpenLogRecoder()) {
-            Log2FileUtil.getInstance().stopLog();
-        }
-        mEasyStreaming.onDestroy();
+        //mEasyStreaming.onDestroy();
+        cameraView.release();
 
         if (chatRoomChangeListener != null) {
             EMClient.getInstance()

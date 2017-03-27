@@ -1,1 +1,1 @@
-include ':app', ':ulive-android-sdk', ':easeui'
+include ':app', /*':ulive-android-sdk',*/ ':easeui'

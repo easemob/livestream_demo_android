@@ -13,7 +13,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.model.LiveSettings;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
@@ -25,7 +24,6 @@ public class MyProfileFragment extends Fragment {
     //TextView frameRateText;
     @BindView(R.id.tv_username) TextView usernameView;
 
-    LiveSettings liveSettings;
 
     @Nullable
     @Override
