@@ -21,10 +21,8 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity {
 
-    @BindView(R.id.edit_text)
-    EditText editText;
-    @BindView(R.id.recView)
-    RecyclerView recyclerView;
+    @BindView(R.id.edit_text) EditText editText;
+    @BindView(R.id.recView) RecyclerView recyclerView;
     @BindView(R.id.empty_view) TextView emptyView;
     @BindView(R.id.btn_cancel) TextView cancelView;
     List<LiveRoom> searchedList;

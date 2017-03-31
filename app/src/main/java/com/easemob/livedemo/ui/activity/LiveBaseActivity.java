@@ -23,8 +23,6 @@ import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.ApiManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
-import com.easemob.livedemo.ui.widget.BarrageLayout;
-import com.easemob.livedemo.ui.widget.LiveLeftGiftView;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.utils.Utils;
@@ -47,13 +45,13 @@ import java.util.List;
 public abstract class LiveBaseActivity extends BaseActivity {
     protected static final String TAG = "LiveActivity";
 
-    @BindView(R.id.left_gift_view1) LiveLeftGiftView leftGiftView;
-    @BindView(R.id.left_gift_view2) LiveLeftGiftView leftGiftView2;
+    //@BindView(R.id.left_gift_view1) LiveLeftGiftView leftGiftView;
+    //@BindView(R.id.left_gift_view2) LiveLeftGiftView leftGiftView2;
     @BindView(R.id.message_view) RoomMessagesView messageView;
     @BindView(R.id.periscope_layout) PeriscopeLayout periscopeLayout;
     @BindView(R.id.bottom_bar) View bottomBar;
 
-    @BindView(R.id.barrage_layout) BarrageLayout barrageLayout;
+    //@BindView(R.id.barrage_layout) BarrageLayout barrageLayout;
     @BindView(R.id.horizontal_recycle_view) RecyclerView horizontalRecyclerView;
     @BindView(R.id.audience_num) TextView audienceNumView;
     //@BindView(R.id.new_messages_warn) ImageView newMsgNotifyImage;
@@ -173,7 +171,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
             @Override public void onAdminAdded(String chatRoomId, String admin) {
                 if(admin.equals(EMClient.getInstance().getCurrentUser())) {
-                    executeRunnable(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override public void run() {
                             userManagerView.setVisibility(View.VISIBLE);
                         }
@@ -184,7 +182,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
             @Override public void onAdminRemoved(String chatRoomId, String admin) {
                 if(admin.equals(EMClient.getInstance().getCurrentUser())) {
-                    executeRunnable(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override public void run() {
                             userManagerView.setVisibility(View.INVISIBLE);
                         }
@@ -230,11 +228,11 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 }
                 // 如果是当前会话的消息，刷新聊天页面
                 if (username.equals(chatroomId)) {
-                    if (message.getBooleanAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, false)) {
-                        barrageLayout.addBarrage(
-                                ((EMTextMessageBody) message.getBody()).getMessage(),
-                                message.getFrom());
-                    }
+                    //if (message.getBooleanAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, false)) {
+                    //    barrageLayout.addBarrage(
+                    //            ((EMTextMessageBody) message.getBody()).getMessage(),
+                    //            message.getFrom());
+                    //}
                     messageView.refreshSelectLast();
                 } else {
                     //if(message.getChatType() == EMMessage.ChatType.Chat && message.getTo().equals(EMClient.getInstance().getCurrentUser())){
@@ -281,11 +279,11 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override public void onMessageSend(String content) {
                         EMMessage message = EMMessage.createTxtSendMessage(content, chatroomId);
-                        if (messageView.isBarrageShow) {
-                            message.setAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, true);
-                            barrageLayout.addBarrage(content,
-                                    EMClient.getInstance().getCurrentUser());
-                        }
+                        //if (messageView.isBarrageShow) {
+                        //    message.setAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, true);
+                        //    barrageLayout.addBarrage(content,
+                        //            EMClient.getInstance().getCurrentUser());
+                        //}
                         message.setChatType(EMMessage.ChatType.ChatRoom);
                         EMClient.getInstance().chatManager().sendMessage(message);
                         message.setMessageStatusCallback(new EMCallBack() {
@@ -385,11 +383,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
                             .chatroomManager()
                             .fetchChatRoomFromServer(chatroomId, true);
                     memberList.clear();
-                    //memberList.addAll(chatroom.getAdminList());
+                    memberList.addAll(chatroom.getAdminList());
                     memberList.addAll(chatroom.getMemberList());
-                    if(!memberList.contains(chatroom.getOwner())){
-                        memberList.add(chatroom.getOwner());
-                    }
                 } catch (HyphenateException e) {
                     e.printStackTrace();
                 }
@@ -397,7 +392,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
             }
 
             @Override public void onSuccess(Void aVoid) {
-                int size = memberList.size();
+                int size = chatroom.getMemberCount();
                 audienceNumView.setText(String.valueOf(size));
                 membersCount = watchedCount = size;
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
@@ -428,7 +423,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
     }
 
-    private synchronized void onRoomMemberExited(String name) {
+    private synchronized void onRoomMemberExited(final String name) {
         memberList.remove(name);
         membersCount--;
         EMLog.e(TAG, name + "exited");
@@ -436,6 +431,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
             @Override public void run() {
                 audienceNumView.setText(String.valueOf(membersCount));
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
+                if(name.equals(anchorId)){
+                    showLongToast("主播已结束直播");
+                }
             }
         });
     }
@@ -459,6 +457,16 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
     @OnClick(R.id.comment_image) void onCommentImageClick() {
         showInputView();
+    }
+
+    @OnClick(R.id.user_manager_image) void showUserList() {
+        RoomUserManagementDialog managementDialog =
+                (RoomUserManagementDialog) getSupportFragmentManager().findFragmentByTag(
+                        "RoomUserManagementDialog");
+        if (managementDialog == null) {
+            managementDialog = new RoomUserManagementDialog(chatroomId);
+        }
+        managementDialog.show(getSupportFragmentManager(), "RoomUserManagementDialog");
     }
 
     //@OnClick(R.id.present_image) void onPresentImageClick() {

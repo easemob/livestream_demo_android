@@ -53,7 +53,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="42dp"/>
 
-        <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+      <!--  <com.easemob.livedemo.ui.widget.LiveLeftGiftView
             android:id="@+id/left_gift_view1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginBottom="5dp"
-            android:visibility="invisible" />
+            android:visibility="invisible" />-->
 
 
         <include

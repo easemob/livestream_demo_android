@@ -3,6 +3,7 @@ package com.easemob.livedemo.data.restapi;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.data.restapi.model.GrantAdminModule;
+import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import java.util.List;
 import okhttp3.RequestBody;
@@ -22,9 +23,6 @@ import retrofit2.http.Query;
 interface ApiService {
     @POST("liverooms?status=ongoing")
     Call<ResponseModule<LiveRoom>> createLiveRoom(@Body LiveRoom module);
-
-    @DELETE("liverooms/{id}")
-    Call<RoomResponse> deleteLiveRoom(@Path("id") String roomId);
 
     @PUT("liverooms/{id}")
     Call updateLiveRoom(@Path("id") String roomId, @Body LiveRoom module);
@@ -72,7 +70,10 @@ interface ApiService {
     Call<ResponseModule> postStatistics(@Path("id") String roomId, @Body RequestBody body);
 
     @PUT("liverooms/{id}/status")
-    Call<ResponseModule> updateStatus(@Path("id") String roomId, @Body RequestBody body);
+    Call<ResponseModule> updateStatus(@Path("id") String roomId, @Body LiveStatusModule module);
+
+    @GET("liverooms/{id}/status")
+    Call<ResponseModule<LiveStatusModule>> getStatus(@Path("id") String roomId);
 
 
     //=========================================================================================

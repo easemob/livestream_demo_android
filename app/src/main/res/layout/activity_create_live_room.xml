@@ -55,7 +55,7 @@
                     android:id="@+id/img_live_cover"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/live_cover_bg"
+                    android:background="@drawable/live_cover_bg"
                     android:scaleType="fitXY"
                     />
                 <TextView

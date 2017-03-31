@@ -69,4 +69,12 @@ public abstract class EaseGroupRemoveListener implements EMGroupChangeListener{
     @Override public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
 
     }
+
+    @Override public void onMemberExited(String groupId, String member) {
+
+    }
+
+    @Override public void onMemberJoined(String groupId, String member) {
+
+    }
 }

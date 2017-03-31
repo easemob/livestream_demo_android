@@ -45,7 +45,7 @@
     <TextView
         android:layout_marginTop="32dp"
         style="@style/LiveEndTextStyle"
-        android:text="直播已结束"
+        android:text="直播已暂停"
         android:textSize="20sp"
         />
     <TextView

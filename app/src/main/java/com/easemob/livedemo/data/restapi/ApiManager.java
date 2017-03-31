@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
 import com.hyphenate.chat.EMClient;
@@ -51,7 +52,7 @@ public class ApiManager {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://120.26.4.73:81/"+appkey+"/")
+                .baseUrl("http://a1.easemob.com/"+appkey+"/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
@@ -135,30 +136,27 @@ public class ApiManager {
     }
 
 
-    public void deleteLiveRoom(String roomId) throws LiveException {
-        Call respCall = apiService.deleteLiveRoom(roomId);
-        handleResponseCall(respCall);
-    }
 
     public void updateLiveRoom(LiveRoom liveRoom) throws LiveException {
         Call respCall = apiService.updateLiveRoom(liveRoom.getId(), liveRoom);
         handleResponseCall(respCall);
     }
 
-    public void terminateLiveRoom(String roomId) throws LiveException {
-        JSONObject jobj = new JSONObject();
-        try {
-            jobj.put("status", "completed");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        handleResponseCall(apiService.updateStatus(roomId, jsonToRequestBody(jobj.toString())));
+    public LiveStatusModule.LiveStatus getLiveRoomStatus(String roomId) throws LiveException {
+        Call<ResponseModule<LiveStatusModule>> respCall = apiService.getStatus(roomId);
+        return handleResponseCall(respCall).body().data.status;
     }
 
-    public void closeLiveRoom(String roomId) throws LiveException {
-        Call respCall = apiService.closeLiveRoom(roomId);
-        handleResponseCall(respCall);
+    public void terminateLiveRoom(String roomId) throws LiveException {
+        LiveStatusModule module = new LiveStatusModule();
+        module.status = LiveStatusModule.LiveStatus.completed;
+        handleResponseCall(apiService.updateStatus(roomId, module));
     }
+
+    //public void closeLiveRoom(String roomId) throws LiveException {
+    //    Call respCall = apiService.closeLiveRoom(roomId);
+    //    handleResponseCall(respCall);
+    //}
 
     public List<LiveRoom> getLiveRoomList(int pageNum, int pageSize) throws LiveException {
         Call<ResponseModule<List<LiveRoom>>> respCall = apiService.getLiveRoomList(pageNum, pageSize);

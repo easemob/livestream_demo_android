@@ -94,7 +94,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
         if(isSelectLayoutShowed) {
             dismissSelectLayout();
             isSelectLayoutShowed = false;
-            if(liveIds.size() == 0) {
+            if(liveIds == null || liveIds.size() == 0) {
                 return;
             }
             selectedLiveId = liveIds.get(loopView.getSelectedItem());
@@ -226,7 +226,27 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
     }
 
+
     //TODO 和CreateLiveRoomActivity中相同/类似的功能，可以抽取一下
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_PICK:
+                if (data == null || data.getData() == null) {
+                    return;
+                }
+                startPhotoZoom(data.getData());
+                break;
+            case REQUEST_CODE_CUTTING:
+                if (data != null) {
+                    setPicToView(data);
+                }
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
 
     private void startPhotoZoom(Uri uri) {
         cacheFile = new File(getExternalCacheDir(), "cover_temp.jpg");

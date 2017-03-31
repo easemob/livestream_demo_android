@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.easemob.livedemo.ui.activity.RoomUserManagementFragment.ManagementType.ADMIN;
+import static com.easemob.livedemo.ui.activity.RoomUserManagementFragment.ManagementType.MUTE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RoomUserManagementFragment#newInstance} factory method to
@@ -78,39 +81,16 @@ public class RoomUserManagementFragment extends Fragment {
 
     private void fetchData(){
         refreshLayout.setRefreshing(true);
-        List<String> userList = null;
-        EMChatRoom chatRoom = chatRoomManager.getChatRoom(chatroomId);
-        if(type == ManagementType.ADMIN){
-            //EMChatRoom chatRoom = chatRoomManager.getChatRoom(chatroomId);
-            //EMChatRoom chatRoom2 = chatRoomManager.getChatRoom(chatroomId);
-            userList = chatRoom.getAdminList();
-            setAdapter(userList);
-        }else{
-            if(type == ManagementType.MUTE){
-                Map<String, Long> muteList = chatRoom.getMuteList();
-                if(muteList.keySet().size() == 0){
-                    executeFetchTask();
-                }else{
-                    userList = new ArrayList<>(chatRoom.getMuteList().keySet());
-                    setAdapter(userList);
-                }
-            }else{
-                userList = chatRoom.getBlackList();
-                if(userList.size() == 0){
-                    executeFetchTask();
-                }else{
-                    setAdapter(userList);
-                }
-            }
-
-
-        }
+        executeFetchTask();
     }
 
     private void executeFetchTask() {
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<List<String>>() {
             @Override public List<String> onRequest() throws HyphenateException {
-                if(type == ManagementType.MUTE){
+                if(type == ADMIN){
+                    EMChatRoom chatRoom = chatRoomManager.fetchChatRoomFromServer(chatroomId);
+                    return chatRoom.getAdminList();
+                }else if(type == MUTE){
                     Map<String, Long> map = chatRoomManager.fetchChatRoomMuteList(chatroomId, 1, 50);
                     List<String> list = new ArrayList<String>(map.keySet());
                     return list;
@@ -131,7 +111,6 @@ public class RoomUserManagementFragment extends Fragment {
 
     private void setAdapter(List<String> list){
         refreshLayout.setRefreshing(false);
-        refreshLayout.setEnabled(false);
         ManagementAdapter adapter = new ManagementAdapter(getActivity(), list, type);
         recyclerView.setAdapter(adapter);
     }
@@ -157,7 +136,13 @@ public class RoomUserManagementFragment extends Fragment {
             holder.usernickView.setText(username);
             switch (type) {
                 case ADMIN:
-                    holder.managerButton.setText("移除房管");
+                    EMChatRoom chatRoom = chatRoomManager.getChatRoom(chatroomId);
+                    if(chatRoom.getAdminList().contains(EMClient.getInstance().getCurrentUser())){
+                       holder.managerButton.setVisibility(View.INVISIBLE);
+                    }else {
+                        holder.managerButton.setVisibility(View.VISIBLE);
+                        holder.managerButton.setText("移除房管");
+                    }
                     break;
                 case MUTE:
                     holder.managerButton.setText("解除禁言");
@@ -175,22 +160,11 @@ public class RoomUserManagementFragment extends Fragment {
                         @Override public Void onRequest() throws HyphenateException {
                             if(type == ManagementType.ADMIN){
                                 chatRoomManager.removeChatRoomAdmin(chatroomId, username);
-                            }else if(type == ManagementType.MUTE){
+                            }else if(type == MUTE){
                                 chatRoomManager.unMuteChatRoomMembers(chatroomId, list);
                             }else{
                                 chatRoomManager.unblockChatRoomMembers(chatroomId, list);
                             }
-                            //switch (type) {
-                            //    case ADMIN:
-                            //        chatRoomManager.removeChatRoomAdmin(chatroomId, username);
-                            //        break;
-                            //    case MUTE:
-                            //        chatRoomManager.unMuteChatRoomMembers(chatroomId, list);
-                            //        break;
-                            //    case BLACKLIST:
-                            //        chatRoomManager.unblockChatRoomMembers(chatroomId, list);
-                            //        break;
-                            //}
                             return null;
                         }
 

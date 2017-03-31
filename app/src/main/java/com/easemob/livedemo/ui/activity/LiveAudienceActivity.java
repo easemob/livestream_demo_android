@@ -16,6 +16,7 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
@@ -28,6 +29,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.ucloud.uvod.UMediaProfile;
 import com.ucloud.uvod.UPlayerStateListener;
 import com.ucloud.uvod.widget.UVideoView;
+import java.util.Random;
 
 public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerStateListener {
 
@@ -47,9 +49,6 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         switchCameraView.setVisibility(View.INVISIBLE);
         likeImageView.setVisibility(View.VISIBLE);
 
-        //InputMethodManager imm =
-        //        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
         Glide.with(this).load(liveRoom.getCover()).placeholder(R.color.placeholder).into(coverView);
 
@@ -57,8 +56,70 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
 
         connect();
     }
-
     private void connect(){
+        connectChatServer();
+    }
+
+    private void connectChatServer(){
+
+        executeTask(new ThreadPoolManager.Task<LiveStatusModule.LiveStatus>() {
+            @Override public LiveStatusModule.LiveStatus onRequest() throws HyphenateException {
+                return ApiManager.get().getLiveRoomStatus(liveId);
+            }
+
+            @Override public void onSuccess(LiveStatusModule.LiveStatus status) {
+                loadingLayout.setVisibility(View.INVISIBLE);
+                switch (status){
+                    case completed: //complete状态允许用户加入聊天室
+                        showLongToast("直播已结束");
+                    case ongoing:
+                        connectLiveStream();
+                        joinChatRoom();
+                        break;
+                    case closed:
+                        showLongToast("直播间已关闭");
+                        finish();
+                        break;
+                    case not_start:
+                        showLongToast("直播尚未开始");
+                        break;
+                }
+
+            }
+
+            @Override public void onError(HyphenateException exception) {
+                loadingLayout.setVisibility(View.INVISIBLE);
+                showToast("加载失败");
+            }
+        });
+    }
+
+    private void joinChatRoom() {
+        //loadingLayout.setVisibility(View.INVISIBLE);
+        EMClient.getInstance()
+                .chatroomManager()
+                .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
+                    @Override public void onSuccess(EMChatRoom emChatRoom) {
+                        chatroom = emChatRoom;
+                        addChatRoomChangeListener();
+                        onMessageListInit();
+                        postUserChangeEvent(StatisticsType.JOIN, EMClient.getInstance().getCurrentUser());
+                    }
+
+                    @Override public void onError(int i, String s) {
+                        if(i == EMError.GROUP_PERMISSION_DENIED || i == EMError.CHATROOM_PERMISSION_DENIED){
+                            showLongToast("你没有权限加入此房间");
+                            finish();
+                        }else if(i == EMError.CHATROOM_MEMBERS_FULL){
+                            showLongToast("房间成员已满");
+                            finish();
+                        }
+                        showLongToast("加入聊天室失败: " +s);
+                    }
+                });
+    }
+
+    private void connectLiveStream(){
         profile = new UMediaProfile();
         profile.setInteger(UMediaProfile.KEY_START_ON_PREPARED, 1);
         profile.setInteger(UMediaProfile.KEY_ENABLE_BACKGROUND_PLAY, 0);
@@ -70,6 +131,11 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
 
         profile.setInteger(UMediaProfile.KEY_READ_FRAME_TIMEOUT, 1000 * 5);
         profile.setInteger(UMediaProfile.KEY_MIN_PREPARE_TIMEOUT_RECONNECT_INTERVAL, 3);
+
+        if (mVideoView != null && mVideoView.isInPlaybackState()) {
+            mVideoView.stopPlayback();
+            mVideoView.release(true);
+        }
 
         mVideoView.setMediaPorfile(profile);//set before setVideoPath
         mVideoView.setOnPlayerStateListener(this);//set before setVideoPath
@@ -120,26 +186,9 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     @Override public void onPlayerStateChanged(State state, int i, Object o) {
         switch (state) {
             case START:
-                loadingLayout.setVisibility(View.INVISIBLE);
+                isSteamConnected = true;
+                isReconnecting = false;
                 mVideoView.applyAspectRatio(UVideoView.VIDEO_RATIO_FILL_PARENT);//set after start
-                EMClient.getInstance()
-                        .chatroomManager()
-                        .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
-                            @Override public void onSuccess(EMChatRoom emChatRoom) {
-                                chatroom = emChatRoom;
-                                addChatRoomChangeListener();
-                                onMessageListInit();
-                                postUserChangeEvent(StatisticsType.JOIN, EMClient.getInstance().getCurrentUser());
-                            }
-
-                            @Override public void onError(int i, String s) {
-                                if(i == EMError.GROUP_PERMISSION_DENIED){
-                                    showLongToast("你没有权限加入此房间");
-                                    finish();
-                                }
-                                showLongToast("加入聊天室失败: " +s);
-                            }
-                        });
                 break;
             case VIDEO_SIZE_CHANGED:
                 break;
@@ -147,23 +196,25 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
                 Toast.makeText(this, "直播已结束", Toast.LENGTH_LONG).show();
                 break;
             case RECONNECT:
-                System.out.println();
+                isReconnecting = true;
                 break;
         }
     }
 
     @Override public void onPlayerInfo(Info info, int extra1, Object o) {
-
     }
 
     @Override public void onPlayerError(Error error, int extra1, Object o) {
+        isSteamConnected = false;
+        isReconnecting = false;
         switch (error) {
             case IOERROR:
-                //Toast.makeText(this, "Error: " + extra1, Toast.LENGTH_SHORT).show();
+                reconnect();
                 break;
             case PREPARE_TIMEOUT:
                 break;
             case READ_FRAME_TIMEOUT:
+                System.out.println();
                 break;
             case UNKNOWN:
                 Toast.makeText(this, "Error: " + extra1, Toast.LENGTH_SHORT).show();
@@ -223,5 +274,44 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         message.setAttribute(DemoConstants.EXTRA_PRAISE_COUNT, praiseCount);
         EMClient.getInstance().chatManager().sendMessage(message);
     }
+
+    volatile boolean isSteamConnected;
+    volatile boolean isReconnecting;
+
+    Thread reconnectThread;
+    private void reconnect(){
+        if(isSteamConnected || isReconnecting)
+            return;
+        if(reconnectThread != null &&reconnectThread.isAlive())
+            return;
+
+        reconnectThread = new Thread(){
+            @Override public void run() {
+                while (!isFinishing() && !isSteamConnected){
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            if(!isReconnecting) {
+                                isReconnecting = true;
+                                connectLiveStream();
+                            }
+                            //mVideoView.setVideoPath(liveRoom.getLivePullUrl());
+                        }
+                    });
+                    try {
+                        // TODO 根据reconnect次数动态改变sleep时间
+                        Thread.sleep(3000 + new Random().nextInt(3000));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+            }
+        };
+        reconnectThread.setDaemon(true);
+        reconnectThread.start();
+
+
+    }
+
 
 }
