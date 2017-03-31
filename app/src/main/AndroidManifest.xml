@@ -46,7 +46,7 @@
         <activity
             android:name=".ui.activity.LiveAudienceActivity"
             android:parentActivityName=".ui.activity.MainActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

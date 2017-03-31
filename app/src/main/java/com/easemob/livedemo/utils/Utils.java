@@ -21,6 +21,7 @@ public class Utils {
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
+
     public static void showToast(final Activity activity, final String toastContent){
         activity.runOnUiThread(new Runnable() {
             public void run() {

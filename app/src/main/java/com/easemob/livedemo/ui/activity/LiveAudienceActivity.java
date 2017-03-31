@@ -1,8 +1,10 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -142,8 +144,11 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         mVideoView.setOnPlayerStateListener(this);//set before setVideoPath
         mVideoView.setVideoPath(liveRoom.getLivePullUrl());
 
-        messageView.getInputView().requestFocus();
-        messageView.getInputView().requestFocusFromTouch();
+        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        //if(getWindow().getAttributes().softInputMode == WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE){
+            messageView.getInputView().requestFocus();
+            messageView.getInputView().requestFocusFromTouch();
+        //}
     }
 
     @Override protected void onResume() {
