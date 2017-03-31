@@ -16,6 +16,7 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
 import com.hyphenate.EMError;
@@ -140,6 +141,9 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         mVideoView.setMediaPorfile(profile);//set before setVideoPath
         mVideoView.setOnPlayerStateListener(this);//set before setVideoPath
         mVideoView.setVideoPath(liveRoom.getLivePullUrl());
+
+        messageView.getInputView().requestFocus();
+        messageView.getInputView().requestFocusFromTouch();
     }
 
     @Override protected void onResume() {
@@ -229,9 +233,8 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     }
 
     int praiseCount;
-    int praiseSendDelay = 5 * 1000;
-    long previousSendTime;
-
+    final int praiseSendDelay = 4 * 1000;
+    private Thread sendPraiseThread;
     /**
      * 点赞
      */
@@ -240,30 +243,37 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         synchronized (this) {
             ++praiseCount;
         }
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - previousSendTime >= praiseSendDelay) {
-            previousSendTime = currentTime;
-            executeTask(new ThreadPoolManager.Task<Void>() {
-                @Override public Void onRequest() throws HyphenateException {
-                    int count = 0;
-                    synchronized (LiveAudienceActivity.this){
-                        count = praiseCount;
-                        praiseCount = 0;
+        if(sendPraiseThread == null){
+            sendPraiseThread = new Thread(new Runnable() {
+                @Override public void run() {
+                    while(!isFinishing()){
+                        int count = 0;
+                        synchronized (LiveAudienceActivity.this){
+                            count = praiseCount;
+                            praiseCount = 0;
+                        }
+                        if(count > 0) {
+                            sendPraiseMessage(count);
+                            try {
+                                ApiManager.get().postStatistics(StatisticsType.PRAISE, liveId, count);
+                            } catch (LiveException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        try {
+                            Thread.sleep(praiseSendDelay + new Random().nextInt(2000));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            return;
+                        }
                     }
-                    sendPraiseMessage(count);
-                    ApiManager.get().postStatistics(StatisticsType.PRAISE, liveId, count);
-                    return null;
-                }
-
-                @Override public void onSuccess(Void aVoid) {
-                }
-
-                @Override public void onError(HyphenateException exception) {
-
                 }
             });
+            sendPraiseThread.setDaemon(true);
+            sendPraiseThread.start();
         }
     }
+
 
     private void sendPraiseMessage(int praiseCount) {
         EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
@@ -279,6 +289,10 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     volatile boolean isReconnecting;
 
     Thread reconnectThread;
+
+    /**
+     * 重连到直播server
+     */
     private void reconnect(){
         if(isSteamConnected || isReconnecting)
             return;
