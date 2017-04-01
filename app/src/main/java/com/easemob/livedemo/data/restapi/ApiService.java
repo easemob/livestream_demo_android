@@ -25,7 +25,7 @@ interface ApiService {
     Call<ResponseModule<LiveRoom>> createLiveRoom(@Body LiveRoom module);
 
     @PUT("liverooms/{id}")
-    Call updateLiveRoom(@Path("id") String roomId, @Body LiveRoom module);
+    Call<ResponseModule> updateLiveRoom(@Path("id") String roomId, @Body RequestBody body);
 
     @POST("liverooms/{id}/close")
     Call<RoomResponse> closeLiveRoom(@Path("id") String roomId);

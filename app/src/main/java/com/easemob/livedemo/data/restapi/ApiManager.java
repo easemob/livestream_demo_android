@@ -9,14 +9,12 @@ import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
 import com.hyphenate.chat.EMClient;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -121,26 +119,39 @@ public class ApiManager {
         return liveRoom;
     }
 
-
-
-    public void joinLiveRoom(String roomId, String userId) throws LiveException {
+    public void updateLiveRoomCover(String roomId, String coverUrl) throws LiveException {
         JSONObject jobj = new JSONObject();
-        String[] arr = new String[]{userId};
-        JSONArray jarr = new JSONArray(Arrays.asList(arr));
+        JSONObject picObj = new JSONObject();
         try {
-            jobj.put("usernames", jarr);
+            picObj.put("cover_picture_url", coverUrl);
+            jobj.put("liveroom", picObj);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        handleResponseCall(apiService.joinLiveRoom(roomId, jsonToRequestBody(jobj.toString())));
+        Call<ResponseModule> responseCall = apiService.updateLiveRoom(roomId, jsonToRequestBody(jobj.toString()));
+        handleResponseCall(responseCall);
     }
 
 
 
-    public void updateLiveRoom(LiveRoom liveRoom) throws LiveException {
-        Call respCall = apiService.updateLiveRoom(liveRoom.getId(), liveRoom);
-        handleResponseCall(respCall);
-    }
+    //public void joinLiveRoom(String roomId, String userId) throws LiveException {
+    //    JSONObject jobj = new JSONObject();
+    //    String[] arr = new String[]{userId};
+    //    JSONArray jarr = new JSONArray(Arrays.asList(arr));
+    //    try {
+    //        jobj.put("usernames", jarr);
+    //    } catch (JSONException e) {
+    //        e.printStackTrace();
+    //    }
+    //    handleResponseCall(apiService.joinLiveRoom(roomId, jsonToRequestBody(jobj.toString())));
+    //}
+
+
+
+    //public void updateLiveRoom(LiveRoom liveRoom) throws LiveException {
+    //    Call respCall = apiService.updateLiveRoom(liveRoom.getId(), liveRoom);
+    //    handleResponseCall(respCall);
+    //}
 
     public LiveStatusModule.LiveStatus getLiveRoomStatus(String roomId) throws LiveException {
         Call<ResponseModule<LiveStatusModule>> respCall = apiService.getStatus(roomId);

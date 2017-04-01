@@ -1,8 +1,6 @@
 package com.easemob.livedemo.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +19,7 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveException;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.cloud.EMCloudOperationCallback;
 import com.hyphenate.cloud.HttpFileManager;
@@ -55,6 +54,8 @@ public class AssociateLiveRoomActivity extends BaseActivity {
     private File cacheFile;
 
     private String selectedLiveId;
+
+    private LiveRoom currentLiveRoom;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +107,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
                 }
 
                 @Override public void onSuccess(LiveRoom liveRoom) {
+                    currentLiveRoom = liveRoom;
                     liveIdView.setText(selectedLiveId);
                     inputLayout.setVisibility(View.VISIBLE);
                     startButton.setEnabled(true);
@@ -188,7 +190,13 @@ public class AssociateLiveRoomActivity extends BaseActivity {
                     throw exception;
                 }
 
-                return ApiManager.get().createLiveRoom(name, desc, coverUrl, selectedLiveId);
+                LiveRoom room =  ApiManager.get().createLiveRoom(name, desc, coverUrl, selectedLiveId);
+                //现在服务器没有更新封面，手动调用更新
+                try {
+                    ApiManager.get().updateLiveRoomCover(selectedLiveId, coverUrl);
+                } catch (LiveException e) {
+                }
+                return room;
             }
 
             @Override public void onSuccess(LiveRoom liveRoom) {
@@ -197,11 +205,18 @@ public class AssociateLiveRoomActivity extends BaseActivity {
                         .putExtra("liveroom", liveRoom));
                 finish();
             }
-
             @Override public void onError(HyphenateException exception) {
                 exception.printStackTrace();
                 dismissProgressDialog();
-                showLongToast("发起直播失败: " + exception.getMessage());
+                // ugly
+                if(exception.getMessage().contains("current live room is ongoing") &&
+                        currentLiveRoom.getAnchorId().equals(EMClient.getInstance().getCurrentUser())){
+                    startActivity(new Intent(AssociateLiveRoomActivity.this, LiveAnchorActivity.class)
+                            .putExtra("liveroom", currentLiveRoom));
+                    finish();
+                }else {
+                    showLongToast("发起直播失败: " + exception.getMessage());
+                }
             }
         });
     }
@@ -271,8 +286,11 @@ public class AssociateLiveRoomActivity extends BaseActivity {
         //Uri uri = picdata.getData();
         coverPath = cacheFile.getAbsolutePath();
         if(coverPath != null){
-            Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
-            liveCoverView.setImageBitmap(bitmap);
+            //Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
+                Glide.with(AssociateLiveRoomActivity.this)
+                        .load(coverPath)
+                        .into(liveCoverView);
+            //liveCoverView.setImageBitmap(bitmap);
             hintView.setVisibility(View.INVISIBLE);
         }
     }

@@ -264,10 +264,6 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         // background
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);
 
-        if(chatRoomChangeListener != null){
-            EMClient.getInstance().chatroomManager().removeChatRoomListener(chatRoomChangeListener);
-        }
-
         // 把此activity 从foreground activity 列表里移除
         EaseUI.getInstance().popActivity(this);
     }
