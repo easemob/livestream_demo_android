@@ -95,7 +95,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getChatroomId();
         anchorId = liveRoom.getAnchorId();
-
         onActivityCreate(savedInstanceState);
         usernameView.setText(anchorId);
         liveIdView.setText(liveId);
@@ -383,8 +382,13 @@ public abstract class LiveBaseActivity extends BaseActivity {
                             .chatroomManager()
                             .fetchChatRoomFromServer(chatroomId, true);
                     memberList.clear();
+                    List<String> ll = chatroom.getAdminList();
+                    List<String> ll2 = chatroom.getMemberList();
                     memberList.addAll(chatroom.getAdminList());
                     memberList.addAll(chatroom.getMemberList());
+                    if (memberList.contains(chatroom.getOwner())) {
+                        memberList.remove(chatroom.getOwner());
+                    }
                 } catch (HyphenateException e) {
                     e.printStackTrace();
                 }
@@ -394,7 +398,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
             @Override public void onSuccess(Void aVoid) {
                 int size = chatroom.getMemberCount();
                 audienceNumView.setText(String.valueOf(size));
-                membersCount = watchedCount = size;
+                membersCount = size;
+                //观看人数不包含主播
+                watchedCount = membersCount -1;
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
             }
 
