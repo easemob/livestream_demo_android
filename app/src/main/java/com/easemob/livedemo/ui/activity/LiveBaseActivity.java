@@ -36,6 +36,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -343,7 +344,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
     }
 
     private void showUserDetailsDialog(String username) {
-        EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().getChatRoom(chatroomId);
         RoomUserDetailsDialog dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
         dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
             @Override public void onKickMember(String username) {
@@ -369,10 +369,10 @@ public abstract class LiveBaseActivity extends BaseActivity {
         }, 200);
     }
 
+    private LinearLayoutManager layoutManager;
     void showMemberList() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(LiveBaseActivity.this);
+        layoutManager = new LinearLayoutManager(LiveBaseActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        layoutManager.setStackFromEnd(true);
         horizontalRecyclerView.setLayoutManager(layoutManager);
         horizontalRecyclerView.setAdapter(new AvatarAdapter(LiveBaseActivity.this, memberList));
         executeTask(new ThreadPoolManager.Task<Void>() {
@@ -382,12 +382,16 @@ public abstract class LiveBaseActivity extends BaseActivity {
                             .chatroomManager()
                             .fetchChatRoomFromServer(chatroomId, true);
                     memberList.clear();
-                    List<String> ll = chatroom.getAdminList();
-                    List<String> ll2 = chatroom.getMemberList();
-                    memberList.addAll(chatroom.getAdminList());
-                    memberList.addAll(chatroom.getMemberList());
-                    if (memberList.contains(chatroom.getOwner())) {
-                        memberList.remove(chatroom.getOwner());
+                    List<String> tempList = new ArrayList<>();
+                    tempList.addAll(chatroom.getAdminList());
+                    tempList.addAll(chatroom.getMemberList());
+                    if (tempList.contains(chatroom.getOwner())) {
+                        tempList.remove(chatroom.getOwner());
+                    }
+                    if(tempList.size() > MAX_SIZE) {
+                        for (int i = 0; i < MAX_SIZE; i++){
+                            memberList.add(i, tempList.get(i));
+                        }
                     }
                 } catch (HyphenateException e) {
                     e.printStackTrace();
@@ -401,7 +405,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 membersCount = size;
                 //观看人数不包含主播
                 watchedCount = membersCount -1;
-                horizontalRecyclerView.getAdapter().notifyDataSetChanged();
+                notifyDataSetChanged();
             }
 
             @Override public void onError(HyphenateException exception) {
@@ -414,7 +418,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         watchedCount++;
         if (!memberList.contains(name)) {
             membersCount++;
-            if(memberList.size() == MAX_SIZE)
+            if(memberList.size() >= MAX_SIZE)
                 memberList.removeLast();
             memberList.addFirst(name);
             showMemberChangeEvent(name, "来了");
@@ -422,11 +426,20 @@ public abstract class LiveBaseActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
                     audienceNumView.setText(String.valueOf(membersCount));
-                    horizontalRecyclerView.getAdapter().notifyDataSetChanged();
+                    notifyDataSetChanged();
                 }
             });
         }
 
+    }
+
+    private void notifyDataSetChanged(){
+        if(memberList.size() > 4){
+            layoutManager.setStackFromEnd(false);
+        }else{
+            layoutManager.setStackFromEnd(true);
+        }
+        horizontalRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     private synchronized void onRoomMemberExited(final String name) {
