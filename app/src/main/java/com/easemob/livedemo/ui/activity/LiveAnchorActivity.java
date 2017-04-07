@@ -109,8 +109,6 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         cameraView.switchCamera();
     }
 
-
-
     /**
      * 关闭直播显示直播成果
      */
@@ -150,17 +148,18 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         }.start();
     }
 
-
     private View liveEndView;
+
     private void showConfirmCloseLayout() {
-        if(liveEndView == null) {
+        if (liveEndView == null) {
             liveEndView = liveEndLayout.inflate();
         }
         liveContainer.setVisibility(View.INVISIBLE);
         liveEndView.setVisibility(View.VISIBLE);
         Button liveContinueBtn = (Button) liveEndView.findViewById(R.id.live_close_confirm);
         TextView usernameView = (TextView) liveEndView.findViewById(R.id.tv_username);
-        ImageView closeConfirmView = (ImageView) liveEndView.findViewById(R.id.img_finish_confirmed);
+        ImageView closeConfirmView =
+                (ImageView) liveEndView.findViewById(R.id.img_finish_confirmed);
         TextView watchedCountView = (TextView) liveEndView.findViewById(R.id.txt_watched_count);
         usernameView.setText(EMClient.getInstance().getCurrentUser());
         watchedCountView.setText(watchedCount + "人看过");
@@ -170,7 +169,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
                 liveEndView.setVisibility(View.GONE);
                 liveContainer.setVisibility(View.VISIBLE);
                 startPreview();
-                if(isStarted){
+                if (isStarted) {
                     cameraView.startRecording();
                 }
             }
@@ -181,7 +180,6 @@ public class LiveAnchorActivity extends LiveBaseActivity {
             }
         });
     }
-
 
     void handleUpdateCountdown(final int count) {
         if (countdownView != null) {
@@ -247,7 +245,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         super.onResume();
         //mEasyStreaming.onResume();
         startPreview();
-        if(isStarted){
+        if (isStarted) {
             cameraView.startRecording();
         }
         if (isMessageListInited) messageView.refresh();
@@ -280,7 +278,6 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         }
         EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
 
-
         executeRunnable(new Runnable() {
             @Override public void run() {
                 try {
@@ -290,17 +287,14 @@ public class LiveAnchorActivity extends LiveBaseActivity {
                 }
             }
         });
-
     }
 
     UStreamStateListener mStreamStateListener = new UStreamStateListener() {
         //stream state
-        @Override
-        public void onStateChanged(UStreamStateListener.State state, Object o) {
+        @Override public void onStateChanged(UStreamStateListener.State state, Object o) {
         }
 
-        @Override
-        public void onStreamError(UStreamStateListener.Error error, Object extra) {
+        @Override public void onStreamError(UStreamStateListener.Error error, Object extra) {
             switch (error) {
                 case IOERROR:
                     if (isStarted && cameraView.isPreviewed()) {
@@ -312,8 +306,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     };
 
     UNetworkListener mNetworkListener = new UNetworkListener() {
-        @Override
-        public void onNetworkStateChanged(State state, Object o) {
+        @Override public void onNetworkStateChanged(State state, Object o) {
             switch (state) {
                 case NETWORK_SPEED:
                     break;

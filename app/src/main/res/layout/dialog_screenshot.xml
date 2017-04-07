@@ -12,7 +12,6 @@
       android:layout_height="wrap_content"
       android:scaleType="fitXY"
       android:layout_weight="1"
-      android:src="@drawable/test1"
       android:layout_margin="5dp"
       />
   <LinearLayout
