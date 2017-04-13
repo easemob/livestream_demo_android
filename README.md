@@ -4,4 +4,4 @@
 ## 文档 ##
 > 环信及ucloud文档地址：
 > [http://docs.easemob.com/im/200androidclientintegration/50singlechat](http://docs.easemob.com/im/200androidclientintegration/50singlechat)，
-> [https://docs.ucloud.cn/upd-docs/ulive/index.html](https://docs.ucloud.cn/upd-docs/ulive/index.html)
+> [https://docs.ucloud.cn/video/ulive/index](https://docs.ucloud.cn/video/ulive/index)
