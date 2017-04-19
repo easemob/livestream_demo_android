@@ -82,11 +82,27 @@ public class ApiManager {
         return instance;
     }
 
-
+    /**
+     * 创建直播室
+     * @param name 直播室名称
+     * @param description 直播室描述
+     * @param coverUrl 直播封面图片url
+     * @return
+     * @throws LiveException
+     */
     public LiveRoom createLiveRoom(String name, String description, String coverUrl) throws LiveException {
         return createLiveRoomWithRequest(name, description, coverUrl, null);
     }
 
+    /**
+     * 根据指定的已经关联的直播室id创建直播
+     * @param name 直播室名称
+     * @param description 直播室描述
+     * @param coverUrl 直播封面图片url
+     * @param liveRoomId 要关联直播的直播室id
+     * @return
+     * @throws LiveException
+     */
     public LiveRoom createLiveRoom(String name, String description, String coverUrl, String liveRoomId) throws LiveException {
         return createLiveRoomWithRequest(name, description, coverUrl, liveRoomId);
     }
@@ -119,6 +135,12 @@ public class ApiManager {
         return liveRoom;
     }
 
+    /**
+     * 更新直播室封面
+     * @param roomId
+     * @param coverUrl
+     * @throws LiveException
+     */
     public void updateLiveRoomCover(String roomId, String coverUrl) throws LiveException {
         JSONObject jobj = new JSONObject();
         JSONObject picObj = new JSONObject();
@@ -153,11 +175,22 @@ public class ApiManager {
     //    handleResponseCall(respCall);
     //}
 
+    /**
+     * 获取直播室直播状态
+     * @param roomId
+     * @return
+     * @throws LiveException
+     */
     public LiveStatusModule.LiveStatus getLiveRoomStatus(String roomId) throws LiveException {
         Call<ResponseModule<LiveStatusModule>> respCall = apiService.getStatus(roomId);
         return handleResponseCall(respCall).body().data.status;
     }
 
+    /**
+     * 结束直播
+     * @param roomId
+     * @throws LiveException
+     */
     public void terminateLiveRoom(String roomId) throws LiveException {
         LiveStatusModule module = new LiveStatusModule();
         module.status = LiveStatusModule.LiveStatus.completed;
@@ -176,6 +209,13 @@ public class ApiManager {
         return response.data;
     }
 
+    /**
+     * 获取正在直播的直播室列表
+     * @param limit 取多少
+     * @param cursor 在这个游标基础上取数据，首次获取传null
+     * @return
+     * @throws LiveException
+     */
     public ResponseModule<List<LiveRoom>> getLivingRoomList(int limit, String cursor) throws LiveException {
         Call<ResponseModule<List<LiveRoom>>> respCall = apiService.getLivingRoomList(limit, cursor);
 
@@ -184,10 +224,22 @@ public class ApiManager {
         return response;
     }
 
+    /**
+     * 获取直播间详情
+     * @param roomId
+     * @return
+     * @throws LiveException
+     */
     public LiveRoom getLiveRoomDetails(String roomId) throws LiveException {
         return handleResponseCall(apiService.getLiveRoomDetails(roomId)).body().data;
     }
 
+    /**
+     * 获取用户已经关联的直播间
+     * @param userId
+     * @return
+     * @throws LiveException
+     */
     public List<String> getAssociatedRooms(String userId) throws LiveException {
         ResponseModule<List<String>> response = handleResponseCall(apiService.getAssociatedRoom(userId)).body();
         return response.data;
