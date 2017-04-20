@@ -6,6 +6,6 @@ package com.easemob.livedemo.data.restapi.model;
 
 public enum StatisticsType {
     PRAISE,
-    JOIN,
-    LEAVE
+    //JOIN,
+    //LEAVE
 }

@@ -106,7 +106,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
                         chatroom = emChatRoom;
                         addChatRoomChangeListener();
                         onMessageListInit();
-                        postUserChangeEvent(StatisticsType.JOIN, EMClient.getInstance().getCurrentUser());
+                        //postUserChangeEvent(StatisticsType.JOIN, EMClient.getInstance().getCurrentUser());
                     }
 
                     @Override public void onError(int i, String s) {
@@ -180,7 +180,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         if(isMessageListInited) {
             EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
 
-            postUserChangeEvent(StatisticsType.LEAVE, EMClient.getInstance().getCurrentUser());
+            //postUserChangeEvent(StatisticsType.LEAVE, EMClient.getInstance().getCurrentUser());
         }
 
         if (chatRoomChangeListener != null) {

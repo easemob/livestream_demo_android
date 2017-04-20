@@ -278,16 +278,16 @@ public class ApiManager {
         handleResponseCall(apiService.postStatistics(roomId, jsonToRequestBody(jobj.toString())));
     }
 
-    public void postStatistics(StatisticsType type, String roomId, String username) throws LiveException {
-        JSONObject jobj = new JSONObject();
-        try {
-            jobj.put("type", type);
-            jobj.put("count", username);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        handleResponseCall(apiService.postStatistics(roomId, jsonToRequestBody(jobj.toString())));
-    }
+    //public void postStatistics(StatisticsType type, String roomId, String username) throws LiveException {
+    //    JSONObject jobj = new JSONObject();
+    //    try {
+    //        jobj.put("type", type);
+    //        jobj.put("count", username);
+    //    } catch (JSONException e) {
+    //        e.printStackTrace();
+    //    }
+    //    handleResponseCall(apiService.postStatistics(roomId, jsonToRequestBody(jobj.toString())));
+    //}
 
     private <T> Response<T>handleResponseCall(Call<T> responseCall) throws LiveException{
         try {

@@ -20,9 +20,6 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.TestAvatarRepository;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.ApiManager;
-import com.easemob.livedemo.data.restapi.LiveException;
-import com.easemob.livedemo.data.restapi.model.StatisticsType;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.utils.Utils;
@@ -146,7 +143,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
                     String curUser = EMClient.getInstance().getCurrentUser();
                     if (curUser.equals(participant)) {
                         EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
-                        postUserChangeEvent(StatisticsType.LEAVE, curUser);
+                        //postUserChangeEvent(StatisticsType.LEAVE, curUser);
                         showToast("你已被移除出此房间");
                         finish();
                     } else {
@@ -457,17 +454,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
         });
     }
 
-    protected void postUserChangeEvent(final StatisticsType type, final String username) {
-        executeRunnable(new Runnable() {
-            @Override public void run() {
-                try {
-                    ApiManager.get().postStatistics(type, liveId, username);
-                } catch (LiveException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
 
     //@OnClick(R.id.root_layout) void onRootLayoutClick() {
