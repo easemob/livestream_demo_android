@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.ucloud.AVOption;
 import com.easemob.livedemo.ucloud.LiveCameraView;
@@ -281,7 +281,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         executeRunnable(new Runnable() {
             @Override public void run() {
                 try {
-                    ApiManager.get().terminateLiveRoom(liveId);
+                    LiveManager.getInstance().terminateLiveRoom(liveId);
                 } catch (LiveException e) {
                     e.printStackTrace();
                 }

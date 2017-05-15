@@ -152,7 +152,7 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
    * @return
   +    */
   protected List<EMConversation> loadConversationList(){
-    // get all conversations
+    // getInstance all conversations
     Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
     if(anchorId != null && !conversations.keySet().contains(anchorId)){
       addAnchorToConversation(conversations);

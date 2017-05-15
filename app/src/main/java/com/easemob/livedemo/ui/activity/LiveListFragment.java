@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.ui.GridMarginDecoration;
 import com.hyphenate.exceptions.HyphenateException;
@@ -91,7 +91,7 @@ public class LiveListFragment extends Fragment {
                 if(!isLoadMore){
                     cursor = null;
                 }
-                return ApiManager.get().getLivingRoomList(pageSize, cursor);
+                return LiveManager.getInstance().getLivingRoomList(pageSize, cursor);
             }
 
             @Override public void onSuccess(ResponseModule<List<LiveRoom>> listResponseModule) {

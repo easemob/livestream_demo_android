@@ -36,9 +36,9 @@ public class DemoApplication extends Application{
   private void initChatSdk(){
     //EMOptions options = new EMOptions();
     //options.enableDNSConfig(false);
-    //options.setRestServer("120.26.4.73:81");
-    //options.setIMServer("120.26.4.73");
-    //options.setImPort(6717);
+    //options.setRestServer("103.241.230.122:31080");
+    //options.setIMServer("103.241.230.122");
+    //options.setImPort(31097);
 
     EaseUI.getInstance().init(this, null);
     EMClient.getInstance().setDebugMode(true);

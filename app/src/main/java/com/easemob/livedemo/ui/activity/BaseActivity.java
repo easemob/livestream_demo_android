@@ -29,7 +29,7 @@ public class BaseActivity extends AppCompatActivity{
         getActionBarToolbar();
     }
     /**
-     * get the actionbar(toolbar) which view id is R.id.toolbar_actionbar
+     * getInstance the actionbar(toolbar) which view id is R.id.toolbar_actionbar
      */
     protected Toolbar getActionBarToolbar() {
         if (mActionBarToolbar == null) {

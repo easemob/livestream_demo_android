@@ -168,7 +168,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
                 });
         //ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<Void>() {
         //  @Override public Void onRequest() throws HyphenateException {
-        //    ApiManager.get().grantLiveRoomAdmin(liveId, username);
+        //    ApiManager.getInstance().grantLiveRoomAdmin(liveId, username);
         //    return null;
         //  }
         //

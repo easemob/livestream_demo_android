@@ -15,6 +15,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.json.JSONException;
 import org.json.JSONObject;
 import retrofit2.Call;
@@ -26,13 +27,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by wei on 2017/2/14.
  */
 
-public class ApiManager {
+public class LiveManager {
     private String appkey;
     private ApiService apiService;
 
-    private static  ApiManager instance;
+    private static LiveManager instance;
 
-    private ApiManager(){
+    private LiveManager(){
         try {
             ApplicationInfo appInfo = DemoApplication.getInstance().getPackageManager().getApplicationInfo(
                     DemoApplication.getInstance().getPackageName(), PackageManager.GET_META_DATA);
@@ -42,11 +43,11 @@ public class ApiManager {
             throw new RuntimeException("must set the easemob appkey");
         }
 
-        //HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        //httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(new RequestInterceptor())
-                //.addInterceptor(httpLoggingInterceptor)
+                .addInterceptor(httpLoggingInterceptor)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -75,9 +76,9 @@ public class ApiManager {
         }
     }
 
-    public static ApiManager get(){
+    public static LiveManager getInstance(){
         if(instance == null){
-            instance = new ApiManager();
+            instance = new LiveManager();
         }
         return instance;
     }
@@ -289,7 +290,7 @@ public class ApiManager {
     //    handleResponseCall(apiService.postStatistics(roomId, jsonToRequestBody(jobj.toString())));
     //}
 
-    private <T> Response<T>handleResponseCall(Call<T> responseCall) throws LiveException{
+    private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException{
         try {
             Response<T> response = responseCall.execute();
             if(!response.isSuccessful()){

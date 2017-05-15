@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
-import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
@@ -67,7 +67,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
 
         executeTask(new ThreadPoolManager.Task<LiveStatusModule.LiveStatus>() {
             @Override public LiveStatusModule.LiveStatus onRequest() throws HyphenateException {
-                return ApiManager.get().getLiveRoomStatus(liveId);
+                return LiveManager.getInstance().getLiveRoomStatus(liveId);
             }
 
             @Override public void onSuccess(LiveStatusModule.LiveStatus status) {
@@ -260,7 +260,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
                         if(count > 0) {
                             sendPraiseMessage(count);
                             try {
-                                ApiManager.get().postStatistics(StatisticsType.PRAISE, liveId, count);
+                                LiveManager.getInstance().postStatistics(StatisticsType.PRAISE, liveId, count);
                             } catch (LiveException e) {
                                 e.printStackTrace();
                             }

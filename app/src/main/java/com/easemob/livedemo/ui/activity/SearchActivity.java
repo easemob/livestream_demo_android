@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveManager;
 import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class SearchActivity extends BaseActivity {
     private void searchLiveRoom(final String searchText){
         executeTask(new ThreadPoolManager.Task<LiveRoom>() {
             @Override public LiveRoom onRequest() throws HyphenateException {
-                return ApiManager.get().getLiveRoomDetails(searchText);
+                return LiveManager.getInstance().getLiveRoomDetails(searchText);
             }
 
             @Override public void onSuccess(LiveRoom liveRoom) {

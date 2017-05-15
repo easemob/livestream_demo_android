@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.cloud.EMCloudOperationCallback;
@@ -66,7 +66,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
         executeTask(new ThreadPoolManager.Task<List<String>>() {
             @Override public List<String> onRequest() throws HyphenateException {
-                return ApiManager.get().getAssociatedRooms(EMClient.getInstance().getCurrentUser());
+                return LiveManager.getInstance().getAssociatedRooms(EMClient.getInstance().getCurrentUser());
             }
 
             @Override public void onSuccess(List<String> list) {
@@ -103,7 +103,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
             showProgressDialog("获取直播间信息...");
             executeTask(new ThreadPoolManager.Task<LiveRoom>() {
                 @Override public LiveRoom onRequest() throws HyphenateException {
-                    return ApiManager.get().getLiveRoomDetails(selectedLiveId);
+                    return LiveManager.getInstance().getLiveRoomDetails(selectedLiveId);
                 }
 
                 @Override public void onSuccess(LiveRoom liveRoom) {
@@ -190,10 +190,10 @@ public class AssociateLiveRoomActivity extends BaseActivity {
                     throw exception;
                 }
 
-                LiveRoom room =  ApiManager.get().createLiveRoom(name, desc, coverUrl, selectedLiveId);
+                LiveRoom room =  LiveManager.getInstance().createLiveRoom(name, desc, coverUrl, selectedLiveId);
                 //现在服务器没有更新封面，手动调用更新
                 try {
-                    ApiManager.get().updateLiveRoomCover(selectedLiveId, coverUrl);
+                    LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
                 } catch (LiveException e) {
                 }
                 return room;

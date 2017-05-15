@@ -17,7 +17,7 @@ import butterknife.OnClick;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.ApiManager;
+import com.easemob.livedemo.data.restapi.LiveManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.cloud.EMCloudOperationCallback;
 import com.hyphenate.cloud.HttpFileManager;
@@ -115,7 +115,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 if(exception != null){
                     throw exception;
                 }
-                return ApiManager.get().createLiveRoom(name, desc, coverUrl);
+                return LiveManager.getInstance().createLiveRoom(name, desc, coverUrl);
             }
 
             @Override public void onSuccess(LiveRoom liveRoom) {
