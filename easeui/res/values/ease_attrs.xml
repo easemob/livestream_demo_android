@@ -33,12 +33,17 @@
     <declare-styleable name="EaseChatExtendMenu">
         <attr name="numColumns" format="integer"/>
     </declare-styleable>
-    
+
     <declare-styleable name="EaseTitleBar">
-        <attr name="titleBarTitle" format="string"/>
+        <attr name="titleBarTitle" format="reference|string"/>
         <attr name="titleBarLeftImage" format="reference"/>
         <attr name="titleBarRightImage" format="reference"/>
+        <attr name="titleBarRightTitle" format="reference|string"/>
         <attr name="titleBarBackground" format="reference|color"/>
+        <attr name="titleBarArrowColor" format="reference|color"/>
+        <attr name="titleBarMenuResource" format="reference"/>
+        <attr name="titleBarRightVisible" format="boolean"/>
+        <attr name="titleBarDisplayHomeAsUpEnabled" format="boolean"/>
     </declare-styleable>
     
     <declare-styleable name="EaseSwitchButton">

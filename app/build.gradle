@@ -12,6 +12,7 @@ android {
         targetSdkVersion 26
         versionCode 2
         versionName "2.0"
+        multiDexEnabled true
         ndk {
             abiFilter 'armeabi-v7a'
         }
@@ -53,18 +54,19 @@ dependencies {
 //    compile(project(':ulive-android-sdk')) {
 //        exclude module: 'support-v4'
 //    }
+    implementation 'com.android.support:multidex:1.0.3'
 
 
-
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.github.florent37:viewanimator:1.0.4'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.weigan:loopView:0.1.1'
     testImplementation 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.17'

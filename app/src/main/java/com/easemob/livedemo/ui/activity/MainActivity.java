@@ -4,52 +4,50 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.ui.AboutMeFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.widget.EaseTitleBar;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseLiveActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private BottomNavigationView navView;
+    private EaseTitleBar mTitleBar;
+    private Fragment mCurrentFragment;
+    private Fragment mHomeFragment, mLiveListFragment, mAboutMeFragment;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-
-        getActionBarToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SearchActivity.class));
-            }
-        });
-        // 添加显示第一个fragment
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, new LiveListFragment())
-                .commit();
-
-        processConflictIntent(getIntent());
+    @Override
+    protected int getLayoutId() {
+        return R.layout.em_activity_main;
     }
 
-    @OnClick(R.id.floatingActionButton) void createLiveRoom() {
-        startActivity(new Intent(this, CreateLiveRoomActivity.class));
+    @Override
+    protected void initView() {
+        super.initView();
+        navView = findViewById(R.id.nav_view);
+        mTitleBar = findViewById(R.id.title_bar_main);
+        navView.setItemIconTintList(null);
     }
 
-    @OnClick(R.id.txt_logout) void logout() {
-        EMClient.getInstance().logout(false, new EMCallBack() {
-            @Override public void onSuccess() {
-                finish();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            }
+    @Override
+    protected void initListener() {
+        super.initListener();
+        navView.setOnNavigationItemSelectedListener(this);
+    }
 
-            @Override public void onError(int i, String s) {
-
-            }
-
-            @Override public void onProgress(int i, String s) {
-
-            }
-        });
+    @Override
+    protected void initData() {
+        super.initData();
+        switchToHome();
     }
 
     @Override protected void onNewIntent(Intent intent) {
@@ -73,6 +71,68 @@ public class MainActivity extends BaseActivity {
                         }
                     });
             builder.show();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        mTitleBar.setVisibility(View.VISIBLE);
+        switch (menuItem.getItemId()) {
+            case R.id.em_main_nav_home :
+                switchToHome();
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
+                return true;
+            case R.id.em_main_nav_live_list :
+                switchToLiveList();
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_live));
+                return true;
+            case R.id.em_main_nav_me :
+                switchToAboutMe();
+                mTitleBar.setVisibility(View.GONE);
+                return true;
+        }
+        return false;
+    }
+
+    private void switchToHome() {
+        if(mHomeFragment == null) {
+            mHomeFragment = new LivingListFragment();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("status", "ongoing");
+        mHomeFragment.setArguments(bundle);
+        replace(mHomeFragment);
+    }
+
+    private void switchToLiveList() {
+        if(mLiveListFragment == null) {
+            mLiveListFragment = new LiveListFragment();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("status", "all");
+        mLiveListFragment.setArguments(bundle);
+        replace(mLiveListFragment);
+    }
+
+    private void switchToAboutMe() {
+        if(mAboutMeFragment == null) {
+            mAboutMeFragment = new AboutMeFragment();
+        }
+        replace(mAboutMeFragment);
+    }
+
+    private void replace(Fragment fragment) {
+        if(mCurrentFragment != fragment) {
+            FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+            if(mCurrentFragment != null) {
+                t.hide(mCurrentFragment);
+            }
+            mCurrentFragment = fragment;
+            if(!fragment.isAdded()) {
+                t.add(R.id.fl_main_fragment, fragment).show(fragment).commit();
+            }else {
+                t.show(fragment).commit();
+            }
         }
     }
 }

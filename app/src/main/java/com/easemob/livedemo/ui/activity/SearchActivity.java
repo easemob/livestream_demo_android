@@ -15,6 +15,7 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
+import com.easemob.livedemo.ui.LiveListAdapter;
 import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.btn_cancel) TextView cancelView;
     List<LiveRoom> searchedList;
 
-    LiveListFragment.PhotoAdapter adapter;
+    LiveListAdapter adapter;
 
 
     @Override
@@ -72,12 +73,13 @@ public class SearchActivity extends BaseActivity {
                 emptyView.setVisibility(View.INVISIBLE);
                 searchedList.clear();
                 searchedList.add(liveRoom);
+
                 if(adapter == null) {
-                    adapter = new LiveListFragment.PhotoAdapter(SearchActivity.this, searchedList);
+                    adapter = new LiveListAdapter();
                     recyclerView.setAdapter(adapter);
-                }else{
-                    adapter.notifyDataSetChanged();
                 }
+
+                adapter.setData(searchedList);
             }
 
             @Override public void onError(HyphenateException exception) {

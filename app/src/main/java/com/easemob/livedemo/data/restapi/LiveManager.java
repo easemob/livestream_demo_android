@@ -203,11 +203,11 @@ public class LiveManager {
     //    handleResponseCall(respCall);
     //}
 
-    public List<LiveRoom> getLiveRoomList(int pageNum, int pageSize) throws LiveException {
+    public ResponseModule<List<LiveRoom>> getLiveRoomList(int pageNum, int pageSize) throws LiveException {
         Call<ResponseModule<List<LiveRoom>>> respCall = apiService.getLiveRoomList(pageNum, pageSize);
 
         ResponseModule<List<LiveRoom>> response = handleResponseCall(respCall).body();
-        return response.data;
+        return response;
     }
 
     /**

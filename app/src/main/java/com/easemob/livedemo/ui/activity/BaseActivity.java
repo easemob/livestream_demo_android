@@ -2,13 +2,18 @@ package com.easemob.livedemo.ui.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+
+import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+
 import android.view.View;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.utils.StatusBarCompat;
 import com.easemob.livedemo.utils.Utils;
 
 /**
@@ -16,9 +21,11 @@ import com.easemob.livedemo.utils.Utils;
  */
 public class BaseActivity extends AppCompatActivity{
     private Toolbar mActionBarToolbar;
+    private BaseActivity mContext;
 
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
@@ -81,6 +88,32 @@ public class BaseActivity extends AppCompatActivity{
         if(progressDialog != null){
             progressDialog.dismiss();
         }
+    }
+
+    /**
+     * 通用页面，需要设置沉浸式
+     * @param fitSystemForTheme
+     */
+    public void setFitSystemForTheme(boolean fitSystemForTheme) {
+        setFitSystemForTheme(fitSystemForTheme, R.color.white);
+        setStatusBarTextColor(false);
+    }
+
+    /**
+     * 设置是否是沉浸式，并可设置状态栏颜色
+     * @param fitSystemForTheme
+     * @param colorId 颜色资源路径
+     */
+    public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId) {
+        StatusBarCompat.setFitSystemForTheme(this, fitSystemForTheme, ContextCompat.getColor(mContext, colorId));
+    }
+
+    /**
+     * 修改状态栏文字颜色
+     * @param isLight 是否是浅色字体
+     */
+    public void setStatusBarTextColor(boolean isLight) {
+        StatusBarCompat.setLightStatusBar(mContext, !isLight);
     }
 
 }

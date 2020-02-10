@@ -25,6 +25,7 @@ public class LiveRoom implements Serializable {
     private String livePushUrl;
     @SerializedName("mobile_pull_url")
     private String livePullUrl;
+    private String status;
     //@SerializedName("liveshow_id")
     //private String showId;
 
@@ -98,6 +99,14 @@ public class LiveRoom implements Serializable {
 
     public void setLivePullUrl(String livePullUrl) {
         this.livePullUrl = livePullUrl;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     //public String getShowId() {

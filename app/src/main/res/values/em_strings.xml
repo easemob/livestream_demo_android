@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="em_main_title_home">直播大厅</string>
+    <string name="em_main_title_live">直播大厅</string>
+    <string name="em_main_title_me">我</string>
+
+    <string name="ease_list_no_data_text">暂无数据</string>
+
+    <string name="em_live_list_item_living">正在直播</string>
+    <string name="em_live_list_item_open">立即开播</string>
+    <string name="em_live_list_item_ongoing">主播在播</string>
+</resources>

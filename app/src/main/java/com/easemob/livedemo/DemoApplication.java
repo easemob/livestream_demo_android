@@ -1,7 +1,10 @@
 package com.easemob.livedemo;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+
+import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
 import com.easemob.livedemo.ui.activity.MainActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -9,18 +12,19 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.ucloud.ulive.UStreamingContext;
 
+import androidx.multidex.MultiDex;
+
 /**
  * Created by wei on 2016/5/27.
  */
 public class DemoApplication extends Application{
-
   private static DemoApplication instance;
-
+  private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
 
   @Override public void onCreate() {
     super.onCreate();
     instance = this;
-
+    registerActivityLifecycleCallbacks();
 
     initChatSdk();
 
@@ -58,6 +62,20 @@ public class DemoApplication extends Application{
         }
       }
     });
+  }
+
+  private void registerActivityLifecycleCallbacks() {
+    this.registerActivityLifecycleCallbacks(mLifecycleCallbacks);
+  }
+
+  public UserActivityLifecycleCallbacks getActivityLifecycle() {
+    return mLifecycleCallbacks;
+  }
+
+  @Override
+  protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    MultiDex.install(this);
   }
 
 }

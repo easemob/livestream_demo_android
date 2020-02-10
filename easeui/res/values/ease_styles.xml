@@ -3,6 +3,14 @@
 
     <style name="AppTheme" parent="android:Theme.Light" />
 
+    <style name="Toolbar.PopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <!--设置背景色-->
+        <!--<item name="android:background">@color/white</item>-->
+        <!--设置字体颜色-->
+        <item name="android:textColor">@color/black</item>
+        <!--设置不覆盖锚点，即不覆盖三个点-->
+        <item name="overlapAnchor">false</item>
+    </style>
 
     <style name="chat_content_date_style">
         <item name="android:minHeight">50dp</item>
