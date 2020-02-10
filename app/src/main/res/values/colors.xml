@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="colorPrimary">#323232</color>
+  <color name="colorPrimaryDark">#323232</color>
+  <color name="colorAccent">#ff00ba6e</color>
+  <color name="colorTextPrimary">#ffffff</color>
+
+  <color name="common_bottom_bar_normal_bg">#323232</color>
+  <color name="common_bottom_bar_selected_bg">#fff</color>
+  <color name="common_botton_bar_text_noral">#5E5E5E</color>
+  <color name="placeholder">#ddd</color>
+  <color name="author_background">#66000000</color>
+
+  <color name="common_bg">#E6E6EB</color>
+  <color name="tab_indicator">#323232</color>
+
+  <color name="common_red">#FF4C4C</color>
+  <color name="common_white">#fff</color>
+  <color name="common_black">#3B3B3B</color>
+
+  <color name="color_progress">#2196F3</color>
+
+  <color name="common_btn_white_normal">@color/common_white</color>
+  <color name="common_btn_white_pressed">#ccc</color>
+
+  <color name="common_btn_black_normal">#1A1A1A</color>
+  <color name="black_323232">#323232</color>
+  <color name="common_btn_black_pressed">#111010</color>
+  <color name="common_btn_blue_normal">#19A3FF</color>
+  <color name="common_btn_blue_pressed">#1887cd</color>
+  <color name="common_btn_blue_disabled">#B9B9B9</color>
+
+  <color name="color_room_my_msg">#1F83C7</color>
+  <color name="color_room_manager_orange">#FF8042</color>
+
+  <color name="color_text_primary">#5E5E5E</color>
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.activity.MainActivity"
+    >
+  <androidx.appcompat.widget.Toolbar
+      style="@style/ToolbarNormal"
+      android:id="@+id/toolbar_actionbar"
+      app:navigationIcon="@drawable/home_search"
+      >
+    <TextView
+        style="@style/TitleNormal"
+        android:text="环信直播"
+        />
+
+
+    <TextView
+        android:id="@+id/txt_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:layout_gravity="right"
+        android:gravity="center"
+        android:background="@null"
+        android:text="登出"
+        android:textSize="18sp"
+        android:textColor="@color/common_white"
+        />
+  </androidx.appcompat.widget.Toolbar>
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/fragment_container"
+      android:layout_below="@id/toolbar_actionbar"
+      >
+  </FrameLayout>
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      app:fabSize="normal"
+      app:backgroundTint="#19A3FF"
+      android:id="@+id/floatingActionButton"
+      android:src="@drawable/live_start_img"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentRight="true"
+      android:layout_margin="20dp"
+      />
+  <!--app:srcCompat="@color/holo_blue_bright"-->
+
+</RelativeLayout>

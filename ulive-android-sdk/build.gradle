@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+    }
+    lintOptions {
+        abortOnError false
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:23.0.0-alpha1'
+    implementation 'com.android.support:preference-v7:23+'
+}

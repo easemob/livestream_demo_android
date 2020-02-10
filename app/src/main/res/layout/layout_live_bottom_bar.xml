@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/comment_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:clickable="true"
+        android:src="@drawable/live_comment"
+        />
+
+    <ImageView
+        android:id="@+id/user_manager_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/comment_image"
+        android:src="@drawable/live_user_manager"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        >
+        <ImageView
+            android:id="@+id/switch_camera_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/live_switch_camera"
+            />
+        <ImageView
+            android:id="@+id/like_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/live_like"
+            android:visibility="invisible"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

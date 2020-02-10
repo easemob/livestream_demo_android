@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.easemob.livedemo.ui.activity.LiveAnchorActivity"
+    >
+    <RelativeLayout
+        android:id="@+id/live_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.easemob.livedemo.ucloud.LiveCameraView
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            >
+
+        </com.easemob.livedemo.ucloud.LiveCameraView>
+
+        <!-- top layout -->
+        <include layout="@layout/layout_live_toolbar"/>
+
+        <!--  android:background="@drawable/live_title_gradient"-->
+
+        <!--<include layout="@layout/room_user_list_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/toolbar"-->
+        <!--/>-->
+
+
+        <TextView
+            android:id="@+id/countdown_txtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="3"
+            android:textColor="@android:color/white"
+            android:textSize="136.0sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            />
+
+        <com.easemob.livedemo.ui.widget.RoomMessagesView
+            android:id="@+id/message_view"
+            android:layout_width="match_parent"
+            android:layout_height="174dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            />
+
+        <!-- <com.easemob.livedemo.ui.widget.BarrageLayout
+             android:id="@+id/barrage_layout"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_above="@id/message_view"
+             android:layout_marginBottom="10dp"
+             />-->
+
+        <com.easemob.livedemo.ui.widget.PeriscopeLayout
+            android:id="@+id/periscope_layout"
+            android:layout_width="150dp"
+            android:layout_height="190dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="42dp"
+            />
+
+        <!--  <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+              android:id="@+id/left_gift_view1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_above="@+id/left_gift_view2"
+              android:layout_marginBottom="4dp"
+              android:visibility="invisible"
+              />
+          <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+              android:id="@+id/left_gift_view2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:layout_marginBottom="5dp"
+              android:visibility="invisible"
+              />-->
+
+        <include
+            layout="@layout/layout_live_bottom_bar"
+            android:id="@+id/bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/message_container"
+            android:layout_width="match_parent"
+            android:layout_height="310dp"
+            android:layout_alignParentBottom="true"
+            ></RelativeLayout>
+    </RelativeLayout>
+    <ViewStub
+        android:id="@+id/finish_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/live_finish_layout"
+        />
+    <ImageView
+        android:id="@+id/cover_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
+        android:visibility="invisible"
+        />
+</RelativeLayout>

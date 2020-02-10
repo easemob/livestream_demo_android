@@ -1,0 +1,121 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.ucloud.uvod.widget.UVideoView
+            android:id="@+id/videoview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include layout="@layout/layout_live_toolbar"/>
+
+        <include layout="@layout/room_user_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            />
+
+        <!-- <ImageButton
+             android:id="@+id/img_bt_close_record"
+             android:onClick="close"
+             android:layout_width="@dimen/dp_80"
+             android:layout_height="@dimen/dp_80"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentBottom="true"
+             android:background="@drawable/live_selecter_room_close_button" />-->
+        <com.easemob.livedemo.ui.widget.RoomMessagesView
+            android:id="@+id/message_view"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible" />
+
+        <com.easemob.livedemo.ui.widget.BarrageLayout
+            android:id="@+id/barrage_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/message_view"
+            android:layout_marginBottom="10dp" />
+
+        <com.easemob.livedemo.ui.widget.PeriscopeLayout
+            android:id="@+id/periscope_layout"
+            android:layout_width="150dp"
+            android:layout_height="190dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="42dp"/>
+
+      <!--  <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+            android:id="@+id/left_gift_view1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/left_gift_view2"
+            android:layout_marginBottom="4dp"
+            android:visibility="invisible" />
+
+        <com.easemob.livedemo.ui.widget.LiveLeftGiftView
+            android:id="@+id/left_gift_view2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:visibility="invisible" />-->
+
+
+        <include
+            android:id="@+id/bottom_bar"
+            layout="@layout/layout_live_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/cover_image"
+            android:scaleType="fitXY"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            >
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:id="@+id/loading_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="正在加载..."
+                android:textColor="#fff"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+   <!-- <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/message_container"
+        android:layout_alignParentBottom="true"
+        ></RelativeLayout>-->
+</RelativeLayout>

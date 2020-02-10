@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    >
+  <androidx.appcompat.widget.Toolbar
+      style="@style/ToolbarNormal"
+      android:id="@id/toolbar"
+      android:background="@color/common_white"
+      >
+    <TextView
+        style="@style/TitleNormal"
+        android:id="@+id/title"
+        android:textColor="@color/common_black"
+        android:text="消息"
+        />
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/popup_close"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="12dp"
+        />
+
+  </androidx.appcompat.widget.Toolbar>
+    <com.hyphenate.easeui.widget.EaseConversationList
+        android:layout_marginTop="1dp"
+        android:id="@+id/conversation_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        />
+
+  </LinearLayout>
