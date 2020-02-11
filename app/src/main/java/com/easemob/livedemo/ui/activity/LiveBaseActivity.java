@@ -1,12 +1,18 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,8 +24,10 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.data.TestAvatarRepository;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.live.MemberAvatarAdapter;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.utils.Utils;
@@ -31,6 +39,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import java.util.ArrayList;
@@ -59,6 +68,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @BindView(R.id.like_image) ImageView likeImageView;
     @BindView(R.id.txt_live_id) TextView liveIdView;
     @BindView(R.id.tv_username) TextView usernameView;
+    @BindView(R.id.tv_member_num) TextView tvMemberNum;
+    @BindView(R.id.tv_attention) TextView tvAttention;
+    @BindView(R.id.toolbar) ViewGroup toolbar;
 
     protected String anchorId;
 
@@ -66,7 +78,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
     protected int watchedCount;
     protected int membersCount;
-
 
     /**
      * 环信聊天室id
@@ -86,38 +97,77 @@ public abstract class LiveBaseActivity extends BaseActivity {
     protected EMChatRoom chatroom;
     private static final int MAX_SIZE = 10;
     LinkedList<String> memberList = new LinkedList<>();
+    protected Handler handler = new Handler();
+    private LinearLayoutManager layoutManager;
+    private MemberAvatarAdapter avatarAdapter;
 
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         liveRoom = (LiveRoom) getIntent().getSerializableExtra("liveroom");
+        if(liveRoom == null) {
+            finish();
+            return;
+        }
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getChatroomId();
         anchorId = liveRoom.getAnchorId();
-        onActivityCreate(savedInstanceState);
-        usernameView.setText(anchorId);
-        liveIdView.setText(liveId);
-        audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
-        watchedCount = liveRoom.getAudienceNum();
+        onActivityCreated(savedInstanceState);
+        initView();
+        initListener();
+        initData();
     }
 
-    protected Handler handler = new Handler();
+    protected abstract void onActivityCreated(@Nullable Bundle savedInstanceState);
 
-    protected abstract void onActivityCreate(@Nullable Bundle savedInstanceState);
+    protected void initView() {
+        usernameView.setText(anchorId);
+        liveIdView.setText(getString(R.string.em_live_room_id, liveId));
+        audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
+        watchedCount = liveRoom.getAudienceNum();
+        tvMemberNum.setText(String.valueOf(watchedCount));
+    }
+
+    protected void initListener() {
+        tvMemberNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                skipToListDialog();
+            }
+        });
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AnchorClick();
+            }
+        });
+    }
+
+    /**
+     * 点击头像
+     */
+    protected void AnchorClick(){ }
+
+    protected void skipToListDialog() {
+
+    }
+
+    protected void initData() {
+
+    }
 
 
     protected void showPraise(final int count){
-        runOnUiThread(new Runnable() {
-            @Override public void run() {
-                for(int i = 0; i < count; i++){
-                    if(!isFinishing())
-                        periscopeLayout.addHeart();
-                }
+        runOnUiThread(() -> {
+            for(int i = 0; i < count; i++){
+                if(!mContext.isFinishing())
+                    periscopeLayout.addHeart();
             }
         });
-
     }
 
-
+    /**
+     * add chat room change listener
+     */
     protected void addChatRoomChangeListener() {
         chatRoomChangeListener = new EMChatRoomChangeListener() {
 
@@ -340,7 +390,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         //}
     }
 
-    private void showUserDetailsDialog(String username) {
+    protected void showUserDetailsDialog(String username) {
         RoomUserDetailsDialog dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
         dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
             @Override public void onKickMember(String username) {
@@ -366,12 +416,25 @@ public abstract class LiveBaseActivity extends BaseActivity {
         }, 200);
     }
 
-    private LinearLayoutManager layoutManager;
     void showMemberList() {
+        horizontalRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(LiveBaseActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         horizontalRecyclerView.setLayoutManager(layoutManager);
-        horizontalRecyclerView.setAdapter(new AvatarAdapter(LiveBaseActivity.this, memberList));
+        avatarAdapter = new MemberAvatarAdapter();
+        horizontalRecyclerView.setAdapter(avatarAdapter);
+        DividerItemDecoration decoration = new DividerItemDecoration(mContext, DividerItemDecoration.HORIZONTAL);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setSize((int) EaseCommonUtils.dip2px(mContext, 5), 0);
+        decoration.setDrawable(drawable);
+        horizontalRecyclerView.addItemDecoration(decoration);
+        avatarAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String item = avatarAdapter.getItem(position);
+                showUserDetailsDialog(item);
+            }
+        });
         executeTask(new ThreadPoolManager.Task<Void>() {
             @Override public Void onRequest() throws HyphenateException {
                 try {
@@ -389,6 +452,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
                         for (int i = 0; i < MAX_SIZE; i++){
                             memberList.add(i, tempList.get(i));
                         }
+                    }else {
+                        memberList.addAll(tempList);
                     }
                 } catch (HyphenateException e) {
                     e.printStackTrace();
@@ -401,7 +466,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 audienceNumView.setText(String.valueOf(size));
                 membersCount = size;
                 //观看人数不包含主播
-                watchedCount = membersCount -1;
+                watchedCount = membersCount;
+                tvMemberNum.setText(String.valueOf(watchedCount));
                 notifyDataSetChanged();
             }
 
@@ -423,6 +489,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override public void run() {
                     audienceNumView.setText(String.valueOf(membersCount));
+                    tvMemberNum.setText(String.valueOf(watchedCount));
                     notifyDataSetChanged();
                 }
             });
@@ -436,7 +503,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         }else{
             layoutManager.setStackFromEnd(true);
         }
-        horizontalRecyclerView.getAdapter().notifyDataSetChanged();
+        avatarAdapter.setData(memberList);
     }
 
     private synchronized void onRoomMemberExited(final String name) {
@@ -446,6 +513,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 audienceNumView.setText(String.valueOf(membersCount));
+                tvMemberNum.setText(String.valueOf(watchedCount));
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
                 if(name.equals(anchorId)){
                     showLongToast("主播已结束直播");
@@ -491,46 +559,63 @@ public abstract class LiveBaseActivity extends BaseActivity {
         super.onResume();
     }
 
-    private class AvatarAdapter extends RecyclerView.Adapter<AvatarViewHolder> {
-        List<String> namelist;
-        Context context;
-        TestAvatarRepository avatarRepository;
 
-        public AvatarAdapter(Context context, List<String> namelist) {
-            this.namelist = namelist;
-            this.context = context;
-            avatarRepository = new TestAvatarRepository();
-        }
+    private float preX, preY;
 
-        @Override public AvatarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new AvatarViewHolder(
-                    LayoutInflater.from(context).inflate(R.layout.avatar_list_item, parent, false));
-        }
-
-        @Override public void onBindViewHolder(AvatarViewHolder holder, final int position) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    showUserDetailsDialog(namelist.get(position));
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN :
+                preX = ev.getX();
+                preY = ev.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float curX = ev.getX();
+                float curY = ev.getY();
+                float x = curX - preX;
+                float y = curY - preY;
+                Log.e("TAG", "x = "+x + " y = "+y);
+                if(Math.abs(x) > Math.abs(y) && Math.abs(x) > 20) {
+                    float[] screenInfo = EaseCommonUtils.getScreenInfo(this);
+                    if(x > 0) {// 向右滑动
+                        slideToLeft(0, screenInfo[0]);
+                    }else {// 向左滑动
+                        slideToRight(screenInfo[0], 0);
+                    }
                 }
-            });
-            //暂时使用测试数据
-            Glide.with(context)
-                    .load(avatarRepository.getAvatar())
-                    .placeholder(R.drawable.ease_default_avatar)
-                    .into(holder.Avatar);
-        }
+                break;
+            case MotionEvent.ACTION_UP:
 
-        @Override public int getItemCount() {
-            return namelist.size();
+                break;
         }
+        return super.onTouchEvent(ev);
     }
 
-    static class AvatarViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.avatar) ImageView Avatar;
+    /**
+     * 向左滑动屏幕
+     * @param startX
+     * @param endY
+     */
+    protected void slideToLeft(int startX, float endY) {
 
-        public AvatarViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+    }
+
+    /**
+     * 向右滑动屏幕
+     * @param startX
+     * @param endX
+     */
+    protected void slideToRight(float startX, float endX) {
+
+    }
+
+    protected void startAnimation(View target, float startX, float endX) {
+        float x = target.getX();
+        if(x != startX) {
+            return;
         }
+        ObjectAnimator animator = ObjectAnimator.ofFloat(target, "translationX", startX, endX);
+        animator.setDuration(500);
+        animator.start();
     }
 }

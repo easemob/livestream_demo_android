@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hyphenate.easeui.widget.EaseImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/item_small_avatar_size"
-    android:layout_height="@dimen/item_small_avatar_size"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/avatar"
-    android:src="@drawable/ease_default_avatar"
-    android:scaleType="centerInside"
-    android:layout_marginRight="4dp"
-    app:ease_shape_type="round"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
-</com.hyphenate.easeui.widget.EaseImageView>
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/item_small_avatar_size"
+        android:layout_height="@dimen/item_small_avatar_size"
+        android:src="@drawable/ease_default_avatar"
+        android:scaleType="centerInside"
+        app:ease_shape_type="round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_gift_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="3056"
+        android:textSize="@dimen/em_size_small"
+        android:textColor="@color/white"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

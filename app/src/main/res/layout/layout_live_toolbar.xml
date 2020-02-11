@@ -1,76 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
-    android:background="@android:color/transparent"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-    <RelativeLayout
-        style="@style/ToolbarNormal"
-        android:background="@android:color/transparent"
+    android:layout_height="wrap_content">
 
-        >
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_anchor"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
-        >
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/horizontal_recycle_view"
+        app:layout_constraintTop_toTopOf="parent">
+
         <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/iv_icon"
             android:layout_width="@dimen/item_small_avatar_size"
             android:layout_height="@dimen/item_small_avatar_size"
             android:src="@drawable/ease_default_avatar"
             app:ease_shape_type="round"
-            />
-        <LinearLayout
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"/>
+
+        <TextView
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/tv_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="昵称"
-                android:textColor="@color/common_white"
-                />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                >
-                <TextView
-                    android:id="@+id/audience_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/common_white"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="人"
-                    android:textColor="@color/common_white"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+            tools:text="昵称"
+            android:textColor="@color/common_white"
+            app:layout_constraintLeft_toRightOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_icon"
+            android:layout_marginLeft="@dimen/em_margin_10"
+            android:layout_marginStart="@dimen/em_margin_10"/>
+
+        <TextView
+            android:id="@+id/audience_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="1人"
+            android:textColor="@color/common_white"
+            app:layout_constraintLeft_toRightOf="@id/iv_icon"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_username"
+            android:layout_marginLeft="@dimen/em_margin_10"
+            android:layout_marginStart="@dimen/em_margin_10"/>
+
+        <TextView
+            android:id="@+id/tv_attention"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="@string/em_live_attention"
+            android:gravity="center"
+            android:textColor="@color/em_color_warning"
+            android:textSize="@dimen/em_size_normal"
+            app:layout_constraintLeft_toRightOf="@id/tv_username"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_username"
+            app:layout_constraintBottom_toBottomOf="@id/audience_num"
+            android:layout_marginLeft="@dimen/em_margin_15"
+            android:layout_marginStart="@dimen/em_margin_15"
+            android:layout_marginRight="@dimen/em_margin_10"
+            android:layout_marginEnd="@dimen/em_margin_10"
+            android:visibility="gone"
+            android:background="@drawable/em_live_attention_bg_shape"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_member_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="30dp"
+        android:minWidth="30dp"
+        tools:text="500"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintLeft_toRightOf="@id/horizontal_recycle_view"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layout_anchor"
+        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:layout_marginEnd="@dimen/em_margin_10"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/horizontal_recycle_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="34dp"
-        android:layout_toLeftOf="@+id/img_bt_close"
-        android:layout_toRightOf="@id/layout_anchor"
-        />
+        app:layout_constraintLeft_toRightOf="@id/layout_anchor"
+        app:layout_constraintRight_toLeftOf="@id/tv_member_num"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintTop_toTopOf="@id/layout_anchor"
+        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
+        android:layout_marginLeft="@dimen/em_margin_10"
+        android:layout_marginStart="@dimen/em_margin_10"/>
+
+    <TextView
+        android:id="@+id/txt_live_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="15454545454"
+        android:textColor="@color/common_white"
+        app:layout_constraintTop_toBottomOf="@id/tv_member_num"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="@dimen/em_margin_10"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:layout_marginEnd="@dimen/em_margin_10"/>
+
     <ImageButton
         android:id="@+id/img_bt_close"
         android:layout_width="wrap_content"
@@ -78,29 +118,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         android:background="@drawable/live_close"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        />
-    </RelativeLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="12dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="房间号："
-            android:textColor="@color/common_white"
-            />
-        <TextView
-            android:id="@+id/txt_live_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="15454545454"
-            android:textColor="@color/common_white"
-            />
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

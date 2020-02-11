@@ -21,7 +21,7 @@ import com.easemob.livedemo.utils.Utils;
  */
 public class BaseActivity extends AppCompatActivity{
     private Toolbar mActionBarToolbar;
-    private BaseActivity mContext;
+    public BaseActivity mContext;
 
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

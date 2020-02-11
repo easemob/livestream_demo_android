@@ -1,10 +1,16 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.animation.ObjectAnimator;
+import android.content.MutableContextWrapper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -12,6 +18,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,6 +33,7 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.ucloud.ulive.UFilterProfile;
 import com.ucloud.ulive.UNetworkListener;
 import com.ucloud.ulive.UStreamStateListener;
@@ -31,12 +41,16 @@ import com.ucloud.ulive.UVideoProfile;
 
 public class LiveAnchorActivity extends LiveBaseActivity {
     private static final String TAG = LiveAnchorActivity.class.getSimpleName();
-    @BindView(R.id.container) LiveCameraView cameraView;
-    @BindView(R.id.countdown_txtv) TextView countdownView;
-    @BindView(R.id.finish_frame) ViewStub liveEndLayout;
-    @BindView(R.id.cover_image) ImageView coverImage;
-
-    @BindView(R.id.live_container) RelativeLayout liveContainer;
+    @BindView(R.id.container)
+    LiveCameraView cameraView;
+    @BindView(R.id.countdown_txtv)
+    TextView countdownView;
+    @BindView(R.id.finish_frame)
+    ViewStub liveEndLayout;
+    @BindView(R.id.cover_image)
+    ImageView coverImage;
+    @BindView(R.id.live_container)
+    ConstraintLayout liveContainer;
     //@BindView(R.id.img_bt_switch_light) ImageButton lightSwitch;
     //@BindView(R.id.img_bt_switch_voice) ImageButton voiceSwitch;
 
@@ -68,9 +82,11 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     };
 
     //203138620012364216
-    @Override protected void onActivityCreate(@Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.activity_live_anchor);
+    @Override
+    protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        setContentView(R.layout.em_activity_live_anchor);
         ButterKnife.bind(this);
+        setFitSystemForTheme(true, R.color.black);
         initLiveEnv();
 
         startLive();
@@ -95,7 +111,8 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         cameraView.stopRecordingAndDismissPreview();
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         //mEasyStreaming.();
         stopPreview();
         super.onBackPressed();
@@ -104,7 +121,8 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     /**
      * 切换摄像头
      */
-    @OnClick(R.id.switch_camera_image) void switchCamera() {
+    @OnClick(R.id.switch_camera_image)
+    void switchCamera() {
         //mEasyStreaming.switchCamera();
         cameraView.switchCamera();
     }
@@ -112,7 +130,8 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     /**
      * 关闭直播显示直播成果
      */
-    @OnClick(R.id.img_bt_close) void closeLive() {
+    @OnClick(R.id.img_bt_close)
+    void closeLive() {
         //mEasyStreaming.stopRecording();
         cameraView.onPause();
         stopPreview();
@@ -122,6 +141,18 @@ public class LiveAnchorActivity extends LiveBaseActivity {
             return;
         }
         showConfirmCloseLayout();
+    }
+
+    @Override
+    protected void slideToLeft(int startX, float endX) {
+        super.slideToLeft(startX, endX);
+        startAnimation(liveContainer, startX, endX);
+    }
+
+    @Override
+    protected void slideToRight(float startX, float endX) {
+        super.slideToRight(startX, endX);
+        startAnimation(liveContainer, startX, endX);
     }
 
     /**
@@ -234,14 +265,16 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         }
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         //mEasyStreaming.onPause();
         cameraView.onPause();
         stopPreview();
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         //mEasyStreaming.onResume();
         startPreview();
@@ -254,7 +287,8 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
     }
 
-    @Override public void onStop() {
+    @Override
+    public void onStop() {
         super.onStop();
         //stopPreview();
 
@@ -266,7 +300,8 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         EaseUI.getInstance().popActivity(this);
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         //mEasyStreaming.onDestroy();
         cameraView.release();

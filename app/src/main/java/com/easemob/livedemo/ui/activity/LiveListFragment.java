@@ -183,7 +183,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         if(living) {
             showDialog();
         }else {
-            startActivity(new Intent(mContext, LiveAudienceActivity.class)
+            startActivity(new Intent(mContext, LiveAnchorActivity.class)
                     .putExtra("liveroom", liveRoom));
         }
     }
