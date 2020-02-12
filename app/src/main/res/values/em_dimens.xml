@@ -7,8 +7,9 @@
     <dimen name="em_size_big">16sp</dimen>
     <dimen name="em_size_big_notify">18sp</dimen>
 
-    <dimen name="em_margin_15">15dp</dimen>
+    <dimen name="em_margin_5">5dp</dimen>
     <dimen name="em_margin_10">10dp</dimen>
+    <dimen name="em_margin_15">15dp</dimen>
     <dimen name="em_margin_20">20dp</dimen>
     <dimen name="em_margin_30">30dp</dimen>
     <dimen name="em_margin_40">40dp</dimen>

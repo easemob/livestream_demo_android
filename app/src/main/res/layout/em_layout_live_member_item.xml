@@ -31,13 +31,28 @@
         android:layout_marginLeft="@dimen/em_margin_10"
         android:layout_marginStart="@dimen/em_margin_10"/>
 
+    <TextView
+        android:id="@+id/tv_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="标签"
+        app:layout_constraintLeft_toRightOf="@id/txt_usernick"
+        app:layout_constraintTop_toTopOf="@id/txt_usernick"
+        app:layout_constraintBottom_toBottomOf="@id/txt_usernick"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/em_margin_10"
+        android:layout_marginStart="@dimen/em_margin_10"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"
+        android:background="@drawable/em_live_member_label_shape"/>
+
     <Button
         android:id="@+id/btn_manager"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_margin="10dp"
         android:background="@drawable/room_user_manager_btn"
-        android:text="移除房管"
+        tools:text="移除房管"
         android:textColor="#FF8042"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

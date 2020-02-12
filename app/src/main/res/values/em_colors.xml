@@ -2,6 +2,7 @@
 <resources>
     <color name="em_color_brand">#ff04aef0</color>
     <color name="em_color_warning">#ffff2b2b</color>
+    <color name="em_color_disable">#ff999999</color>
 
     <color name="em_color_common_text_black">#ff333333</color>
     <color name="em_color_common_text_gray">#ff999999</color>

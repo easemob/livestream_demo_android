@@ -155,6 +155,12 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         startAnimation(liveContainer, startX, endX);
     }
 
+    @Override
+    protected void skipToListDialog() {
+        super.skipToListDialog();
+        showUserList();
+    }
+
     /**
      * 开始直播
      */

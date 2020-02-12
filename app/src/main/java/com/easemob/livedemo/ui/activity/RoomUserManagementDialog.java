@@ -61,11 +61,11 @@ public class RoomUserManagementDialog extends DialogFragment {
     private void setupViewPager() {
         FragmentAdapter adapter = new FragmentAdapter(getChildFragmentManager());
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
-                RoomUserManagementFragment.ManagementType.ADMIN), "房管");
+                RoomUserManagementFragment.ManagementType.MEMBER), "成员");
+        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
+                RoomUserManagementFragment.ManagementType.BLACKLIST), "白名单");
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
                 RoomUserManagementFragment.ManagementType.MUTE), "禁言");
-        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
-                RoomUserManagementFragment.ManagementType.BLACKLIST), "黑名单");
         viewPager.setAdapter(adapter);
     }
 }

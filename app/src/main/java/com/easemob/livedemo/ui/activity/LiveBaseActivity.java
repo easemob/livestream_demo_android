@@ -147,6 +147,9 @@ public abstract class LiveBaseActivity extends BaseActivity {
      */
     protected void AnchorClick(){ }
 
+    /**
+     * 跳转到member列表
+     */
     protected void skipToListDialog() {
 
     }
@@ -532,7 +535,10 @@ public abstract class LiveBaseActivity extends BaseActivity {
         showInputView();
     }
 
-    @OnClick(R.id.user_manager_image) void showUserList() {
+    /**
+     * 展示观众列表（主播）
+     */
+    protected void showUserList() {
         RoomUserManagementDialog managementDialog = new RoomUserManagementDialog(chatroomId);
         managementDialog.show(getSupportFragmentManager(), "RoomUserManagementDialog");
     }
