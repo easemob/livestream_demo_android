@@ -22,4 +22,8 @@
     <string name="em_live_user_gift">礼物</string>
     <string name="em_live_user_send_gift">送出礼物</string>
     <string name="em_live_user_receive_gift">收到礼物</string>
+    <string name="em_live_gift_history">礼物记录</string>
+    <string name="em_live_gift_total">礼物数：%1$d</string>
+    <string name="em_live_gift_send_total">打赏人数：%1$d</string>
+    <string name="em_live_gift_sender_info">送出 X %1$d</string>
 </resources>

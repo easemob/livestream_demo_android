@@ -1,26 +1,19 @@
-package com.easemob.livedemo.ui.activity;
+package com.easemob.livedemo.ui.live;
 
-import android.animation.ObjectAnimator;
-import android.content.MutableContextWrapper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import androidx.annotation.Nullable;
 
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,11 +22,11 @@ import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.ucloud.AVOption;
 import com.easemob.livedemo.ucloud.LiveCameraView;
+import com.easemob.livedemo.ui.live.fragment.LiveGiftStatisticsDialog;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.ucloud.ulive.UFilterProfile;
 import com.ucloud.ulive.UNetworkListener;
 import com.ucloud.ulive.UStreamStateListener;
@@ -87,8 +80,12 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         setContentView(R.layout.em_activity_live_anchor);
         ButterKnife.bind(this);
         setFitSystemForTheme(true, R.color.black);
-        initLiveEnv();
+    }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        initLiveEnv();
         startLive();
     }
 
@@ -144,6 +141,12 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     }
 
     @Override
+    protected void onGiftClick() {
+        super.onGiftClick();
+        showGiftDialog();
+    }
+
+    @Override
     protected void slideToLeft(int startX, float endX) {
         super.slideToLeft(startX, endX);
         startAnimation(liveContainer, startX, endX);
@@ -159,6 +162,10 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     protected void skipToListDialog() {
         super.skipToListDialog();
         showUserList();
+    }
+
+    private void showGiftDialog() {
+        LiveGiftStatisticsDialog.getNewInstance().show(getSupportFragmentManager(), "git_statistics");
     }
 
     /**

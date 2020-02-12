@@ -1,4 +1,4 @@
-package com.easemob.livedemo.ui.activity;
+package com.easemob.livedemo.ui.live;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
-import com.easemob.livedemo.ui.live.LiveMemberListDialog;
+import com.easemob.livedemo.ui.live.fragment.LiveMemberListDialog;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -66,7 +66,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     @Override
     protected void initView() {
         super.initView();
-        switchCameraView.setVisibility(View.INVISIBLE);
+        switchCameraView.setVisibility(View.GONE);
         likeImageView.setVisibility(View.VISIBLE);
         Glide.with(this).load(liveRoom.getCover()).placeholder(R.color.placeholder).into(coverView);
         mVideoView = (UVideoView) findViewById(R.id.videoview);
@@ -102,6 +102,16 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     protected void AnchorClick() {
         super.AnchorClick();
         showUserDetailsDialog(chatroom.getOwner());
+    }
+
+    @Override
+    protected void onGiftClick() {
+        super.onGiftClick();
+        showGiftDialog();
+    }
+
+    private void showGiftDialog() {
+
     }
 
     private void connect(){

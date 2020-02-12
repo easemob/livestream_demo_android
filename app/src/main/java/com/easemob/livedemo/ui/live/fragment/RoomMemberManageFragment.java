@@ -1,4 +1,4 @@
-package com.easemob.livedemo.ui.live;
+package com.easemob.livedemo.ui.live.fragment;
 
 import android.text.TextUtils;
 import android.view.View;

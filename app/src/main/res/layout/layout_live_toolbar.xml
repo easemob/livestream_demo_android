@@ -111,15 +111,4 @@
         android:layout_marginRight="@dimen/em_margin_10"
         android:layout_marginEnd="@dimen/em_margin_10"/>
 
-    <ImageButton
-        android:id="@+id/img_bt_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:background="@drawable/live_close"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:visibility="gone"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

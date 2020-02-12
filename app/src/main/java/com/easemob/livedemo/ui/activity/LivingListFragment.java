@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 
 public class LivingListFragment extends LiveListFragment {
 

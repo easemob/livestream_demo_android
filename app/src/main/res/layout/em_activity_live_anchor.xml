@@ -58,7 +58,7 @@
         <include
             layout="@layout/em_layout_live_bottom_bar"
             android:id="@+id/bottom_bar"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
 
         <TextView
             android:id="@+id/countdown_txtv"

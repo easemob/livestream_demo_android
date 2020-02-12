@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.LiveAudienceActivity"
+            android:name=".ui.live.LiveAudienceActivity"
             android:parentActivityName=".ui.activity.MainActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
@@ -57,7 +57,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activity.LiveAnchorActivity"
+            android:name=".ui.live.LiveAnchorActivity"
             android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait">
             <meta-data

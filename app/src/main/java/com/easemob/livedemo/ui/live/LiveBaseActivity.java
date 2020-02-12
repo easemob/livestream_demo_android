@@ -1,7 +1,6 @@
-package com.easemob.livedemo.ui.activity;
+package com.easemob.livedemo.ui.live;
 
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,23 +10,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.bumptech.glide.Glide;
+
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.OnItemClickListener;
-import com.easemob.livedemo.data.TestAvatarRepository;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ui.live.MemberAvatarAdapter;
+import com.easemob.livedemo.ui.activity.BaseActivity;
+import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
+import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
+import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.utils.Utils;
@@ -71,6 +70,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @BindView(R.id.tv_member_num) TextView tvMemberNum;
     @BindView(R.id.tv_attention) TextView tvAttention;
     @BindView(R.id.toolbar) ViewGroup toolbar;
+    @BindView(R.id.live_receive_gift) ImageView liveReceiveGift;
 
     protected String anchorId;
 
@@ -140,6 +140,19 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 AnchorClick();
             }
         });
+        liveReceiveGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onGiftClick();
+            }
+        });
+    }
+
+    /**
+     * 点击礼物的事件
+     */
+    protected void onGiftClick() {
+
     }
 
     /**
@@ -377,7 +390,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         });
     }
 
-    protected void updateUnreadMsgView() {
+    public void updateUnreadMsgView() {
         //if(isMessageListInited) {
         //  for (EMConversation conversation : EMClient.getInstance()
         //      .chatManager()

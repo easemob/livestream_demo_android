@@ -19,9 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
-import com.easemob.livedemo.ui.live.RoomMemberManageFragment;
-import com.easemob.livedemo.ui.live.RoomMuteManageFragment;
-import com.easemob.livedemo.ui.live.RoomWhiteManageFragment;
+import com.easemob.livedemo.ui.live.fragment.RoomMemberManageFragment;
+import com.easemob.livedemo.ui.live.fragment.RoomMuteManageFragment;
+import com.easemob.livedemo.ui.live.fragment.RoomWhiteManageFragment;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
@@ -29,10 +29,8 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.easemob.livedemo.ui.activity.RoomUserManagementFragment.ManagementType.BLACKLIST;
-import static com.easemob.livedemo.ui.activity.RoomUserManagementFragment.ManagementType.MEMBER;
 import static com.easemob.livedemo.ui.activity.RoomUserManagementFragment.ManagementType.MUTE;
 
 /**

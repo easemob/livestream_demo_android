@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -35,20 +36,47 @@
         app:layout_constraintBottom_toBottomOf="@id/comment_image" />
 
     <ImageView
+        android:id="@+id/live_receive_gift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/live_button_present_normal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/switch_camera_image"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:layout_marginEnd="@dimen/em_margin_10"/>
+
+    <ImageView
         android:id="@+id/switch_camera_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/live_switch_camera"
+        android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toLeftOf="@id/like_image"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:layout_marginEnd="@dimen/em_margin_10"/>
 
     <ImageView
         android:id="@+id/like_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/live_like"
-        android:visibility="invisible"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/img_bt_close"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:layout_marginEnd="@dimen/em_margin_10"/>
+
+    <ImageButton
+        android:id="@+id/img_bt_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/live_close"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

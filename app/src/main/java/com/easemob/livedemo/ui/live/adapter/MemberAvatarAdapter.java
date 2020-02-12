@@ -1,4 +1,4 @@
-package com.easemob.livedemo.ui.live;
+package com.easemob.livedemo.ui.live.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

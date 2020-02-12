@@ -1,34 +1,25 @@
-package com.easemob.livedemo.ui.live;
+package com.easemob.livedemo.ui.live.fragment;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.OnItemClickListener;
-import com.easemob.livedemo.ui.activity.BaseDialogFragment;
+import com.easemob.livedemo.ui.live.adapter.LiveMemberAdapter;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class LiveMemberListDialog extends BaseDialogFragment {
+public class LiveMemberListDialog extends BaseLiveDialogFragment {
     private TextView tvMemberNum;
     private RecyclerView rvList;
     private LiveMemberAdapter adapter;
@@ -46,22 +37,6 @@ public class LiveMemberListDialog extends BaseDialogFragment {
     @Override
     public int getLayoutId() {
         return R.layout.em_fragment_live_member_list;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            Window dialogWindow = getDialog().getWindow();
-            dialogWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialogWindow.getDecorView().setPadding(0, 0, 0, 0);
-            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-            lp.gravity = Gravity.BOTTOM;
-            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialogWindow.setAttributes(lp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
