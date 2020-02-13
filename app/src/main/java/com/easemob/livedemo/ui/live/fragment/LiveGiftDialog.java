@@ -3,16 +3,20 @@ package com.easemob.livedemo.ui.live.fragment;
 import android.os.Bundle;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.ui.live.adapter.GiftFragmentAdapter;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 public class LiveGiftDialog extends BaseLiveDialogFragment {
     private ViewPager2 vpList;
     private TabLayout tabLayout;
+
+    public static LiveGiftDialog getNewInstance() {
+        return new LiveGiftDialog();
+    }
 
     @Override
     public int getLayoutId() {
@@ -25,29 +29,20 @@ public class LiveGiftDialog extends BaseLiveDialogFragment {
         vpList = findViewById(R.id.vp_list);
         tabLayout = findViewById(R.id.tab_layout);
 
-
+        //禁止ViewPager2滑动翻页
+        vpList.setUserInputEnabled(false);
+        GiftFragmentAdapter adapter = new GiftFragmentAdapter(mContext);
+        vpList.setAdapter(adapter);
+        //设置缓冲页数
+        vpList.setOffscreenPageLimit(1);//根据礼物类型进行变化
+        //关联TabLayout
+        TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, vpList, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                tab.setText(getString(R.string.em_live_gift_name));
+            }
+        });
+        mediator.attach();
     }
 
-    @Override
-    public void initData() {
-        super.initData();
-    }
-
-    private class GiftAdapter extends FragmentStateAdapter {
-
-        public GiftAdapter(@NonNull Fragment fragment) {
-            super(fragment);
-        }
-
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            return null;
-        }
-
-        @Override
-        public int getItemCount() {
-            return 0;
-        }
-    }
 }

@@ -1,10 +1,16 @@
 package com.easemob.livedemo.data.model;
 
-public class GiftBean {
+import java.io.Serializable;
+import java.util.List;
+
+public class GiftBean implements Serializable {
     private User user;
     private int type;
     private String gift;
     private int num;
+    private int resource;
+    private String name;
+    private boolean isChecked;
 
     public User getUser() {
         return user;
@@ -36,5 +42,29 @@ public class GiftBean {
 
     public void setNum(int num) {
         this.num = num;
+    }
+
+    public int getResource() {
+        return resource;
+    }
+
+    public void setResource(int resource) {
+        this.resource = resource;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

@@ -23,6 +23,7 @@ import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
+import com.easemob.livedemo.ui.live.fragment.LiveGiftDialog;
 import com.easemob.livedemo.ui.live.fragment.LiveMemberListDialog;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
@@ -111,7 +112,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     }
 
     private void showGiftDialog() {
-
+        LiveGiftDialog.getNewInstance().show(getSupportFragmentManager(), "live_gift");
     }
 
     private void connect(){

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp">
+
+    <EditText
+        android:id="@+id/et_input_num"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/em_margin_30"
+        android:layout_marginStart="@dimen/em_margin_30"
+        android:layout_marginRight="@dimen/em_margin_30"
+        android:layout_marginEnd="@dimen/em_margin_30"
+        android:paddingLeft="11dp"
+        android:paddingStart="11dp"
+        android:paddingRight="11dp"
+        android:paddingEnd="11dp"
+        android:layout_marginTop="6dp"
+        android:paddingBottom="6dp"
+        android:inputType="number"
+        android:maxLines="1"
+        android:maxLength="10"
+        android:background="@drawable/em_live_gift_et_num_bg_shape"/>
+
+</RelativeLayout>
