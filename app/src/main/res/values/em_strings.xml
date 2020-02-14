@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="em_live_welcome">欢迎使用环信直播聊天室</string>
     <string name="em_main_title_home">直播大厅</string>
     <string name="em_main_title_live">直播大厅</string>
     <string name="em_main_title_me">我</string>
