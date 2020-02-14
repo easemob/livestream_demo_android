@@ -1,29 +1,37 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ui.AboutMeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
-public class MainActivity extends BaseLiveActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private BottomNavigationView navView;
+public class MainActivity extends BaseLiveActivity implements View.OnClickListener {
     private EaseTitleBar mTitleBar;
     private Fragment mCurrentFragment;
     private Fragment mHomeFragment, mLiveListFragment, mAboutMeFragment;
+    private LinearLayout llHomeHome, llHomeSet;
+    private ImageView ivHomeHome, ivHomeSet;
+    private RelativeLayout rlHomeLive;
+    private int position;
 
     @Override
     protected int getLayoutId() {
@@ -33,21 +41,34 @@ public class MainActivity extends BaseLiveActivity implements BottomNavigationVi
     @Override
     protected void initView() {
         super.initView();
-        navView = findViewById(R.id.nav_view);
         mTitleBar = findViewById(R.id.title_bar_main);
-        navView.setItemIconTintList(null);
+        llHomeHome = findViewById(R.id.ll_home_home);
+        llHomeSet = findViewById(R.id.ll_home_set);
+        rlHomeLive = findViewById(R.id.rl_home_live);
+        ivHomeHome = findViewById(R.id.iv_home_home);
+        ivHomeSet = findViewById(R.id.iv_home_set);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        navView.setOnNavigationItemSelectedListener(this);
+        llHomeHome.setOnClickListener(this);
+        llHomeSet.setOnClickListener(this);
+        rlHomeLive.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        switchToHome();
+        skipToTarget(position);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState != null) {
+            position = savedInstanceState.getInt("position");
+        }
     }
 
     @Override protected void onNewIntent(Intent intent) {
@@ -74,27 +95,9 @@ public class MainActivity extends BaseLiveActivity implements BottomNavigationVi
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        mTitleBar.setVisibility(View.VISIBLE);
-        switch (menuItem.getItemId()) {
-            case R.id.em_main_nav_home :
-                switchToHome();
-                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
-                return true;
-            case R.id.em_main_nav_live_list :
-                switchToLiveList();
-                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_live));
-                return true;
-            case R.id.em_main_nav_me :
-                switchToAboutMe();
-                mTitleBar.setVisibility(View.GONE);
-                return true;
-        }
-        return false;
-    }
-
     private void switchToHome() {
+        ivHomeHome.setImageResource(R.drawable.em_live_home_selected);
+        ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
         if(mHomeFragment == null) {
             mHomeFragment = new LivingListFragment();
         }
@@ -105,6 +108,9 @@ public class MainActivity extends BaseLiveActivity implements BottomNavigationVi
     }
 
     private void switchToLiveList() {
+        startAnimation(1f, 0.9f, 1f, 0.9f);
+        ivHomeHome.setImageResource(R.drawable.em_live_home_unselected);
+        ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
         if(mLiveListFragment == null) {
             mLiveListFragment = new LiveListFragment();
         }
@@ -115,10 +121,18 @@ public class MainActivity extends BaseLiveActivity implements BottomNavigationVi
     }
 
     private void switchToAboutMe() {
+        ivHomeHome.setImageResource(R.drawable.em_live_home_unselected);
+        ivHomeSet.setImageResource(R.drawable.em_live_set_selected);
         if(mAboutMeFragment == null) {
             mAboutMeFragment = new AboutMeFragment();
         }
         replace(mAboutMeFragment);
+    }
+
+    private void startAnimation(float fromX, float toX, float fromY, float toY) {
+        ScaleAnimation animation = new ScaleAnimation(fromX, toX, fromY, toY, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(200);
+        rlHomeLive.startAnimation(animation);
     }
 
     private void replace(Fragment fragment) {
@@ -134,5 +148,45 @@ public class MainActivity extends BaseLiveActivity implements BottomNavigationVi
                 t.show(fragment).commit();
             }
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_home_home :
+                skipToTarget(0);
+                break;
+            case R.id.ll_home_set :
+                skipToTarget(2);
+                break;
+            case R.id.rl_home_live :
+                skipToTarget(1);
+                break;
+        }
+    }
+
+    private void skipToTarget(int position) {
+        this.position = position;
+        mTitleBar.setVisibility(View.VISIBLE);
+        switch (position) {
+            case 0 :
+                switchToHome();
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
+                break;
+            case 1 :
+                switchToLiveList();
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_live));
+                break;
+            case 2 :
+                switchToAboutMe();
+                mTitleBar.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("position", position);
     }
 }

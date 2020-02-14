@@ -21,25 +21,92 @@
         android:id="@+id/fl_main_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintBottom_toTopOf="@id/cl_bottom"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar_main" />
+        app:layout_constraintTop_toBottomOf="@id/title_bar_main"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bottom"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_main_nav_menu"
-        app:itemTextColor="@color/em_main_tab_text_selector"
-        app:itemTextAppearanceActive="@style/main_bottom_view_selected"
-        app:itemTextAppearanceInactive="@style/main_bottom_view_normal"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/ll_home_home"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/ll_home_middle"
+            app:layout_constraintHorizontal_chainStyle="spread_inside">
+
+            <ImageView
+                android:id="@+id/iv_home_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/em_live_home_selected" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_home_middle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/ll_home_home"
+            app:layout_constraintRight_toLeftOf="@id/ll_home_set"
+            app:layout_constraintHorizontal_chainStyle="spread_inside">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_home_set"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/ll_home_middle"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_home_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/em_live_set_unselected"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_home_live"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/em_live_home_live_bg_shape">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/em_live_logo"
+            android:padding="5dp"/>
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
