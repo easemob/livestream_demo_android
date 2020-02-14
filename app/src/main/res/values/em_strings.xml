@@ -38,4 +38,5 @@
     <string name="em_gift_send">赠送</string>
     <string name="em_gift_send_confirm">是否赠送</string>
     <string name="em_gift_send_info">%1$d个 %2$s</string>
+    <string name="em_gift_input_num_title">输入赠送数量</string>
 </resources>

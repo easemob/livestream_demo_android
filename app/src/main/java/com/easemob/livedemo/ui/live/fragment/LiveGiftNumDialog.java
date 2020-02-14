@@ -33,6 +33,11 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     }
 
     @Override
+    protected void setAnimation() {
+
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.em_fragment_dialog_live_gift_num;
     }
@@ -74,7 +79,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
                 tvGiftNum.setText(String.valueOf(giftNum));
                 break;
             case R.id.btn_send :
-                dismiss();
+                giftNum = getNum();
                 if(this.clickListener != null) {
                     clickListener.onGiftNum(v, giftNum);
                 }

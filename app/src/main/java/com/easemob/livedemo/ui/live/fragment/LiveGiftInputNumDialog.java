@@ -49,6 +49,7 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        mTvDialogTitle.setText(getString(R.string.em_gift_input_num_title));
         etInputNum.setText(String.valueOf(giftNum));
     }
 
@@ -61,6 +62,7 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
             return;
         }
         if(this.listener != null) {
+            dismiss();
             listener.onConfirmClick(v, Integer.valueOf(num));
         }
     }

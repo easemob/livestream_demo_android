@@ -32,7 +32,15 @@ public abstract class BaseDialogFragment extends DialogFragment {
         View view = inflater.inflate(getLayoutId(), container, false);
         setChildView(view);
         setDialogAttrs();
+        setAnimation();
         return view;
+    }
+
+    /**
+     * 设置转场动画
+     */
+    protected void setAnimation() {
+
     }
 
     public void setChildView(View view) {}

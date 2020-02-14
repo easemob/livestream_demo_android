@@ -70,6 +70,7 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         mTvDialogTitle.setText(getString(R.string.em_gift_send_confirm));
+        mBtnDialogConfirm.setText(getString(R.string.em_dialog_btn_give));
         ivGiftIcon.setImageResource(gift.getResource());
         tvGiftInfo.setText(getString(R.string.em_gift_send_info, giftNum, gift.getName()));
     }

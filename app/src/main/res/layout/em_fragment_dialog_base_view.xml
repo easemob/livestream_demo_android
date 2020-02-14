@@ -72,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_dialog_middle"
             android:background="@drawable/em_dialog_btn_selector"
-            android:text="@string/em_dialog_btn_give"
+            android:text="@string/em_dialog_btn_confirm"
             android:textColor="@color/em_dialog_btn_text_color_selector"/>
 
         <androidx.constraintlayout.widget.Group
