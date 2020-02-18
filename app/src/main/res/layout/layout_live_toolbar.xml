@@ -10,32 +10,41 @@
         android:id="@+id/layout_anchor"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:padding="1dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/horizontal_recycle_view"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="@dimen/em_margin_15"
+        android:layout_marginStart="@dimen/em_margin_15"
+        android:background="@drawable/em_live_live_anchor_bg_shape">
 
         <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/iv_icon"
             android:layout_width="@dimen/item_small_avatar_size"
             android:layout_height="@dimen/item_small_avatar_size"
-            android:src="@drawable/ease_default_avatar"
+            android:src="@drawable/em_live_logo"
             app:ease_shape_type="round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"/>
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"/>
 
         <TextView
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="昵称"
+            android:textSize="@dimen/em_size_small"
             android:textColor="@color/common_white"
             app:layout_constraintLeft_toRightOf="@id/iv_icon"
+            app:layout_constraintRight_toLeftOf="@id/tv_attention"
             app:layout_constraintTop_toTopOf="@id/iv_icon"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
             android:layout_marginLeft="@dimen/em_margin_10"
-            android:layout_marginStart="@dimen/em_margin_10"/>
+            android:layout_marginStart="@dimen/em_margin_10"
+            android:layout_marginEnd="@dimen/em_margin_15"
+            android:layout_marginRight="@dimen/em_margin_15"/>
 
         <TextView
             android:id="@+id/audience_num"
@@ -47,7 +56,8 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_icon"
             app:layout_constraintTop_toBottomOf="@id/tv_username"
             android:layout_marginLeft="@dimen/em_margin_10"
-            android:layout_marginStart="@dimen/em_margin_10"/>
+            android:layout_marginStart="@dimen/em_margin_10"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_attention"
@@ -61,8 +71,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_username"
             app:layout_constraintBottom_toBottomOf="@id/audience_num"
-            android:layout_marginLeft="@dimen/em_margin_15"
-            android:layout_marginStart="@dimen/em_margin_15"
             android:layout_marginRight="@dimen/em_margin_10"
             android:layout_marginEnd="@dimen/em_margin_10"
             android:visibility="gone"
@@ -79,13 +87,18 @@
         tools:text="500"
         android:textColor="@color/white"
         android:gravity="center"
-        android:textSize="@dimen/em_size_big"
+        android:textSize="@dimen/em_size_normal"
         app:layout_constraintLeft_toRightOf="@id/horizontal_recycle_view"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/layout_anchor"
         app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
         android:layout_marginRight="@dimen/em_margin_10"
-        android:layout_marginEnd="@dimen/em_margin_10"/>
+        android:layout_marginEnd="@dimen/em_margin_10"
+        android:paddingLeft="@dimen/em_margin_15"
+        android:paddingStart="@dimen/em_margin_15"
+        android:paddingEnd="@dimen/em_margin_15"
+        android:paddingRight="@dimen/em_margin_15"
+        android:background="@drawable/em_live_live_audience_num_bg_shape"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/horizontal_recycle_view"
@@ -109,6 +122,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="@dimen/em_margin_10"
         android:layout_marginRight="@dimen/em_margin_10"
-        android:layout_marginEnd="@dimen/em_margin_10"/>
+        android:layout_marginEnd="@dimen/em_margin_10"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

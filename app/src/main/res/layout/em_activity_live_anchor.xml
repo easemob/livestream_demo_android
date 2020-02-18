@@ -41,11 +41,12 @@
         <com.easemob.livedemo.ui.widget.RoomMessagesView
             android:id="@+id/message_view"
             android:layout_width="0dp"
-            android:layout_height="174dp"
+            android:layout_height="280dp"
+            android:layout_alignParentBottom="true"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <com.easemob.livedemo.ui.widget.PeriscopeLayout
             android:id="@+id/periscope_layout"

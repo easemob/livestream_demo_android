@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageGroupView">
+        <attr name="image_group_src" format="reference"/>
+        <attr name="image_group_width" format="dimension">
+            <!-- The view should be as big as its parent (minus padding).
+                 This constant is deprecated starting from API Level 8 and
+                 is replaced by {@code match_parent}. -->
+            <enum name="fill_parent" value="-1" />
+            <!-- The view should be as big as its parent (minus padding).
+                 Introduced in API Level 8. -->
+            <enum name="match_parent" value="-1" />
+            <!-- The view should be only big enough to enclose its content (plus padding). -->
+            <enum name="wrap_content" value="-2" />
+        </attr>
+        <attr name="image_group_height" format="dimension">
+            <!-- The view should be as big as its parent (minus padding).
+                 This constant is deprecated starting from API Level 8 and
+                 is replaced by {@code match_parent}. -->
+            <enum name="fill_parent" value="-1" />
+            <!-- The view should be as big as its parent (minus padding).
+                 Introduced in API Level 8. -->
+            <enum name="match_parent" value="-1" />
+            <!-- The view should be only big enough to enclose its content (plus padding). -->
+            <enum name="wrap_content" value="-2" />
+        </attr>
+    </declare-styleable>
+
+</resources>

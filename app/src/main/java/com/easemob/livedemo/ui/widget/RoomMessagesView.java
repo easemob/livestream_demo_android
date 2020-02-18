@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -169,7 +171,7 @@ public class RoomMessagesView extends RelativeLayout{
                 if (EMClient.getInstance().getCurrentUser().equals(message.getFrom())) {
                     holder.content.setTextColor(getResources().getColor(R.color.color_room_my_msg));
                 } else {
-                    holder.content.setTextColor(getResources().getColor(R.color.common_white));
+                    holder.content.setTextColor(Color.parseColor("#FFC700"));
                 }
                 holder.itemView.setOnClickListener(new OnClickListener() {
                     @Override public void onClick(View v) {
