@@ -22,9 +22,10 @@
     <string name="em_live_anchor_mute">禁言</string>
     <string name="em_live_anchor_remove_white">删除</string>
     <string name="em_live_user_fans">粉丝</string>
+    <string name="em_live_user_star">被赞</string>
     <string name="em_live_user_attentions">关注</string>
     <string name="em_live_user_gift">礼物</string>
-    <string name="em_live_user_send_gift">送出礼物</string>
+    <string name="em_live_user_send_gift">礼物</string>
     <string name="em_live_user_receive_gift">收到礼物</string>
     <string name="em_live_gift_name">礼物</string>
     <string name="em_live_gift_history">礼物记录</string>

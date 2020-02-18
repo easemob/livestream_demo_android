@@ -4,24 +4,37 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
-    android:layout_gravity="bottom">
+    android:layout_gravity="center">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="@dimen/em_margin_15"
+        android:layout_marginStart="@dimen/em_margin_15"
+        android:layout_marginRight="@dimen/em_margin_15"
+        android:layout_marginEnd="@dimen/em_margin_15"
+        android:background="@drawable/em_live_user_detail_bg_shape"/>
 
     <com.hyphenate.easeui.widget.EaseImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/ease_default_avatar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:ease_shape_type="round"/>
 
     <TextView
         android:id="@+id/tv_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         tools:text="username"
         android:textColor="@color/common_black"
         android:textSize="18sp"
@@ -32,44 +45,43 @@
     <TextView
         android:id="@+id/tv_fan_num"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_attention_num"
+        app:layout_constraintRight_toLeftOf="@id/tv_gift_num"
         app:layout_constraintTop_toBottomOf="@id/tv_username"
-        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintHorizontal_weight="1.5"
         android:layout_marginTop="@dimen/em_margin_20"
+        android:layout_marginLeft="75dp"
         android:text="0"
         style="@style/em_live_user_tv_num" />
 
     <TextView
-        app:layout_constraintCircle="@id/tv_fan_num"
-        app:layout_constraintCircleAngle="180"
-        app:layout_constraintCircleRadius="@dimen/em_margin_25"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_fan_num"
-        android:text="@string/em_live_user_fans"
-        style="@style/em_live_user_tv_num"/>
-
-    <TextView
-        android:id="@+id/tv_attention_num"
-        app:layout_constraintLeft_toRightOf="@id/tv_fan_num"
-        app:layout_constraintRight_toLeftOf="@id/tv_gift_num"
+        app:layout_constraintRight_toLeftOf="@id/tv_fan_num"
         app:layout_constraintTop_toTopOf="@id/tv_fan_num"
         app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
-        app:layout_constraintHorizontal_weight="1"
-        android:text="0"
-        style="@style/em_live_user_tv_num"/>
+        android:text="@string/em_live_user_fans"
+        style="@style/em_live_user_tv_num_title"/>
 
-    <TextView
-        app:layout_constraintCircle="@id/tv_attention_num"
-        app:layout_constraintCircleAngle="180"
-        app:layout_constraintCircleRadius="@dimen/em_margin_25"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_attention_num"
-        android:text="@string/em_live_user_attentions"
-        style="@style/em_live_user_tv_num"/>
 
     <TextView
         android:id="@+id/tv_gift_num"
-        app:layout_constraintLeft_toRightOf="@id/tv_attention_num"
+        app:layout_constraintLeft_toRightOf="@id/tv_fan_num"
+        app:layout_constraintRight_toLeftOf="@id/tv_attention_num"
+        app:layout_constraintTop_toTopOf="@id/tv_fan_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
+        app:layout_constraintHorizontal_weight="1.2"
+        android:layout_marginRight="@dimen/em_margin_20"
+        android:text="0"
+        style="@style/em_live_user_tv_num"/>
+
+    <TextView
+        app:layout_constraintRight_toLeftOf="@id/tv_gift_num"
+        app:layout_constraintTop_toTopOf="@id/tv_gift_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_gift_num"
+        android:text="@string/em_live_user_send_gift"
+        style="@style/em_live_user_tv_num_title"/>
+
+    <TextView
+        android:id="@+id/tv_attention_num"
+        app:layout_constraintLeft_toRightOf="@id/tv_gift_num"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_fan_num"
         app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
@@ -78,13 +90,12 @@
         style="@style/em_live_user_tv_num"/>
 
     <TextView
-        app:layout_constraintCircle="@id/tv_gift_num"
-        app:layout_constraintCircleAngle="180"
-        app:layout_constraintCircleRadius="@dimen/em_margin_25"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_gift_num"
-        android:text="@string/em_live_user_send_gift"
-        style="@style/em_live_user_tv_num"/>
+        app:layout_constraintRight_toLeftOf="@id/tv_attention_num"
+        app:layout_constraintTop_toTopOf="@id/tv_attention_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_attention_num"
+        android:text="@string/em_live_user_star"
+        style="@style/em_live_user_tv_num_title"/>
+
 
     <LinearLayout
         android:id="@+id/layout_live_no_talk"
@@ -172,11 +183,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
+    
+    <Button
+        android:id="@+id/btn_attention"
+        android:layout_width="120dp"
+        android:layout_height="35dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_gift_num"
+        android:layout_marginTop="@dimen/em_margin_30"
+        android:layout_marginBottom="@dimen/em_margin_25"
+        android:background="@drawable/em_live_btn_attention_bg_shape"
+        android:text="@string/em_live_user_attentions"
+        android:drawableLeft="@drawable/em_live_plus_white"
+        android:drawableStart="@drawable/em_live_plus_white"
+        android:paddingLeft="@dimen/em_margin_25"
+        android:paddingStart="@dimen/em_margin_25"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big_notify"/>
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/layout_management"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:constraint_referenced_ids="layout_live_no_talk,layout_live_add_blacklist,layout_live_kick,btn_set_admin"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -74,7 +74,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         }
     };
 
-    //203138620012364216
+    //203138620012364216img_bt_close
     @Override
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.em_activity_live_anchor);

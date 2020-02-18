@@ -37,19 +37,21 @@
         app:layout_constraintLeft_toRightOf="@id/comment_image"
         app:layout_constraintTop_toTopOf="@id/comment_image"
         app:layout_constraintBottom_toBottomOf="@id/comment_image"
+        android:visibility="gone"
         android:background="@drawable/em_live_button_bg_shape"/>
 
+
     <ImageView
-        android:id="@+id/live_receive_gift"
+        android:id="@+id/img_bt_close"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:padding="@dimen/em_margin_10"
-        android:src="@drawable/live_button_present_normal"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/em_live_close"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/switch_camera_image"
-        android:layout_marginRight="@dimen/em_margin_10"
-        android:layout_marginEnd="@dimen/em_margin_10"
         android:background="@drawable/em_live_button_bg_shape"/>
 
     <ImageView
@@ -75,22 +77,23 @@
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/img_bt_close"
+        app:layout_constraintRight_toLeftOf="@id/live_receive_gift"
         android:layout_marginRight="@dimen/em_margin_10"
         android:layout_marginEnd="@dimen/em_margin_10"
         android:background="@drawable/em_live_button_bg_shape"/>
 
-    <ImageButton
-        android:id="@+id/img_bt_close"
+
+    <ImageView
+        android:id="@+id/live_receive_gift"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:padding="@dimen/em_margin_10"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:src="@drawable/live_close"
+        android:src="@drawable/live_gift"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:layout_marginEnd="@dimen/em_margin_10"
         android:background="@drawable/em_live_button_bg_shape"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
