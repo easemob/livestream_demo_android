@@ -7,9 +7,12 @@
 
     <string name="ease_list_no_data_text">暂无数据</string>
 
+    <string name="em_live_list_all_title">选择聊天室开始直播</string>
+
     <string name="em_live_list_item_living">正在直播</string>
     <string name="em_live_list_item_open">立即开播</string>
     <string name="em_live_list_item_ongoing">主播在播</string>
+    <string name="em_live_list_item_lived">主播在播\n不能选择</string>
 
     <string name="em_live_attention">关注</string>
     <string name="em_live_member_num">观众（%1$d）</string>

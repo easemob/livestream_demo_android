@@ -81,11 +81,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     private void initView() {
         loadmorePB = (ProgressBar) getView().findViewById(R.id.pb_load_more);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
-        layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+        layoutManager = new GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
         swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new GridMarginDecoration(3));
+        recyclerView.addItemDecoration(new GridMarginDecoration(mContext,3));
         adapter = new LiveListAdapter();
         recyclerView.setAdapter(adapter);
 

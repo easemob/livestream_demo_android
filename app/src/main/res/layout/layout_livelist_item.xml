@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.easemob.livedemo.ui.widget.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="400dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <!--android:foreground="@drawable/grey_ripple"-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,12 +20,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <View
+            android:id="@+id/view_lived_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/em_live_list_item_lived_bg_shape"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_gravity="bottom|end"
             android:gravity="bottom"
-            android:background="@drawable/gradient_bg"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -37,19 +47,21 @@
                 android:paddingBottom="5dp"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
-                android:text="Tom"
-                android:textColor="@color/placeholder" />
+                tools:text="Tom"
+                android:textColor="@color/placeholder"
+                android:textSize="@dimen/em_size_big"/>
 
             <TextView
                 android:id="@+id/audience_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="5dp"
+                android:paddingBottom="8dp"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
-                android:text="1 person"
+                tools:text="1263正在看"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/placeholder" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/em_size_normal"/>
 
         </RelativeLayout>
 
@@ -57,22 +69,24 @@
             android:id="@+id/tv_ongoing_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="16dp"
             android:text="@string/em_live_list_item_living"
-            android:textSize="@dimen/em_size_normal"
+            android:textSize="@dimen/em_size_smaller"
             android:textColor="@color/white"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/em_live_list_item_living_shape"
+            android:gravity="center_vertical"
+            android:paddingLeft="3dp"
+            android:paddingRight="6dp"
+            android:background="@drawable/em_live_living_bg_shape"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:drawablePadding="2dp"
+            android:drawableLeft="@drawable/em_living_icon"
             android:layout_marginTop="@dimen/em_margin_10"
             android:layout_marginLeft="@dimen/em_margin_10"
             android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/tv_status"
+            android:id="@+id/tv_status_unactivite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/em_live_list_item_open"
@@ -82,14 +96,40 @@
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@drawable/em_live_unactivity_icon"
             android:background="@drawable/em_live_list_item_living_shape"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="@dimen/em_margin_10"
-            android:layout_marginLeft="@dimen/em_margin_10"
             android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_status_lived"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/em_live_list_item_lived"
+            android:textSize="@dimen/em_size_big"
+            android:textColor="@color/white"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:lineSpacingExtra="5dp"
+            android:background="@drawable/em_live_list_item_lived_shape"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_lived"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="view_lived_bg,tv_status_lived"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

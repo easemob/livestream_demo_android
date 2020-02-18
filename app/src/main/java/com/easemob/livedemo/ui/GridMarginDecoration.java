@@ -16,36 +16,58 @@
 
 package com.easemob.livedemo.ui;
 
+import android.content.Context;
 import android.graphics.Rect;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
+
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 public class GridMarginDecoration extends RecyclerView.ItemDecoration {
 
     private int space;
 
-    public GridMarginDecoration(int space) {
-        this.space = space;
+    public GridMarginDecoration(Context context, int space) {
+        this.space = (int) (EaseCommonUtils.dip2px(context, space) / 2);
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view,
                                RecyclerView parent, RecyclerView.State state) {
-        outRect.right = 0;
-        outRect.bottom = 0;
+        outRect.right = space;
+        outRect.bottom = space;
         outRect.left = space;
         outRect.top = space;
 
-        int pos = parent.getChildAdapterPosition(view) + 1;
+        int pos = parent.getChildAdapterPosition(view);
         int spanCount = ((GridLayoutManager)parent.getLayoutManager()).getSpanCount();
         int childCount = parent.getAdapter().getItemCount();
-        if(pos == 0 || pos % spanCount == 1){
+        //最左边没有padding
+        if(pos % spanCount == 0){
             outRect.left = 0;
         }
-        int rows = childCount % spanCount == 0 ? childCount/spanCount : childCount/spanCount+1;
-        int rowNum = pos % spanCount == 0 ? pos/spanCount : pos/spanCount+1;
-        if(rowNum == rows) outRect.bottom = space;
+        //最右边也没有padding
+        if(pos % spanCount == spanCount - 1) {
+            outRect.right = 0;
+        }
+        //最上边也没有padding
+        if(pos < spanCount) {
+            outRect.top = 0;
+        }
+        //在最下边也没有padding，此处需要分情况
+        int rows = childCount % spanCount == 0 ? childCount/spanCount : childCount/spanCount + 1;
+        int rowNum = pos % spanCount == 0 ? pos/spanCount + 1: (int) Math.floor(pos / spanCount) + 1;
+        if(rowNum == rows) {
+            outRect.bottom = 0;
+        }else {
+            int lastRowChildCount = (childCount - 1) % spanCount;
+            if(rowNum == rows - 1 && pos % spanCount > lastRowChildCount) {
+                outRect.bottom = 0;
+            }
+        }
 
     }
 }

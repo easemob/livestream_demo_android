@@ -157,10 +157,10 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
                 skipToTarget(0);
                 break;
             case R.id.ll_home_set :
-                skipToTarget(2);
+                skipToTarget(1);
                 break;
             case R.id.rl_home_live :
-                skipToTarget(1);
+                LiveAllActivity.actionStart(mContext);
                 break;
         }
     }
@@ -173,11 +173,11 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
                 switchToHome();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
                 break;
+//            case 1 :
+//                switchToLiveList();
+//                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_live));
+//                break;
             case 1 :
-                switchToLiveList();
-                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_live));
-                break;
-            case 2 :
                 switchToAboutMe();
                 mTitleBar.setVisibility(View.GONE);
                 break;

@@ -14,6 +14,7 @@ import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.adapter.EaseBaseRecyclerViewAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
 
 public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
@@ -38,6 +39,7 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
         private TextView audienceNum;
         private TextView tvOngoingStatus;
         private TextView tvStatus;
+        private Group groupLived;
 
         public PhotoViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -49,7 +51,8 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
             author = findViewById(R.id.author);
             audienceNum = findViewById(R.id.audience_num);
             tvOngoingStatus = findViewById(R.id.tv_ongoing_status);
-            tvStatus = findViewById(R.id.tv_status);
+            tvStatus = findViewById(R.id.tv_status_unactivite);
+            groupLived = findViewById(R.id.group_lived);
         }
 
         @Override
@@ -62,18 +65,18 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
                 tvStatus.setVisibility(View.VISIBLE);
                 String status = liveRoom.getStatus();
                 if(!TextUtils.isEmpty(status) && TextUtils.equals(status, DemoConstants.LIVE_ONGOING)) {
-                    tvStatus.setText(mContext.getString(R.string.em_live_list_item_ongoing));
-                    tvStatus.setBackground(null);
+                    groupLived.setVisibility(View.VISIBLE);
+                    tvStatus.setVisibility(View.GONE);
                 }else {
-                    tvStatus.setText(mContext.getString(R.string.em_live_list_item_open));
-                    tvStatus.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_live_list_item_living_shape));
+                    groupLived.setVisibility(View.GONE);
+                    tvStatus.setVisibility(View.VISIBLE);
                 }
             }
             author.setText(liveRoom.getName());
-            audienceNum.setText(liveRoom.getAudienceNum() + "人");
+            audienceNum.setText(liveRoom.getAudienceNum() + "正在看");
             Glide.with(mContext)
                     .load(liveRoom.getCover())
-                    .placeholder(R.color.placeholder)
+                    .placeholder(R.drawable.em_live_default_bg)
                     .into(photo);
         }
     }
