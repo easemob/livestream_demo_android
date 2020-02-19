@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.data.TestGiftRepository;
 import com.easemob.livedemo.data.model.GiftBean;
@@ -21,6 +22,7 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
     private RecyclerView rvList;
     private GiftListAdapter adapter;
     private GiftBean giftBean;
+    private OnConfirmClickListener listener;
 
     @Override
     protected int getLayoutId() {
@@ -79,11 +81,25 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
 
     @Override
     public void onGiftNum(View view, int num) {
-        LiveGiftSendDialog.getNewInstance(giftBean, num).show(getChildFragmentManager(), "gift_send");
+        giftBean.setNum(num);
+        LiveGiftSendDialog dialog = LiveGiftSendDialog.getNewInstance(giftBean);
+        dialog.setOnConfirmClickListener(new OnConfirmClickListener() {
+            @Override
+            public void onConfirmClick(View view, Object bean) {
+                if(listener != null) {
+                    listener.onConfirmClick(view, bean);
+                }
+            }
+        });
+        dialog.show(getChildFragmentManager(), "gift_send");
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         adapter.setSelectedPosition(-1);
+    }
+
+    public void setOnConfirmClickListener(OnConfirmClickListener listener) {
+        this.listener = listener;
     }
 }

@@ -51,14 +51,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
-        <com.easemob.livedemo.ui.widget.BarrageLayout
-            android:id="@+id/barrage_layout"
-            android:layout_width="0dp"
+        <com.easemob.livedemo.ui.widget.ShowGiveGiftView
+            android:id="@+id/show_gift_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/message_view"/>
+            app:layout_constraintBottom_toTopOf="@id/message_view"
+            android:layout_marginLeft="@dimen/em_margin_10"
+            android:layout_marginStart="@dimen/em_margin_10"
+            android:layout_marginBottom="@dimen/em_margin_40"/>
 
         <com.easemob.livedemo.ui.widget.PeriscopeLayout
             android:id="@+id/periscope_layout"

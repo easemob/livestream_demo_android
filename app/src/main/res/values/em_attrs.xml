@@ -41,4 +41,25 @@
         <attr name="arrowItemAvatarWidth" format="dimension|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="MagicTextView">
+        <attr name="innerShadowColor" format="color" />
+        <attr name="innerShadowRadius" format="float" />
+        <attr name="innerShadowDx" format="float" />
+        <attr name="innerShadowDy" format="float" />
+        <attr name="outerShadowColor" format="color" />
+        <attr name="outerShadowRadius" format="float" />
+        <attr name="outerShadowDx" format="float" />
+        <attr name="outerShadowDy" format="float" />
+        <attr name="m_typeface" format="string" />
+        <attr name="m_foreground" format="reference|color" />
+        <attr name="m_strokeWidth" format="float" />
+        <attr name="m_strokeMiter" format="float" />
+        <attr name="m_strokeColor" format="color" />
+        <attr name="m_strokeJoinStyle">
+            <enum name="miter" value="0" />
+            <enum name="bevel" value="1" />
+            <enum name="round" value="2" />
+        </attr>
+    </declare-styleable>
+
 </resources>

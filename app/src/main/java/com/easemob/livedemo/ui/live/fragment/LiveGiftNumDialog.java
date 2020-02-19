@@ -79,6 +79,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
                 tvGiftNum.setText(String.valueOf(giftNum));
                 break;
             case R.id.btn_send :
+                dismiss();
                 giftNum = getNum();
                 if(this.clickListener != null) {
                     clickListener.onGiftNum(v, giftNum);

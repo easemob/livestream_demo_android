@@ -17,7 +17,6 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
     public TextView mTvDialogTitle;
     public Button mBtnDialogCancel;
     public Button mBtnDialogConfirm;
-    public OnConfirmClickListener mOnConfirmClickListener;
     public Group mGroupMiddle;
 
     @Override
@@ -92,13 +91,6 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
      */
     public void onConfirmClick(View v) {
 
-    }
-
-    /**
-     * 确定事件的点击事件
-     */
-    public interface OnConfirmClickListener {
-        void onConfirmClick(View view);
     }
 
 }

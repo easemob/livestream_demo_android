@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="2dp"
+        android:paddingRight="68dp"
+        android:paddingEnd="68dp"
+        android:background="@drawable/em_live_gift_show_bg_shape">
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_username"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ease_default_avatar"
+            app:ease_shape_type="round"/>
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="小仙女士双第三方的"
+            app:layout_constraintLeft_toRightOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_icon"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:textSize="@dimen/em_size_smaller"
+            android:textColor="@color/white"
+            android:maxEms="8"
+            android:maxLength="8"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/em_gift_show_send"
+            app:layout_constraintLeft_toRightOf="@id/iv_icon"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:textSize="@dimen/em_size_smaller"
+            android:textColor="@color/white"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_gift"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        app:layout_constraintRight_toRightOf="@id/cl_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:src="@drawable/gift_default_1"
+        android:layout_marginRight="@dimen/em_margin_30"
+        android:layout_marginEnd="@dimen/em_margin_30"/>
+
+    <ImageView
+        android:id="@+id/iv_x"
+        android:layout_width="11dp"
+        android:layout_height="11dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_gift"
+        app:layout_constraintBottom_toBottomOf="@id/iv_gift"
+        android:src="@drawable/em_live_gift_x"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/white"
+        android:textSize="25sp"/>
+
+    <com.easemob.livedemo.ui.widget.MagicTextView
+        android:id="@+id/tv_gift_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/iv_x"
+        app:layout_constraintBottom_toBottomOf="@id/iv_gift"
+        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp"
+        tools:text="12"
+        android:textColor="@color/white"
+        android:textSize="25sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

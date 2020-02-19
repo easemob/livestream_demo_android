@@ -27,8 +27,10 @@ import com.easemob.livedemo.ui.activity.BaseActivity;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
 import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
 import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
+import com.easemob.livedemo.ui.widget.BarrageLayout;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
+import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
@@ -57,7 +59,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @BindView(R.id.periscope_layout) PeriscopeLayout periscopeLayout;
     @BindView(R.id.bottom_bar) View bottomBar;
 
-    //@BindView(R.id.barrage_layout) BarrageLayout barrageLayout;
+    @BindView(R.id.show_gift_view)
+    ShowGiveGiftView barrageLayout;
     @BindView(R.id.horizontal_recycle_view) RecyclerView horizontalRecyclerView;
     @BindView(R.id.audience_num) TextView audienceNumView;
     //@BindView(R.id.new_messages_warn) ImageView newMsgNotifyImage;

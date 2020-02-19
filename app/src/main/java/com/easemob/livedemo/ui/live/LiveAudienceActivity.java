@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.OnConfirmClickListener;
+import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
@@ -111,7 +113,16 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     }
 
     private void showGiftDialog() {
-        LiveGiftDialog.getNewInstance().show(getSupportFragmentManager(), "live_gift");
+        LiveGiftDialog dialog = LiveGiftDialog.getNewInstance();
+        dialog.show(getSupportFragmentManager(), "live_gift");
+        dialog.setOnConfirmClickListener(new OnConfirmClickListener() {
+            @Override
+            public void onConfirmClick(View view, Object bean) {
+                if(bean instanceof GiftBean) {
+                    barrageLayout.showGift((GiftBean) bean);
+                }
+            }
+        });
     }
 
     private void connect(){
