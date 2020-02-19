@@ -26,4 +26,19 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="ArrowItemView">
+        <attr name="arrowItemTitle" format="string|reference"/>
+        <attr name="arrowItemTitleColor" format="color|reference"/>
+        <attr name="arrowItemTitleSize" format="dimension|reference"/>
+        <attr name="arrowItemContent" format="string|reference"/>
+        <attr name="arrowItemContentColor" format="color|reference"/>
+        <attr name="arrowItemContentSize" format="dimension|reference"/>
+        <attr name="arrowItemShowDivider" format="boolean"/>
+        <attr name="arrowItemShowArrow" format="boolean"/>
+        <attr name="arrowItemShowAvatar" format="boolean"/>
+        <attr name="arrowItemAvatarSrc" format="reference"/>
+        <attr name="arrowItemAvatarHeight" format="dimension|reference"/>
+        <attr name="arrowItemAvatarWidth" format="dimension|reference"/>
+    </declare-styleable>
+
 </resources>

@@ -99,6 +99,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.LiveAllActivity" />
+        <!--关于环信-->
+        <activity android:name=".ui.activity.AboutHxActivity" />
     </application>
 
 </manifest>

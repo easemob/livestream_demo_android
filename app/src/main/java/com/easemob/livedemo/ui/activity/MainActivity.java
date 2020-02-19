@@ -179,7 +179,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
 //                break;
             case 1 :
                 switchToAboutMe();
-                mTitleBar.setVisibility(View.GONE);
+                mTitleBar.setTitle(getResources().getString(R.string.em_set_title));
                 break;
         }
     }
