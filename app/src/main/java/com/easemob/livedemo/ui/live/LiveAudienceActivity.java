@@ -71,7 +71,6 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         likeImageView.setVisibility(View.VISIBLE);
         Glide.with(this).load(liveRoom.getCover()).placeholder(R.color.placeholder).into(coverView);
         mVideoView = (UVideoView) findViewById(R.id.videoview);
-        tvAttention.setVisibility(View.VISIBLE);
     }
 
     @Override

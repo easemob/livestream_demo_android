@@ -14,6 +14,7 @@
     <string name="em_live_list_item_ongoing">主播在播</string>
     <string name="em_live_list_item_lived">主播在播\n不能选择</string>
 
+    <string name="em_live_input_hint">和大家来聊天吧</string>
     <string name="em_live_attention">关注</string>
     <string name="em_live_member_num">观众（%1$d）</string>
     <string name="em_live_room_id">房间号：%1$s</string>

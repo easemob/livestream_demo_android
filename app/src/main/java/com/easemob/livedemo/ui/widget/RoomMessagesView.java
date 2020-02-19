@@ -2,11 +2,17 @@ package com.easemob.livedemo.ui.widget;
 
 import android.app.Activity;
 import android.content.Context;
+
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.utils.KeyboardUtils;
+import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -33,7 +41,7 @@ public class RoomMessagesView extends RelativeLayout{
 
     RecyclerView listview;
     EditText editview;
-    Button sendBtn;
+    ImageView sendBtn;
     View sendContainer;
     ImageView closeView;
     //ImageView danmuImage;
@@ -59,7 +67,7 @@ public class RoomMessagesView extends RelativeLayout{
         LayoutInflater.from(context).inflate(R.layout.widget_room_messages, this);
         listview = (RecyclerView) findViewById(R.id.listview);
         editview = (EditText) findViewById(R.id.edit_text);
-        sendBtn = (Button) findViewById(R.id.btn_send);
+        sendBtn = (ImageView) findViewById(R.id.btn_send);
         closeView = (ImageView) findViewById(R.id.close_image);
         sendContainer = findViewById(R.id.container_send);
         //danmuImage = (ImageView) findViewById(R.id.danmu_image);
@@ -91,6 +99,7 @@ public class RoomMessagesView extends RelativeLayout{
         closeView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 setShowInputView(false);
                 if(messageViewListener != null){
                     messageViewListener.onHiderBottomBar();
@@ -111,6 +120,10 @@ public class RoomMessagesView extends RelativeLayout{
         //    }
         //});
 
+    }
+
+    private void hideKeyboard() {
+        Utils.hideKeyboard(this);
     }
 
     public void setShowInputView(boolean showInputView){
@@ -166,13 +179,16 @@ public class RoomMessagesView extends RelativeLayout{
         public void onBindViewHolder(MyViewHolder holder, int position) {
             final EMMessage message = messages[position];
             if(message.getBody() instanceof EMTextMessageBody) {
-                holder.name.setText(message.getFrom());
-                holder.content.setText(((EMTextMessageBody) message.getBody()).getMessage());
-                if (EMClient.getInstance().getCurrentUser().equals(message.getFrom())) {
-                    holder.content.setTextColor(getResources().getColor(R.color.color_room_my_msg));
-                } else {
-                    holder.content.setTextColor(Color.parseColor("#FFC700"));
-                }
+                String from = message.getFrom();
+                String content = ((EMTextMessageBody) message.getBody()).getMessage();
+                boolean isSelf = EMClient.getInstance().getCurrentUser().equals(from);
+                StringBuilder builder = new StringBuilder();
+                builder.append(from).append(":").append(content);
+                SpannableString span = new SpannableString(builder.toString());
+                span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, from.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new ForegroundColorSpan(isSelf ? ContextCompat.getColor(getContext(), R.color.color_room_my_msg) : Color.parseColor("#FFC700")),
+                        from.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.name.setText(span);
                 holder.itemView.setOnClickListener(new OnClickListener() {
                     @Override public void onClick(View v) {
                         if (messageViewListener != null) {

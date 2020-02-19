@@ -5,7 +5,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listview"
-        android:layout_width="match_parent"
+        android:layout_width="260dp"
         android:layout_height="match_parent"
         android:layout_above="@+id/container_send"
         android:layout_marginBottom="4dp"
@@ -19,13 +19,14 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:visibility="invisible"
-        android:background="#E9E9E9"
+        android:background="@color/white"
         >
         <ImageView
             android:id="@+id/close_image"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/live_close"
+            android:tint="@color/em_color_brand"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="9dp"
             android:clickable="true"
@@ -44,18 +45,18 @@
             android:id="@+id/edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="说点什么吧..."
+            android:hint="@string/em_live_input_hint"
             android:layout_weight="1"
             android:maxLines="3"
             android:minHeight="36dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="1dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="10dp"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:textSize="18sp"
-            android:background="#fff"
+            android:background="@drawable/em_live_input_et_bg_shape"
             />
-        <Button
+        <ImageView
             android:id="@+id/btn_send"
             android:layout_width="60dp"
             android:layout_height="36dp"
@@ -65,8 +66,7 @@
             android:layout_marginLeft="4dp"
             android:textColor="#fff"
             android:textSize="16sp"
-            style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/common_blue_btn_bg"
+            android:src="@drawable/em_live_send_icon"
             />
     </LinearLayout>
 </RelativeLayout>

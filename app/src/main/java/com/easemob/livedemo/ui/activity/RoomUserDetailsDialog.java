@@ -95,8 +95,8 @@ public class RoomUserDetailsDialog extends DialogFragment {
 //                }
 //            } else {
                 if (username.equals(EMClient.getInstance().getCurrentUser())) {
-                    setAdminButton.setVisibility(View.INVISIBLE);
-                    managementLayout.setVisibility(View.INVISIBLE);
+                    setAdminButton.setVisibility(View.GONE);
+                    managementLayout.setVisibility(View.GONE);
                 }
 //            }
         }
