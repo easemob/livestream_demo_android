@@ -1,11 +1,9 @@
 package com.easemob.livedemo.ui.activity;
 
-import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -20,7 +18,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ui.AboutMeFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -98,35 +95,38 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     private void switchToHome() {
         ivHomeHome.setImageResource(R.drawable.em_live_home_selected);
         ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
+        mHomeFragment = getSupportFragmentManager().findFragmentByTag("home");
         if(mHomeFragment == null) {
             mHomeFragment = new LivingListFragment();
         }
         Bundle bundle = new Bundle();
         bundle.putString("status", "ongoing");
         mHomeFragment.setArguments(bundle);
-        replace(mHomeFragment);
+        replace(mHomeFragment, "home");
     }
 
     private void switchToLiveList() {
         startAnimation(1f, 0.9f, 1f, 0.9f);
         ivHomeHome.setImageResource(R.drawable.em_live_home_unselected);
         ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
+        mLiveListFragment = getSupportFragmentManager().findFragmentByTag("live_list");
         if(mLiveListFragment == null) {
             mLiveListFragment = new LiveListFragment();
         }
         Bundle bundle = new Bundle();
         bundle.putString("status", "all");
         mLiveListFragment.setArguments(bundle);
-        replace(mLiveListFragment);
+        replace(mLiveListFragment, "live_list");
     }
 
     private void switchToAboutMe() {
         ivHomeHome.setImageResource(R.drawable.em_live_home_unselected);
         ivHomeSet.setImageResource(R.drawable.em_live_set_selected);
+        mAboutMeFragment = getSupportFragmentManager().findFragmentByTag("about_me");
         if(mAboutMeFragment == null) {
             mAboutMeFragment = new AboutMeFragment();
         }
-        replace(mAboutMeFragment);
+        replace(mAboutMeFragment, "about_me");
     }
 
     private void startAnimation(float fromX, float toX, float fromY, float toY) {
@@ -135,7 +135,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         rlHomeLive.startAnimation(animation);
     }
 
-    private void replace(Fragment fragment) {
+    private void replace(Fragment fragment, String tag) {
         if(mCurrentFragment != fragment) {
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
             if(mCurrentFragment != null) {
@@ -143,7 +143,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
             }
             mCurrentFragment = fragment;
             if(!fragment.isAdded()) {
-                t.add(R.id.fl_main_fragment, fragment).show(fragment).commit();
+                t.add(R.id.fl_main_fragment, fragment, tag).show(fragment).commit();
             }else {
                 t.show(fragment).commit();
             }
