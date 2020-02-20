@@ -42,13 +42,8 @@ public class ShowGiveGiftView extends LinearLayout {
     public ShowGiveGiftView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
-        initView(context);
         initAttrs(context, attrs);
         init(context);
-    }
-
-    private void initView(Context context) {
-
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {

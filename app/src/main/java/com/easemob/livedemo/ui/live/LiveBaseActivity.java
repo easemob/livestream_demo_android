@@ -31,6 +31,7 @@ import com.easemob.livedemo.ui.widget.BarrageLayout;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
+import com.easemob.livedemo.ui.widget.SingleBarrageView;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
@@ -74,6 +75,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @BindView(R.id.tv_attention) TextView tvAttention;
     @BindView(R.id.toolbar) ViewGroup toolbar;
     @BindView(R.id.live_receive_gift) ImageView liveReceiveGift;
+    @BindView(R.id.barrageView)
+    SingleBarrageView barrageView;
 
     protected String anchorId;
 
@@ -171,7 +174,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
     }
 
     protected void initData() {
-
+        barrageView.initBarrage();
     }
 
 
@@ -300,6 +303,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
                     //            message.getFrom());
                     //}
                     messageView.refreshSelectLast();
+                    barrageView.refresh();
                 } else {
                     //if(message.getChatType() == EMMessage.ChatType.Chat && message.getTo().equals(EMClient.getInstance().getCurrentUser())){
                     //  runOnUiThread(new Runnable() {
@@ -342,6 +346,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 messageView.init(chatroomId);
+                barrageView.setData(chatroomId);
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override public void onMessageSend(String content) {
                         EMMessage message = EMMessage.createTxtSendMessage(content, chatroomId);
@@ -356,6 +361,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
                             @Override public void onSuccess() {
                                 //刷新消息列表
                                 messageView.refreshSelectLast();
+                                barrageView.refresh();
                             }
 
                             @Override public void onError(int i, String s) {
