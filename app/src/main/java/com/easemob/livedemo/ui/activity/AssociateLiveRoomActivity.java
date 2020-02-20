@@ -211,7 +211,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
                 dismissProgressDialog();
                 // ugly
                 if(exception.getMessage().contains("current live room is ongoing") &&
-                        currentLiveRoom.getAnchorId().equals(EMClient.getInstance().getCurrentUser())){
+                        currentLiveRoom.getOwner().equals(EMClient.getInstance().getCurrentUser())){
                     startActivity(new Intent(AssociateLiveRoomActivity.this, LiveAnchorActivity.class)
                             .putExtra("liveroom", currentLiveRoom));
                     finish();

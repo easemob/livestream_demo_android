@@ -2,6 +2,9 @@ package com.easemob.livedemo.data.restapi;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
+
+import com.easemob.livedemo.BuildConfig;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
@@ -51,7 +54,7 @@ public class LiveManager {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://a1.easemob.com/"+appkey+"/")
+                .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
@@ -65,6 +68,7 @@ public class LiveManager {
 
         @Override public okhttp3.Response intercept(Chain chain) throws IOException {
             Request original = chain.request();
+            Log.e("TAG", "token = "+"Bearer " + EMClient.getInstance().getAccessToken());
             Request request = original.newBuilder()
                     .header("Authorization", "Bearer " + EMClient.getInstance().getAccessToken())
                     .header("Accept", "application/json")
@@ -112,7 +116,7 @@ public class LiveManager {
         LiveRoom liveRoom = new LiveRoom();
         liveRoom.setName(name);
         liveRoom.setDescription(description);
-        liveRoom.setAnchorId(EMClient.getInstance().getCurrentUser());
+        liveRoom.setOwner(EMClient.getInstance().getCurrentUser());
         liveRoom.setCover(coverUrl);
 
         Call<ResponseModule<LiveRoom>> responseCall;

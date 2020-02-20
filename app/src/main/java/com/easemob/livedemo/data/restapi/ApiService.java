@@ -21,7 +21,7 @@ import retrofit2.http.Query;
  */
 
 interface ApiService {
-    @POST("liverooms?status=ongoing")
+    @POST("liverooms")
     Call<ResponseModule<LiveRoom>> createLiveRoom(@Body LiveRoom module);
 
     @PUT("liverooms/{id}")

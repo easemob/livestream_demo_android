@@ -1,5 +1,6 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,10 @@ public class CreateLiveRoomActivity extends BaseActivity {
     private String coverPath;
     private File cacheFile;
 
+    public static void actionStart(Context context) {
+        Intent starter = new Intent(context, CreateLiveRoomActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

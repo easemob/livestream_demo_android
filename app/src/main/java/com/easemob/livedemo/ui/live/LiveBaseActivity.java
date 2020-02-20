@@ -27,7 +27,6 @@ import com.easemob.livedemo.ui.activity.BaseActivity;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
 import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
 import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
-import com.easemob.livedemo.ui.widget.BarrageLayout;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
@@ -116,7 +115,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
         }
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getChatroomId();
-        anchorId = liveRoom.getAnchorId();
+        anchorId = liveRoom.getOwner();
         onActivityCreated(savedInstanceState);
         initView();
         initListener();
