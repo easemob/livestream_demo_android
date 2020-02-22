@@ -114,7 +114,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
             return;
         }
         liveId = liveRoom.getId();
-        chatroomId = liveRoom.getChatroomId();
+        chatroomId = liveRoom.getId();
         anchorId = liveRoom.getOwner();
         onActivityCreated(savedInstanceState);
         initView();

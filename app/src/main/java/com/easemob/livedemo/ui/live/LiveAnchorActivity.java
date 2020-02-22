@@ -1,5 +1,7 @@
 package com.easemob.livedemo.ui.live;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,25 +16,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.LiveHelper;
+import com.easemob.livedemo.common.OnConfirmClickListener;
+import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
-import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.ucloud.AVOption;
 import com.easemob.livedemo.ucloud.LiveCameraView;
+import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.fragment.LiveGiftStatisticsDialog;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.exceptions.HyphenateException;
 import com.ucloud.ulive.UFilterProfile;
 import com.ucloud.ulive.UNetworkListener;
 import com.ucloud.ulive.UStreamStateListener;
 import com.ucloud.ulive.UVideoProfile;
 
-public class LiveAnchorActivity extends LiveBaseActivity {
+public class LiveAnchorActivity extends LiveBaseActivity implements View.OnClickListener {
     private static final String TAG = LiveAnchorActivity.class.getSimpleName();
     @BindView(R.id.container)
     LiveCameraView cameraView;
@@ -44,6 +52,14 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     ImageView coverImage;
     @BindView(R.id.live_container)
     ConstraintLayout liveContainer;
+    @BindView(R.id.group_gift_info)
+    Group groupGiftInfo;
+    @BindView(R.id.tv_gift_num)
+    TextView tvGiftNum;
+    @BindView(R.id.tv_like_num)
+    TextView tvLikeNum;
+    @BindView(R.id.img_bt_close)
+    ImageView imgBtClose;
     //@BindView(R.id.img_bt_switch_light) ImageButton lightSwitch;
     //@BindView(R.id.img_bt_switch_voice) ImageButton voiceSwitch;
 
@@ -74,12 +90,31 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         }
     };
 
+    public static void actionStart(Context context, LiveRoom liveRoom) {
+        Intent starter = new Intent(context, LiveAnchorActivity.class);
+        starter.putExtra("liveroom", liveRoom);
+        context.startActivity(starter);
+    }
+
     //203138620012364216img_bt_close
     @Override
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.em_activity_live_anchor);
         ButterKnife.bind(this);
         setFitSystemForTheme(true, R.color.black);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        groupGiftInfo.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        imgBtClose.setOnClickListener(this);
     }
 
     @Override
@@ -249,20 +284,13 @@ public class LiveAnchorActivity extends LiveBaseActivity {
                                 .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
                                     @Override public void onSuccess(EMChatRoom emChatRoom) {
                                         chatroom = emChatRoom;
-                                        addChatRoomChangeListener();
-                                        onMessageListInit();
+                                        changeAnchorLive();
                                     }
 
                                     @Override public void onError(int i, String s) {
                                         showToast("加入聊天室失败");
                                     }
                                 });
-                        showToast("直播开始！");
-                        //mEasyStreaming.startRecording();
-                        cameraView.startRecording();
-                        isStarted = true;
-                        cameraView.addStreamStateListener(mStreamStateListener);
-                        cameraView.addNetworkListener(mNetworkListener);
                     }
                 }
 
@@ -276,6 +304,41 @@ public class LiveAnchorActivity extends LiveBaseActivity {
                 countdownView.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void changeAnchorLive() {
+        if(liveRoom.isLiving()) {
+            startAnchorLive(liveRoom);
+        }else {
+            executeTask(new ThreadPoolManager.Task<LiveRoom>() {
+                @Override
+                public LiveRoom onRequest() throws HyphenateException {
+                    return LiveManager.getInstance().startLive(liveId, EMClient.getInstance().getCurrentUser());
+                }
+
+                @Override
+                public void onSuccess(LiveRoom liveRoom) {
+                    startAnchorLive(liveRoom);
+                }
+
+                @Override
+                public void onError(HyphenateException exception) {
+                    showToast(exception.getMessage());
+                }
+            });
+        }
+    }
+
+    private void startAnchorLive(LiveRoom liveRoom) {
+        LiveHelper.saveLivingId(liveRoom.getId());
+        addChatRoomChangeListener();
+        onMessageListInit();
+        showToast("直播开始！");
+        //mEasyStreaming.startRecording();
+        cameraView.startRecording();
+        isStarted = true;
+        cameraView.addStreamStateListener(mStreamStateListener);
+        cameraView.addNetworkListener(mNetworkListener);
     }
 
     @Override
@@ -317,7 +380,11 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         //mEasyStreaming.onDestroy();
-        cameraView.release();
+        try {
+            cameraView.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (chatRoomChangeListener != null) {
             EMClient.getInstance()
@@ -326,15 +393,15 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         }
         EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
 
-        executeRunnable(new Runnable() {
-            @Override public void run() {
-                try {
-                    LiveManager.getInstance().terminateLiveRoom(liveId);
-                } catch (LiveException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        executeRunnable(new Runnable() {
+//            @Override public void run() {
+//                try {
+//                    LiveManager.getInstance().terminateLiveRoom(liveId);
+//                } catch (LiveException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     UStreamStateListener mStreamStateListener = new UStreamStateListener() {
@@ -373,4 +440,49 @@ public class LiveAnchorActivity extends LiveBaseActivity {
             }
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_bt_close :
+                showDialog();
+                break;
+        }
+    }
+
+    private void showDialog() {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_live_dialog_quit_title)
+                .setConfirmButtonTxt(R.string.em_live_dialog_quit_btn_title)
+                .setConfirmColor(R.color.em_color_warning)
+                .setOnConfirmClickListener(new OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view, Object bean) {
+                        leaveRoom();
+                    }
+                })
+                .build()
+                .show(getSupportFragmentManager(), "dialog");
+    }
+
+    private void leaveRoom() {
+        executeTask(new ThreadPoolManager.Task<Void>() {
+            @Override
+            public Void onRequest() throws HyphenateException {
+                LiveManager.getInstance().closeLiveRoom(liveId, EMClient.getInstance().getCurrentUser());
+                return null;
+            }
+
+            @Override
+            public void onSuccess(Void aVoid) {
+                LiveHelper.saveLivingId("");
+                finish();
+            }
+
+            @Override
+            public void onError(HyphenateException exception) {
+                finish();
+            }
+        });
+    }
 }

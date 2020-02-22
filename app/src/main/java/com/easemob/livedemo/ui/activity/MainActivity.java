@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -17,9 +18,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.LiveHelper;
+import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ui.AboutMeFragment;
+import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class MainActivity extends BaseLiveActivity implements View.OnClickListener {
     private EaseTitleBar mTitleBar;
@@ -58,6 +65,30 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     protected void initData() {
         super.initData();
         skipToTarget(position);
+        checkoutLiving();
+    }
+
+    private void checkoutLiving() {
+        String liveId = LiveHelper.getLivingId();
+        if(TextUtils.isEmpty(liveId)) {
+            return;
+        }
+        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
+            @Override
+            public LiveRoom onRequest() throws HyphenateException {
+                return LiveManager.getInstance().getLiveRoomDetails(liveId);
+            }
+
+            @Override
+            public void onSuccess(LiveRoom liveRoom) {
+                LiveAnchorActivity.actionStart(mContext, liveRoom);
+            }
+
+            @Override
+            public void onError(HyphenateException exception) {
+
+            }
+        });
     }
 
     @Override

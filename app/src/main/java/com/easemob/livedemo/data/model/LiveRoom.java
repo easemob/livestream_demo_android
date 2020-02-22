@@ -1,5 +1,7 @@
 package com.easemob.livedemo.data.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Map;
@@ -11,8 +13,7 @@ public class LiveRoom implements Serializable {
     @SerializedName(value = "liveroom_id", alternate = {"id"})
     private String id;
     private String name;
-    @SerializedName("current_user_count")
-    private int audienceNum;
+    private Integer audienceNum;
     private String cover;
     @SerializedName("chatroom_id")
     private String chatroomId;
@@ -24,7 +25,7 @@ public class LiveRoom implements Serializable {
     private String livePullUrl;
     private String status;
     private Map ext;
-    private int maxusers;
+    private Integer maxusers;
     private String[] members;
     //@SerializedName("liveshow_id")
     //private String showId;
@@ -46,10 +47,10 @@ public class LiveRoom implements Serializable {
     }
 
     public int getAudienceNum() {
-        return audienceNum;
+        return audienceNum == null?0:audienceNum;
     }
 
-    public void setAudienceNum(int audienceNum) {
+    public void setAudienceNum(Integer audienceNum) {
         this.audienceNum = audienceNum;
     }
 
@@ -118,10 +119,10 @@ public class LiveRoom implements Serializable {
     }
 
     public int getMaxusers() {
-        return maxusers;
+        return maxusers == null ? 0 : maxusers;
     }
 
-    public void setMaxusers(int maxusers) {
+    public void setMaxusers(Integer maxusers) {
         this.maxusers = maxusers;
     }
 
@@ -140,4 +141,8 @@ public class LiveRoom implements Serializable {
     //public void setShowId(String showId) {
     //    this.showId = showId;
     //}
+
+    public boolean isLiving() {
+        return !TextUtils.isEmpty(status) && TextUtils.equals(status, "ongoing");
+    }
 }

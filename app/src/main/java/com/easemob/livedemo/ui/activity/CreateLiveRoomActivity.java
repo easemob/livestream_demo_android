@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -57,6 +58,9 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 finish();
             }
         });
+
+        String restServer = EMClient.getInstance().getOptions().getRestServer();
+        Log.e("TAG", "restServer = "+restServer);
 
     }
 
@@ -126,8 +130,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
 
             @Override public void onSuccess(LiveRoom liveRoom) {
                 dismissProgressDialog();
-                startActivity(new Intent(CreateLiveRoomActivity.this, LiveAnchorActivity.class)
-                        .putExtra("liveroom", liveRoom));
+                LiveAnchorActivity.actionStart(mContext, liveRoom);
                 finish();
             }
 

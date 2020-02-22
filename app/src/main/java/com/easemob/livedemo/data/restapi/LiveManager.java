@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.easemob.livedemo.BuildConfig;
 import com.easemob.livedemo.DemoApplication;
+import com.easemob.livedemo.common.LoggerInterceptor;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
@@ -48,9 +49,10 @@ public class LiveManager {
 
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        LoggerInterceptor logger = new LoggerInterceptor("LoggerInterceptor", true, true);
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(new RequestInterceptor())
-                .addInterceptor(httpLoggingInterceptor)
+                .addInterceptor(logger)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -119,25 +121,24 @@ public class LiveManager {
         liveRoom.setOwner(EMClient.getInstance().getCurrentUser());
         liveRoom.setCover(coverUrl);
 
-        Call<ResponseModule<LiveRoom>> responseCall;
+        Call<LiveRoom> responseCall;
         if(liveRoomId != null){
             responseCall = apiService.createLiveShow(liveRoomId, liveRoom);
 
         }else {
+            liveRoom.setMaxusers(200);
             responseCall = apiService.createLiveRoom(liveRoom);
         }
-        ResponseModule<LiveRoom> response = handleResponseCall(responseCall).body();
-        LiveRoom room = response.data;
-        if(room.getId() != null) {
-            liveRoom.setId(room.getId());
-        }else {
-            liveRoom.setId(liveRoomId);
-        }
-        liveRoom.setChatroomId(room.getChatroomId());
-        //liveRoom.setAudienceNum(1);
-        liveRoom.setLivePullUrl(room.getLivePullUrl());
-        liveRoom.setLivePushUrl(room.getLivePushUrl());
-        return liveRoom;
+//        if(room.getId() != null) {
+//            liveRoom.setId(room.getId());
+//        }else {
+//            liveRoom.setId(liveRoomId);
+//        }
+//        liveRoom.setChatroomId(room.getChatroomId());
+//        //liveRoom.setAudienceNum(1);
+//        liveRoom.setLivePullUrl(room.getLivePullUrl());
+//        liveRoom.setLivePushUrl(room.getLivePushUrl());
+        return handleResponseCall(responseCall).body();
     }
 
     /**
@@ -202,13 +203,31 @@ public class LiveManager {
         handleResponseCall(apiService.updateStatus(roomId, module));
     }
 
-    //public void closeLiveRoom(String roomId) throws LiveException {
-    //    Call respCall = apiService.closeLiveRoom(roomId);
-    //    handleResponseCall(respCall);
-    //}
+    /**
+     * 开始直播
+     * @param roomId
+     * @param username
+     * @return
+     * @throws LiveException
+     */
+    public LiveRoom startLive(String roomId, String username) throws LiveException {
+        Call<LiveRoom> respCall = apiService.changeLiveStatus(roomId, username, "ongoing");
+        return handleResponseCall(respCall).body();
+    }
 
-    public ResponseModule<List<LiveRoom>> getLiveRoomList(int pageNum, int pageSize) throws LiveException {
-        Call<ResponseModule<List<LiveRoom>>> respCall = apiService.getLiveRoomList(pageNum, pageSize);
+    /**
+     * 结束直播
+     * @param roomId
+     * @param username
+     * @throws LiveException
+     */
+    public void closeLiveRoom(String roomId, String username) throws LiveException {
+        Call<LiveRoom> respCall = apiService.changeLiveStatus(roomId, username, "offline");
+        handleResponseCall(respCall);
+    }
+
+    public ResponseModule<List<LiveRoom>> getLiveRoomList(int limit, String cursor) throws LiveException {
+        Call<ResponseModule<List<LiveRoom>>> respCall = apiService.getLiveRoomList(limit, cursor);
 
         ResponseModule<List<LiveRoom>> response = handleResponseCall(respCall).body();
         return response;
@@ -236,7 +255,7 @@ public class LiveManager {
      * @throws LiveException
      */
     public LiveRoom getLiveRoomDetails(String roomId) throws LiveException {
-        return handleResponseCall(apiService.getLiveRoomDetails(roomId)).body().data;
+        return handleResponseCall(apiService.getLiveRoomDetails(roomId)).body();
     }
 
     /**

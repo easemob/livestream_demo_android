@@ -125,18 +125,19 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         isLoading = true;
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<ResponseModule<List<LiveRoom>>>() {
             @Override public ResponseModule<List<LiveRoom>> onRequest() throws HyphenateException {
-                int num = pageSize;
                 if(!isLoadMore){
                     cursor = null;
-                    num = pageSize;
                 }
                 return isOngoingLive() ? LiveManager.getInstance().getLivingRoomList(pageSize, cursor) :
-                        LiveManager.getInstance().getLiveRoomList(0, num);
+                        LiveManager.getInstance().getLiveRoomList(pageSize, cursor);
             }
 
             @Override public void onSuccess(ResponseModule<List<LiveRoom>> listResponseModule) {
                 hideLoadingView(isLoadMore);
                 List<LiveRoom> returnList = listResponseModule.data;
+                if(returnList == null) {
+                    return;
+                }
                 if(returnList.size() < pageSize){
                     hasMoreData = false;
                     cursor = null;
@@ -178,8 +179,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         if(living) {
             showDialog();
         }else {
-            startActivity(new Intent(mContext, LiveAnchorActivity.class)
-                    .putExtra("liveroom", liveRoom));
+            LiveAnchorActivity.actionStart(mContext, liveRoom);
         }
     }
 

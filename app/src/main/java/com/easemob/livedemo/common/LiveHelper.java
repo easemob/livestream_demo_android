@@ -14,4 +14,12 @@ public class LiveHelper {
     public static boolean isLiving(String status) {
         return !TextUtils.isEmpty(status) && TextUtils.equals(status, DemoConstants.LIVE_ONGOING);
     }
+
+    public static void saveLivingId(String liveId) {
+        PreferenceManager.getInstance().saveLivingId(liveId);
+    }
+
+    public static String getLivingId() {
+        return PreferenceManager.getInstance().getLivingId();
+    }
 }

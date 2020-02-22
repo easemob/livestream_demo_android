@@ -46,6 +46,8 @@
     <string name="em_gift_send_info">%1$d个 %2$s</string>
     <string name="em_gift_input_num_title">输入赠送数量</string>
     <string name="em_gift_show_send">送出礼物</string>
+    <string name="em_live_dialog_quit_title">确定结束直播？</string>
+    <string name="em_live_dialog_quit_btn_title">结束并退出</string>
 
     <string name="em_set_title">设置</string>
     <string name="em_set_live_room">环信直播聊天室</string>

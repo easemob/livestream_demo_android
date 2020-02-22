@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.PreferenceManager;
 import com.hyphenate.chat.EMClient;
 
 public class SplashActivity extends BaseLiveActivity {
@@ -55,6 +56,7 @@ public class SplashActivity extends BaseLiveActivity {
     private void skipToTarget() {
         //登录过
         if(EMClient.getInstance().isLoggedInBefore()){
+            PreferenceManager.init(mContext, EMClient.getInstance().getCurrentUser());
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }else {

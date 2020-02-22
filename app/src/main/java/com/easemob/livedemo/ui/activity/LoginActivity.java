@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.PreferenceManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
@@ -118,6 +119,7 @@ public class LoginActivity extends BaseActivity {
       showProgress(true);
       EMClient.getInstance().login(email.toString(), password.toString(), new EMCallBack() {
         @Override public void onSuccess() {
+            PreferenceManager.init(mContext, EMClient.getInstance().getCurrentUser());
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }

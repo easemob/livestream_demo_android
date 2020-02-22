@@ -9,6 +9,7 @@ import com.easemob.livedemo.ui.activity.MainActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.ucloud.ulive.UStreamingContext;
 
@@ -38,13 +39,13 @@ public class DemoApplication extends Application{
   }
 
   private void initChatSdk(){
-    //EMOptions options = new EMOptions();
-    //options.enableDNSConfig(false);
-    //options.setRestServer("103.241.230.122:31080");
-    //options.setIMServer("103.241.230.122");
-    //options.setImPort(31097);
+    EMOptions options = new EMOptions();
+    options.enableDNSConfig(true);
+    options.setRestServer("a1-hsb.easemob.com");
+    options.setIMServer("39.107.54.56");
+    options.setImPort(6717);
 
-    EaseUI.getInstance().init(this, null);
+    EaseUI.getInstance().init(this, options);
     EMClient.getInstance().setDebugMode(true);
 
     EMClient.getInstance().addConnectionListener(new EMConnectionListener() {
