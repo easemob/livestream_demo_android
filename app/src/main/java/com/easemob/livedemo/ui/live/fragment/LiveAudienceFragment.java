@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.LiveHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.GiftBean;
@@ -74,6 +75,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         switchCameraView.setVisibility(View.GONE);
         likeImageView.setVisibility(View.VISIBLE);
         Glide.with(mContext).load(liveRoom.getCover()).placeholder(R.color.placeholder).into(coverView);
+
     }
 
     @Override
@@ -304,6 +306,12 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
     }
 
     public void setOnLiveListener(OnLiveListener liveListener) {

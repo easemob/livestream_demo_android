@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.LiveHelper;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.data.model.LiveRoom;
@@ -111,6 +113,16 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 //            }
 //        });
         adapter.setOnItemClickListener(this);
+
+        LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST, Boolean.class)
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        if(aBoolean != null && aBoolean) {
+                            showLiveList(false);
+                        }
+                    }
+                });
     }
 
     private void initData() {

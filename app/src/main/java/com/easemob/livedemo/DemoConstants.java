@@ -11,4 +11,6 @@ public interface DemoConstants {
     String EXTRA_PRAISE_COUNT = "live_praise_count";
 
     String LIVE_ONGOING = "ongoing";
+
+    String FRESH_LIVE_LIST = "fresh_live_list";
 }
