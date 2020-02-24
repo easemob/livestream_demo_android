@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="52dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_anchor"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="40dp"
         android:padding="1dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/horizontal_recycle_view"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginLeft="@dimen/em_margin_15"
         android:layout_marginStart="@dimen/em_margin_15"
         android:background="@drawable/em_live_live_anchor_bg_shape">
@@ -129,7 +130,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/horizontal_recycle_view"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/layout_anchor"
         app:layout_constraintRight_toLeftOf="@id/tv_member_num"
         app:layout_constraintHorizontal_bias="1"

@@ -284,23 +284,26 @@ public class LiveAudienceFragment extends LiveBaseFragment {
 
         // 把此activity 从foreground activity 列表里移除
         EaseUI.getInstance().popActivity(mContext);
+
+        if(mContext.isFinishing()) {
+            if(isMessageListInited) {
+                EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+
+                //postUserChangeEvent(StatisticsType.LEAVE, EMClient.getInstance().getCurrentUser());
+            }
+
+            if (chatRoomChangeListener != null) {
+                EMClient.getInstance()
+                        .chatroomManager()
+                        .removeChatRoomChangeListener(chatRoomChangeListener);
+            }
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        if(isMessageListInited) {
-            EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
-
-            //postUserChangeEvent(StatisticsType.LEAVE, EMClient.getInstance().getCurrentUser());
-        }
-
-        if (chatRoomChangeListener != null) {
-            EMClient.getInstance()
-                    .chatroomManager()
-                    .removeChatRoomChangeListener(chatRoomChangeListener);
-        }
     }
 
     public void setOnLiveListener(OnLiveListener liveListener) {

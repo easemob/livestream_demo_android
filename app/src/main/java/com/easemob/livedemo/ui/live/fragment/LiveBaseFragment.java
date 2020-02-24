@@ -607,7 +607,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 float curY = ev.getY();
                 float x = curX - preX;
                 float y = curY - preY;
-                Log.e("TAG", "x = "+x + " y = "+y);
                 if(Math.abs(x) > Math.abs(y) && Math.abs(x) > 20) {
                     float[] screenInfo = EaseCommonUtils.getScreenInfo(mContext);
                     if(x > 0) {// 向右滑动

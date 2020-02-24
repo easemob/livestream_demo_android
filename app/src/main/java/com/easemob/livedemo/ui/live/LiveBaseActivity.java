@@ -74,7 +74,6 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
     protected void initView() {
         coverImage = findViewById(R.id.cover_image);
-        Log.e("TAG", "cover"+liveRoom.getCover());
         Glide.with(mContext)
                 .load(liveRoom.getCover())
                 .error(R.drawable.em_live_default_bg)

@@ -103,7 +103,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.img_bt_close :
-                showDialog();
+                showDialog(new OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view, Object bean) {
+                        stopLiving();
+                    }
+                });
                 break;
         }
     }
@@ -271,22 +276,24 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         }
     }
 
-    private void showDialog() {
+    private void showDialog(OnConfirmClickListener listener) {
         new SimpleDialogFragment.Builder(mContext)
                 .setTitle(R.string.em_live_dialog_quit_title)
                 .setConfirmButtonTxt(R.string.em_live_dialog_quit_btn_title)
                 .setConfirmColor(R.color.em_color_warning)
-                .setOnConfirmClickListener(new OnConfirmClickListener() {
-                    @Override
-                    public void onConfirmClick(View view, Object bean) {
-                        if(cameraListener != null) {
-                            cameraListener.onStopCamera();
-                        }
-                        leaveRoom();
-                    }
-                })
+                .setOnConfirmClickListener(listener)
                 .build()
                 .show(getChildFragmentManager(), "dialog");
+    }
+
+    /**
+     * 停止直播
+     */
+    private void stopLiving() {
+        if(cameraListener != null) {
+            cameraListener.onStopCamera();
+        }
+        leaveRoom();
     }
 
     private void leaveRoom() {
@@ -344,6 +351,17 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     .removeChatRoomChangeListener(chatRoomChangeListener);
         }
         EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDialog(new OnConfirmClickListener() {
+            @Override
+            public void onConfirmClick(View view, Object bean) {
+                stopLiving();
+                mContext.onBackPressed();
+            }
+        });
     }
 
     public interface OnCameraListener {

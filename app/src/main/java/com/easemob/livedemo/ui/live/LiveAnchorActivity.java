@@ -117,7 +117,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     }
 
     private void startPreview() {
-        cameraView.init(mAVOption);
+//        cameraView.init(mAVOption);
     }
 
     private void stopPreview() {

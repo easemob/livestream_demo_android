@@ -1,6 +1,7 @@
 package com.easemob.livedemo.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.ColorRes;
@@ -11,6 +12,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.utils.StatusBarCompat;
@@ -116,4 +120,18 @@ public class BaseActivity extends AppCompatActivity{
         StatusBarCompat.setLightStatusBar(mContext, !isLight);
     }
 
+    @Override
+    public void onBackPressed() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm!=null&&getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null){
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                super.onBackPressed();
+            }else {
+                super.onBackPressed();
+            }
+        }else {
+            super.onBackPressed();
+        }
+    }
 }
