@@ -1,11 +1,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
     <ImageView
+        android:id="@+id/cover_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -14,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:scaleType="fitXY"
         android:visibility="visible"
-        android:background="@drawable/em_live_default_bg"/>
+        tools:src="@drawable/em_live_default_bg"/>
 
     <com.ucloud.uvod.widget.UVideoView
         android:id="@+id/videoview"
@@ -25,99 +27,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/group_ui"
+    <FrameLayout
+        android:id="@+id/fl_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <include layout="@layout/layout_live_toolbar"
-            android:id="@+id/toolbar"/>
-
-        <com.easemob.livedemo.ui.widget.SingleBarrageView
-            android:id="@+id/barrageView"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            android:layout_marginTop="@dimen/em_margin_20"/>
-
-        <com.easemob.livedemo.ui.widget.RoomMessagesView
-            android:id="@+id/message_view"
-            android:layout_width="0dp"
-            android:layout_height="280dp"
-            android:layout_alignParentBottom="true"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-
-        <com.easemob.livedemo.ui.widget.ShowGiveGiftView
-            android:id="@+id/show_gift_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/message_view"
-            android:layout_marginLeft="@dimen/em_margin_10"
-            android:layout_marginStart="@dimen/em_margin_10"
-            android:layout_marginBottom="@dimen/em_margin_40"/>
-
-        <com.easemob.livedemo.ui.widget.PeriscopeLayout
-            android:id="@+id/periscope_layout"
-            android:layout_width="150dp"
-            android:layout_height="190dp"
-            android:layout_marginBottom="42dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-
-        <include
-            android:id="@+id/bottom_bar"
-            layout="@layout/em_layout_live_bottom_bar"
-            android:visibility="invisible" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <RelativeLayout
-        android:id="@+id/loading_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/cover_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/loading_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="正在加载..."
-                android:textColor="#fff" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

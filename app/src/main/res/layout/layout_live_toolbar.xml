@@ -129,14 +129,16 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/horizontal_recycle_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintLeft_toRightOf="@id/layout_anchor"
         app:layout_constraintRight_toLeftOf="@id/tv_member_num"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintTop_toTopOf="@id/layout_anchor"
         app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
         android:layout_marginLeft="@dimen/em_margin_10"
-        android:layout_marginStart="@dimen/em_margin_10"/>
+        android:layout_marginStart="@dimen/em_margin_10"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"/>
 
     <TextView
         android:id="@+id/txt_live_id"

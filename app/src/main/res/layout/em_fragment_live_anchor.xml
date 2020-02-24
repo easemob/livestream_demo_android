@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <include layout="@layout/layout_live_toolbar"
+            android:id="@+id/toolbar"/>
+
+        <com.easemob.livedemo.ui.widget.SingleBarrageView
+            android:id="@+id/barrageView"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            android:layout_marginTop="@dimen/em_margin_20"/>
+
+        <com.easemob.livedemo.ui.widget.RoomMessagesView
+            android:id="@+id/message_view"
+            android:layout_width="0dp"
+            android:layout_height="280dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <com.easemob.livedemo.ui.widget.ShowGiveGiftView
+            android:id="@+id/show_gift_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/message_view"
+            android:layout_marginLeft="@dimen/em_margin_10"
+            android:layout_marginStart="@dimen/em_margin_10"
+            android:layout_marginBottom="@dimen/em_margin_40"/>
+
+        <com.easemob.livedemo.ui.widget.PeriscopeLayout
+            android:id="@+id/periscope_layout"
+            android:layout_width="150dp"
+            android:layout_height="190dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="42dp" />
+
+        <include
+            layout="@layout/em_layout_live_bottom_bar"
+            android:id="@+id/bottom_bar"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/countdown_txtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColor="@android:color/white"
+            android:textSize="136.0sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ViewStub
+            android:id="@+id/finish_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/live_finish_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

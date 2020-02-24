@@ -141,7 +141,7 @@ public class ChatFragment extends Fragment implements EMMessageListener {
     super.onDestroyView();
     unbinder.unbind();
     if(getActivity() != null && (getActivity() instanceof LiveBaseActivity)){
-      ((LiveBaseActivity) getActivity()).updateUnreadMsgView();
+//      ((LiveBaseActivity) getActivity()).updateUnreadMsgView();
     }
   }
 

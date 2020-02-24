@@ -65,11 +65,11 @@ public class BaseActivity extends AppCompatActivity{
         ThreadPoolManager.getInstance().executeRunnable(runnable);
     }
 
-    protected void showToast(final String toastContent){
+    public void showToast(final String toastContent){
         Utils.showToast(this, toastContent);
     }
 
-    protected void showLongToast(final String toastContent){
+    public void showLongToast(final String toastContent){
         Utils.showLongToast(this, toastContent);
     }
 

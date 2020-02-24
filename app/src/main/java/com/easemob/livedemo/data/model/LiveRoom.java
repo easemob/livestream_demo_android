@@ -13,6 +13,7 @@ public class LiveRoom implements Serializable {
     @SerializedName(value = "liveroom_id", alternate = {"id"})
     private String id;
     private String name;
+    @SerializedName("affiliations_count")
     private Integer audienceNum;
     private String cover;
     @SerializedName("chatroom_id")
