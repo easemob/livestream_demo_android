@@ -36,12 +36,13 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="80dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vp_list"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:visibility="invisible"
         style="@style/TabLayout.Gift"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,11 +7,18 @@ import android.util.Log;
 import com.easemob.livedemo.BuildConfig;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.common.LoggerInterceptor;
+import com.easemob.livedemo.common.ThreadManager;
+import com.easemob.livedemo.data.UserRepository;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
+
 import java.io.IOException;
 import java.util.List;
 import okhttp3.Interceptor;
@@ -267,6 +274,56 @@ public class LiveManager {
     public List<String> getAssociatedRooms(String userId) throws LiveException {
         ResponseModule<List<String>> response = handleResponseCall(apiService.getAssociatedRoom(userId)).body();
         return response.data;
+    }
+
+    /**
+     * 登录
+     * @param user
+     * @param callBack
+     */
+    public void login(User user, EMCallBack callBack) {
+        ThreadManager.getInstance().runOnIOThread(()-> {
+            EMClient.getInstance().login(user.getUsername(), UserRepository.getInstance().getDefaultPsw(), new EMCallBack() {
+                @Override
+                public void onSuccess() {
+                    callBack.onSuccess();
+                }
+
+                @Override
+                public void onError(int code, String error) {
+                    if(code == EMError.USER_NOT_FOUND) {
+                        register(user, callBack);
+                    }else {
+                        callBack.onError(code, error);
+                    }
+                }
+
+                @Override
+                public void onProgress(int progress, String status) {
+
+                }
+            });
+        });
+    }
+
+    /**
+     * 注册并登录
+     * @param user
+     * @param callBack
+     */
+    public void register(User user, EMCallBack callBack) {
+        ThreadManager.getInstance().runOnIOThread(()-> {
+            try {
+                EMClient.getInstance().createAccount(user.getUsername(), UserRepository.getInstance().getDefaultPsw());
+                //如果注册成功，则直接进行登录
+                login(user, callBack);
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+                if(callBack != null) {
+                    callBack.onError(e.getErrorCode(), e.getMessage());
+                }
+            }
+        });
     }
 
     //public void grantLiveRoomAdmin(String roomId, String adminId) throws LiveException {

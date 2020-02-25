@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.easemob.livedemo.DemoConstants;
 
-public class LiveHelper {
+public class DemoHelper {
 
     /**
      * 判断房间状态
@@ -21,5 +21,13 @@ public class LiveHelper {
 
     public static String getLivingId() {
         return PreferenceManager.getInstance().getLivingId();
+    }
+
+    /**
+     * 是否显示登陆注册
+     * @return
+     */
+    public static boolean isCanRegister() {
+        return PreferenceManager.isCanRegister();
     }
 }

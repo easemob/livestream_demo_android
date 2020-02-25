@@ -1,6 +1,5 @@
 package com.easemob.livedemo.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,7 +22,7 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.LiveDataBus;
-import com.easemob.livedemo.common.LiveHelper;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
@@ -187,7 +186,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     public void onItemClick(View view, int position) {
         LiveRoom liveRoom = adapter.getItem(position);
         String status = liveRoom.getStatus();
-        boolean living = LiveHelper.isLiving(status);
+        boolean living = DemoHelper.isLiving(status);
         if(living) {
             showDialog();
         }else {

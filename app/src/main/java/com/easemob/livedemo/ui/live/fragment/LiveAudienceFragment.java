@@ -16,14 +16,13 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.LiveDataBus;
-import com.easemob.livedemo.common.LiveHelper;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
-import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -214,7 +213,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             public void onSuccess(LiveRoom liveRoom) {
                 loadingLayout.setVisibility(View.INVISIBLE);
                 LiveAudienceFragment.this.liveRoom = liveRoom;
-                if(LiveHelper.isLiving(liveRoom.getStatus())) {
+                if(DemoHelper.isLiving(liveRoom.getStatus())) {
                     //直播正在进行
                     if(liveListener != null) {
                         liveListener.onLiveOngoing();

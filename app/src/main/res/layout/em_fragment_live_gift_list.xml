@@ -12,5 +12,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+<!--
+    <include layout="@layout/em_fragment_dialog_live_gift_num"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

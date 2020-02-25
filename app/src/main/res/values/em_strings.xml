@@ -39,8 +39,12 @@
     <string name="em_gift_default_name_4">生日蛋糕</string>
     <string name="em_gift_default_name_5">大礼包</string>
     <string name="em_gift_default_name_6">春花烂漫</string>
-    <string name="em_gift_default_name_7">春花烂漫</string>
+    <string name="em_gift_default_name_7">小狗狗</string>
     <string name="em_gift_default_name_8">金镯子</string>
+    <string name="em_gift_default_name_9">金手镯</string>
+    <string name="em_gift_default_name_10">大钻石</string>
+    <string name="em_gift_default_name_11">心心相映</string>
+    <string name="em_gift_default_name_12">白金项链</string>
     <string name="em_gift_send">赠送</string>
     <string name="em_gift_send_confirm">是否赠送</string>
     <string name="em_gift_send_info">%1$d个 %2$s</string>

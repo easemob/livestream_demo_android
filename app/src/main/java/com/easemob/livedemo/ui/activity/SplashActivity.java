@@ -1,5 +1,6 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -7,7 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.PreferenceManager;
+import com.easemob.livedemo.data.UserRepository;
+import com.easemob.livedemo.data.model.User;
+import com.easemob.livedemo.data.restapi.LiveManager;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
 public class SplashActivity extends BaseLiveActivity {
@@ -60,9 +66,41 @@ public class SplashActivity extends BaseLiveActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }else {
-            //创建临时账号
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            if(DemoHelper.isCanRegister()) {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            }else {
+                //创建临时账号
+                createRandomUser();
+            }
+
         }
+    }
+
+    private void createRandomUser() {
+        ProgressDialog pd = new ProgressDialog(mContext);
+        pd.setMessage("请稍等...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+        UserRepository.getInstance().init(mContext);
+        User user = UserRepository.getInstance().getRandomUser();
+        LiveManager.getInstance().login(user, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                pd.dismiss();
+                skipToTarget();
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                runOnUiThread(pd::dismiss);
+                showToast(error);
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
     }
 }

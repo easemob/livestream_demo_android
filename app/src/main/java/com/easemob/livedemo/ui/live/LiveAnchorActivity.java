@@ -3,40 +3,19 @@ package com.easemob.livedemo.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+
 import androidx.annotation.Nullable;
 
 import android.view.View;
-import android.view.ViewStub;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ThreadPoolManager;
-import com.easemob.livedemo.common.LiveHelper;
-import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ucloud.AVOption;
 import com.easemob.livedemo.ucloud.LiveCameraView;
-import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
-import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
-import com.easemob.livedemo.ui.live.fragment.LiveGiftStatisticsDialog;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.exceptions.HyphenateException;
 import com.ucloud.ulive.UFilterProfile;
 import com.ucloud.ulive.UNetworkListener;
 import com.ucloud.ulive.UStreamStateListener;

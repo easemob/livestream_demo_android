@@ -85,7 +85,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
             liveId = liveRoom.getId();
 
             EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().getChatRoom(chatroomId);
-            List<String> adminList = chatRoom.getAdminList();
+//            List<String> adminList = chatRoom.getAdminList();
 //            if (!EMClient.getInstance().getCurrentUser().equals(chatRoom.getOwner())) {
 //                setAdminButton.setVisibility(View.INVISIBLE);
 //                if (!adminList.contains(EMClient.getInstance().getCurrentUser()) ||

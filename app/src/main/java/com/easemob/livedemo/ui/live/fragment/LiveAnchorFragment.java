@@ -14,26 +14,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.LiveDataBus;
-import com.easemob.livedemo.common.LiveHelper;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
-import com.easemob.livedemo.ucloud.LiveCameraView;
 import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.exceptions.HyphenateException;
-import com.ucloud.ulive.UNetworkListener;
-import com.ucloud.ulive.UStreamStateListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -269,7 +265,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void startAnchorLive(LiveRoom liveRoom) {
-        LiveHelper.saveLivingId(liveRoom.getId());
+        DemoHelper.saveLivingId(liveRoom.getId());
         addChatRoomChangeListener();
         onMessageListInit();
         mContext.showToast("直播开始！");
@@ -308,7 +304,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
             @Override
             public void onSuccess(Void aVoid) {
-                LiveHelper.saveLivingId("");
+                DemoHelper.saveLivingId("");
                 mContext.finish();
             }
 

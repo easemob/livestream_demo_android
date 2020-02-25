@@ -17,6 +17,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.easemob.livedemo.DemoApplication;
+
 /**
  * 鉴于使用用户的username作为文件名，故需要在用户登录后，再进行初始化
  */
@@ -24,13 +26,23 @@ public class PreferenceManager {
 	private static SharedPreferences mSharedPreferences;
 	private static PreferenceManager mPreferencemManager;
 	private static SharedPreferences.Editor editor;
+	private static SharedPreferences mDefaultSp;
+	private static SharedPreferences.Editor mDefaultEditor;
 
-	private String KEY_LIVING_ID = "key_living_id";
+	private static final String KEY_LIVING_ID = "key_living_id";
+	private static final  String KEY_CAN_REGISTER = "key_can_register";
 
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt, String username) {
 		mSharedPreferences = cxt.getSharedPreferences(username, Context.MODE_PRIVATE);
 		editor = mSharedPreferences.edit();
+	}
+
+	private static void getDefaultSp(Context context) {
+		if(mDefaultSp == null) {
+			mDefaultSp = context.getSharedPreferences("demo", Context.MODE_PRIVATE);
+			mDefaultEditor = mDefaultSp.edit();
+		}
 	}
 
 	/**
@@ -69,6 +81,21 @@ public class PreferenceManager {
 
 	public String getLivingId() {
 		return mSharedPreferences.getString(KEY_LIVING_ID, null);
+	}
+
+	/**
+	 * 设置是否显示登陆注册页面
+	 * @param canRegister
+	 */
+	public static void setCanRegister(boolean canRegister) {
+		getDefaultSp(DemoApplication.getInstance());
+		mDefaultEditor.putBoolean(KEY_CAN_REGISTER, canRegister);
+		mDefaultEditor.apply();
+	}
+
+	public static boolean isCanRegister() {
+		getDefaultSp(DemoApplication.getInstance());
+		return mDefaultSp.getBoolean(KEY_CAN_REGISTER, false);
 	}
 
 }
