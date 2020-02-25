@@ -55,4 +55,9 @@
 
     <string name="em_set_title">设置</string>
     <string name="em_set_live_room">环信直播聊天室</string>
+    <string name="em_set_select_auto">是否切换为访客模式？</string>
+    <string name="em_set_select_login">是否切换为登录模式？</string>
+    <string name="em_set_select_switch">切换</string>
+    <string name="em_set_logout">退出</string>
+    <string name="em_set_logout_confirm">是否退出？</string>
 </resources>

@@ -34,6 +34,10 @@ public class DemoHelper {
         return PreferenceManager.isCanRegister();
     }
 
+    public static void setCanRegister(boolean canRegister) {
+        PreferenceManager.setCanRegister(canRegister);
+    }
+
     /**
      * 获取用户的昵称
      * @param username
