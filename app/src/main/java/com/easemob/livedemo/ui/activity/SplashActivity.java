@@ -35,6 +35,8 @@ public class SplashActivity extends BaseLiveActivity {
     @Override
     protected void initData() {
         super.initData();
+        //初始化demo user数据
+        UserRepository.getInstance().init(mContext);
         AlphaAnimation animation = new AlphaAnimation(0, 1f);
         animation.setDuration(500);
         ivIcon.startAnimation(animation);
@@ -82,7 +84,6 @@ public class SplashActivity extends BaseLiveActivity {
         pd.setMessage("请稍等...");
         pd.setCanceledOnTouchOutside(false);
         pd.show();
-        UserRepository.getInstance().init(mContext);
         User user = UserRepository.getInstance().getRandomUser();
         LiveManager.getInstance().login(user, new EMCallBack() {
             @Override

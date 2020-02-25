@@ -81,6 +81,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        usernameView.setText("");
         groupGiftInfo.setVisibility(View.VISIBLE);
     }
 
@@ -266,6 +267,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     private void startAnchorLive(LiveRoom liveRoom) {
         DemoHelper.saveLivingId(liveRoom.getId());
+        usernameView.setText(DemoHelper.getNickName(EMClient.getInstance().getCurrentUser()));
+        ivIcon.setImageResource(DemoHelper.getAvatarResource(EMClient.getInstance().getCurrentUser()));
         addChatRoomChangeListener();
         onMessageListInit();
         mContext.showToast("直播开始！");

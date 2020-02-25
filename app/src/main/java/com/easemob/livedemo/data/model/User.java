@@ -1,5 +1,7 @@
 package com.easemob.livedemo.data.model;
 
+import android.text.TextUtils;
+
 import com.hyphenate.chat.EMContact;
 
 import java.io.Serializable;
@@ -27,6 +29,9 @@ public class User implements Serializable {
     }
 
     public String getNickname() {
+        if(TextUtils.isEmpty(nick)) {
+            return username;
+        }
         return nick;
     }
 

@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.data.TestAvatarRepository;
 import com.easemob.livedemo.ui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -42,9 +43,10 @@ public class MemberAvatarAdapter extends EaseBaseRecyclerViewAdapter<String> {
 
         @Override
         public void setData(String item, int position) {
+            int avatarResource = DemoHelper.getAvatarResource(item, R.drawable.ease_default_avatar);
             //暂时使用测试数据
             Glide.with(mContext)
-                    .load(avatarRepository.getAvatar())
+                    .load(avatarResource)
                     .placeholder(R.drawable.ease_default_avatar)
                     .into(avatar);
         }

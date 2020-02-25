@@ -39,6 +39,7 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -47,11 +48,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.OnClick;
 
 public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener {
     private static final int MAX_SIZE = 10;
     protected static final String TAG = "LiveActivity";
+    @BindView(R.id.iv_icon)
+    EaseImageView ivIcon;
     @BindView(R.id.message_view)
     RoomMessagesView messageView;
     @BindView(R.id.periscope_layout)

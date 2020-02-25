@@ -86,6 +86,8 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     protected void initData() {
         super.initData();
+        usernameView.setText(DemoHelper.getNickName(liveRoom.getOwner()));
+        ivIcon.setImageResource(DemoHelper.getAvatarResource(liveRoom.getOwner()));
         getLiveRoomDetail();
     }
 

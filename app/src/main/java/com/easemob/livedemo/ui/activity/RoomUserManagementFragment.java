@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.ui.live.fragment.RoomMemberManageFragment;
 import com.easemob.livedemo.ui.live.fragment.RoomMuteManageFragment;
 import com.easemob.livedemo.ui.live.fragment.RoomWhiteManageFragment;
@@ -160,7 +161,8 @@ public class RoomUserManagementFragment extends BaseFragment {
         @Override
         public void onBindViewHolder(ManagementViewHolder holder, final int position) {
             final String username = userList.get(position);
-            holder.usernickView.setText(username);
+            holder.usernickView.setText(DemoHelper.getNickName(username));
+            holder.imgAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
             showOtherInfo(holder, userList, position);
         }
 

@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.ui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.widget.EaseImageView;
 
@@ -37,7 +38,8 @@ public class LiveMemberAdapter extends EaseBaseRecyclerViewAdapter<String> {
 
         @Override
         public void setData(String item, int position) {
-            txtUsernick.setText(item);
+            txtUsernick.setText(DemoHelper.getNickName(item));
+            imgAvatar.setImageResource(DemoHelper.getAvatarResource(item, R.drawable.ease_default_avatar));
         }
     }
 }

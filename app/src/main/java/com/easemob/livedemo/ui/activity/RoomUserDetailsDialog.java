@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.EMValueCallBack;
@@ -101,7 +102,8 @@ public class RoomUserDetailsDialog extends DialogFragment {
 //            }
         }
         if (username != null) {
-            usernameView.setText(username);
+            usernameView.setText(DemoHelper.getNickName(username));
+            ivAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
         }
         //mentionBtn.setText("@TA");
     }

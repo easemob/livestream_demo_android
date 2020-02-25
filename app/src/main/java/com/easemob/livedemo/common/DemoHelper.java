@@ -3,6 +3,9 @@ package com.easemob.livedemo.common;
 import android.text.TextUtils;
 
 import com.easemob.livedemo.DemoConstants;
+import com.easemob.livedemo.R;
+import com.easemob.livedemo.data.UserRepository;
+import com.easemob.livedemo.data.model.User;
 
 public class DemoHelper {
 
@@ -29,5 +32,40 @@ public class DemoHelper {
      */
     public static boolean isCanRegister() {
         return PreferenceManager.isCanRegister();
+    }
+
+    /**
+     * 获取用户的昵称
+     * @param username
+     * @return
+     */
+    public static String getNickName(String username) {
+        User user = UserRepository.getInstance().getUserById(username);
+        if(user == null) {
+            return username;
+        }
+        return user.getNickname();
+    }
+
+    /**
+     * 获取用户头像信息
+     * @param username
+     * @return
+     */
+    public static int getAvatarResource(String username) {
+        return getAvatarResource(username, 0);
+    }
+
+    /**
+     * 获取用户头像信息
+     * @param username
+     * @return
+     */
+    public static int getAvatarResource(String username, int defaultDrawable) {
+        User user = UserRepository.getInstance().getUserById(username);
+        if(user == null) {
+            return defaultDrawable == 0 ? R.drawable.em_live_logo : defaultDrawable;
+        }
+        return user.getAvatarResource();
     }
 }
