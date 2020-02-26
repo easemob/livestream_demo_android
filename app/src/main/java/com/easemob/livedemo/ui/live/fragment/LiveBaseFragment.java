@@ -25,6 +25,7 @@ import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.activity.BaseLiveFragment;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
 import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
+import com.easemob.livedemo.ui.live.ChatRoomPresenter;
 import com.easemob.livedemo.ui.live.LiveBaseActivity;
 import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
@@ -53,7 +54,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.OnClick;
 
-public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener {
+public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener {
     private static final int MAX_SIZE = 10;
     protected static final String TAG = "LiveActivity";
     @BindView(R.id.iv_icon)
@@ -105,14 +106,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected String liveId = "";
     protected String anchorId;
     protected int watchedCount;
-    protected EMChatRoomChangeListener chatRoomChangeListener;
-    protected EMMessageListener msgListener;
     LinkedList<String> memberList = new LinkedList<>();
     protected int membersCount;
     protected Handler handler = new Handler();
     private LinearLayoutManager layoutManager;
     private MemberAvatarAdapter avatarAdapter;
     protected boolean isMessageListInited;
+    protected ChatRoomPresenter presenter;
 
     @Override
     protected void initArgument() {
@@ -135,6 +135,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
         watchedCount = liveRoom.getAudienceNum();
         tvMemberNum.setText(String.valueOf(watchedCount));
+
+        presenter = new ChatRoomPresenter(mContext, chatroomId);
     }
 
     @Override
@@ -144,7 +146,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         toolbar.setOnClickListener(this);
         liveReceiveGift.setOnClickListener(this);
         getView().setOnTouchListener(this);
-        initMessageListener();
+        presenter.setOnChatRoomListener(this);
     }
 
     @Override
@@ -221,82 +223,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
      * add chat room change listener
      */
     protected void addChatRoomChangeListener() {
-        chatRoomChangeListener = new EMChatRoomChangeListener() {
-
-            @Override public void onChatRoomDestroyed(String roomId, String roomName) {
-                if (roomId.equals(chatroomId)) {
-                    mContext.finish();
-                }
-            }
-
-            @Override public void onMemberJoined(String roomId, String participant) {
-                onRoomMemberAdded(participant);
-            }
-
-            @Override
-            public void onMemberExited(String roomId, String roomName, String participant) {
-                //                showChatroomToast("member : " + participant + " leave the room : " + roomId + " room name : " + roomName);
-                onRoomMemberExited(participant);
-            }
-
-            @Override
-            public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
-                if (roomId.equals(chatroomId)) {
-                    String curUser = EMClient.getInstance().getCurrentUser();
-                    if (curUser.equals(participant)) {
-                        EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
-                        //postUserChangeEvent(StatisticsType.LEAVE, curUser);
-                        mContext.showToast("你已被移除出此房间");
-                        mContext.finish();
-                    } else {
-                        //                        showChatroomToast("member : " + participant + " was kicked from the room : " + roomId + " room name : " + roomName);
-                        onRoomMemberExited(participant);
-                    }
-                }
-            }
-
-            @Override
-            public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
-                for(String name : mutes){
-                    showMemberChangeEvent(name, "被禁言");
-                }
-            }
-
-            @Override public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
-                for(String name : mutes){
-                    showMemberChangeEvent(name, "被解除禁言");
-                }
-            }
-
-            @Override public void onAdminAdded(String chatRoomId, String admin) {
-                if(admin.equals(EMClient.getInstance().getCurrentUser())) {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            userManagerView.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }
-                showMemberChangeEvent(admin, "被提升为房管");
-            }
-
-            @Override public void onAdminRemoved(String chatRoomId, String admin) {
-                if(admin.equals(EMClient.getInstance().getCurrentUser())) {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            userManagerView.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
-                showMemberChangeEvent(admin, "被解除房管");
-            }
-
-            @Override
-            public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
-
-            }
-        };
-
-        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(presenter);
     }
 
     private synchronized void onRoomMemberAdded(String name) {
@@ -306,7 +233,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             if(memberList.size() >= MAX_SIZE)
                 memberList.removeLast();
             memberList.addFirst(name);
-            showMemberChangeEvent(name, "来了");
+            presenter.showMemberChangeEvent(name, "来了");
             EMLog.d(TAG, name + "added");
             requireActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
@@ -316,17 +243,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 }
             });
         }
-    }
-
-    private void showMemberChangeEvent(String username, String event){
-        EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-        message.setTo(chatroomId);
-        message.setFrom(username);
-        EMTextMessageBody textMessageBody = new EMTextMessageBody(event);
-        message.addBody(textMessageBody);
-        message.setChatType(EMMessage.ChatType.ChatRoom);
-        EMClient.getInstance().chatManager().saveMessage(message);
-        messageView.refreshSelectLast();
     }
 
     private void notifyDataSetChanged(){
@@ -353,69 +269,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 }
             }
         });
-    }
-
-    private void initMessageListener() {
-        msgListener = new EMMessageListener() {
-
-            @Override public void onMessageReceived(List<EMMessage> messages) {
-
-                for (EMMessage message : messages) {
-                    String username = null;
-                    // 群组消息
-                    if (message.getChatType() == EMMessage.ChatType.GroupChat
-                            || message.getChatType() == EMMessage.ChatType.ChatRoom) {
-                        username = message.getTo();
-                    } else {
-                        // 单聊消息
-                        username = message.getFrom();
-                    }
-                    // 如果是当前会话的消息，刷新聊天页面
-                    if (username.equals(chatroomId)) {
-                        //if (message.getBooleanAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, false)) {
-                        //    barrageLayout.addBarrage(
-                        //            ((EMTextMessageBody) message.getBody()).getMessage(),
-                        //            message.getFrom());
-                        //}
-                        messageView.refreshSelectLast();
-                        barrageView.refresh();
-                    } else {
-                        //if(message.getChatType() == EMMessage.ChatType.Chat && message.getTo().equals(EMClient.getInstance().getCurrentUser())){
-                        //  runOnUiThread(new Runnable() {
-                        //    @Override public void run() {
-                        //      newMsgNotifyImage.setVisibility(View.VISIBLE);
-                        //    }
-                        //  });
-                        //}
-                        //// 如果消息不是和当前聊天ID的消息
-                        //EaseUI.getInstance().getNotifier().onNewMsg(message);
-                    }
-                }
-            }
-
-            @Override public void onCmdMessageReceived(List<EMMessage> messages) {
-                EMMessage message = messages.get(messages.size() - 1);
-                if (DemoConstants.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
-                    //showLeftGiftView(message.getFrom());
-                } else if(DemoConstants.CMD_PRAISE.equals(((EMCmdMessageBody) message.getBody()).action())) {
-                    showPraise(message.getIntAttribute(DemoConstants.EXTRA_PRAISE_COUNT, 1));
-                }
-            }
-
-            @Override public void onMessageRead(List<EMMessage> messages) {
-
-            }
-
-            @Override public void onMessageDelivered(List<EMMessage> messages) {
-
-            }
-
-            @Override public void onMessageChanged(EMMessage message, Object change) {
-                if (isMessageListInited) {
-                    messageView.refresh();
-                }
-            }
-        };
     }
 
     protected void onMessageListInit() {
@@ -625,5 +478,38 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onChatRoomMemberAdded(String participant) {
+        onRoomMemberAdded(participant);
+    }
+
+    @Override
+    public void onChatRoomMemberExited(String participant) {
+        onRoomMemberExited(participant);
+    }
+
+    @Override
+    public void onMessageReceived() {
+        messageView.refreshSelectLast();
+        barrageView.refresh();
+    }
+
+    @Override
+    public void onMessageSelectLast() {
+        messageView.refreshSelectLast();
+    }
+
+    @Override
+    public void onMessageChanged() {
+        if (isMessageListInited) {
+            messageView.refresh();
+        }
+    }
+
+    @Override
+    public void onChatRoomShowPraise(int count) {
+        showPraise(count);
     }
 }

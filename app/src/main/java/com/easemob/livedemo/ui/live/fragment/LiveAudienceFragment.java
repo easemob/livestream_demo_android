@@ -123,7 +123,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                             praiseCount = 0;
                         }
                         if(count > 0) {
-                            sendPraiseMessage(count);
+                            presenter.sendPraiseMessage(count);
                             try {
                                 LiveManager.getInstance().postStatistics(StatisticsType.PRAISE, liveId, count);
                             } catch (LiveException e) {
@@ -192,16 +192,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                 }
             }
         });
-    }
-
-    private void sendPraiseMessage(int praiseCount) {
-        EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
-        message.setTo(chatroomId);
-        EMCmdMessageBody cmdMessageBody = new EMCmdMessageBody(DemoConstants.CMD_PRAISE);
-        message.addBody(cmdMessageBody);
-        message.setChatType(EMMessage.ChatType.ChatRoom);
-        message.setAttribute(DemoConstants.EXTRA_PRAISE_COUNT, praiseCount);
-        EMClient.getInstance().chatManager().sendMessage(message);
     }
 
     private void getLiveRoomDetail() {
@@ -275,7 +265,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if (isMessageListInited) messageView.refresh();
         EaseUI.getInstance().pushActivity(mContext);
         // register the event listener when enter the foreground
-        EMClient.getInstance().chatManager().addMessageListener(msgListener);
+        EMClient.getInstance().chatManager().addMessageListener(presenter);
     }
 
     @Override
@@ -283,7 +273,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         super.onStop();
         // unregister this event listener when this activity enters the
         // background
-        EMClient.getInstance().chatManager().removeMessageListener(msgListener);
+        EMClient.getInstance().chatManager().removeMessageListener(presenter);
 
         // 把此activity 从foreground activity 列表里移除
         EaseUI.getInstance().popActivity(mContext);
@@ -295,10 +285,10 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                 //postUserChangeEvent(StatisticsType.LEAVE, EMClient.getInstance().getCurrentUser());
             }
 
-            if (chatRoomChangeListener != null) {
+            if (presenter != null) {
                 EMClient.getInstance()
                         .chatroomManager()
-                        .removeChatRoomChangeListener(chatRoomChangeListener);
+                        .removeChatRoomListener(presenter);
             }
         }
     }

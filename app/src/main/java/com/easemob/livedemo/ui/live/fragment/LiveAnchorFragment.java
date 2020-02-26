@@ -337,7 +337,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if (isMessageListInited) messageView.refresh();
         EaseUI.getInstance().pushActivity(mContext);
         // register the event listener when enter the foreground
-        EMClient.getInstance().chatManager().addMessageListener(msgListener);
+        EMClient.getInstance().chatManager().addMessageListener(presenter);
     }
 
     @Override
@@ -345,7 +345,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onStop();
         // unregister this event listener when this activity enters the
         // background
-        EMClient.getInstance().chatManager().removeMessageListener(msgListener);
+        EMClient.getInstance().chatManager().removeMessageListener(presenter);
 
         // 把此activity 从foreground activity 列表里移除
         EaseUI.getInstance().popActivity(mContext);
@@ -355,10 +355,10 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        if (chatRoomChangeListener != null) {
+        if (presenter != null) {
             EMClient.getInstance()
                     .chatroomManager()
-                    .removeChatRoomChangeListener(chatRoomChangeListener);
+                    .removeChatRoomListener(presenter);
         }
         EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
     }
