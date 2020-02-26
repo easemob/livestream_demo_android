@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
 import com.easemob.livedemo.utils.KeyboardUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
@@ -79,6 +81,7 @@ public class RoomMessagesView extends RelativeLayout{
     }
 
     public void init(String chatroomId){
+        addSoftKeyboardListener();
         conversation = EMClient.getInstance().chatManager().getConversation(chatroomId, EMConversation.EMConversationType.ChatRoom, true);
         adapter = new ListAdapter(getContext(), conversation);
         listview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -119,6 +122,27 @@ public class RoomMessagesView extends RelativeLayout{
         //        }
         //    }
         //});
+
+    }
+
+    private void addSoftKeyboardListener() {
+        if(getContext() instanceof Activity) {
+            SoftKeyboardChangeHelper.setOnSoftKeyboardChangeListener((Activity) getContext(), new SoftKeyboardChangeHelper.OnSoftKeyboardChangeListener() {
+                @Override
+                public void keyboardShow(int height) {
+                    Log.e("TAG", "软键盘展示");
+                }
+
+                @Override
+                public void keyboardHide(int height) {
+                    Log.e("TAG", "软键盘隐藏");
+                    setShowInputView(false);
+                    if(messageViewListener != null){
+                        messageViewListener.onHiderBottomBar();
+                    }
+                }
+            });
+        }
 
     }
 

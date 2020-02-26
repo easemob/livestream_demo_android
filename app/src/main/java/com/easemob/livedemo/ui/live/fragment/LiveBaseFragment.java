@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.OnItemClickListener;
+import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.activity.BaseLiveFragment;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
@@ -148,7 +150,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     protected void initData() {
         super.initData();
-
+        DemoMsgHelper.getInstance().init(chatroomId);
         barrageView.initBarrage();
     }
 
@@ -422,33 +424,30 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 messageView.init(chatroomId);
                 barrageView.setData(chatroomId);
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
-                    @Override public void onMessageSend(String content) {
-                        EMMessage message = EMMessage.createTxtSendMessage(content, chatroomId);
-                        //if (messageView.isBarrageShow) {
-                        //    message.setAttribute(DemoConstants.EXTRA_IS_BARRAGE_MSG, true);
-                        //    barrageLayout.addBarrage(content,
-                        //            EMClient.getInstance().getCurrentUser());
-                        //}
-                        message.setChatType(EMMessage.ChatType.ChatRoom);
-                        EMClient.getInstance().chatManager().sendMessage(message);
-                        message.setMessageStatusCallback(new EMCallBack() {
-                            @Override public void onSuccess() {
+                    @Override
+                    public void onMessageSend(String content) {
+                        DemoMsgHelper.getInstance().sendTxtMsg(content, new EMCallBack() {
+                            @Override
+                            public void onSuccess() {
                                 //刷新消息列表
                                 messageView.refreshSelectLast();
                                 barrageView.refresh();
                             }
 
-                            @Override public void onError(int i, String s) {
+                            @Override
+                            public void onError(int code, String error) {
                                 mContext.showToast("消息发送失败！");
                             }
 
-                            @Override public void onProgress(int i, String s) {
+                            @Override
+                            public void onProgress(int progress, String status) {
 
                             }
                         });
                     }
 
-                    @Override public void onItemClickListener(final EMMessage message) {
+                    @Override
+                    public void onItemClickListener(final EMMessage message) {
                         //if(message.getFrom().equals(EMClient.getInstance().getCurrentUser())){
                         //    return;
                         //}
@@ -456,7 +455,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                         showUserDetailsDialog(clickUsername);
                     }
 
-                    @Override public void onHiderBottomBar() {
+                    @Override
+                    public void onHiderBottomBar() {
                         bottomBar.setVisibility(View.VISIBLE);
                     }
                 });
