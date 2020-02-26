@@ -32,7 +32,7 @@ interface ApiService {
     Call<ResponseModule<List<LiveRoom>>> getLivingRoomList(@Query("limit") int limit, @Query("cursor") String cursor);
 
     @PUT("liverooms/{id}")
-    Call<ResponseModule> updateLiveRoom(@Path("id") String roomId, @Body RequestBody body);
+    Call<LiveRoom> updateLiveRoom(@Path("id") String roomId, @Body RequestBody body);
 
     @POST("liverooms/{liveroomid}/users/{username}/{status}")
     Call<LiveRoom> changeLiveStatus(@Path("liveroomid") String roomId,

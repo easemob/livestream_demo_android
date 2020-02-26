@@ -63,6 +63,8 @@ public class AssociateLiveRoomActivity extends BaseActivity {
         setContentView(R.layout.activity_associate_live_room);
         ButterKnife.bind(this);
 
+        selectedLiveId = getIntent().getStringExtra("roomid");
+        startButton.setEnabled(true);
         loopView.setTextSize(18);
 
         executeTask(new ThreadPoolManager.Task<List<String>>() {
@@ -191,13 +193,13 @@ public class AssociateLiveRoomActivity extends BaseActivity {
                     throw exception;
                 }
 
-                LiveRoom room =  LiveManager.getInstance().createLiveRoom(name, desc, coverUrl, selectedLiveId);
+//                LiveRoom room =  LiveManager.getInstance().createLiveRoom(name, desc, coverUrl, selectedLiveId);
                 //现在服务器没有更新封面，手动调用更新
-                try {
-                    LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
-                } catch (LiveException e) {
-                }
-                return room;
+//                try {
+//                    LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
+//                } catch (LiveException e) {
+//                }
+                return LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
             }
 
             @Override public void onSuccess(LiveRoom liveRoom) {

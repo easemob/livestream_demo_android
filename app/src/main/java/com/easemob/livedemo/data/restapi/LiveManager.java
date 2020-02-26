@@ -154,17 +154,15 @@ public class LiveManager {
      * @param coverUrl
      * @throws LiveException
      */
-    public void updateLiveRoomCover(String roomId, String coverUrl) throws LiveException {
+    public LiveRoom updateLiveRoomCover(String roomId, String coverUrl) throws LiveException {
         JSONObject jobj = new JSONObject();
-        JSONObject picObj = new JSONObject();
         try {
-            picObj.put("cover_picture_url", coverUrl);
-            jobj.put("liveroom", picObj);
+            jobj.put("cover", coverUrl);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Call<ResponseModule> responseCall = apiService.updateLiveRoom(roomId, jsonToRequestBody(jobj.toString()));
-        handleResponseCall(responseCall);
+        Call<LiveRoom> responseCall = apiService.updateLiveRoom(roomId, jsonToRequestBody(jobj.toString()));
+        return handleResponseCall(responseCall).body();
     }
 
 

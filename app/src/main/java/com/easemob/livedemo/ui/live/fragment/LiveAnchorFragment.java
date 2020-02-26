@@ -1,5 +1,6 @@
 package com.easemob.livedemo.ui.live.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +25,7 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
+import com.easemob.livedemo.ui.activity.AssociateLiveRoomActivity;
 import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
