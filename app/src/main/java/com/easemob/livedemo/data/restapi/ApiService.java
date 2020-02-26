@@ -8,6 +8,7 @@ import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import java.util.List;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -37,6 +38,11 @@ interface ApiService {
     Call<LiveRoom> changeLiveStatus(@Path("liveroomid") String roomId,
                                              @Path("username") String username,
                                              @Path("status") String status);
+
+    @POST("liverooms/{liveroomid}/users/{username}/{status}")
+    Call<Response<LiveRoom>> changeTestLiveStatus(@Path("liveroomid") String roomId,
+                                                 @Path("username") String username,
+                                                 @Path("status") String status);
 
     @GET("liverooms/{id}")
     Call<LiveRoom> getLiveRoomDetails(@Path("id") String roomId);

@@ -15,6 +15,7 @@ public class User implements Serializable {
     private String nick;
     private String avatar;
     private int avatarResource;
+    private String id;
 
     public String getUsername() {
         return username;
@@ -57,5 +58,13 @@ public class User implements Serializable {
 
     public void setAvatarResource(int avatarResource) {
         this.avatarResource = avatarResource;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

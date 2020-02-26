@@ -115,7 +115,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         adapter.setOnItemClickListener(this);
 
         LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST, Boolean.class)
-                .observe(this, new Observer<Boolean>() {
+                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean aBoolean) {
                         if(aBoolean != null && aBoolean) {

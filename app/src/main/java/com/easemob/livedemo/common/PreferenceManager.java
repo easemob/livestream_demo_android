@@ -31,6 +31,7 @@ public class PreferenceManager {
 
 	private static final String KEY_LIVING_ID = "key_living_id";
 	private static final  String KEY_CAN_REGISTER = "key_can_register";
+	private static final  String KEY_USER_ID = "key_user_id";
 
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt, String username) {
@@ -98,4 +99,16 @@ public class PreferenceManager {
 		return mDefaultSp.getBoolean(KEY_CAN_REGISTER, false);
 	}
 
+	/**
+	 * 保存用户id(模拟数据id，非环信id)
+	 * @param id
+	 */
+	public void saveUserId(String id) {
+		editor.putString(KEY_USER_ID, id);
+		editor.apply();
+	}
+
+	public String getUserId() {
+		return mSharedPreferences.getString(KEY_USER_ID, null);
+	}
 }

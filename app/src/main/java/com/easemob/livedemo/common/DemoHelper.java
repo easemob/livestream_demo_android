@@ -6,6 +6,7 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.UserRepository;
 import com.easemob.livedemo.data.model.User;
+import com.hyphenate.chat.EMClient;
 
 public class DemoHelper {
 
@@ -44,11 +45,41 @@ public class DemoHelper {
      * @return
      */
     public static String getNickName(String username) {
-        User user = UserRepository.getInstance().getUserById(username);
+        User user = UserRepository.getInstance().getUserByUsername(username);
         if(user == null) {
             return username;
         }
         return user.getNickname();
+    }
+
+    /**
+     * 获取当前用户数据（模拟数据）
+     * @return
+     */
+    public static User getCurrentDemoUser() {
+        User user = UserRepository.getInstance().getCurrentUser();
+        if(user == null) {
+            user = UserRepository.getInstance().getUserByUsername(EMClient.getInstance().getCurrentUser());
+        }
+        return user;
+    }
+
+    /**
+     * 保存当前用户相关联的id
+     */
+    public static void saveUserId() {
+        PreferenceManager.getInstance().saveUserId(getCurrentDemoUser().getId());
+    }
+
+    /**
+     * 清除用户id
+     */
+    public static void clearUserId() {
+        PreferenceManager.getInstance().saveUserId("");
+    }
+
+    public static String getUserId() {
+        return PreferenceManager.getInstance().getUserId();
     }
 
     /**
@@ -66,7 +97,7 @@ public class DemoHelper {
      * @return
      */
     public static int getAvatarResource(String username, int defaultDrawable) {
-        User user = UserRepository.getInstance().getUserById(username);
+        User user = UserRepository.getInstance().getUserByUsername(username);
         if(user == null) {
             return defaultDrawable == 0 ? R.drawable.em_live_logo : defaultDrawable;
         }

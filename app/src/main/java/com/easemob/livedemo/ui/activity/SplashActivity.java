@@ -65,6 +65,7 @@ public class SplashActivity extends BaseLiveActivity {
         //登录过
         if(EMClient.getInstance().isLoggedInBefore()){
             PreferenceManager.init(mContext, EMClient.getInstance().getCurrentUser());
+            DemoHelper.saveUserId();
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }else {

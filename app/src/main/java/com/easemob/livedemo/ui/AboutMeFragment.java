@@ -126,6 +126,7 @@ public class AboutMeFragment extends BaseLiveFragment implements View.OnClickLis
     }
 
     private void skipToLogin() {
+        DemoHelper.clearUserId();
         Intent intent = new Intent(mContext, LoginActivity.class);
         startActivity(intent);
 
