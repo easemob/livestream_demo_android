@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -26,13 +28,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
+import com.easemob.livedemo.data.UserRepository;
 import com.easemob.livedemo.utils.KeyboardUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 /**
  * Created by wei on 2016/6/3.
@@ -86,6 +91,11 @@ public class RoomMessagesView extends RelativeLayout{
         adapter = new ListAdapter(getContext(), conversation);
         listview.setLayoutManager(new LinearLayoutManager(getContext()));
         listview.setAdapter(adapter);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setSize(0, (int) EaseCommonUtils.dip2px(getContext(), 4));
+        itemDecoration.setDrawable(drawable);
+        listview.addItemDecoration(itemDecoration);
         sendBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,14 +214,15 @@ public class RoomMessagesView extends RelativeLayout{
             final EMMessage message = messages[position];
             if(message.getBody() instanceof EMTextMessageBody) {
                 String from = message.getFrom();
+                String nickName = DemoHelper.getNickName(from);
                 String content = ((EMTextMessageBody) message.getBody()).getMessage();
                 boolean isSelf = EMClient.getInstance().getCurrentUser().equals(from);
                 StringBuilder builder = new StringBuilder();
-                builder.append(from).append(":").append(content);
+                builder.append(nickName).append(":").append(content);
                 SpannableString span = new SpannableString(builder.toString());
-                span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, from.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 span.setSpan(new ForegroundColorSpan(isSelf ? ContextCompat.getColor(getContext(), R.color.color_room_my_msg) : Color.parseColor("#FFC700")),
-                        from.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        nickName.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 holder.name.setText(span);
                 holder.itemView.setOnClickListener(new OnClickListener() {
                     @Override public void onClick(View v) {

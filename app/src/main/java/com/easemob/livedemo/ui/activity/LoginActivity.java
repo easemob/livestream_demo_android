@@ -42,6 +42,7 @@ public class LoginActivity extends BaseActivity {
       return;
     }
     setContentView(R.layout.activity_login);
+    setFitSystemForTheme(true);
     // Set up the login form.
     mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 

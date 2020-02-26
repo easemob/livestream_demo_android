@@ -10,8 +10,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.chat.EMClient;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
@@ -64,12 +66,22 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
                 tvOngoingStatus.setVisibility(View.GONE);
                 tvStatus.setVisibility(View.VISIBLE);
                 String status = liveRoom.getStatus();
-                if(!TextUtils.isEmpty(status) && TextUtils.equals(status, DemoConstants.LIVE_ONGOING)) {
-                    groupLived.setVisibility(View.VISIBLE);
-                    tvStatus.setVisibility(View.GONE);
+                if(DemoHelper.isLiving(status)) {
+                    if(!TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
+                        groupLived.setVisibility(View.VISIBLE);
+                        tvStatus.setVisibility(View.GONE);
+                    }else {
+                        groupLived.setVisibility(View.GONE);
+                        tvStatus.setVisibility(View.VISIBLE);
+                        tvStatus.setText(R.string.em_live_list_item_continue);
+                        tvStatus.setTextColor(ContextCompat.getColor(mContext, R.color.em_color_warning));
+                    }
+
                 }else {
                     groupLived.setVisibility(View.GONE);
                     tvStatus.setVisibility(View.VISIBLE);
+                    tvStatus.setText(R.string.em_live_list_item_open);
+                    tvStatus.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 }
             }
             author.setText(liveRoom.getName());

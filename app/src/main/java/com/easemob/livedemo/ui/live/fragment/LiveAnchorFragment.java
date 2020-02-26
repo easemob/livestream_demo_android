@@ -105,7 +105,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 showDialog(new OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view, Object bean) {
-                        stopLiving();
+
                     }
                 });
                 break;
@@ -282,7 +282,16 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .setTitle(R.string.em_live_dialog_quit_title)
                 .setConfirmButtonTxt(R.string.em_live_dialog_quit_btn_title)
                 .setConfirmColor(R.color.em_color_warning)
-                .setOnConfirmClickListener(listener)
+                .setOnConfirmClickListener(new OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view, Object bean) {
+                        stopLiving();
+                        LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
+                        if(listener != null) {
+                            listener.onConfirmClick(view, bean);
+                        }
+                    }
+                })
                 .build()
                 .show(getChildFragmentManager(), "dialog");
     }
@@ -359,8 +368,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         showDialog(new OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view, Object bean) {
-                stopLiving();
-                LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                 mContext.onBackPressed();
             }
         });

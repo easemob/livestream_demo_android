@@ -30,6 +30,7 @@ import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.ui.GridMarginDecoration;
 import com.easemob.livedemo.ui.LiveListAdapter;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,13 +189,18 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         String status = liveRoom.getStatus();
         boolean living = DemoHelper.isLiving(status);
         if(living) {
-            showDialog();
+            if(TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
+                LiveAnchorActivity.actionStart(mContext, liveRoom);
+            }else {
+                showDialog();
+            }
+
         }else {
             LiveAnchorActivity.actionStart(mContext, liveRoom);
         }
     }
 
     private void showDialog() {
-        Toast.makeText(mContext, "展示dialog", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.em_live_list_warning, Toast.LENGTH_SHORT).show();
     }
 }
