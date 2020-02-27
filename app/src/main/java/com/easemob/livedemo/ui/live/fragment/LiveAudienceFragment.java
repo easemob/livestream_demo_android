@@ -18,6 +18,7 @@ import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveException;
@@ -195,40 +196,37 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     }
 
     private void getLiveRoomDetail() {
-        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-            @Override
-            public LiveRoom onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getLiveRoomDetails(liveId);
-            }
+        viewModel.getRoomDetailObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    LiveAudienceFragment.this.liveRoom = liveRoom;
+                    if(DemoHelper.isLiving(liveRoom.getStatus())) {
+                        //直播正在进行
+                        if(liveListener != null) {
+                            liveListener.onLiveOngoing();
+                        }
+                        messageView.getInputView().requestFocus();
+                        messageView.getInputView().requestFocusFromTouch();
+                        joinChatRoom();
 
-            @Override
-            public void onSuccess(LiveRoom liveRoom) {
-                loadingLayout.setVisibility(View.INVISIBLE);
-                LiveAudienceFragment.this.liveRoom = liveRoom;
-                if(DemoHelper.isLiving(liveRoom.getStatus())) {
-                    //直播正在进行
-                    if(liveListener != null) {
-                        liveListener.onLiveOngoing();
-                    }
-                    messageView.getInputView().requestFocus();
-                    messageView.getInputView().requestFocusFromTouch();
-                    joinChatRoom();
-
-                }else {
-                    mContext.showLongToast("直播已结束");
-                    if(liveListener != null) {
-                        liveListener.onLiveClosed();
+                    }else {
+                        mContext.showLongToast("直播已结束");
+                        if(liveListener != null) {
+                            liveListener.onLiveClosed();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onError(HyphenateException exception) {
-                mContext.runOnUiThread(()-> {
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
                     loadingLayout.setVisibility(View.INVISIBLE);
-                });
-            }
+                }
+            });
         });
+
+        viewModel.getLiveRoomDetails(liveId);
     }
 
     private void joinChatRoom() {

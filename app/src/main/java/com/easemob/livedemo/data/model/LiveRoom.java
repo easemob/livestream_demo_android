@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by wei on 2016/5/27.
  */
-public class LiveRoom implements Serializable {
+public class LiveRoom extends BaseBean implements Serializable {
     @SerializedName(value = "liveroom_id", alternate = {"id"})
     private String id;
     private String name;

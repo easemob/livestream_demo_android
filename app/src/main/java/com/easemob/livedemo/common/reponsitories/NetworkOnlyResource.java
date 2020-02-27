@@ -8,12 +8,14 @@ import androidx.lifecycle.MediatorLiveData;
 
 import com.easemob.livedemo.common.DemoLog;
 import com.easemob.livedemo.common.ThreadManager;
+import com.easemob.livedemo.data.model.BaseBean;
+import com.easemob.livedemo.data.restapi.model.ResponseModule;
 
 /**
  * 此类用于从环信SDK拉取异步数据或者其他耗时操作
  * @param <ResultType>
  */
-public abstract class NetworkOnlyResource<ResultType> {
+public abstract class NetworkOnlyResource<ResultType, RequestType> {
     private static final String TAG = "NetworkBoundResource";
     private ThreadManager mThreadManager;
     private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
@@ -40,29 +42,34 @@ public abstract class NetworkOnlyResource<ResultType> {
      * work on main thread
      */
     private void fetchFromNetwork() {
-        createCall(new ResultCallBack<LiveData<ResultType>>() {
+        createCall(new ResultCallBack<LiveData<RequestType>>() {
             @Override
-            public void onSuccess(LiveData<ResultType> apiResponse) {
+            public void onSuccess(LiveData<RequestType> apiResponse) {
                 // 保证回调后在主线程
                 mThreadManager.runOnMainThread(() -> {
                     result.addSource(apiResponse, response-> {
                         result.removeSource(apiResponse);
                         if(response != null) {
                             // 如果结果是EmResult结构，需要判断code，是否请求成功
-                            if(response instanceof Result) {
-                                int code = ((Result) response).code;
+                            if(response instanceof BaseBean) {
+                                int code = ((BaseBean) response).code;
                                 if(code != ErrorCode.EM_NO_ERROR) {
-                                    fetchFailed(code, null);
+                                    fetchFailed(code, ((BaseBean) response).message);
+                                    return;
                                 }
                             }
                             // 在异步线程中处理保存的逻辑
                             mThreadManager.runOnIOThread(() -> {
+                                ResultType resultType = transformRequestType(response); //自定义的
+                                if(resultType == null) {
+                                    resultType = transformDefault(response);
+                                }
                                 try {
-                                    saveCallResult(processResponse(response));
+                                    saveCallResult(processResponse(resultType));
                                 } catch (Exception e) {
                                     DemoLog.e(TAG, "save call result failed: " + e.toString());
                                 }
-                                result.postValue(Resource.success(response));
+                                result.postValue(Resource.success(resultType));
                             });
 
                         }else {
@@ -81,6 +88,43 @@ public abstract class NetworkOnlyResource<ResultType> {
         });
 
 
+    }
+
+    /**
+     * 默认转换
+     * @param response
+     * @return
+     */
+    @WorkerThread
+    private ResultType transformDefault(RequestType response) {
+        if(response instanceof ResponseModule) {
+            Object result = ((ResponseModule) response).data;
+            if(result != null) {
+                try {
+                    return (ResultType) result;
+                } catch (Exception e) {
+                    return null;
+                }
+            }else {
+                return null;
+            }
+        }
+        try {
+            return (ResultType) response;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 用户自定义转换
+     * @param response
+     * @return
+     */
+    @WorkerThread
+    protected ResultType transformRequestType(RequestType response) {
+        return null;
     }
 
     @MainThread
@@ -111,7 +155,7 @@ public abstract class NetworkOnlyResource<ResultType> {
      * @return
      */
     @MainThread
-    protected abstract void createCall(@NonNull ResultCallBack<LiveData<ResultType>> callBack);
+    protected abstract void createCall(@NonNull ResultCallBack<LiveData<RequestType>> callBack);
 
     /**
      * Called when the fetch fails. The child class may want to reset components like rate limiter.

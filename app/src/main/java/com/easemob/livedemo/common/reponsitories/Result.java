@@ -1,15 +1,17 @@
 package com.easemob.livedemo.common.reponsitories;
 
 
+import com.google.gson.annotations.SerializedName;
 import com.hyphenate.chat.EMBase;
 
 /**
  * 结果基础类
  * @param <T> 请求结果的实体类
  */
-public class Result<T> extends EMBase<T> {
+public class Result<T> {
     public int code;
     public T result;
+    public String message;
 
     public Result(){
     }
@@ -17,6 +19,11 @@ public class Result<T> extends EMBase<T> {
     public Result(int code, T result) {
         this.code = code;
         this.result = result;
+    }
+
+    public Result(int code, String message) {
+        this.code = code;
+        this.message = message;
     }
 
     public Result(int code){

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -23,10 +24,13 @@ import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
+import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ui.activity.AssociateLiveRoomActivity;
 import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
+import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -68,6 +72,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             }
         }
     };
+    private LivingViewModel viewModel;
 
     @Override
     protected int getLayoutId() {
@@ -96,6 +101,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void initData() {
         super.initData();
+        viewModel = new ViewModelProvider(this).get(LivingViewModel.class);
         startLive();
     }
 
@@ -225,45 +231,31 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void getLiveRoomDetail() {
-        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-            @Override
-            public LiveRoom onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getLiveRoomDetails(liveId);
-            }
-
-            @Override
-            public void onSuccess(LiveRoom liveRoom) {
-                LiveAnchorFragment.this.liveRoom = liveRoom;
-                changeAnchorLive();
-            }
-
-            @Override
-            public void onError(HyphenateException exception) {
-
-            }
+        viewModel.getRoomDetailObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    LiveAnchorFragment.this.liveRoom = liveRoom;
+                    changeAnchorLive();
+                }
+            });
         });
+        viewModel.getLiveRoomDetails(liveId);
     }
 
     private void changeAnchorLive() {
+        viewModel.getChangeObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    startAnchorLive(liveRoom);
+                }
+            });
+        });
         if(liveRoom.isLiving()) {
             startAnchorLive(liveRoom);
         }else {
-            ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-                @Override
-                public LiveRoom onRequest() throws HyphenateException {
-                    return LiveManager.getInstance().startLive(liveId, EMClient.getInstance().getCurrentUser());
-                }
-
-                @Override
-                public void onSuccess(LiveRoom liveRoom) {
-                    startAnchorLive(liveRoom);
-                }
-
-                @Override
-                public void onError(HyphenateException exception) {
-                    mContext.showToast(exception.getMessage());
-                }
-            });
+            viewModel.changeLiveStatus(liveId, EMClient.getInstance().getCurrentUser(), "ongoing");
         }
     }
 

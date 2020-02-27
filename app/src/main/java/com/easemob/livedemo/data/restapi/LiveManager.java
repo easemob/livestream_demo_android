@@ -65,6 +65,7 @@ public class LiveManager {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .client(httpClient)
                 .build();
 
@@ -94,6 +95,10 @@ public class LiveManager {
             instance = new LiveManager();
         }
         return instance;
+    }
+
+    public ApiService getApiService() {
+        return apiService;
     }
 
     /**

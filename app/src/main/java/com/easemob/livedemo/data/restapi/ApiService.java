@@ -1,5 +1,9 @@
 package com.easemob.livedemo.data.restapi;
 
+import androidx.lifecycle.LiveData;
+
+import com.easemob.livedemo.common.reponsitories.Resource;
+import com.easemob.livedemo.common.reponsitories.Result;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.data.restapi.model.GrantAdminModule;
@@ -21,18 +25,30 @@ import retrofit2.http.Query;
  * Created by wei on 2017/2/14.
  */
 
-interface ApiService {
+public interface ApiService {
     @POST("liverooms")
     Call<LiveRoom> createLiveRoom(@Body LiveRoom module);
+
+    @POST("liverooms")
+    LiveData<LiveRoom> createLiveRooms(@Body LiveRoom module);
 
     @GET("liverooms")
     Call<ResponseModule<List<LiveRoom>>> getLiveRoomList(@Query("limit") int limit, @Query("cursor") String cursor);
 
+    @GET("liverooms")
+    LiveData<ResponseModule<List<LiveRoom>>> getLiveRoomLists(@Query("limit") int limit, @Query("cursor") String cursor);
+
     @GET("liverooms/ongoing")
     Call<ResponseModule<List<LiveRoom>>> getLivingRoomList(@Query("limit") int limit, @Query("cursor") String cursor);
 
+    @GET("liverooms/ongoing")
+    LiveData<ResponseModule<List<LiveRoom>>> getLivingRoomLists(@Query("limit") int limit, @Query("cursor") String cursor);
+
     @PUT("liverooms/{id}")
     Call<LiveRoom> updateLiveRoom(@Path("id") String roomId, @Body RequestBody body);
+
+    @PUT("liverooms/{id}")
+    LiveData<LiveRoom> updateLiveRooms(@Path("id") String roomId, @Body RequestBody body);
 
     @POST("liverooms/{liveroomid}/users/{username}/{status}")
     Call<LiveRoom> changeLiveStatus(@Path("liveroomid") String roomId,
@@ -40,12 +56,15 @@ interface ApiService {
                                              @Path("status") String status);
 
     @POST("liverooms/{liveroomid}/users/{username}/{status}")
-    Call<Response<LiveRoom>> changeTestLiveStatus(@Path("liveroomid") String roomId,
+    LiveData<LiveRoom> changeTestLiveStatus(@Path("liveroomid") String roomId,
                                                  @Path("username") String username,
                                                  @Path("status") String status);
 
     @GET("liverooms/{id}")
     Call<LiveRoom> getLiveRoomDetails(@Path("id") String roomId);
+
+    @GET("liverooms/{id}")
+    LiveData<LiveRoom> getLiveRoomDetail(@Path("id") String roomId);
 
     @POST("liverooms/{id}/close")
     Call<RoomResponse> closeLiveRoom(@Path("id") String roomId);

@@ -6,10 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +26,16 @@ import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnItemClickListener;
+import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.ThreadManager;
+import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.ui.GridMarginDecoration;
 import com.easemob.livedemo.ui.LiveListAdapter;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.easemob.livedemo.ui.live.viewmodels.LiveListViewModel;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
@@ -43,7 +49,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     private RecyclerView recyclerView;
     private ProgressBar loadmorePB;
 
-    private static final int pageSize = 8;
+    protected static final int pageSize = 8;
     private String cursor;
     private boolean hasMoreData;
     private boolean isLoading;
@@ -51,6 +57,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     public LiveListAdapter adapter;
     private GridLayoutManager layoutManager;
     private String status;
+    protected LiveListViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +71,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        initViewModel();
     }
 
     @Override
@@ -93,6 +101,38 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         recyclerView.setAdapter(adapter);
 
         adapter.setStatus(status);
+    }
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(LiveListViewModel.class);
+        viewModel.getAllObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<LiveRoom>>() {
+                @Override
+                public void onSuccess(List<LiveRoom> data) {
+                    adapter.setData(data);
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    hideLoadingView(false);
+                }
+            });
+        });
+        viewModel.getLivingRoomsObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<LiveRoom>>() {
+                @Override
+                public void onSuccess(List<LiveRoom> data) {
+                    adapter.setData(data);
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    hideLoadingView(false);
+                }
+            });
+        });
     }
 
     private void initListener() {
@@ -129,46 +169,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         showLiveList(false);
     }
 
-    private void showLiveList(final boolean isLoadMore){
-        if(!isLoadMore)
-            swipeRefreshLayout.setRefreshing(true);
-        else
-            loadmorePB.setVisibility(View.VISIBLE);
-        isLoading = true;
-        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<ResponseModule<List<LiveRoom>>>() {
-            @Override public ResponseModule<List<LiveRoom>> onRequest() throws HyphenateException {
-                if(!isLoadMore){
-                    cursor = null;
-                }
-                return isOngoingLive() ? LiveManager.getInstance().getLivingRoomList(pageSize, cursor) :
-                        LiveManager.getInstance().getLiveRoomList(pageSize, cursor);
-            }
-
-            @Override public void onSuccess(ResponseModule<List<LiveRoom>> listResponseModule) {
-                hideLoadingView(isLoadMore);
-                List<LiveRoom> returnList = listResponseModule.data;
-                if(returnList == null) {
-                    return;
-                }
-                if(returnList.size() < pageSize){
-                    hasMoreData = false;
-                    cursor = null;
-                }else{
-                    hasMoreData = true;
-                    cursor = listResponseModule.cursor;
-                }
-
-                if(!isLoadMore) {
-                    liveRoomList.clear();
-                }
-                liveRoomList.addAll(returnList);
-                adapter.setData(liveRoomList);
-            }
-
-            @Override public void onError(HyphenateException exception) {
-                hideLoadingView(isLoadMore);
-            }
-        });
+    /**
+     * 加载数据
+     * @param isLoadMore
+     */
+    protected void showLiveList(final boolean isLoadMore){
+        viewModel.getLiveRoomList(pageSize);
     }
 
     private void hideLoadingView(boolean isLoadMore){

@@ -6,9 +6,11 @@ import androidx.annotation.Nullable;
 
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.common.enums.Status;
+import com.google.gson.annotations.SerializedName;
 
 public class Resource<T> {
     public Status status;
+    @SerializedName("entities")
     public T data;
     public int errorCode;
     private String message;

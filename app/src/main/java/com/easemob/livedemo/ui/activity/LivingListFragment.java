@@ -14,4 +14,9 @@ public class LivingListFragment extends LiveListFragment {
         startActivity(new Intent(mContext, LiveAudienceActivity.class)
                 .putExtra("liveroom", liveRoom));
     }
+
+    @Override
+    protected void showLiveList(boolean isLoadMore) {
+        viewModel.getLivingRoomLists(pageSize);
+    }
 }

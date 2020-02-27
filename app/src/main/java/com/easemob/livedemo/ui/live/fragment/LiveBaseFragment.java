@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
 import com.easemob.livedemo.ui.live.ChatRoomPresenter;
 import com.easemob.livedemo.ui.live.LiveBaseActivity;
 import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
+import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
@@ -113,6 +115,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     private MemberAvatarAdapter avatarAdapter;
     protected boolean isMessageListInited;
     protected ChatRoomPresenter presenter;
+    protected LivingViewModel viewModel;
 
     @Override
     protected void initArgument() {
@@ -137,6 +140,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         tvMemberNum.setText(String.valueOf(watchedCount));
 
         presenter = new ChatRoomPresenter(mContext, chatroomId);
+    }
+
+    @Override
+    protected void initViewModel() {
+        super.initViewModel();
+        viewModel = new ViewModelProvider(this).get(LivingViewModel.class);
+
     }
 
     @Override

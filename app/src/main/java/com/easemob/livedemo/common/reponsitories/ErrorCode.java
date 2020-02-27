@@ -59,6 +59,11 @@ public class ErrorCode extends EMError {
 
     public static final int EM_DELETE_SYS_MSG_ERROR = -115;
 
+    /**
+     * 请求错误
+     */
+    public static final int EM_REQUEST_ERROR = -9998;
+
     public enum Error {
         UNKNOWN_ERROR(-9999, 0);
 

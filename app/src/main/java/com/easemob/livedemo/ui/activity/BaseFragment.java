@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.reponsitories.Resource;
+
 public class BaseFragment extends Fragment {
     public BaseActivity mContext;
 
@@ -37,5 +40,17 @@ public class BaseFragment extends Fragment {
 
     public void onBackPressed() {
         mContext.onBackPressed();
+    }
+
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(mContext != null) {
+            mContext.parseResource(response, callback);
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.ThreadManager;
+import com.easemob.livedemo.common.enums.Status;
+import com.easemob.livedemo.common.reponsitories.Resource;
 import com.easemob.livedemo.utils.StatusBarCompat;
 import com.easemob.livedemo.utils.Utils;
 
@@ -132,6 +137,33 @@ public class BaseActivity extends AppCompatActivity{
             }
         }else {
             super.onBackPressed();
+        }
+    }
+
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(response == null) {
+            return;
+        }
+        if(response.status == Status.SUCCESS) {
+            callback.hideLoading();
+            callback.onSuccess(response.data);
+        }else if(response.status == Status.ERROR) {
+            ThreadManager.getInstance().runOnMainThread(()-> {
+                callback.hideLoading();
+                if(!callback.hideErrorMsg) {
+                    showToast(response.getMessage());
+                }
+                callback.onError(response.errorCode, response.getMessage());
+            });
+
+        }else if(response.status == Status.LOADING) {
+            callback.onLoading();
         }
     }
 }
