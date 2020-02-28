@@ -16,12 +16,14 @@ public class LivingViewModel extends AndroidViewModel {
     private AppServerRepository repository;
     private MediatorLiveData<Resource<LiveRoom>> changeObservable;
     private MediatorLiveData<Resource<LiveRoom>> roomDetailObservable;
+    private MediatorLiveData<Resource<LiveRoom>> closeObservable;
 
     public LivingViewModel(@NonNull Application application) {
         super(application);
         repository = new AppServerRepository();
         changeObservable = new MediatorLiveData<>();
         roomDetailObservable = new MediatorLiveData<>();
+        closeObservable = new MediatorLiveData<>();
     }
 
     public LiveData<Resource<LiveRoom>> getChangeObservable() {
@@ -38,5 +40,13 @@ public class LivingViewModel extends AndroidViewModel {
 
     public void getLiveRoomDetails(String roomId) {
         roomDetailObservable.addSource(repository.getLiveRoomDetails(roomId), response -> roomDetailObservable.postValue(response));
+    }
+
+    public MediatorLiveData<Resource<LiveRoom>> getCloseObservable() {
+        return closeObservable;
+    }
+
+    public void closeLive(String roomId, String username) {
+        closeObservable.addSource(repository.changeLiveStatus(roomId, username, "offline"), response -> closeObservable.postValue(response));
     }
 }

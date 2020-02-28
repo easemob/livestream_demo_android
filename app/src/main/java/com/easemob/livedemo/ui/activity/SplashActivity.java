@@ -7,18 +7,23 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.PreferenceManager;
 import com.easemob.livedemo.data.UserRepository;
 import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.data.restapi.LiveManager;
+import com.easemob.livedemo.ui.viewmodels.LoginViewModel;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
 public class SplashActivity extends BaseLiveActivity {
     private ImageView ivIcon;
     private TextView tvWelcome;
+    private LoginViewModel viewModel;
 
     @Override
     protected int getLayoutId() {
@@ -37,6 +42,9 @@ public class SplashActivity extends BaseLiveActivity {
         super.initData();
         //初始化demo user数据
         UserRepository.getInstance().init(mContext);
+
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
         AlphaAnimation animation = new AlphaAnimation(0, 1f);
         animation.setDuration(500);
         ivIcon.startAnimation(animation);
@@ -84,25 +92,28 @@ public class SplashActivity extends BaseLiveActivity {
         ProgressDialog pd = new ProgressDialog(mContext);
         pd.setMessage("请稍等...");
         pd.setCanceledOnTouchOutside(false);
-        pd.show();
-        User user = UserRepository.getInstance().getRandomUser();
-        LiveManager.getInstance().login(user, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                pd.dismiss();
-                skipToTarget();
-            }
 
-            @Override
-            public void onError(int code, String error) {
-                runOnUiThread(pd::dismiss);
-                showToast(error);
-            }
+        viewModel.getLoginObservable().observe(mContext, response -> {
+            parseResource(response, new OnResourceParseCallback<User>() {
+                @Override
+                public void onSuccess(User data) {
+                    skipToTarget();
+                }
 
-            @Override
-            public void onProgress(int progress, String status) {
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    pd.show();
+                }
 
-            }
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    pd.dismiss();
+                }
+            });
         });
+
+        viewModel.login();
     }
 }

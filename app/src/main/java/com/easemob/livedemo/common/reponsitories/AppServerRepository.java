@@ -11,10 +11,8 @@ import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import java.util.List;
 
 import okhttp3.RequestBody;
-import retrofit2.http.Body;
-import retrofit2.http.Path;
 
-public class AppServerRepository extends BaseEMRepository {
+public class AppServerRepository {
     private ApiService apiService;
 
     public AppServerRepository() {

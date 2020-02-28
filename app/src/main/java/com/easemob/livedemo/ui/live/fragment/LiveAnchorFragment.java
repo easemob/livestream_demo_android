@@ -25,6 +25,7 @@ import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
@@ -208,7 +209,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                                 .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
                                     @Override public void onSuccess(EMChatRoom emChatRoom) {
                                         chatroom = emChatRoom;
-                                        getLiveRoomDetail();
+                                        ThreadManager.getInstance().runOnMainThread(LiveAnchorFragment.this::getLiveRoomDetail);
                                     }
 
                                     @Override public void onError(int i, String s) {
@@ -301,24 +302,22 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void leaveRoom() {
-        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<Void>() {
-            @Override
-            public Void onRequest() throws HyphenateException {
-                LiveManager.getInstance().closeLiveRoom(liveId, EMClient.getInstance().getCurrentUser());
-                return null;
-            }
+        viewModel.getCloseObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    DemoHelper.saveLivingId("");
+                    mContext.finish();
+                }
 
-            @Override
-            public void onSuccess(Void aVoid) {
-                DemoHelper.saveLivingId("");
-                mContext.finish();
-            }
-
-            @Override
-            public void onError(HyphenateException exception) {
-                mContext.finish();
-            }
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    mContext.finish();
+                }
+            });
         });
+        viewModel.closeLive(liveId, EMClient.getInstance().getCurrentUser());
     }
 
     public void setOnCameraListener(OnCameraListener listener) {

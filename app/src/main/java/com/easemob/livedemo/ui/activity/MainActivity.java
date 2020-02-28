@@ -17,14 +17,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ui.AboutMeFragment;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -76,22 +79,16 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         if(TextUtils.isEmpty(liveId)) {
             return;
         }
-        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-            @Override
-            public LiveRoom onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getLiveRoomDetails(liveId);
-            }
-
-            @Override
-            public void onSuccess(LiveRoom liveRoom) {
-                LiveAnchorActivity.actionStart(mContext, liveRoom);
-            }
-
-            @Override
-            public void onError(HyphenateException exception) {
-
-            }
+        LivingViewModel viewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
+        viewModel.getRoomDetailObservable().observe(mContext, response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    LiveAnchorActivity.actionStart(mContext, data);
+                }
+            });
         });
+        viewModel.getLiveRoomDetails(liveId);
     }
 
     @Override

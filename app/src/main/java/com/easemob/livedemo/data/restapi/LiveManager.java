@@ -36,6 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by wei on 2017/2/14.
+ * 此类用户初始化相关网络请求类，具体接口调用，请通过viewmodel+livedata+repository实现
  */
 
 public class LiveManager {
@@ -214,51 +215,6 @@ public class LiveManager {
     }
 
     /**
-     * 开始直播
-     * @param roomId
-     * @param username
-     * @return
-     * @throws LiveException
-     */
-    public LiveRoom startLive(String roomId, String username) throws LiveException {
-        Call<LiveRoom> respCall = apiService.changeLiveStatus(roomId, username, "ongoing");
-        return handleResponseCall(respCall).body();
-    }
-
-    /**
-     * 结束直播
-     * @param roomId
-     * @param username
-     * @throws LiveException
-     */
-    public void closeLiveRoom(String roomId, String username) throws LiveException {
-        Call<LiveRoom> respCall = apiService.changeLiveStatus(roomId, username, "offline");
-        handleResponseCall(respCall);
-    }
-
-    public ResponseModule<List<LiveRoom>> getLiveRoomList(int limit, String cursor) throws LiveException {
-        Call<ResponseModule<List<LiveRoom>>> respCall = apiService.getLiveRoomList(limit, cursor);
-
-        ResponseModule<List<LiveRoom>> response = handleResponseCall(respCall).body();
-        return response;
-    }
-
-    /**
-     * 获取正在直播的直播室列表
-     * @param limit 取多少
-     * @param cursor 在这个游标基础上取数据，首次获取传null
-     * @return
-     * @throws LiveException
-     */
-    public ResponseModule<List<LiveRoom>> getLivingRoomList(int limit, String cursor) throws LiveException {
-        Call<ResponseModule<List<LiveRoom>>> respCall = apiService.getLivingRoomList(limit, cursor);
-
-        ResponseModule<List<LiveRoom>> response = handleResponseCall(respCall).body();
-
-        return response;
-    }
-
-    /**
      * 获取直播间详情
      * @param roomId
      * @return
@@ -279,55 +235,6 @@ public class LiveManager {
         return response.data;
     }
 
-    /**
-     * 登录
-     * @param user
-     * @param callBack
-     */
-    public void login(User user, EMCallBack callBack) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
-            EMClient.getInstance().login(user.getUsername(), UserRepository.getInstance().getDefaultPsw(), new EMCallBack() {
-                @Override
-                public void onSuccess() {
-                    callBack.onSuccess();
-                }
-
-                @Override
-                public void onError(int code, String error) {
-                    if(code == EMError.USER_NOT_FOUND) {
-                        register(user, callBack);
-                    }else {
-                        callBack.onError(code, error);
-                    }
-                }
-
-                @Override
-                public void onProgress(int progress, String status) {
-
-                }
-            });
-        });
-    }
-
-    /**
-     * 注册并登录
-     * @param user
-     * @param callBack
-     */
-    public void register(User user, EMCallBack callBack) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
-            try {
-                EMClient.getInstance().createAccount(user.getUsername(), UserRepository.getInstance().getDefaultPsw());
-                //如果注册成功，则直接进行登录
-                login(user, callBack);
-            } catch (HyphenateException e) {
-                e.printStackTrace();
-                if(callBack != null) {
-                    callBack.onError(e.getErrorCode(), e.getMessage());
-                }
-            }
-        });
-    }
 
     //public void grantLiveRoomAdmin(String roomId, String adminId) throws LiveException {
     //    GrantAdminModule module = new GrantAdminModule();

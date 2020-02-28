@@ -13,23 +13,20 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.lifecycle.ViewModelProvider;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.cloud.EMCloudOperationCallback;
-import com.hyphenate.cloud.HttpFileManager;
-import com.hyphenate.exceptions.HyphenateException;
+
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class CreateLiveRoomActivity extends BaseActivity {
 
@@ -43,6 +40,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
 
     private String coverPath;
     private File cacheFile;
+    private CreateLiveViewModel viewmodel;
 
     public static void actionStart(Context context) {
         Intent starter = new Intent(context, CreateLiveRoomActivity.class);
@@ -61,6 +59,8 @@ public class CreateLiveRoomActivity extends BaseActivity {
 
         String restServer = EMClient.getInstance().getOptions().getRestServer();
         Log.e("TAG", "restServer = "+restServer);
+
+        viewmodel = new ViewModelProvider(this).get(CreateLiveViewModel.class);
 
     }
 
@@ -87,58 +87,34 @@ public class CreateLiveRoomActivity extends BaseActivity {
             desc = liveDescView.getText().toString();
         }
 
+        viewmodel.createLiveRoom(name, desc, coverPath);
 
-        showProgressDialog("发起直播...");
-
-        //EMHttpClient.getInstance().uploadFile();
-
-        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-            HyphenateException exception;
-            String coverUrl;
-            @Override public LiveRoom onRequest() throws HyphenateException {
-                if(coverPath != null){
-
-                    Map<String, String> headers = new HashMap<String, String>();
-                    headers.put("Authorization", "Bearer " + EMClient.getInstance().getAccessToken());
-                    new HttpFileManager().uploadFile(coverPath, "", "", "", headers, new EMCloudOperationCallback() {
-                        @Override public void onSuccess(String result) {
-                            try {
-                                JSONObject jsonObj = new JSONObject(result);
-                                JSONObject entitys = jsonObj.getJSONArray("entities").getJSONObject(0);
-                                String uuid = entitys.getString("uuid");
-                                String url = jsonObj.getString("uri");
-                                coverUrl = url + "/" + uuid;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override public void onError(String msg) {
-                            exception = new HyphenateException(msg);
-                        }
-
-                        @Override public void onProgress(int progress) {
-
-                        }
-                    });
+        viewmodel.getCreateObservable().observe(mContext, response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>(true) {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    LiveAnchorActivity.actionStart(mContext, data);
+                    finish();
                 }
-                if(exception != null){
-                    throw exception;
+
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showProgressDialog("发起直播...");
                 }
-                return LiveManager.getInstance().createLiveRoom(name, desc, coverUrl);
-            }
 
-            @Override public void onSuccess(LiveRoom liveRoom) {
-                dismissProgressDialog();
-                LiveAnchorActivity.actionStart(mContext, liveRoom);
-                finish();
-            }
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    dismissProgressDialog();
+                }
 
-            @Override public void onError(HyphenateException exception) {
-                exception.printStackTrace();
-                dismissProgressDialog();
-                showToast("发起直播失败: " + exception.getMessage());
-            }
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    showToast("发起直播失败: " + message);
+                }
+            });
         });
 
     }

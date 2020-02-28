@@ -63,6 +63,7 @@ public class ErrorCode extends EMError {
      * 请求错误
      */
     public static final int EM_REQUEST_ERROR = -9998;
+    public static final int UNKNOWN_ERROR = -9999;
 
     public enum Error {
         UNKNOWN_ERROR(-9999, 0);
