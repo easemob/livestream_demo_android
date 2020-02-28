@@ -82,10 +82,12 @@
         android:id="@+id/tv_gift_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="50dp"
         app:layout_constraintLeft_toRightOf="@id/iv_x"
         app:layout_constraintBottom_toBottomOf="@id/iv_gift"
         android:layout_marginLeft="3dp"
         android:layout_marginStart="3dp"
+        android:gravity="left|center_vertical"
         tools:text="12"
         android:textColor="@color/white"
         android:textSize="25sp"/>

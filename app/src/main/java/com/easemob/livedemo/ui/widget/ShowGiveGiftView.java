@@ -83,7 +83,7 @@ public class ShowGiveGiftView extends LinearLayout {
 
         // 添加礼物视图
         View newGiftView = getNewGiftView(bean);
-        newGiftView.setTag(bean.getNum() * duration);
+        newGiftView.setTag(bean.getNum() * calculateDuration(bean));
         addView(newGiftView);
 
         // 播放动画
@@ -114,6 +114,7 @@ public class ShowGiveGiftView extends LinearLayout {
     }
 
     private void startGiftTimer(MagicTextView tvGiftNum, GiftBean bean) {
+        int duration = calculateDuration(bean);
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -124,6 +125,7 @@ public class ShowGiveGiftView extends LinearLayout {
                         timer.cancel();
                         return;
                     }
+                    calculateIncrease(bean, (int) tvGiftNum.getTag());
                     tvGiftNum.setTag(tag+1);
                     tvGiftNum.setText(String.valueOf(tag+1));
                     giftNumberAnim.showAnimator(tvGiftNum);
@@ -132,6 +134,19 @@ public class ShowGiveGiftView extends LinearLayout {
             }
 
         }, 0, duration);
+    }
+
+    private void calculateIncrease(GiftBean bean, int durationTime) {
+        if(bean.getNum() * 200 > 2000) {
+
+        }
+    }
+
+    private int calculateDuration(GiftBean bean) {
+        if(bean.getNum() * 200 > 2000) {
+            return 2000 / bean.getNum();
+        }
+        return 200;
     }
 
     /**
@@ -241,7 +256,7 @@ public class ShowGiveGiftView extends LinearLayout {
             ObjectAnimator animScaleY = ObjectAnimator.ofFloat(v, "scaleY", 1.3f, 1.0f);
             AnimatorSet animSet = new AnimatorSet();
             animSet.playTogether(animScaleX, animScaleY);
-            animSet.setDuration(duration);
+            animSet.setDuration(200);
             lastAnimator = animSet;
             animSet.start();
         }

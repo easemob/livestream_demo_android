@@ -141,7 +141,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void slideToLeft(int startX, float endX) {
         super.slideToLeft(startX, endX);
-        Log.e("TAG", "view.child count = "+((ViewGroup)getView()).getChildCount());
         startAnimation(getView(), startX, endX);
     }
 
@@ -214,6 +213,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
                                     @Override public void onError(int i, String s) {
                                         mContext.showToast("加入聊天室失败");
+                                        mContext.finish();
                                     }
                                 });
                     }

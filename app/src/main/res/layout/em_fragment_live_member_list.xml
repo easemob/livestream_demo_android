@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:minHeight="300dp"
-    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -18,7 +17,12 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/em_margin_20"
         android:paddingStart="@dimen/em_margin_20"
-        tools:text="观众298人"/>
+        android:drawableLeft="@drawable/em_live_user_small"
+        android:drawableStart="@drawable/em_live_user_small"
+        android:drawablePadding="6dp"
+        tools:text="观众298人"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"

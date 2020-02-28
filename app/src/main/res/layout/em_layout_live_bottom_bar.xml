@@ -72,15 +72,13 @@
         android:id="@+id/like_image"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:padding="@dimen/em_margin_10"
-        android:src="@drawable/live_like"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/live_receive_gift"
         android:layout_marginRight="@dimen/em_margin_10"
         android:layout_marginEnd="@dimen/em_margin_10"
-        android:background="@drawable/em_live_button_bg_shape"/>
+        android:background="@drawable/em_live_like_bg_selector"/>
 
 
     <ImageView
