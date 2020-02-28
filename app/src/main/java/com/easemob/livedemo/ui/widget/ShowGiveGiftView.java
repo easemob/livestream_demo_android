@@ -17,8 +17,11 @@ import android.widget.TextView;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
+import com.easemob.livedemo.data.model.User;
+import com.hyphenate.easeui.widget.EaseImageView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -229,8 +232,11 @@ public class ShowGiveGiftView extends LinearLayout {
 
         //显示赠送人
         TextView tvName = giftView.findViewById(R.id.tv_username);
-        if(gift.getUser() != null) {
-            tvName.setText(gift.getUser().getUsername());
+        EaseImageView ivIcon = giftView.findViewById(R.id.iv_icon);
+        User user = gift.getUser();
+        if(user != null) {
+            tvName.setText(DemoHelper.getNickName(user.getUsername()));
+            ivIcon.setImageResource(DemoHelper.getAvatarResource(user.getUsername()));
         }
 
         // 添加标识，记录礼物个数

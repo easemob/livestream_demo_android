@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.data.model.GiftBean;
+import com.easemob.livedemo.data.model.User;
+import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class TestGiftRepository {
         Context context = DemoApplication.getInstance().getApplicationContext();
         List<GiftBean> gifts = new ArrayList<>();
         GiftBean bean;
+        User user;
         for(int i = 1; i <= SIZE; i++){
             bean = new GiftBean();
             String name = "gift_default_"+i;
@@ -26,6 +29,9 @@ public class TestGiftRepository {
             int nameId = context.getResources().getIdentifier("em_gift_default_name_" + i, "string", context.getPackageName());
             bean.setResource(resId);
             bean.setName(context.getString(nameId));
+            user = new User();
+            user.setUsername(EMClient.getInstance().getCurrentUser());
+            bean.setUser(user);
             gifts.add(bean);
         }
         return gifts;
