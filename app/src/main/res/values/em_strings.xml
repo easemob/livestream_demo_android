@@ -22,7 +22,11 @@
     <string name="em_live_room_id">房间号：%1$s</string>
     <string name="em_live_anchor_self">主播</string>
     <string name="em_live_anchor_mute_all">全员禁言</string>
+    <string name="em_live_anchor_unmute_all">全员解禁</string>
     <string name="em_live_anchor_mute">禁言</string>
+    <string name="em_live_anchor_muted">已禁言</string>
+    <string name="em_live_anchor_add_white">加入白名单</string>
+    <string name="em_live_anchor_remove_from_white">从白名单移除</string>
     <string name="em_live_anchor_remove_white">删除</string>
     <string name="em_live_user_fans">粉丝</string>
     <string name="em_live_user_star">被赞</string>

@@ -172,6 +172,11 @@ public class ChatFragment extends Fragment implements EMMessageListener {
     messageListView.refresh();
   }
 
+  @Override
+  public void onMessageRecalled(List<EMMessage> messages) {
+
+  }
+
 
   @Override
   public void onMessageChanged(EMMessage emMessage, Object change) {

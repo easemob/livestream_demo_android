@@ -242,6 +242,11 @@ public class ConversationListFragment extends Fragment implements EMMessageListe
 
   }
 
+  @Override
+  public void onMessageRecalled(List<EMMessage> messages) {
+
+  }
+
 
   @Override public void onMessageChanged(EMMessage emMessage, Object o) {
 

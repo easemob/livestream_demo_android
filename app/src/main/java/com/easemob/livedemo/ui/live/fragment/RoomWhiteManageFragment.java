@@ -6,12 +6,14 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.ui.activity.RoomUserManagementFragment;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoomWhiteManageFragment extends RoomUserManagementFragment {
+
     @Override
-    protected List<String> getDataFromServer() throws HyphenateException {
-        return chatRoomManager.fetchChatRoomBlackList(chatroomId, 1, 50);
+    protected void executeFetchTask() {
+        viewModel.getWhiteList(chatroomId);
     }
 
     @Override
@@ -23,7 +25,9 @@ public class RoomWhiteManageFragment extends RoomUserManagementFragment {
         holder.managerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                List<String> list = new ArrayList<>();
+                list.add(userList.get(position));
+                viewModel.removeFromChatRoomWhiteList(chatroomId, list);
             }
         });
     }

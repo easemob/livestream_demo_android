@@ -19,6 +19,18 @@ public class DemoHelper {
         return !TextUtils.isEmpty(status) && TextUtils.equals(status, DemoConstants.LIVE_ONGOING);
     }
 
+    /**
+     * 判断是不是房主
+     * @param username
+     * @return
+     */
+    public static boolean isOwner(String username) {
+        if(TextUtils.isEmpty(username)) {
+            return false;
+        }
+        return TextUtils.equals(username, EMClient.getInstance().getCurrentUser());
+    }
+
     public static void saveLivingId(String liveId) {
         PreferenceManager.getInstance().saveLivingId(liveId);
     }

@@ -46,7 +46,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
     }
 
     @Override
-    public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
+    public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
         if (roomId.equals(chatroomId)) {
             if (currentUser.equals(participant)) {
                 EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
@@ -86,6 +86,11 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
 
     @Override
     public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+
+    }
+
+    @Override
+    public void onAnnouncementChanged(String chatRoomId, String announcement) {
 
     }
 
@@ -133,6 +138,11 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
 
     @Override
     public void onMessageDelivered(List<EMMessage> messages) {
+
+    }
+
+    @Override
+    public void onMessageRecalled(List<EMMessage> messages) {
 
     }
 

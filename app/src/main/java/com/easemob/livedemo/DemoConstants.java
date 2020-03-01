@@ -13,4 +13,7 @@ public interface DemoConstants {
     String LIVE_ONGOING = "ongoing";
 
     String FRESH_LIVE_LIST = "fresh_live_list";
+
+    String TYPE_ANCHOR = "anchor";
+    String TYPE_AUDIENCE = "audience";
 }

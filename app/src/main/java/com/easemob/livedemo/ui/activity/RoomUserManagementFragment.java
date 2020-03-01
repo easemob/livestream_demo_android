@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,9 +21,11 @@ import butterknife.ButterKnife;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.ui.live.fragment.RoomMemberManageFragment;
 import com.easemob.livedemo.ui.live.fragment.RoomMuteManageFragment;
 import com.easemob.livedemo.ui.live.fragment.RoomWhiteManageFragment;
+import com.easemob.livedemo.ui.viewmodels.UserManageViewModel;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
@@ -46,6 +49,10 @@ public class RoomUserManagementFragment extends BaseFragment {
     protected EMChatRoomManager chatRoomManager;
     protected String chatroomId;
     protected ManagementAdapter adapter;
+    protected UserManageViewModel viewModel;
+    protected EMChatRoom chatRoom;
+    protected boolean isAllMuted;
+    protected List<String> muteList;
 
     public RoomUserManagementFragment() {
         // Required empty public constructor
@@ -87,19 +94,45 @@ public class RoomUserManagementFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         refreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_refresh_layout);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
+        initViewModel();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         chatRoomManager = EMClient.getInstance().chatroomManager();
+        chatRoom = chatRoomManager.getChatRoom(chatroomId);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false));
         adapter = new ManagementAdapter(getActivity());
         recyclerView.setAdapter(adapter);
-
         fetchData();
+    }
 
+    protected void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
+        viewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<String>>() {
+                @Override
+                public void onSuccess(List<String> data) {
+                    setAdapter(data);
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    finishRefresh();
+                }
+            });
+        });
+        viewModel.getChatRoomObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    executeFetchTask();
+                }
+            });
+        });
     }
 
     private void fetchData(){
@@ -107,37 +140,26 @@ public class RoomUserManagementFragment extends BaseFragment {
         executeFetchTask();
     }
 
-    private void executeFetchTask() {
-        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<List<String>>() {
-            @Override public List<String> onRequest() throws HyphenateException {
-                return getDataFromServer();
-            }
+    /**
+     * 请求数据
+     */
+    protected void executeFetchTask() {}
 
-            @Override public void onSuccess(List<String> list) {
-                if(list == null) {
-                    return;
-                }
-                setAdapter(list);
-            }
-
-            @Override public void onError(HyphenateException exception) {
-
-            }
-        });
+    /**
+     * 设置数据
+     * @param list
+     */
+    protected void setAdapter(List<String> list){
+        adapter.setData(list);
     }
 
     /**
-     * 请求数据
-     * @return
-     * @throws HyphenateException
+     * 停止刷新
      */
-    protected List<String> getDataFromServer() throws HyphenateException {
-        return null;
-    }
-
-    protected void setAdapter(List<String> list){
-        refreshLayout.setRefreshing(false);
-        adapter.setData(list);
+    protected void finishRefresh() {
+        if(refreshLayout != null) {
+            refreshLayout.setRefreshing(false);
+        }
     }
 
     protected class ManagementAdapter extends RecyclerView.Adapter<ManagementAdapter.ManagementViewHolder>{

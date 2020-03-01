@@ -30,6 +30,7 @@ import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ui.activity.AssociateLiveRoomActivity;
+import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
 import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;
@@ -158,6 +159,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     private void showGiftDialog() {
         LiveGiftStatisticsDialog.getNewInstance().show(getChildFragmentManager(), "git_statistics");
+    }
+
+    @Override
+    protected void showUserDetailsDialog(String username) {
+        RoomUserDetailsDialog dialog = RoomUserDetailsDialog.newInstance(username, liveRoom, DemoConstants.TYPE_ANCHOR);
+        dialog.show(getChildFragmentManager(), "RoomUserDetailsDialog");
     }
 
     /**

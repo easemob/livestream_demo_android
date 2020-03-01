@@ -103,9 +103,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/layout_live_add_blacklist"
+        app:layout_constraintRight_toLeftOf="@id/layout_live_add_whitelist"
         app:layout_constraintTop_toBottomOf="@id/tv_gift_num"
-        android:layout_marginTop="@dimen/em_margin_40">
+        android:layout_marginTop="@dimen/em_margin_30">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -113,16 +113,17 @@
             android:src="@drawable/live_notalk" />
 
         <TextView
+            android:id="@+id/tv_mute_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="禁言"
+            android:text="@string/em_live_anchor_mute"
             android:textColor="#909090" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_live_add_blacklist"
+        android:id="@+id/layout_live_add_whitelist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -137,10 +138,11 @@
             android:src="@drawable/live_add_blacklist" />
 
         <TextView
+            android:id="@+id/tv_white_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="加入黑名单"
+            android:text="@string/em_live_anchor_add_white"
             android:textColor="#909090" />
 
     </LinearLayout>
@@ -150,10 +152,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        app:layout_constraintLeft_toRightOf="@id/layout_live_add_blacklist"
+        app:layout_constraintLeft_toRightOf="@id/layout_live_add_whitelist"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/layout_live_no_talk"
-        app:layout_constraintBottom_toBottomOf="@id/layout_live_no_talk">
+        app:layout_constraintBottom_toBottomOf="@id/layout_live_no_talk"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -182,7 +185,8 @@
         app:layout_constraintTop_toBottomOf="@id/layout_live_no_talk"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
     
     <Button
         android:id="@+id/btn_attention"
@@ -191,7 +195,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_gift_num"
+        app:layout_constraintTop_toBottomOf="@id/layout_live_no_talk"
         android:layout_marginTop="@dimen/em_margin_30"
         android:layout_marginBottom="@dimen/em_margin_25"
         android:background="@drawable/em_live_btn_attention_bg_shape"
@@ -207,7 +211,7 @@
         android:id="@+id/layout_management"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="layout_live_no_talk,layout_live_add_blacklist,layout_live_kick,btn_set_admin"/>
+        android:visibility="visible"
+        app:constraint_referenced_ids="layout_live_no_talk,layout_live_add_whitelist" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

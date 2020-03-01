@@ -1,8 +1,10 @@
 package com.easemob.livedemo.ui.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.reponsitories.Resource;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.viewmodels.UserDetailManageViewModel;
+import com.easemob.livedemo.ui.viewmodels.UserManageViewModel;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -24,9 +31,11 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,18 +61,39 @@ public class RoomUserDetailsDialog extends DialogFragment {
     TextView tvAttentionNum;
     @BindView(R.id.tv_gift_num)
     TextView tvGiftNum;
+    @BindView(R.id.tv_mute_status)
+    TextView tvMuteStatus;
+    @BindView(R.id.tv_white_status)
+    TextView tvWhiteStatus;
 
+    private BaseActivity mContext;
     private String username;
     private String chatroomId;
     private String liveId;
+    private String type;
+    private UserManageViewModel viewModel;
+    private UserDetailManageViewModel detailViewModel;
+    private List<String> whiteList;
+    private List<String> muteList;
 
     public static RoomUserDetailsDialog newInstance(String username, LiveRoom liveRoom) {
+        return RoomUserDetailsDialog.newInstance(username,liveRoom, DemoConstants.TYPE_AUDIENCE);
+    }
+
+    public static RoomUserDetailsDialog newInstance(String username, LiveRoom liveRoom, String type) {
         RoomUserDetailsDialog dialog = new RoomUserDetailsDialog();
         Bundle args = new Bundle();
         args.putString("username", username);
         args.putSerializable("liveRoom", liveRoom);
+        args.putString("type", type);
         dialog.setArguments(args);
         return dialog;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = (BaseActivity) context;
     }
 
     @Nullable
@@ -77,29 +107,26 @@ public class RoomUserDetailsDialog extends DialogFragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViewModel();
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
             username = getArguments().getString("username");
             LiveRoom liveRoom = (LiveRoom) getArguments().getSerializable("liveRoom");
+            type = getArguments().getString("type");
             chatroomId = liveRoom.getChatroomId();
             liveId = liveRoom.getId();
-
-            EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().getChatRoom(chatroomId);
-//            List<String> adminList = chatRoom.getAdminList();
-//            if (!EMClient.getInstance().getCurrentUser().equals(chatRoom.getOwner())) {
-//                setAdminButton.setVisibility(View.INVISIBLE);
-//                if (!adminList.contains(EMClient.getInstance().getCurrentUser()) ||
-//                        username.equals(EMClient.getInstance().getCurrentUser()) ||
-//                        username.equals(chatRoom.getOwner())) {
-//                    managementLayout.setVisibility(View.INVISIBLE);
-//                }
-//            } else {
-                if (username.equals(EMClient.getInstance().getCurrentUser())) {
-                    setAdminButton.setVisibility(View.GONE);
-                    managementLayout.setVisibility(View.GONE);
-                }
-//            }
+        }
+        if (username.equals(EMClient.getInstance().getCurrentUser())) {
+            managementLayout.setVisibility(View.GONE);
+        }
+        if(TextUtils.equals(type, DemoConstants.TYPE_ANCHOR) && !DemoHelper.isOwner(username)) {
+            managementLayout.setVisibility(View.VISIBLE);
         }
         if (username != null) {
             usernameView.setText(DemoHelper.getNickName(username));
@@ -119,46 +146,76 @@ public class RoomUserDetailsDialog extends DialogFragment {
         window.setAttributes(wlp);
     }
 
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
+        detailViewModel = new ViewModelProvider(this).get(UserDetailManageViewModel.class);
+        viewModel.getMuteObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<String>>() {
+                @Override
+                public void onSuccess(List<String> data) {
+                    muteList = data;
+                    if(data.contains(username)) {
+                        tvMuteStatus.setText(getString(R.string.em_live_anchor_muted));
+                    }else {
+                        tvMuteStatus.setText(getString(R.string.em_live_anchor_mute));
+                    }
+                }
+            });
+        });
+        viewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<String>>() {
+                @Override
+                public void onSuccess(List<String> data) {
+                    whiteList = data;
+                    if(data.contains(username)) {
+                        tvWhiteStatus.setText(getString(R.string.em_live_anchor_remove_from_white));
+                    }else {
+                        tvWhiteStatus.setText(getString(R.string.em_live_anchor_add_white));
+                    }
+                }
+            });
+        });
+        detailViewModel.getWhiteObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    viewModel.getWhiteList(chatroomId);
+                }
+            });
+        });
+
+        detailViewModel.getMuteObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    viewModel.getMuteList(chatroomId);
+                }
+            });
+        });
+        viewModel.getWhiteList(chatroomId);
+        viewModel.getMuteList(chatroomId);
+    }
+
     @OnClick(R.id.layout_live_no_talk)
     void mute() {
         if (chatroomId != null) {
-            EMClient.getInstance()
-                    .chatroomManager()
-                    .asyncMuteChatRoomMembers(chatroomId, getUserList(), -1,
-                            new EMValueCallBack<EMChatRoom>() {
-                                @Override
-                                public void onSuccess(EMChatRoom value) {
-                                    showToast("禁言成功");
-                                }
+            if(muteList != null && muteList.contains(username)) {
+                detailViewModel.unMuteChatRoomMembers(chatroomId, getUserList());
+            }else {
+                detailViewModel.muteChatRoomMembers(chatroomId, getUserList(), -1);
+            }
 
-                                @Override
-                                public void onError(int error, String errorMsg) {
-                                    showToast("禁言失败");
-                                }
-                            });
         }
     }
 
-    @OnClick(R.id.layout_live_add_blacklist)
+    @OnClick(R.id.layout_live_add_whitelist)
     void addToBlacklist() {
         if (chatroomId != null) {
-            EMClient.getInstance()
-                    .chatroomManager()
-                    .asyncBlockChatroomMembers(chatroomId, getUserList(),
-                            new EMValueCallBack<EMChatRoom>() {
-                                @Override
-                                public void onSuccess(EMChatRoom value) {
-                                    if (eventListener != null) {
-                                        eventListener.onAddBlacklist(username);
-                                    }
-                                    showToast("加入黑名单成功");
-                                }
-
-                                @Override
-                                public void onError(int error, String errorMsg) {
-                                    showToast("加入黑名单失败");
-                                }
-                            });
+            if(whiteList != null && whiteList.contains(username)) {
+                detailViewModel.removeFromChatRoomWhiteList(chatroomId, getUserList());
+            }else {
+                detailViewModel.addToChatRoomWhiteList(chatroomId, getUserList());
+            }
         }
     }
 
@@ -243,5 +300,18 @@ public class RoomUserDetailsDialog extends DialogFragment {
 
         void onAddBlacklist(String username);
 
+    }
+
+
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(mContext != null) {
+            mContext.parseResource(response, callback);
+        }
     }
 }

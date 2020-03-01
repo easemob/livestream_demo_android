@@ -15,10 +15,8 @@ import androidx.core.content.ContextCompat;
 public class RoomMuteManageFragment extends RoomUserManagementFragment {
 
     @Override
-    protected List<String> getDataFromServer() throws HyphenateException {
-        Map<String, Long> map = chatRoomManager.fetchChatRoomMuteList(chatroomId, 1, 50);
-        List<String> list = new ArrayList<String>(map.keySet());
-        return list;
+    protected void executeFetchTask() {
+        viewModel.getMuteList(chatroomId);
     }
 
     @Override
@@ -32,7 +30,9 @@ public class RoomMuteManageFragment extends RoomUserManagementFragment {
         holder.managerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                List<String> list = new ArrayList<>();
+                list.add(userList.get(position));
+                viewModel.unMuteChatRoomMembers(chatroomId, list);
             }
         });
     }
