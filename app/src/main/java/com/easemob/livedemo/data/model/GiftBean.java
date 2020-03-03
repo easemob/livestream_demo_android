@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class GiftBean implements Serializable {
+    private String id;
     private User user;
     private int type;
     private String gift;
@@ -11,6 +12,14 @@ public class GiftBean implements Serializable {
     private int resource;
     private String name;
     private boolean isChecked;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;

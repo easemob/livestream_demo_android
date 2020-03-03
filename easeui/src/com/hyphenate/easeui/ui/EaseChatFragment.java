@@ -35,6 +35,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
@@ -183,7 +184,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
             // set title
             if(EaseUserUtils.getUserInfo(toChatUsername) != null){
-                titleBar.setTitle(EaseUserUtils.getUserInfo(toChatUsername).getNick());
+                titleBar.setTitle(EaseUserUtils.getUserInfo(toChatUsername).getNickname());
             }
             titleBar.setRightImageResource(R.drawable.ease_mm_title_remove);
         } else {
@@ -517,7 +518,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             }
 
             @Override
-            public void onRemovedFromChatRoom(String roomId, String roomName, String participant) {
+            public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
                 if (roomId.equals(toChatUsername)) {
                     String curUser = EMClient.getInstance().getCurrentUser();
                     if (curUser.equals(participant)) {
@@ -548,6 +549,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             @Override
             public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+
+            }
+
+            @Override
+            public void onAnnouncementChanged(String chatRoomId, String announcement) {
 
             }
         };
@@ -604,6 +610,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if(isMessageListInited) {
             messageList.refresh();
         }
+    }
+
+    @Override
+    public void onMessageRecalled(List<EMMessage> messages) {
+
     }
 
     @Override
@@ -991,6 +1002,21 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     }
                 }
             });
+        }
+
+        @Override
+        public void onAnnouncementChanged(String groupId, String announcement) {
+
+        }
+
+        @Override
+        public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
+
+        }
+
+        @Override
+        public void onSharedFileDeleted(String groupId, String fileId) {
+
         }
 
     }

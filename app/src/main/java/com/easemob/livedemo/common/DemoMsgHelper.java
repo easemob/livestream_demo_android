@@ -1,8 +1,17 @@
 package com.easemob.livedemo.common;
 
+import android.text.TextUtils;
+import android.widget.TextView;
+
+import com.easemob.livedemo.DemoConstants;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.adapter.message.EMACustomMessageBody;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DemoMsgHelper {
     private static DemoMsgHelper instance;
@@ -38,5 +47,67 @@ public class DemoMsgHelper {
         message.setChatType(EMMessage.ChatType.ChatRoom);
         EMClient.getInstance().chatManager().sendMessage(message);
         message.setMessageStatusCallback(callBack);
+    }
+
+    /**
+     * 发送礼物消息
+     * @param giftId
+     * @param num
+     * @param callBack
+     */
+    public void sendGiftMsg(String giftId, int num, EMCallBack callBack) {
+        EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
+        EMCustomMessageBody body = new EMCustomMessageBody(DemoConstants.CUSTOM_GIFT);
+        Map<String, String> params = new HashMap<>();
+        params.put(DemoConstants.CUSTOM_GIFT_KEY_ID, giftId);
+        params.put(DemoConstants.CUSTOM_GIFT_KEY_NUM, String.valueOf(num));
+        body.setParams(params);
+        sendMessage.addBody(body);
+        sendMessage.setTo(chatroomId);
+        sendMessage.setChatType(EMMessage.ChatType.ChatRoom);
+        EMClient.getInstance().chatManager().sendMessage(sendMessage);
+        sendMessage.setMessageStatusCallback(callBack);
+    }
+
+    /**
+     * 发送点赞消息
+     * @param num
+     * @param callBack
+     */
+    public void sendLikeMsg(int num, EMCallBack callBack) {
+        if(num <= 0) {
+            return;
+        }
+        EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
+        EMCustomMessageBody body = new EMCustomMessageBody(DemoConstants.CUSTOM_LIKE);
+        Map<String, String> params = new HashMap<>();
+        params.put(DemoConstants.CUSTOM_LIKE_KEY_NUM, String.valueOf(num));
+        body.setParams(params);
+        sendMessage.addBody(body);
+        sendMessage.setTo(chatroomId);
+        sendMessage.setChatType(EMMessage.ChatType.ChatRoom);
+        EMClient.getInstance().chatManager().sendMessage(sendMessage);
+        sendMessage.setMessageStatusCallback(callBack);
+    }
+
+    /**
+     * 发送弹幕消息
+     * @param content
+     * @param callBack
+     */
+    public void sendBarrageMsg(String content, EMCallBack callBack) {
+        if(TextUtils.isEmpty(content)) {
+            return;
+        }
+        EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
+        EMCustomMessageBody body = new EMCustomMessageBody(DemoConstants.CUSTOM_BARRAGE);
+        Map<String, String> params = new HashMap<>();
+        params.put(DemoConstants.CUSTOM_BARRAGE_KEY_TXT, content);
+        body.setParams(params);
+        sendMessage.addBody(body);
+        sendMessage.setTo(chatroomId);
+        sendMessage.setChatType(EMMessage.ChatType.ChatRoom);
+        EMClient.getInstance().chatManager().sendMessage(sendMessage);
+        sendMessage.setMessageStatusCallback(callBack);
     }
 }

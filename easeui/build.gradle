@@ -58,10 +58,11 @@ dependencies {
     implementation fileTree(include: '*.jar', dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    api 'com.hyphenate:hyphenate-sdk-lite:3.3.1'
+//    api 'com.hyphenate:hyphenate-sdk-lite:3.6.4'
 //    compile(name: 'hyphenate-sdk-lite-3.3.1', ext: 'aar')
     api 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    api project(path: ':emclient-android:hyphenatechatsdk')
 }

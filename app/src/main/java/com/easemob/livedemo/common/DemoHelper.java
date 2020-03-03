@@ -4,7 +4,9 @@ import android.text.TextUtils;
 
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.data.TestGiftRepository;
 import com.easemob.livedemo.data.UserRepository;
+import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.User;
 import com.hyphenate.chat.EMClient;
 
@@ -114,5 +116,14 @@ public class DemoHelper {
             return defaultDrawable == 0 ? R.drawable.em_live_logo : defaultDrawable;
         }
         return user.getAvatarResource();
+    }
+
+    /**
+     * 通过id获取gift对象
+     * @param giftId
+     * @return
+     */
+    public static GiftBean getGiftById(String giftId) {
+        return TestGiftRepository.getGiftById(giftId);
     }
 }

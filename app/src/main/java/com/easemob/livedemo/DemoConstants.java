@@ -16,4 +16,13 @@ public interface DemoConstants {
 
     String TYPE_ANCHOR = "anchor";
     String TYPE_AUDIENCE = "audience";
+
+    String CUSTOM_GIFT = "chatroom_gift";
+    String CUSTOM_LIKE = "chatroom_like";
+    String CUSTOM_BARRAGE = "chatroom_barrage";
+
+    String CUSTOM_GIFT_KEY_ID = "id";
+    String CUSTOM_GIFT_KEY_NUM = "num";
+    String CUSTOM_LIKE_KEY_NUM = "num";
+    String CUSTOM_BARRAGE_KEY_TXT = "txt";
 }

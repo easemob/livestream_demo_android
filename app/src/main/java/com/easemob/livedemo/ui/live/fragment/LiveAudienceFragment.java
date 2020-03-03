@@ -19,11 +19,13 @@ import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.model.StatisticsType;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -117,7 +119,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if(sendPraiseThread == null){
             sendPraiseThread = new Thread(new Runnable() {
                 @Override public void run() {
-                    while(!requireActivity().isFinishing()){
+                    while(mContext != null && !mContext.isFinishing()){
                         int count = 0;
                         synchronized (LiveAudienceFragment.this){
                             count = praiseCount;
@@ -125,11 +127,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         }
                         if(count > 0) {
                             presenter.sendPraiseMessage(count);
-                            try {
-                                LiveManager.getInstance().postStatistics(StatisticsType.PRAISE, liveId, count);
-                            } catch (LiveException e) {
-                                e.printStackTrace();
-                            }
                         }
                         try {
                             Thread.sleep(praiseSendDelay + new Random().nextInt(2000));
@@ -189,7 +186,25 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             @Override
             public void onConfirmClick(View view, Object bean) {
                 if(bean instanceof GiftBean) {
-                    barrageLayout.showGift((GiftBean) bean);
+                    presenter.sendGiftMsg((GiftBean) bean, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            ThreadManager.getInstance().runOnMainThread(()-> {
+                                barrageLayout.showGift((GiftBean) bean);
+                            });
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            mContext.showToast(error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+
                 }
             }
         });

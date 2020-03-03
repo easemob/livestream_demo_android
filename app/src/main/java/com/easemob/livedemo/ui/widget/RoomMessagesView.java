@@ -27,17 +27,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
 import com.easemob.livedemo.data.UserRepository;
+import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.utils.KeyboardUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 
 /**
  * Created by wei on 2016/6/3.
@@ -212,26 +216,94 @@ public class RoomMessagesView extends RelativeLayout{
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             final EMMessage message = messages[position];
+            String from = message.getFrom();
+            String nickName = DemoHelper.getNickName(from);
+            boolean isSelf = EMClient.getInstance().getCurrentUser().equals(from);
             if(message.getBody() instanceof EMTextMessageBody) {
-                String from = message.getFrom();
-                String nickName = DemoHelper.getNickName(from);
+                boolean memberAdd = false;
+                try {
+                    memberAdd = message.getBooleanAttribute("member_add");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
                 String content = ((EMTextMessageBody) message.getBody()).getMessage();
-                boolean isSelf = EMClient.getInstance().getCurrentUser().equals(from);
-                StringBuilder builder = new StringBuilder();
-                builder.append(nickName).append(":").append(content);
-                SpannableString span = new SpannableString(builder.toString());
-                span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                span.setSpan(new ForegroundColorSpan(isSelf ? ContextCompat.getColor(getContext(), R.color.color_room_my_msg) : Color.parseColor("#FFC700")),
-                        nickName.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                holder.name.setText(span);
-                holder.itemView.setOnClickListener(new OnClickListener() {
-                    @Override public void onClick(View v) {
-                        if (messageViewListener != null) {
-                            messageViewListener.onItemClickListener(message);
-                        }
+                if(memberAdd) {
+                    showMemberAddMsg(holder.name, nickName, content);
+                }else {
+                    showText(holder.name, nickName, isSelf, content);
+                }
+            }else if(message.getBody() instanceof EMCustomMessageBody) {
+                EMCustomMessageBody body = (EMCustomMessageBody) message.getBody();
+                String event = body.event();
+                if(!TextUtils.isEmpty(event)) {
+                    switch (event) {
+                        case DemoConstants.CUSTOM_GIFT :
+                            showGiftMessage(holder.name, nickName, isSelf, body);
+                            break;
+                        case DemoConstants.CUSTOM_LIKE :
+                            showLikeMessage(holder.name, nickName, isSelf, body);
+                            break;
+                        case DemoConstants.CUSTOM_BARRAGE :
+                            showBarrageMessage(holder.name, nickName, isSelf, body);
+                            break;
                     }
-                });
+                }
             }
+            holder.itemView.setOnClickListener(new OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (messageViewListener != null) {
+                        messageViewListener.onItemClickListener(message);
+                    }
+                }
+            });
+        }
+
+        private void showMemberAddMsg(TextView name, String nickName, String content) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(nickName).append(" ").append(context.getString(R.string.em_live_msg_member_add));
+            SpannableString span = new SpannableString(builder.toString());
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
+                    nickName.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showText(TextView name, String nickName, boolean isSelf, String content) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(nickName).append(":").append(content);
+            SpannableString span = new SpannableString(builder.toString());
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(isSelf ? ContextCompat.getColor(getContext(), R.color.color_room_my_msg) : Color.parseColor("#FFC700")),
+                    nickName.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
+            GiftBean bean = DemoHelper.getGiftById(body.getParams().get(DemoConstants.CUSTOM_GIFT_KEY_ID));
+            String num = body.getParams().get(DemoConstants.CUSTOM_LIKE_KEY_NUM);
+            String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
+            SpannableString span = new SpannableString(content);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
+                    nickName.length() + 1, nickName.length() + 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(Color.parseColor("#ff68ff95")),
+                    nickName.length() + 4, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showLikeMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
+            String content = context.getString(R.string.em_live_msg_like, nickName, body.getParams().get(DemoConstants.CUSTOM_LIKE_KEY_NUM));
+            SpannableString span = new SpannableString(content);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
+                    nickName.length() + 1, nickName.length() + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(Color.parseColor("#ff68ff95")),
+                    nickName.length() + 3, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showBarrageMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
+            showText(name, nickName, isSelf, body.getParams().get(DemoConstants.CUSTOM_BARRAGE_KEY_TXT));
         }
 
         @Override

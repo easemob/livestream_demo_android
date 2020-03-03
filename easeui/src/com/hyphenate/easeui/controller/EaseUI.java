@@ -169,6 +169,11 @@ public final class EaseUI {
             @Override public void onMessageDelivered(List<EMMessage> messages) {
 
             }
+
+            @Override
+            public void onMessageRecalled(List<EMMessage> messages) {
+
+            }
         });
     }
     

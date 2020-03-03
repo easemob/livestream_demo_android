@@ -19,9 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
+import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.activity.BaseLiveFragment;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
@@ -243,7 +246,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             if(memberList.size() >= MAX_SIZE)
                 memberList.removeLast();
             memberList.addFirst(name);
-            presenter.showMemberChangeEvent(name, "来了");
+            presenter.showMemberChangeEvent(name, getString(R.string.em_live_msg_member_add));
             EMLog.d(TAG, name + "added");
             requireActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
@@ -276,6 +279,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
                 if(name.equals(anchorId)){
                     mContext.showLongToast("主播已结束直播");
+                    LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                 }
             }
         });
@@ -519,7 +523,28 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     @Override
-    public void onChatRoomShowPraise(int count) {
+    public void onReceivePraiseMsg(int count) {
         showPraise(count);
+    }
+
+    /**
+     * 收到礼物
+     * @param giftId
+     * @param num
+     */
+    @Override
+    public void onReceiveGiftMsg(String giftId, String num) {
+        GiftBean bean = DemoHelper.getGiftById(giftId);
+        bean.setNum(Integer.valueOf(num));
+        barrageLayout.showGift(bean);
+    }
+
+    /**
+     * 收到弹幕消息
+     * @param txt
+     */
+    @Override
+    public void onReceiveBarrageMsg(String txt) {
+
     }
 }

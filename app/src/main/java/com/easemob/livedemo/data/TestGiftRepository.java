@@ -1,6 +1,7 @@
 package com.easemob.livedemo.data;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.easemob.livedemo.DemoApplication;
@@ -29,11 +30,27 @@ public class TestGiftRepository {
             int nameId = context.getResources().getIdentifier("em_gift_default_name_" + i, "string", context.getPackageName());
             bean.setResource(resId);
             bean.setName(context.getString(nameId));
+            bean.setId("gift_"+i);
             user = new User();
             user.setUsername(EMClient.getInstance().getCurrentUser());
             bean.setUser(user);
             gifts.add(bean);
         }
         return gifts;
+    }
+
+    /**
+     * 获取GiftBean
+     * @param giftId
+     * @return
+     */
+    public static GiftBean getGiftById(String giftId) {
+        List<GiftBean> gifts = getDefaultGifts();
+        for (GiftBean bean : gifts) {
+            if(TextUtils.equals(bean.getId(), giftId)) {
+                return bean;
+            }
+        }
+        return null;
     }
 }

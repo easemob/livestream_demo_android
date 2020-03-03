@@ -44,7 +44,7 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
             holder.tvLabel.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_live_member_label_shape));
             holder.tvLabel.setText(getString(R.string.em_live_anchor_self));
         }else {
-            isMemberMuted = muteList.contains(username);
+            isMemberMuted = muteList != null && muteList.contains(username);
             if(isMemberMuted) {
                 holder.managerButton.setVisibility(View.GONE);
                 holder.tvLabel.setVisibility(View.VISIBLE);

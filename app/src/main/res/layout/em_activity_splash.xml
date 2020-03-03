@@ -24,6 +24,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="123dp"
         android:textSize="@dimen/em_size_big"
-        android:textColor="#ff565656"/>
+        android:textColor="#565656"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

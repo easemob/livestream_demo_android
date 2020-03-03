@@ -14,7 +14,7 @@ android {
         versionName "2.0"
         multiDexEnabled true
         ndk {
-            abiFilter 'armeabi-v7a'
+            abiFilters "armeabi-v7a"/*,"x86"*/
         }
     }
     buildTypes {
