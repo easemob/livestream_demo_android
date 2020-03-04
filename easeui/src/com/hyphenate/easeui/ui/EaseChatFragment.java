@@ -539,6 +539,21 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
             }
 
+            @Override
+            public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+
+            }
+
+            @Override
+            public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
+
+            }
+
+            @Override
+            public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
+
+            }
+
             @Override public void onAdminAdded(String chatRoomId, String admin) {
 
             }
@@ -1002,6 +1017,21 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     }
                 }
             });
+        }
+
+        @Override
+        public void onWhiteListAdded(String groupId, List<String> whitelist) {
+
+        }
+
+        @Override
+        public void onWhiteListRemoved(String groupId, List<String> whitelist) {
+
+        }
+
+        @Override
+        public void onAllMemberMuteStateChanged(String groupId, boolean isMuted) {
+
         }
 
         @Override

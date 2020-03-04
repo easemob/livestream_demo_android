@@ -84,6 +84,21 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
     }
 
     @Override
+    public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
+
+    }
+
+    @Override
     public void onAdminAdded(String chatRoomId, String admin) {
         showMemberChangeEvent(admin, "被提升为房管");
     }
