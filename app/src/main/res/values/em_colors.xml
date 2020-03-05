@@ -14,4 +14,7 @@
 
     <color name="em_color_gift_dialog_half_bg">#80000000</color>
 
+    <color name="em_switch_color_checked">#ff04aef0</color>
+    <color name="em_switch_color_unchecked">#ffe9e9e9</color>
+
 </resources>

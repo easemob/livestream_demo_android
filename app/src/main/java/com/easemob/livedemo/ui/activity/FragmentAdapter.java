@@ -38,4 +38,8 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return mFragmentTitles.get(position);
     }
+
+    public List<String> getTitles() {
+        return mFragmentTitles;
+    }
 }

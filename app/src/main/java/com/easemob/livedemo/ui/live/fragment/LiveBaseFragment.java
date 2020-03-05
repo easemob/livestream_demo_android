@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -219,8 +220,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
      * 展示观众列表（主播）
      */
     protected void showUserList() {
-        RoomUserManagementDialog managementDialog = new RoomUserManagementDialog(chatroomId);
-        managementDialog.show(getChildFragmentManager(), "RoomUserManagementDialog");
+        RoomUserManagementDialog dialog = (RoomUserManagementDialog) getChildFragmentManager().findFragmentByTag("RoomUserManagementDialog");
+        if(dialog == null) {
+            dialog = new RoomUserManagementDialog(chatroomId);
+        }
+        dialog.show(getChildFragmentManager(), "RoomUserManagementDialog");
     }
 
     protected void showPraise(final int count){
@@ -341,7 +345,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     protected void showUserDetailsDialog(String username) {
-        RoomUserDetailsDialog dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
+        RoomUserDetailsDialog dialog = (RoomUserDetailsDialog) getChildFragmentManager().findFragmentByTag("RoomUserDetailsDialog");
+        if(dialog == null) {
+            dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
+        }
+        dialog.show(getChildFragmentManager(), "RoomUserDetailsDialog");
         dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
             @Override public void onKickMember(String username) {
                 onRoomMemberExited(username);
@@ -351,7 +359,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 onRoomMemberExited(username);
             }
         });
-        dialog.show(getChildFragmentManager(), "RoomUserDetailsDialog");
     }
 
     public void updateUnreadMsgView() {

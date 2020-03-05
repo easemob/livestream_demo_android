@@ -11,11 +11,13 @@ import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.DemoConstants;
@@ -32,7 +34,9 @@ import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ui.activity.AssociateLiveRoomActivity;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
 import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
+import com.easemob.livedemo.ui.live.viewmodels.GiftStatisticsViewModel;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
+import com.easemob.livedemo.ui.viewmodels.UserManageViewModel;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -92,6 +96,13 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.initView(savedInstanceState);
         usernameView.setText("");
         groupGiftInfo.setVisibility(View.VISIBLE);
+
+        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum();
+        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, totalNum));
+
+        int likeNum = DemoHelper.getLikeNum();
+        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, likeNum));
+
     }
 
     @Override
@@ -104,6 +115,21 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     protected void initData() {
         super.initData();
         viewModel = new ViewModelProvider(this).get(LivingViewModel.class);
+        LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if(response != null && response) {
+                        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum();
+                        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, totalNum));
+                    }
+                });
+
+        LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if(response != null && response) {
+                        int likeNum = DemoHelper.getLikeNum();
+                        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, likeNum));
+                    }
+                });
         startLive();
     }
 
@@ -158,13 +184,20 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void showGiftDialog() {
-        LiveGiftStatisticsDialog.getNewInstance().show(getChildFragmentManager(), "git_statistics");
+        LiveGiftStatisticsDialog dialog = (LiveGiftStatisticsDialog) getChildFragmentManager().findFragmentByTag("git_statistics");
+        if(dialog == null) {
+            dialog = LiveGiftStatisticsDialog.getNewInstance();
+        }
+        dialog.show(getChildFragmentManager(), "git_statistics");
     }
 
     @Override
     protected void showUserDetailsDialog(String username) {
-        RoomUserDetailsDialog dialog = RoomUserDetailsDialog.newInstance(username, liveRoom, DemoConstants.TYPE_ANCHOR);
-        dialog.show(getChildFragmentManager(), "RoomUserDetailsDialog");
+        RoomManageUserDialog fragment = (RoomManageUserDialog) getChildFragmentManager().findFragmentByTag("RoomManageUserDialog");
+        if(fragment == null) {
+            fragment = RoomManageUserDialog.getNewInstance(chatroomId, username);
+        }
+        fragment.show(getChildFragmentManager(), "RoomManageUserDialog");
     }
 
     /**
@@ -256,6 +289,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
+                    //开始直播，则开始统计点赞及礼物统计，实际开发中，应该由服务器进行统计，此处仅为展示用
+                    DemoHelper.saveLikeNum(0);
+                    DemoHelper.getReceiveGiftDao().clearData();
                     startAnchorLive(liveRoom);
                 }
             });
@@ -314,6 +350,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 @Override
                 public void onSuccess(LiveRoom data) {
                     DemoHelper.saveLivingId("");
+                    DemoHelper.getReceiveGiftDao().clearData();
+                    DemoHelper.saveLikeNum(0);
                     mContext.finish();
                 }
 

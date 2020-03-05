@@ -16,19 +16,27 @@ import androidx.lifecycle.MediatorLiveData;
 public class UserManageViewModel extends AndroidViewModel {
     private EmClientRepository repository;
     private MediatorLiveData<Resource<List<String>>> observable;
+    private MediatorLiveData<Resource<List<String>>> whitesObservable;
     private MediatorLiveData<Resource<List<String>>> muteObservable;
     private MediatorLiveData<Resource<EMChatRoom>> chatRoomObservable;
+    private MediatorLiveData<Resource<Boolean>> checkInWhiteObservable;
 
     public UserManageViewModel(@NonNull Application application) {
         super(application);
         repository = new EmClientRepository();
         observable = new MediatorLiveData<>();
+        whitesObservable = new MediatorLiveData<>();
         chatRoomObservable = new MediatorLiveData<>();
         muteObservable = new MediatorLiveData<>();
+        checkInWhiteObservable = new MediatorLiveData<>();
     }
 
     public MediatorLiveData<Resource<List<String>>> getObservable() {
         return observable;
+    }
+
+    public MediatorLiveData<Resource<List<String>>> getWhitesObservable() {
+        return whitesObservable;
     }
 
     /**
@@ -36,7 +44,7 @@ public class UserManageViewModel extends AndroidViewModel {
      * @param roomId
      */
     public void getWhiteList(String roomId) {
-        observable.addSource(repository.getWhiteList(roomId), response -> observable.postValue(response));
+        whitesObservable.addSource(repository.getWhiteList(roomId), response -> whitesObservable.postValue(response));
     }
 
     /**
@@ -81,6 +89,19 @@ public class UserManageViewModel extends AndroidViewModel {
     public void removeFromChatRoomWhiteList(String chatRoomId, List<String> members) {
         chatRoomObservable.addSource(repository.removeFromChatRoomWhiteList(chatRoomId, members),
                 response -> chatRoomObservable.postValue(response));
+    }
+
+    public MediatorLiveData<Resource<Boolean>> getCheckInWhiteObservable() {
+        return checkInWhiteObservable;
+    }
+
+    /**
+     * 检查是否在白名单中
+     * @param username
+     */
+    public void checkIfInGroupWhiteList(String username) {
+        checkInWhiteObservable.addSource(repository.checkIfInGroupWhiteList(username),
+                response -> checkInWhiteObservable.postValue(response));
     }
 
     /**

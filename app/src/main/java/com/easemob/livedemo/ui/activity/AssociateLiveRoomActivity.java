@@ -23,7 +23,7 @@ import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.cloud.EMCloudOperationCallback;
-import com.hyphenate.cloud.HttpFileManager;
+//import com.hyphenate.cloud.HttpFileManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.weigan.loopview.LoopView;
 import java.io.File;
@@ -167,27 +167,27 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
                     Map<String, String> headers = new HashMap<String, String>();
                     headers.put("Authorization", "Bearer " + EMClient.getInstance().getAccessToken());
-                    new HttpFileManager().uploadFile(coverPath, "", "", "", headers, new EMCloudOperationCallback() {
-                        @Override public void onSuccess(String result) {
-                            try {
-                                JSONObject jsonObj = new JSONObject(result);
-                                JSONObject entitys = jsonObj.getJSONArray("entities").getJSONObject(0);
-                                String uuid = entitys.getString("uuid");
-                                String url = jsonObj.getString("uri");
-                                coverUrl = url + "/" + uuid;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override public void onError(String msg) {
-                            exception = new HyphenateException(msg);
-                        }
-
-                        @Override public void onProgress(int progress) {
-
-                        }
-                    });
+//                    new HttpFileManager().uploadFile(coverPath, "", "", "", headers, new EMCloudOperationCallback() {
+//                        @Override public void onSuccess(String result) {
+//                            try {
+//                                JSONObject jsonObj = new JSONObject(result);
+//                                JSONObject entitys = jsonObj.getJSONArray("entities").getJSONObject(0);
+//                                String uuid = entitys.getString("uuid");
+//                                String url = jsonObj.getString("uri");
+//                                coverUrl = url + "/" + uuid;
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        @Override public void onError(String msg) {
+//                            exception = new HyphenateException(msg);
+//                        }
+//
+//                        @Override public void onProgress(int progress) {
+//
+//                        }
+//                    });
                 }
                 if(exception != null){
                     throw exception;

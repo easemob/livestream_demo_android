@@ -20,7 +20,12 @@
     <style name="TabLayout.UserManage" parent="Base.Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
         <item name="android:textSize">@dimen/em_size_normal</item>
-        <item name="tabTextColor">@color/white</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="tabTextAppearance">@style/TabLayout.UserManage.TextAppearance</item>
+    </style>
+    
+    <style name="TabLayout.UserManage.TextAppearance">
+        <item name="android:textSize">@dimen/em_size_normal</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/em_tabs_text_color_selector</item>
     </style>
 </resources>

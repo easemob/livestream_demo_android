@@ -4,6 +4,7 @@
   <color name="colorPrimaryDark">@color/white</color>
   <color name="colorAccent">#ff00ba6e</color>
   <color name="colorTextPrimary">#ffffff</color>
+  <color name="textColorSecondary">@color/gray_normal</color>
 
   <color name="common_bottom_bar_normal_bg">#323232</color>
   <color name="common_bottom_bar_selected_bg">#fff</color>

@@ -1,14 +1,26 @@
 package com.easemob.livedemo.common;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.db.DemoDbHelper;
+import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
+import com.easemob.livedemo.common.db.entity.ReceiveGiftEntity;
 import com.easemob.livedemo.data.TestGiftRepository;
 import com.easemob.livedemo.data.UserRepository;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.User;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCustomMessageBody;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class DemoHelper {
 
@@ -125,5 +137,98 @@ public class DemoHelper {
      */
     public static GiftBean getGiftById(String giftId) {
         return TestGiftRepository.getGiftById(giftId);
+    }
+
+    /**
+     * 初始化数据库
+     */
+    public static void initDb() {
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(EMClient.getInstance().getCurrentUser());
+    }
+
+    /**
+     * 获取ReceiveGiftDao
+     * @return
+     */
+    public static ReceiveGiftDao getReceiveGiftDao() {
+        return DemoDbHelper.getInstance(DemoApplication.getInstance()).getReceiveGiftDao();
+    }
+
+    /**
+     * 保存礼物消息到本地
+     * @param message
+     */
+    public static void saveGiftInfo(EMMessage message) {
+        if(message == null) {
+            return;
+        }
+        EMMessageBody body = message.getBody();
+        if(!(body instanceof EMCustomMessageBody)) {
+            return;
+        }
+        String event = ((EMCustomMessageBody) body).event();
+        if(!TextUtils.equals(event, DemoConstants.CUSTOM_GIFT)) {
+            return;
+        }
+        Map<String, String> params = ((EMCustomMessageBody) body).getParams();
+        Set<String> keySet = params.keySet();
+        String gift_id = null;
+        String gift_num = null;
+        if(keySet.contains(DemoConstants.CUSTOM_GIFT_KEY_ID) && keySet.contains(DemoConstants.CUSTOM_GIFT_KEY_NUM)) {
+            gift_id = params.get(DemoConstants.CUSTOM_GIFT_KEY_ID);
+            gift_num = params.get(DemoConstants.CUSTOM_GIFT_KEY_NUM);
+            ReceiveGiftEntity entity = new ReceiveGiftEntity();
+            entity.setFrom(message.getFrom());
+            entity.setTo(message.getTo());
+            entity.setTimestamp(message.getMsgTime());
+            entity.setGift_id(gift_id);
+            entity.setGift_num(Integer.valueOf(gift_num));
+            List<Long> list = getReceiveGiftDao().insert(entity);
+            if(list.size() <= 0) {
+                Log.e("TAG", "保存数据失败！");
+            }else {
+                Log.i("TAG", "保存数据成功");
+                LiveDataBus.get().with(DemoConstants.CUSTOM_GIFT).postValue(true);
+            }
+        }
+    }
+
+    /**
+     * 保存点赞数量
+     * @param message
+     */
+    public static void saveLikeInfo(EMMessage message) {
+        if(message == null) {
+            return;
+        }
+        EMMessageBody body = message.getBody();
+        if(!(body instanceof EMCustomMessageBody)) {
+            return;
+        }
+        String event = ((EMCustomMessageBody) body).event();
+        if(!TextUtils.equals(event, DemoConstants.CUSTOM_LIKE)) {
+            return;
+        }
+        Map<String, String> params = ((EMCustomMessageBody) body).getParams();
+        Set<String> keySet = params.keySet();
+        String num = null;
+        if(keySet.contains(DemoConstants.CUSTOM_LIKE_KEY_NUM)) {
+            num = params.get(DemoConstants.CUSTOM_LIKE_KEY_NUM);
+        }
+        if(!TextUtils.isEmpty(num)) {
+            int like_num = Integer.valueOf(num);
+            int total = getLikeNum() + like_num;
+            saveLikeNum(total);
+            LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM).postValue(true);
+        }
+
+    }
+
+    public static void saveLikeNum(int num) {
+        PreferenceManager.getInstance().saveLikeNum(num);
+    }
+
+    public static int getLikeNum() {
+        return PreferenceManager.getInstance().getLikeNum();
     }
 }

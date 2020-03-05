@@ -5,6 +5,8 @@
     <string name="em_main_title_live">直播大厅</string>
     <string name="em_main_title_me">我</string>
 
+    <string name="em_live_common_cancel">取消</string>
+
     <string name="ease_list_no_data_text">暂无数据</string>
 
     <string name="em_live_list_all_title">选择聊天室开始直播</string>
@@ -25,9 +27,13 @@
     <string name="em_live_anchor_unmute_all">全员解禁</string>
     <string name="em_live_anchor_mute">禁言</string>
     <string name="em_live_anchor_muted">已禁言</string>
+    <string name="em_live_audience_muted">禁言中</string>
     <string name="em_live_anchor_add_white">加入白名单</string>
     <string name="em_live_anchor_remove_from_white">从白名单移除</string>
     <string name="em_live_anchor_remove_white">删除</string>
+    <string name="em_live_anchor_remove_mute">解禁</string>
+    <string name="em_live_anchor_like_info">被赞 %1$d</string>
+    <string name="em_live_anchor_receive_gift_info">礼物 %1$d</string>
     <string name="em_live_user_fans">粉丝</string>
     <string name="em_live_user_star">被赞</string>
     <string name="em_live_user_attentions">关注</string>
@@ -36,9 +42,10 @@
     <string name="em_live_user_receive_gift">收到礼物</string>
     <string name="em_live_gift_name">礼物</string>
     <string name="em_live_gift_history">礼物记录</string>
-    <string name="em_live_gift_total">礼物数：%1$d</string>
-    <string name="em_live_gift_send_total">打赏人数：%1$d</string>
-    <string name="em_live_gift_sender_info">送出 X %1$d</string>
+    <string name="em_live_gift_total">共 %1$d 份</string>
+    <string name="em_live_gift_send_total">打赏人数 %1$d</string>
+    <string name="em_live_gift_gift_info">X %1$d</string>
+    <string name="em_live_gift_sender_info">%1$s 送出</string>
     <string name="em_gift_default_name_1">香水玫瑰</string>
     <string name="em_gift_default_name_2">心想事成</string>
     <string name="em_gift_default_name_3">比翼双飞</string>
@@ -61,6 +68,9 @@
     <string name="em_live_msg_gift">%1$s 赠送了 %2$sx%3$s</string>
     <string name="em_live_msg_like">%1$s 点了 %2$s个赞</string>
     <string name="em_live_msg_member_add">进入了直播间</string>
+    <string name="em_live_user_manage_users">观众(%1$d)</string>
+    <string name="em_live_user_manage_white">白名单(%1$d)</string>
+    <string name="em_live_user_manage_mute">用户禁言(%1$d)</string>
 
     <string name="em_set_title">设置</string>
     <string name="em_set_live_room">环信直播聊天室</string>

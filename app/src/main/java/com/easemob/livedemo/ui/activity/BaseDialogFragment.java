@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.reponsitories.Resource;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,6 +62,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(savedInstanceState);
+        initViewModel();
         initListener();
     }
 
@@ -71,6 +75,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void initArgument() {}
 
     public void initView(Bundle savedInstanceState) {}
+
+    public void initViewModel() {}
 
     public void initListener() {}
 
@@ -86,4 +92,16 @@ public abstract class BaseDialogFragment extends DialogFragment {
         return getView().findViewById(id);
     }
 
+
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(mContext != null) {
+            mContext.parseResource(response, callback);
+        }
+    }
 }

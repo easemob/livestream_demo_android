@@ -30,8 +30,9 @@ public class PreferenceManager {
 	private static SharedPreferences.Editor mDefaultEditor;
 
 	private static final String KEY_LIVING_ID = "key_living_id";
-	private static final  String KEY_CAN_REGISTER = "key_can_register";
-	private static final  String KEY_USER_ID = "key_user_id";
+	private static final String KEY_CAN_REGISTER = "key_can_register";
+	private static final String KEY_USER_ID = "key_user_id";
+	private static final String KEY_LIKE_NUM = "key_like_num";
 
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt, String username) {
@@ -110,5 +111,18 @@ public class PreferenceManager {
 
 	public String getUserId() {
 		return mSharedPreferences.getString(KEY_USER_ID, null);
+	}
+
+	public void saveLikeNum(int num) {
+		editor.putInt(KEY_LIKE_NUM, num);
+		editor.apply();
+	}
+
+	/**
+	 * 获取点赞数目
+	 * @return
+	 */
+	public int getLikeNum() {
+		return mSharedPreferences.getInt(KEY_LIKE_NUM, 0);
 	}
 }

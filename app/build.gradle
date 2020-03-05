@@ -66,6 +66,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.room:room-runtime:2.2.4"
+    annotationProcessor "androidx.room:room-compiler:2.2.4"
     implementation 'com.github.florent37:viewanimator:1.0.4'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'

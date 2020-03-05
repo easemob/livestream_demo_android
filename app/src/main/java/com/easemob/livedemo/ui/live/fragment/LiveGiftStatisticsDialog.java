@@ -3,14 +3,18 @@ package com.easemob.livedemo.ui.live.fragment;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.ui.live.adapter.LiveGiftStatisticsAdapter;
+import com.easemob.livedemo.ui.live.viewmodels.GiftStatisticsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +24,7 @@ public class LiveGiftStatisticsDialog extends BaseLiveDialogFragment {
     private TextView tvGiftNum;
     private TextView tvSenderNum;
     private LiveGiftStatisticsAdapter adapter;
+    private GiftStatisticsViewModel viewModel;
 
     public static LiveGiftStatisticsDialog getNewInstance() {
         LiveGiftStatisticsDialog dialog = new LiveGiftStatisticsDialog();
@@ -50,22 +55,36 @@ public class LiveGiftStatisticsDialog extends BaseLiveDialogFragment {
     }
 
     @Override
+    public void initViewModel() {
+        super.initViewModel();
+        viewModel = new ViewModelProvider(this).get(GiftStatisticsViewModel.class);
+        viewModel.getGiftObservable().observe(getViewLifecycleOwner(), response -> {
+            if(response != null) {
+                tvGiftNum.setText(getString(R.string.em_live_gift_total, response.size()));
+                adapter.setData(response);
+            }
+        });
+        viewModel.getSenderNumObservable().observe(getViewLifecycleOwner(), response -> {
+            if(response != null) {
+                tvSenderNum.setText(getString(R.string.em_live_gift_send_total, response));
+            }
+        });
+        LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if(response != null && response) {
+                        getData();
+                    }
+                });
+    }
+
+    @Override
     public void initData() {
         super.initData();
         getData();
     }
 
     private void getData() {
-        List<GiftBean> list = new ArrayList<>();
-        for(int i = 0; i < 20; i++) {
-            GiftBean bean = new GiftBean();
-            User user = new User();
-            user.setNickname("测试"+(i+1));
-            bean.setUser(user);
-            bean.setGift("鲜花");
-            bean.setNum((int) (Math.random() * 50));
-            list.add(bean);
-        }
-        adapter.setData(list);
+        viewModel.getGiftListFromDb();
+        viewModel.getGiftSenderNumFromDb();
     }
 }

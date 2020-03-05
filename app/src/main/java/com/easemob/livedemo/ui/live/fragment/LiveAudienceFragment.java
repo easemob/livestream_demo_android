@@ -37,6 +37,7 @@ import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.Random;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -157,14 +158,17 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     protected void skipToListDialog() {
         super.skipToListDialog();
-        LiveMemberListDialog newInstance = LiveMemberListDialog.getNewInstance(chatroomId);
-        newInstance.setOnItemClickListener(new LiveMemberListDialog.OnMemberItemClickListener() {
+        LiveMemberListDialog dialog = (LiveMemberListDialog) getChildFragmentManager().findFragmentByTag("liveMember");
+        if(dialog == null) {
+            dialog = LiveMemberListDialog.getNewInstance(chatroomId);
+        }
+        dialog.show(getChildFragmentManager(), "liveMember");
+        dialog.setOnItemClickListener(new LiveMemberListDialog.OnMemberItemClickListener() {
             @Override
             public void OnMemberItemClick(View view, int position, String member) {
                 showUserDetailsDialog(member);
             }
         });
-        newInstance.show(getChildFragmentManager(), "liveMember");
     }
 
     @Override
@@ -180,7 +184,10 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     }
 
     private void showGiftDialog() {
-        LiveGiftDialog dialog = LiveGiftDialog.getNewInstance();
+        LiveGiftDialog dialog = (LiveGiftDialog) getChildFragmentManager().findFragmentByTag("live_gift");
+        if(dialog == null) {
+            dialog = LiveGiftDialog.getNewInstance();
+        }
         dialog.show(getChildFragmentManager(), "live_gift");
         dialog.setOnConfirmClickListener(new OnConfirmClickListener() {
             @Override

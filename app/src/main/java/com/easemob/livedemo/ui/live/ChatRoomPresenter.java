@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.easemob.livedemo.DemoConstants;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
@@ -149,6 +150,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
                     Map<String, String> params = body.getParams();
                     switch (event) {
                         case DemoConstants.CUSTOM_GIFT :
+                            DemoHelper.saveGiftInfo(message);
                             if(onChatRoomListener != null) {
                                 onChatRoomListener.onReceiveGiftMsg(params.get(DemoConstants.CUSTOM_GIFT_KEY_ID),
                                         params.get(DemoConstants.CUSTOM_GIFT_KEY_NUM));

@@ -14,7 +14,8 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.cloud.EMCloudOperationCallback;
-import com.hyphenate.cloud.HttpFileManager;
+//import com.hyphenate.cloud.HttpFileManager;
+import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.exceptions.HyphenateException;
 
 import org.json.JSONException;
@@ -39,8 +40,7 @@ public class EmClientRepository extends BaseEMRepository {
                 runOnIOThread(()-> {
                     Map<String, String> headers = new HashMap<String, String>();
                     headers.put("Authorization", "Bearer " + EMClient.getInstance().getAccessToken());
-                    new HttpFileManager().uploadFile(localPath, "", "", "", headers, new EMCloudOperationCallback() {
-
+                    EMHttpClient.getInstance().uploadFile(localPath, null, headers, new EMCloudOperationCallback() {
                         @Override
                         public void onSuccess(String result) {
                             try {
@@ -60,7 +60,7 @@ public class EmClientRepository extends BaseEMRepository {
                         }
 
                         @Override
-                        public void onProgress(int progress) {
+                        public void onProgress(int i) {
 
                         }
                     });
@@ -194,6 +194,30 @@ public class EmClientRepository extends BaseEMRepository {
                             callBack.onError(error, errorMsg);
                         }
                     });
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 检查是否在白名单中
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> checkIfInGroupWhiteList(String username) {
+        return new NetworkOnlyResource<Boolean, Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getChatRoomManager().checkIfInChatRoomWhiteList(username, new EMValueCallBack<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean aBoolean) {
+                        callBack.onSuccess(createLiveData(aBoolean));
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+                        callBack.onError(i, s);
+                    }
                 });
             }
         }.asLiveData();

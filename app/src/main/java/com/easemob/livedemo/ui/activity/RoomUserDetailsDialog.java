@@ -119,7 +119,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
             username = getArguments().getString("username");
             LiveRoom liveRoom = (LiveRoom) getArguments().getSerializable("liveRoom");
             type = getArguments().getString("type");
-            chatroomId = liveRoom.getChatroomId();
+            chatroomId = liveRoom.getId();
             liveId = liveRoom.getId();
         }
         if (username.equals(EMClient.getInstance().getCurrentUser())) {

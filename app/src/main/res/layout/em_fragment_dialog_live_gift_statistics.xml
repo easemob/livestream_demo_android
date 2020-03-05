@@ -5,20 +5,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:minHeight="300dp"
-    android:background="@color/white">
+    android:background="#80000000">
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/em_margin_20"
         android:paddingStart="@dimen/em_margin_20"
-        android:text="@string/em_live_gift_history"/>
+        android:text="@string/em_live_gift_history"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big"
+        android:drawableLeft="@drawable/gift_icon"
+        android:drawableStart="@drawable/gift_icon"
+        android:drawablePadding="6dp"/>
+
+    <TextView
+        android:id="@+id/tv_gift_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintRight_toLeftOf="@id/tv_sender_num"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_vertical"
+        android:layout_marginEnd="@dimen/em_margin_10"
+        android:layout_marginRight="@dimen/em_margin_10"
+        tools:text="共 89 份"/>
+
+    <TextView
+        android:id="@+id/tv_sender_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_vertical"
+        android:layout_marginRight="@dimen/em_margin_20"
+        android:layout_marginEnd="@dimen/em_margin_20"
+        tools:text="打赏人数 20"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
@@ -27,30 +59,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
-        app:layout_constraintBottom_toTopOf="@id/tv_gift_num"/>
-
-    <TextView
-        android:id="@+id/tv_gift_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="50dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center_vertical"
-        android:layout_marginStart="@dimen/em_margin_20"
-        android:layout_marginLeft="@dimen/em_margin_20"
-        tools:text="礼物数：89"/>
-
-    <TextView
-        android:id="@+id/tv_sender_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="50dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center_vertical"
-        android:layout_marginRight="@dimen/em_margin_20"
-        android:layout_marginEnd="@dimen/em_margin_20"
-        tools:text="打赏人数：20"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

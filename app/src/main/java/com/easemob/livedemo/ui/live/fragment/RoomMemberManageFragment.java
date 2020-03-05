@@ -1,6 +1,8 @@
 package com.easemob.livedemo.ui.live.fragment;
 
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
@@ -17,11 +19,18 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        viewModel.getMuteObservable().observe(getViewLifecycleOwner(), response-> {
+        viewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<String>>() {
                 @Override
                 public void onSuccess(List<String> data) {
-                    muteList = data;
+                    Log.e("TAG", "getObservable = "+data.size());
+                    setAdapter(data);
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    finishRefresh();
                 }
             });
         });
@@ -38,41 +47,27 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
         boolean isAnchor = DemoHelper.isOwner(username);
         boolean isMemberMuted = false;
         if(isAnchor){
-            holder.managerButton.setVisibility(View.VISIBLE);
-            holder.managerButton.setText(isAllMuted ? getString(R.string.em_live_anchor_unmute_all) : getString(R.string.em_live_anchor_mute_all));
+            holder.switchMute.setVisibility(View.VISIBLE);
+            holder.switchMute.setChecked(isAllMuted);
             holder.tvLabel.setVisibility(View.VISIBLE);
-            holder.tvLabel.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_live_member_label_shape));
             holder.tvLabel.setText(getString(R.string.em_live_anchor_self));
         }else {
-            isMemberMuted = muteList != null && muteList.contains(username);
-            if(isMemberMuted) {
-                holder.managerButton.setVisibility(View.GONE);
-                holder.tvLabel.setVisibility(View.VISIBLE);
-                holder.tvLabel.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_live_member_label_mute_shape));
-                holder.tvLabel.setText(getString(R.string.em_live_anchor_muted));
-            }else {
-                holder.tvLabel.setVisibility(View.GONE);
-                holder.managerButton.setVisibility(View.VISIBLE);
-                holder.managerButton.setText(getString(R.string.em_live_anchor_mute));
-            }
-
+            holder.managerButton.setVisibility(View.GONE);
+            holder.tvLabel.setVisibility(View.GONE);
+            holder.tvLabel.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_live_member_label_mute_shape));
+            holder.tvLabel.setText(getString(R.string.em_live_anchor_muted));
         }
 
-        holder.managerButton.setOnClickListener(new View.OnClickListener() {
+        holder.switchMute.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if(isAnchor) {
-                    if(isAllMuted) {
-                        viewModel.unMuteAllMembers(chatroomId);
-                    }else {
-                        viewModel.muteAllMembers(chatroomId);
-                    }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    viewModel.muteAllMembers(chatroomId);
                 }else {
-                    List<String> list = new ArrayList<>();
-                    list.add(username);
-                    viewModel.muteChatRoomMembers(chatroomId, list, -1);
+                    viewModel.unMuteAllMembers(chatroomId);
                 }
             }
         });
+
     }
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +43,7 @@ import static com.easemob.livedemo.ui.activity.RoomUserManagementFragment.Manage
  * Use the {@link RoomUserManagementFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RoomUserManagementFragment extends BaseFragment {
+public class RoomUserManagementFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     private ManagementType type;
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
@@ -94,8 +95,9 @@ public class RoomUserManagementFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         refreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_refresh_layout);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
-        initViewModel();
+        refreshLayout.setOnRefreshListener(this);
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -106,25 +108,13 @@ public class RoomUserManagementFragment extends BaseFragment {
                 LinearLayoutManager.VERTICAL, false));
         adapter = new ManagementAdapter(getActivity());
         recyclerView.setAdapter(adapter);
+        initViewModel();
         fetchData();
     }
 
     protected void initViewModel() {
-        viewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
-        viewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
-                @Override
-                public void onSuccess(List<String> data) {
-                    setAdapter(data);
-                }
+        viewModel = new ViewModelProvider(mContext).get(UserManageViewModel.class);
 
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    finishRefresh();
-                }
-            });
-        });
         viewModel.getChatRoomObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
                 @Override
@@ -136,8 +126,8 @@ public class RoomUserManagementFragment extends BaseFragment {
     }
 
     private void fetchData(){
-        refreshLayout.setRefreshing(true);
-        executeFetchTask();
+//        refreshLayout.setRefreshing(true);
+//        executeFetchTask();
     }
 
     /**
@@ -160,6 +150,11 @@ public class RoomUserManagementFragment extends BaseFragment {
         if(refreshLayout != null) {
             refreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        executeFetchTask();
     }
 
     protected class ManagementAdapter extends RecyclerView.Adapter<ManagementAdapter.ManagementViewHolder>{
@@ -207,6 +202,8 @@ public class RoomUserManagementFragment extends BaseFragment {
             public TextView managerButton;
             @BindView(R.id.tv_label)
             public TextView tvLabel;
+            @BindView(R.id.switch_mute)
+            public Switch switchMute;
 
             public ManagementViewHolder(View itemView) {
                 super(itemView);
