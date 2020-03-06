@@ -16,7 +16,7 @@
         android:id="@+id/tv_gift_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/em_gift_default_name_1"
+        tools:text="@string/em_gift_default_name_1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

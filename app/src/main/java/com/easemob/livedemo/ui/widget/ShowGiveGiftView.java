@@ -136,7 +136,7 @@ public class ShowGiveGiftView extends LinearLayout {
                 });
             }
 
-        }, 0, duration);
+        }, 0, 200);
     }
 
     private void calculateIncrease(GiftBean bean, int durationTime) {

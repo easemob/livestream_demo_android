@@ -19,4 +19,6 @@ public interface DemoConstants {
     String TYPE_ANCHOR = "anchor";
     String TYPE_AUDIENCE = "audience";
 
+    String MSG_KEY_MEMBER_ADD = "member_add";
+
 }

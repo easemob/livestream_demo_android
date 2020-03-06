@@ -21,6 +21,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     private TextView tvGiftNum;
     private Button btnSend;
     private int giftNum = 1;
+    private GiftBean giftBean;
     private OnGiftNumListener clickListener;
     private OnDismissListener dismissListener;
 
@@ -43,6 +44,15 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     }
 
     @Override
+    public void initArgument() {
+        super.initArgument();
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            giftBean = (GiftBean) bundle.getSerializable("gift");
+        }
+    }
+
+    @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         tvGiftName = findViewById(R.id.tv_gift_name);
@@ -51,6 +61,9 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
         ivGiftPlus = findViewById(R.id.iv_gift_plus);
         btnSend = findViewById(R.id.btn_send);
 
+        if(giftBean != null) {
+            tvGiftName.setText(giftBean.getName());
+        }
         tvGiftNum.setText(giftNum + "");
     }
 

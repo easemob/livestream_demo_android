@@ -309,7 +309,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
                             @Override
                             public void onError(int code, String error) {
-                                mContext.showToast("消息发送失败！");
+                                mContext.showToast("消息发送失败！errorCode = "+code+"; errorMsg = "+error);
                             }
 
                             @Override

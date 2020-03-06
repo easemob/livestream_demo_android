@@ -219,7 +219,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
 
             @Override
             public void onError(int code, String error) {
-                mContext.showToast(error);
+                mContext.showToast("errorCode = " + code + "; errorMsg = "+error);
             }
 
             @Override

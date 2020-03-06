@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.reponsitories.Resource;
 import com.easemob.livedemo.data.model.LiveRoom;
@@ -100,6 +101,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initArgument();
         View view = inflater.inflate(R.layout.fragment_room_user_details, container, false);
         unbinder = ButterKnife.bind(this, view);
         customDialog();
@@ -115,13 +117,6 @@ public class RoomUserDetailsDialog extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null) {
-            username = getArguments().getString("username");
-            LiveRoom liveRoom = (LiveRoom) getArguments().getSerializable("liveRoom");
-            type = getArguments().getString("type");
-            chatroomId = liveRoom.getId();
-            liveId = liveRoom.getId();
-        }
         if (username.equals(EMClient.getInstance().getCurrentUser())) {
             managementLayout.setVisibility(View.GONE);
         }
@@ -144,6 +139,16 @@ public class RoomUserDetailsDialog extends DialogFragment {
         wlp.gravity = Gravity.CENTER;
         wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(wlp);
+    }
+
+    private void initArgument() {
+        if (getArguments() != null) {
+            username = getArguments().getString("username");
+            LiveRoom liveRoom = (LiveRoom) getArguments().getSerializable("liveRoom");
+            type = getArguments().getString("type");
+            chatroomId = liveRoom.getId();
+            liveId = liveRoom.getId();
+        }
     }
 
     private void initViewModel() {
@@ -192,8 +197,25 @@ public class RoomUserDetailsDialog extends DialogFragment {
                 }
             });
         });
-        viewModel.getWhiteList(chatroomId);
-        viewModel.getMuteList(chatroomId);
+
+        LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if(response != null && response) {
+                        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum();
+                        tvGiftNum.setText(String.valueOf(totalNum));
+                    }
+                });
+
+        LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if(response != null && response) {
+                        int likeNum = DemoHelper.getLikeNum();
+                        tvAttentionNum.setText(String.valueOf(likeNum));
+                    }
+                });
+
+//        viewModel.getWhiteList(chatroomId);
+//        viewModel.getMuteList(chatroomId);
     }
 
     @OnClick(R.id.layout_live_no_talk)

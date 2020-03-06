@@ -183,6 +183,11 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         showGiftDialog();
     }
 
+    @Override
+    protected void showPraise(int count) {
+        //观众端不展示动画
+    }
+
     private void showGiftDialog() {
         LiveGiftDialog dialog = (LiveGiftDialog) getChildFragmentManager().findFragmentByTag("live_gift");
         if(dialog == null) {
@@ -203,7 +208,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
 
                         @Override
                         public void onError(int code, String error) {
-                            mContext.showToast(error);
+                            mContext.showToast("errorCode = " + code + "; errorMsg = "+error);
                         }
 
                         @Override

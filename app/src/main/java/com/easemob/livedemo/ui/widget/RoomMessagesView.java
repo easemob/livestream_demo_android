@@ -42,6 +42,8 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.Map;
+
 /**
  * Created by wei on 2016/6/3.
  */
@@ -229,10 +231,9 @@ public class RoomMessagesView extends RelativeLayout{
             boolean isSelf = EMClient.getInstance().getCurrentUser().equals(from);
             if(message.getBody() instanceof EMTextMessageBody) {
                 boolean memberAdd = false;
-                try {
-                    memberAdd = message.getBooleanAttribute("member_add");
-                } catch (HyphenateException e) {
-                    e.printStackTrace();
+                Map<String, Object> ext = message.ext();
+                if(ext.containsKey(DemoConstants.MSG_KEY_MEMBER_ADD)) {
+                    memberAdd = (boolean) ext.get(DemoConstants.MSG_KEY_MEMBER_ADD);
                 }
                 String content = ((EMTextMessageBody) message.getBody()).getMessage();
                 if(memberAdd) {
