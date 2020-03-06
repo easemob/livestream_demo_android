@@ -41,7 +41,6 @@
         </activity>
         <activity
             android:name=".ui.live.LiveAudienceActivity"
-            android:parentActivityName=".ui.activity.MainActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
             <meta-data
@@ -54,7 +53,6 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.live.LiveAnchorActivity"
-            android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -54,7 +54,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.em_activity_live_audience);
         ButterKnife.bind(this);
-        setFitSystemForTheme(true, R.color.black);
+        setFitSystemForTheme(false, android.R.color.transparent);
     }
 
     @Override
