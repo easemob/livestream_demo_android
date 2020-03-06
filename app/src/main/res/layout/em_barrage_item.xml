@@ -26,6 +26,9 @@
         tools:text="sssss"
         android:textColor="@color/white"
         android:textSize="@dimen/em_size_normal"
+        android:maxLines="1"
+        android:maxEms="20"
+        android:ellipsize="end"
         android:gravity="center" />
 
 </LinearLayout>

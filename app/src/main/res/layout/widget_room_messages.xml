@@ -70,6 +70,7 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:textSize="18sp"
+            android:textColor="@color/common_black"
             android:background="@drawable/em_live_input_et_bg_shape"
             />
         <ImageView

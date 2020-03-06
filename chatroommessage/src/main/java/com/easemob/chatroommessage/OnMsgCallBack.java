@@ -1,10 +1,14 @@
-package com.easemob.livedemo.common;
+package com.easemob.chatroommessage;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMMessage;
 
 public abstract class OnMsgCallBack implements EMCallBack {
 
+    /**
+     * 为了回调发送的message，不建议使用此回调
+     */
+    @Deprecated
     @Override
     public void onSuccess() {
 

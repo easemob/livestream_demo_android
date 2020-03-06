@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.easemob.chatroommessage.ChatRoomMsgHelper;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
 import com.easemob.livedemo.ui.activity.MainActivity;
 import com.hyphenate.EMConnectionListener;
@@ -28,6 +29,8 @@ public class DemoApplication extends Application{
     registerActivityLifecycleCallbacks();
 
     initChatSdk();
+
+    ChatRoomMsgHelper.getInstance().init(this);
 
     //UEasyStreaming.initStreaming("publish3-key");
 

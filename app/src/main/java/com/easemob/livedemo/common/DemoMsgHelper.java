@@ -1,15 +1,14 @@
 package com.easemob.livedemo.common;
 
-import android.icu.util.Measure;
 import android.text.TextUtils;
-import android.widget.TextView;
 
+import com.easemob.chatroommessage.ChatRoomMsgHelper;
+import com.easemob.chatroommessage.OnMsgCallBack;
 import com.easemob.livedemo.DemoConstants;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.adapter.message.EMACustomMessageBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,18 +84,8 @@ public class DemoMsgHelper {
      * @param num
      * @param callBack
      */
-    public void sendGiftMsg(String giftId, int num, EMCallBack callBack) {
-        EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(DemoConstants.CUSTOM_GIFT);
-        Map<String, String> params = new HashMap<>();
-        params.put(DemoConstants.CUSTOM_GIFT_KEY_ID, giftId);
-        params.put(DemoConstants.CUSTOM_GIFT_KEY_NUM, String.valueOf(num));
-        body.setParams(params);
-        sendMessage.addBody(body);
-        sendMessage.setTo(chatroomId);
-        sendMessage.setChatType(EMMessage.ChatType.ChatRoom);
-        EMClient.getInstance().chatManager().sendMessage(sendMessage);
-        sendMessage.setMessageStatusCallback(callBack);
+    public void sendGiftMsg(String giftId, int num, OnMsgCallBack callBack) {
+        ChatRoomMsgHelper.getInstance().sendGiftMsg(giftId, num, callBack);
     }
 
     /**
@@ -104,20 +93,8 @@ public class DemoMsgHelper {
      * @param num
      * @param callBack
      */
-    public void sendLikeMsg(int num, EMCallBack callBack) {
-        if(num <= 0) {
-            return;
-        }
-        EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(DemoConstants.CUSTOM_LIKE);
-        Map<String, String> params = new HashMap<>();
-        params.put(DemoConstants.CUSTOM_LIKE_KEY_NUM, String.valueOf(num));
-        body.setParams(params);
-        sendMessage.addBody(body);
-        sendMessage.setTo(chatroomId);
-        sendMessage.setChatType(EMMessage.ChatType.ChatRoom);
-        EMClient.getInstance().chatManager().sendMessage(sendMessage);
-        sendMessage.setMessageStatusCallback(callBack);
+    public void sendLikeMsg(int num, OnMsgCallBack callBack) {
+        ChatRoomMsgHelper.getInstance().sendLikeMsg(num, callBack);
     }
 
     /**
@@ -126,39 +103,6 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendBarrageMsg(String content, OnMsgCallBack callBack) {
-        if(TextUtils.isEmpty(content)) {
-            return;
-        }
-        EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(DemoConstants.CUSTOM_BARRAGE);
-        Map<String, String> params = new HashMap<>();
-        params.put(DemoConstants.CUSTOM_BARRAGE_KEY_TXT, content);
-        body.setParams(params);
-        sendMessage.addBody(body);
-        sendMessage.setTo(chatroomId);
-        sendMessage.setChatType(EMMessage.ChatType.ChatRoom);
-        EMClient.getInstance().chatManager().sendMessage(sendMessage);
-        sendMessage.setMessageStatusCallback(new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                if(callBack != null) {
-                    callBack.onSuccess(sendMessage);
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                if(callBack != null) {
-                    callBack.onError(i, s);
-                }
-            }
-
-            @Override
-            public void onProgress(int i, String s) {
-                if(callBack != null) {
-                    callBack.onProgress(i, s);
-                }
-            }
-        });
+        ChatRoomMsgHelper.getInstance().sendBarrageMsg(content, callBack);
     }
 }

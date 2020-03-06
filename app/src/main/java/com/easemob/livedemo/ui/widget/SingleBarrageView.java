@@ -3,10 +3,12 @@ package com.easemob.livedemo.ui.widget;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easemob.chatroommessage.MsgConstant;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.MessageBean;
@@ -119,12 +121,13 @@ public class SingleBarrageView extends BarrageView {
             EMMessageBody body = data.getMessage().getBody();
             if(body instanceof EMCustomMessageBody) {
                 String event = ((EMCustomMessageBody) body).event();
-                if(TextUtils.isEmpty(event) || !TextUtils.equals(event, DemoConstants.CUSTOM_BARRAGE)) {
+                if(TextUtils.isEmpty(event) || !TextUtils.equals(event, MsgConstant.CUSTOM_BARRAGE)) {
                     return;
                 }
                 Map<String, String> params = ((EMCustomMessageBody) body).getParams();
-                if(params.containsKey(DemoConstants.CUSTOM_BARRAGE_KEY_TXT)) {
-                    mContent.setText(params.get(DemoConstants.CUSTOM_BARRAGE_KEY_TXT));
+                if(params.containsKey(MsgConstant.CUSTOM_BARRAGE_KEY_TXT)) {
+                    Log.e("TAG", "barrage content = "+params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
+                    mContent.setText(params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
                 }
 
             }

@@ -3,6 +3,7 @@ package com.easemob.livedemo.common;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.easemob.chatroommessage.MsgConstant;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -167,16 +168,16 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, DemoConstants.CUSTOM_GIFT)) {
+        if(!TextUtils.equals(event, MsgConstant.CUSTOM_GIFT)) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();
         Set<String> keySet = params.keySet();
         String gift_id = null;
         String gift_num = null;
-        if(keySet.contains(DemoConstants.CUSTOM_GIFT_KEY_ID) && keySet.contains(DemoConstants.CUSTOM_GIFT_KEY_NUM)) {
-            gift_id = params.get(DemoConstants.CUSTOM_GIFT_KEY_ID);
-            gift_num = params.get(DemoConstants.CUSTOM_GIFT_KEY_NUM);
+        if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_ID) && keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
+            gift_id = params.get(MsgConstant.CUSTOM_GIFT_KEY_ID);
+            gift_num = params.get(MsgConstant.CUSTOM_GIFT_KEY_NUM);
             ReceiveGiftEntity entity = new ReceiveGiftEntity();
             entity.setFrom(message.getFrom());
             entity.setTo(message.getTo());
@@ -188,7 +189,7 @@ public class DemoHelper {
                 Log.e("TAG", "保存数据失败！");
             }else {
                 Log.i("TAG", "保存数据成功");
-                LiveDataBus.get().with(DemoConstants.CUSTOM_GIFT).postValue(true);
+                LiveDataBus.get().with(MsgConstant.CUSTOM_GIFT).postValue(true);
             }
         }
     }
@@ -206,14 +207,14 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, DemoConstants.CUSTOM_LIKE)) {
+        if(!TextUtils.equals(event, MsgConstant.CUSTOM_LIKE)) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();
         Set<String> keySet = params.keySet();
         String num = null;
-        if(keySet.contains(DemoConstants.CUSTOM_LIKE_KEY_NUM)) {
-            num = params.get(DemoConstants.CUSTOM_LIKE_KEY_NUM);
+        if(keySet.contains(MsgConstant.CUSTOM_LIKE_KEY_NUM)) {
+            num = params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM);
         }
         if(!TextUtils.isEmpty(num)) {
             int like_num = Integer.valueOf(num);

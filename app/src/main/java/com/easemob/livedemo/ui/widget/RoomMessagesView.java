@@ -27,6 +27,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.chatroommessage.MsgConstant;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
@@ -244,13 +245,13 @@ public class RoomMessagesView extends RelativeLayout{
                 String event = body.event();
                 if(!TextUtils.isEmpty(event)) {
                     switch (event) {
-                        case DemoConstants.CUSTOM_GIFT :
+                        case MsgConstant.CUSTOM_GIFT :
                             showGiftMessage(holder.name, nickName, isSelf, body);
                             break;
-                        case DemoConstants.CUSTOM_LIKE :
+                        case MsgConstant.CUSTOM_LIKE :
                             showLikeMessage(holder.name, nickName, isSelf, body);
                             break;
-                        case DemoConstants.CUSTOM_BARRAGE :
+                        case MsgConstant.CUSTOM_BARRAGE :
                             showBarrageMessage(holder.name, nickName, isSelf, body);
                             break;
                     }
@@ -286,8 +287,8 @@ public class RoomMessagesView extends RelativeLayout{
         }
 
         private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
-            GiftBean bean = DemoHelper.getGiftById(body.getParams().get(DemoConstants.CUSTOM_GIFT_KEY_ID));
-            String num = body.getParams().get(DemoConstants.CUSTOM_LIKE_KEY_NUM);
+            GiftBean bean = DemoHelper.getGiftById(body.getParams().get(MsgConstant.CUSTOM_GIFT_KEY_ID));
+            String num = body.getParams().get(MsgConstant.CUSTOM_LIKE_KEY_NUM);
             String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -299,7 +300,7 @@ public class RoomMessagesView extends RelativeLayout{
         }
 
         private void showLikeMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
-            String content = context.getString(R.string.em_live_msg_like, nickName, body.getParams().get(DemoConstants.CUSTOM_LIKE_KEY_NUM));
+            String content = context.getString(R.string.em_live_msg_like, nickName, body.getParams().get(MsgConstant.CUSTOM_LIKE_KEY_NUM));
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
@@ -310,7 +311,7 @@ public class RoomMessagesView extends RelativeLayout{
         }
 
         private void showBarrageMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
-            showText(name, nickName, isSelf, body.getParams().get(DemoConstants.CUSTOM_BARRAGE_KEY_TXT));
+            showText(name, nickName, isSelf, body.getParams().get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
         }
 
         @Override

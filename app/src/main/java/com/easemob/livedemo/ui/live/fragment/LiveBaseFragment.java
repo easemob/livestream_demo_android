@@ -4,19 +4,20 @@ import android.animation.ObjectAnimator;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.easemob.chatroommessage.ChatRoomMsgHelper;
+import com.easemob.chatroommessage.MsgConstant;
+import com.easemob.chatroommessage.OnCustomMsgReceiveListener;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
@@ -24,15 +25,13 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
-import com.easemob.livedemo.common.OnMsgCallBack;
-import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
+import com.easemob.chatroommessage.OnMsgCallBack;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.activity.BaseLiveFragment;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
 import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
 import com.easemob.livedemo.ui.live.ChatRoomPresenter;
-import com.easemob.livedemo.ui.live.LiveBaseActivity;
 import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
@@ -40,14 +39,9 @@ import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
 import com.easemob.livedemo.ui.widget.SingleBarrageView;
 import com.easemob.livedemo.utils.Utils;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.EMChatRoomChangeListener;
-import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.exceptions.HyphenateException;
@@ -56,12 +50,13 @@ import com.hyphenate.util.EMLog;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.OnClick;
 
-public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener {
+public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnCustomMsgReceiveListener {
     private static final int MAX_SIZE = 10;
     protected static final String TAG = "LiveActivity";
     @BindView(R.id.iv_icon)
@@ -138,6 +133,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         chatroomId = liveRoom.getId();
         anchorId = liveRoom.getOwner();
 
+        //设置相关的直播间信息
+        ChatRoomMsgHelper.getInstance().setChatRoomInfo(chatroomId, EMClient.getInstance().getCurrentUser());
+
         usernameView.setText(anchorId);
         liveIdView.setText(getString(R.string.em_live_room_id, liveId));
         audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
@@ -162,6 +160,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         liveReceiveGift.setOnClickListener(this);
         getView().setOnTouchListener(this);
         presenter.setOnChatRoomListener(this);
+        ChatRoomMsgHelper.getInstance().setOnCustomMsgReceiveListener(this);
     }
 
     @Override
@@ -532,20 +531,29 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     @Override
-    public void onReceivePraiseMsg(int count) {
-        showPraise(count);
+    public void onReceiveGiftMsg(EMMessage message) {
+        DemoHelper.saveGiftInfo(message);
+        Map<String, String> params = ChatRoomMsgHelper.getInstance().getCustomMsgParams(message);
+        Set<String> keySet = params.keySet();
+        if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
+            GiftBean bean = DemoHelper.getGiftById(params.get(MsgConstant.CUSTOM_GIFT_KEY_ID));
+            if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
+                bean.setNum(Integer.valueOf(params.get(MsgConstant.CUSTOM_GIFT_KEY_NUM)));
+                barrageLayout.showGift(bean);
+            }
+        }
+
     }
 
-    /**
-     * 收到礼物
-     * @param giftId
-     * @param num
-     */
     @Override
-    public void onReceiveGiftMsg(String giftId, String num) {
-        GiftBean bean = DemoHelper.getGiftById(giftId);
-        bean.setNum(Integer.valueOf(num));
-        barrageLayout.showGift(bean);
+    public void onReceivePraiseMsg(EMMessage message) {
+        DemoHelper.saveLikeInfo(message);
+        Map<String, String> params = ChatRoomMsgHelper.getInstance().getCustomMsgParams(message);
+        Set<String> keySet = params.keySet();
+        if(keySet.contains(MsgConstant.CUSTOM_LIKE_KEY_NUM)) {
+            showPraise(Integer.valueOf(params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM)));
+        }
+
     }
 
     /**

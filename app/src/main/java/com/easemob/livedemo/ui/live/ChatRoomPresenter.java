@@ -3,6 +3,7 @@ package com.easemob.livedemo.ui.live;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.easemob.chatroommessage.OnMsgCallBack;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
@@ -141,34 +142,6 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
                 if(onChatRoomListener != null) {
                     onChatRoomListener.onMessageReceived();
                 }
-                if(message.getType() == EMMessage.Type.CUSTOM) {
-                    EMCustomMessageBody body = (EMCustomMessageBody) message.getBody();
-                    String event = body.event();
-                    if(TextUtils.isEmpty(event)) {
-                        return;
-                    }
-                    Map<String, String> params = body.getParams();
-                    switch (event) {
-                        case DemoConstants.CUSTOM_GIFT :
-                            DemoHelper.saveGiftInfo(message);
-                            if(onChatRoomListener != null) {
-                                onChatRoomListener.onReceiveGiftMsg(params.get(DemoConstants.CUSTOM_GIFT_KEY_ID),
-                                        params.get(DemoConstants.CUSTOM_GIFT_KEY_NUM));
-                            }
-                            break;
-                        case DemoConstants.CUSTOM_LIKE :
-                            if(onChatRoomListener != null) {
-                                onChatRoomListener.onReceivePraiseMsg(Integer.valueOf(params.get(DemoConstants.CUSTOM_LIKE_KEY_NUM)));
-                            }
-                            break;
-                        case DemoConstants.CUSTOM_BARRAGE :
-                            if(onChatRoomListener != null) {
-                                onChatRoomListener.onReceiveBarrageMsg(message);
-                            }
-                            break;
-                    }
-
-                }
             }
         }
     }
@@ -233,9 +206,9 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
      * @param praiseCount
      */
     public void sendPraiseMessage(int praiseCount) {
-        DemoMsgHelper.getInstance().sendLikeMsg(praiseCount, new EMCallBack() {
+        DemoMsgHelper.getInstance().sendLikeMsg(praiseCount, new OnMsgCallBack() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(EMMessage message) {
                 Log.e("TAG", "send praise message success");
                 ThreadManager.getInstance().runOnMainThread(()-> {
                     if(onChatRoomListener != null) {
@@ -266,9 +239,9 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
      * @param callBack
      */
     public void sendGiftMsg(GiftBean bean, EMCallBack callBack) {
-        DemoMsgHelper.getInstance().sendGiftMsg(bean.getId(), bean.getNum(), new EMCallBack() {
+        DemoMsgHelper.getInstance().sendGiftMsg(bean.getId(), bean.getNum(), new OnMsgCallBack() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(EMMessage message) {
                 if(callBack != null) {
                     callBack.onSuccess();
                 }
@@ -323,23 +296,5 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
          */
         void onMessageChanged();
 
-        /**
-         * 显示点赞
-         * @param count
-         */
-        void onReceivePraiseMsg(int count);
-
-        /**
-         * 收到礼物
-         * @param giftId
-         * @param num
-         */
-        void onReceiveGiftMsg(String giftId, String num);
-
-        /**
-         * 收到弹幕消息
-         * @param message
-         */
-        void onReceiveBarrageMsg(EMMessage message);
     }
 }
