@@ -211,7 +211,7 @@
         android:id="@+id/layout_management"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:constraint_referenced_ids="layout_live_no_talk,layout_live_add_whitelist" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

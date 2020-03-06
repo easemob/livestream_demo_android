@@ -119,6 +119,8 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
             parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
                 @Override
                 public void onSuccess(EMChatRoom data) {
+                    chatRoom = data;
+                    isAllMuted = chatRoom.isAllMemberMuted();
                     executeFetchTask();
                 }
             });
@@ -204,6 +206,8 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
             public TextView tvLabel;
             @BindView(R.id.switch_mute)
             public Switch switchMute;
+            @BindView(R.id.tv_mute_hint)
+            public TextView tvMuteHint;
 
             public ManagementViewHolder(View itemView) {
                 super(itemView);

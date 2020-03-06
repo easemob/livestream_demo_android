@@ -51,7 +51,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.em_activity_live_anchor);
         ButterKnife.bind(this);
-        setFitSystemForTheme(false, android.R.color.transparent);
+        setFitSystemForTheme(true, R.color.black);
     }
 
     @Override

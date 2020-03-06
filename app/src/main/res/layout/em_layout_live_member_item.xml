@@ -78,4 +78,18 @@
         android:layout_marginEnd="@dimen/em_margin_15"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/tv_mute_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="房间禁言"
+        android:textColor="@color/gray_normal"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintRight_toLeftOf="@id/switch_mute"
+        app:layout_constraintTop_toTopOf="@id/switch_mute"
+        app:layout_constraintBottom_toBottomOf="@id/switch_mute"
+        android:layout_marginRight="@dimen/em_margin_5"
+        android:layout_marginEnd="@dimen/em_margin_5"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

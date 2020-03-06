@@ -166,7 +166,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         dialog.setOnItemClickListener(new LiveMemberListDialog.OnMemberItemClickListener() {
             @Override
             public void OnMemberItemClick(View view, int position, String member) {
-                showUserDetailsDialog(member);
+//                showUserDetailsDialog(member);
             }
         });
     }

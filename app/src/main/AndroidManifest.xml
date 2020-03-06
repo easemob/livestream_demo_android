@@ -25,7 +25,8 @@
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/em_live_logo"
+        android:roundIcon="@mipmap/em_live_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -41,6 +42,7 @@
         </activity>
         <activity
             android:name=".ui.live.LiveAudienceActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
             <meta-data
@@ -53,6 +55,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.live.LiveAnchorActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

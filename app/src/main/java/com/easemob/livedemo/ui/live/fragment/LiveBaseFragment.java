@@ -394,7 +394,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             @Override
             public void onItemClick(View view, int position) {
                 String item = avatarAdapter.getItem(position);
-                showUserDetailsDialog(item);
+                skipToListDialog();
             }
         });
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<Void>() {
