@@ -13,17 +13,17 @@ import android.graphics.drawable.GradientDrawable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +31,7 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
-import com.easemob.livedemo.data.UserRepository;
 import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.utils.KeyboardUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -55,6 +53,8 @@ public class RoomMessagesView extends RelativeLayout{
     ImageView sendBtn;
     View sendContainer;
     ImageView closeView;
+    Switch switchMsgType;
+    boolean isBarrageMsg;
     //ImageView danmuImage;
 
     public boolean isBarrageShow = false;
@@ -81,6 +81,7 @@ public class RoomMessagesView extends RelativeLayout{
         sendBtn = (ImageView) findViewById(R.id.btn_send);
         closeView = (ImageView) findViewById(R.id.close_image);
         sendContainer = findViewById(R.id.container_send);
+        switchMsgType = findViewById(R.id.switch_msg_type);
         //danmuImage = (ImageView) findViewById(R.id.danmu_image);
 
     }
@@ -108,7 +109,7 @@ public class RoomMessagesView extends RelativeLayout{
                         Toast.makeText(getContext(), "文字内容不能为空！", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    messageViewListener.onMessageSend(editview.getText().toString());
+                    messageViewListener.onMessageSend(editview.getText().toString(), isBarrageMsg);
                     editview.setText("");
                 }
             }
@@ -121,6 +122,12 @@ public class RoomMessagesView extends RelativeLayout{
                 if(messageViewListener != null){
                     messageViewListener.onHiderBottomBar();
                 }
+            }
+        });
+        switchMsgType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isBarrageMsg = isChecked;
             }
         });
 
@@ -174,7 +181,7 @@ public class RoomMessagesView extends RelativeLayout{
 
     private MessageViewListener messageViewListener;
     public interface MessageViewListener{
-        void onMessageSend(String content);
+        void onMessageSend(String content, boolean isBarrageMsg);
         void onItemClickListener(EMMessage message);
         void onHiderBottomBar();
     }

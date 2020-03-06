@@ -163,7 +163,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
                             break;
                         case DemoConstants.CUSTOM_BARRAGE :
                             if(onChatRoomListener != null) {
-                                onChatRoomListener.onReceiveBarrageMsg(params.get(DemoConstants.CUSTOM_BARRAGE_KEY_TXT));
+                                onChatRoomListener.onReceiveBarrageMsg(message);
                             }
                             break;
                     }
@@ -338,8 +338,8 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
 
         /**
          * 收到弹幕消息
-         * @param txt
+         * @param message
          */
-        void onReceiveBarrageMsg(String txt);
+        void onReceiveBarrageMsg(EMMessage message);
     }
 }

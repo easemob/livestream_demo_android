@@ -28,4 +28,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/em_tabs_text_color_selector</item>
     </style>
+
+    <style name="SwitchTheme" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">@color/em_switch_text_selector</item>
+    </style>
 </resources>

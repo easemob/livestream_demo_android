@@ -7,18 +7,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.MessageBean;
 import com.easemob.livedemo.ui.widget.barrage.BarrageAdapter;
 import com.easemob.livedemo.ui.widget.barrage.BarrageView;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMTextMessageBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SingleBarrageView extends BarrageView {
     private BarrageAdapter<MessageBean> mAdapter;
@@ -44,7 +47,7 @@ public class SingleBarrageView extends BarrageView {
                 .setInterval(100)                                     // 设置弹幕的发送间隔
                 .setSpeed(200,29)                   // 设置速度和波动值
                 .setModel(BarrageView.MODEL_COLLISION_DETECTION)     // 设置弹幕生成模式
-                .setRepeat(-1)                                       // 循环播放 默认为1次 -1 为无限循环
+                .setRepeat(1)                                       // 循环播放 默认为1次 -1 为无限循环
                 .setClick(false);                                    // 设置弹幕是否可以点击
         setOptions(options);
 
@@ -70,6 +73,13 @@ public class SingleBarrageView extends BarrageView {
         if(!TextUtils.isEmpty(chatId)) {
             setData(chatId);
         }
+    }
+
+    public void addData(EMMessage message) {
+        MessageBean bean = new MessageBean();
+        bean.setMessage(message);
+        bean.setType(message.getType().ordinal());
+        mAdapter.add(bean);
     }
 
     public void setData(String id) {
@@ -107,9 +117,16 @@ public class SingleBarrageView extends BarrageView {
         @Override
         protected void onBind(MessageBean data) {
             EMMessageBody body = data.getMessage().getBody();
-            if(body instanceof EMTextMessageBody) {
-                String content = ((EMTextMessageBody) body).getMessage();
-                mContent.setText(content);
+            if(body instanceof EMCustomMessageBody) {
+                String event = ((EMCustomMessageBody) body).event();
+                if(TextUtils.isEmpty(event) || !TextUtils.equals(event, DemoConstants.CUSTOM_BARRAGE)) {
+                    return;
+                }
+                Map<String, String> params = ((EMCustomMessageBody) body).getParams();
+                if(params.containsKey(DemoConstants.CUSTOM_BARRAGE_KEY_TXT)) {
+                    mContent.setText(params.get(DemoConstants.CUSTOM_BARRAGE_KEY_TXT));
+                }
+
             }
         }
     }

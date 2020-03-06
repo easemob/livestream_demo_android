@@ -24,6 +24,7 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
+import com.easemob.livedemo.common.OnMsgCallBack;
 import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
@@ -293,16 +294,18 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         requireActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
                 messageView.init(chatroomId);
-                barrageView.setData(chatroomId);
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override
-                    public void onMessageSend(String content) {
-                        DemoMsgHelper.getInstance().sendTxtMsg(content, new EMCallBack() {
+                    public void onMessageSend(String content, boolean isBarrageMsg) {
+                        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnMsgCallBack() {
                             @Override
-                            public void onSuccess() {
+                            public void onSuccess(EMMessage message) {
                                 //刷新消息列表
                                 messageView.refreshSelectLast();
-                                barrageView.refresh();
+
+                                if(isBarrageMsg) {
+                                    barrageView.addData(message);
+                                }
                             }
 
                             @Override
@@ -514,7 +517,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onMessageReceived() {
         messageView.refreshSelectLast();
-        barrageView.refresh();
     }
 
     @Override
@@ -548,10 +550,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     /**
      * 收到弹幕消息
-     * @param txt
+     * @param message
      */
     @Override
-    public void onReceiveBarrageMsg(String txt) {
-
+    public void onReceiveBarrageMsg(EMMessage message) {
+        barrageView.addData(message);
     }
 }

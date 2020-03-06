@@ -19,8 +19,23 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:visibility="invisible"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
+
+        <Switch
+            android:id="@+id/switch_msg_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/em_margin_15"
+            android:layout_marginStart="@dimen/em_margin_15"
+            android:layout_marginRight="@dimen/em_margin_5"
+            android:layout_marginEnd="@dimen/em_margin_5"
+            android:thumb="@drawable/em_switch_thumb_selector"
+            android:track="@drawable/em_switch_track_selector"
+            android:textOff="@string/em_live_msg_normal"
+            android:textOn="@string/em_live_msg_barrage"
+            android:showText="true"
+            android:switchTextAppearance="@style/SwitchTheme"/>
+
         <ImageView
             android:id="@+id/close_image"
             android:layout_width="20dp"
@@ -30,6 +45,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="9dp"
             android:clickable="true"
+            android:visibility="gone"
             />
       <!--  <ImageView
             android:id="@+id/danmu_image"
