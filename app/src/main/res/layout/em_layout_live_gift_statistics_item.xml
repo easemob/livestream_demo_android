@@ -29,7 +29,7 @@
         android:layout_marginEnd="@dimen/em_margin_30"
         android:layout_marginLeft="@dimen/em_margin_10"
         android:layout_marginStart="@dimen/em_margin_10"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="@dimen/em_size_normal"/>
 
     <com.hyphenate.easeui.widget.EaseImageView

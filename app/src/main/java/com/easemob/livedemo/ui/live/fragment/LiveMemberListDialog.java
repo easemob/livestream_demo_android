@@ -7,13 +7,16 @@ import android.widget.TextView;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.OnItemClickListener;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.ui.live.adapter.LiveMemberAdapter;
+import com.easemob.livedemo.ui.live.viewmodels.LiveMemberListViewModel;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.List;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +28,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
     private LiveMemberAdapter adapter;
     private String chatRoomId;
     private OnMemberItemClickListener listener;
+    private LiveMemberListViewModel viewModel;
 
     public static LiveMemberListDialog getNewInstance(String chatRoomId) {
         LiveMemberListDialog dialog = new LiveMemberListDialog();
@@ -61,6 +65,21 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
     }
 
     @Override
+    public void initViewModel() {
+        super.initViewModel();
+        viewModel = new ViewModelProvider(this).get(LiveMemberListViewModel.class);
+        viewModel.getMembersObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<String>>() {
+                @Override
+                public void onSuccess(List<String> list) {
+                    tvMemberNum.setText(getString(R.string.em_live_member_num, list.size()));
+                    adapter.setData(list);
+                }
+            });
+        });
+    }
+
+    @Override
     public void initListener() {
         super.initListener();
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -80,21 +99,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
     }
 
     private void getMemberList() {
-        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<List<String>>() {
-            @Override public List<String> onRequest() throws HyphenateException {
-                EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(chatRoomId, true);
-                return chatRoom.getMemberList();
-            }
-
-            @Override public void onSuccess(List<String> list) {
-                tvMemberNum.setText(getString(R.string.em_live_member_num, list.size()));
-                adapter.setData(list);
-            }
-
-            @Override public void onError(HyphenateException exception) {
-
-            }
-        });
+        viewModel.getMembers(chatRoomId);
     }
 
     public void setOnItemClickListener(OnMemberItemClickListener listener) {

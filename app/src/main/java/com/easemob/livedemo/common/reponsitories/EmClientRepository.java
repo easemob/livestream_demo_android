@@ -224,6 +224,28 @@ public class EmClientRepository extends BaseEMRepository {
     }
 
     /**
+     * 获取成员列表（不包含owner和admins）
+     * @param chatRoomId
+     * @return
+     */
+    public LiveData<Resource<List<String>>> getOnlyMembers(String chatRoomId) {
+        return new NetworkOnlyResource<List<String>, List<String>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
+                ThreadManager.getInstance().runOnIOThread(()-> {
+                    try {
+                        EMChatRoom chatRoom = getChatRoomManager().fetchChatRoomFromServer(chatRoomId, true);
+                        List<String> memberList = chatRoom.getMemberList();
+                        callBack.onSuccess(createLiveData(memberList));
+                    } catch (HyphenateException e) {
+                        callBack.onError(e.getErrorCode(), e.getMessage());
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
      * 获取成员列表
      * @param roomId
      * @return
