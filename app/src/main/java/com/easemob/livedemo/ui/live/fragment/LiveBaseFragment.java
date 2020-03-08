@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.easemob.chatroommessage.ChatRoomMsgHelper;
+import com.easemob.chatroommessage.EmCustomMsgHelper;
 import com.easemob.chatroommessage.MsgConstant;
 import com.easemob.chatroommessage.OnCustomMsgReceiveListener;
 import com.easemob.livedemo.DemoConstants;
@@ -134,7 +134,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         anchorId = liveRoom.getOwner();
 
         //设置相关的直播间信息
-        ChatRoomMsgHelper.getInstance().setChatRoomInfo(chatroomId, EMClient.getInstance().getCurrentUser());
+        EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId, EMClient.getInstance().getCurrentUser());
 
         usernameView.setText(anchorId);
         liveIdView.setText(getString(R.string.em_live_room_id, liveId));
@@ -160,7 +160,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         liveReceiveGift.setOnClickListener(this);
         getView().setOnTouchListener(this);
         presenter.setOnChatRoomListener(this);
-        ChatRoomMsgHelper.getInstance().setOnCustomMsgReceiveListener(this);
+        EmCustomMsgHelper.getInstance().setOnCustomMsgReceiveListener(this);
     }
 
     @Override
@@ -533,7 +533,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onReceiveGiftMsg(EMMessage message) {
         DemoHelper.saveGiftInfo(message);
-        Map<String, String> params = ChatRoomMsgHelper.getInstance().getCustomMsgParams(message);
+        Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(message);
         Set<String> keySet = params.keySet();
         if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
             GiftBean bean = DemoHelper.getGiftById(params.get(MsgConstant.CUSTOM_GIFT_KEY_ID));
@@ -548,7 +548,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onReceivePraiseMsg(EMMessage message) {
         DemoHelper.saveLikeInfo(message);
-        Map<String, String> params = ChatRoomMsgHelper.getInstance().getCustomMsgParams(message);
+        Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(message);
         Set<String> keySet = params.keySet();
         if(keySet.contains(MsgConstant.CUSTOM_LIKE_KEY_NUM)) {
             showPraise(Integer.valueOf(params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM)));

@@ -27,6 +27,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.chatroommessage.EmCustomMsgHelper;
+import com.easemob.chatroommessage.EmCustomMsgType;
 import com.easemob.chatroommessage.MsgConstant;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -243,17 +245,18 @@ public class RoomMessagesView extends RelativeLayout{
                 }
             }else if(message.getBody() instanceof EMCustomMessageBody) {
                 EMCustomMessageBody body = (EMCustomMessageBody) message.getBody();
-                String event = body.event();
-                if(!TextUtils.isEmpty(event)) {
-                    switch (event) {
-                        case MsgConstant.CUSTOM_GIFT :
-                            showGiftMessage(holder.name, nickName, isSelf, body);
+                Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(message);
+                EmCustomMsgType msgType = EmCustomMsgHelper.getInstance().getCustomMsgType(body.event());
+                if(msgType != null && params != null) {
+                    switch (msgType) {
+                        case CHATROOM_GIFT:
+                            showGiftMessage(holder.name, nickName, isSelf, params);
                             break;
-                        case MsgConstant.CUSTOM_LIKE :
-                            showLikeMessage(holder.name, nickName, isSelf, body);
+                        case CHATROOM_LIKE:
+                            showLikeMessage(holder.name, nickName, isSelf, params);
                             break;
-                        case MsgConstant.CUSTOM_BARRAGE :
-                            showBarrageMessage(holder.name, nickName, isSelf, body);
+                        case CHATROOM_BARRAGE:
+                            showBarrageMessage(holder.name, nickName, isSelf, params);
                             break;
                     }
                 }
@@ -287,9 +290,9 @@ public class RoomMessagesView extends RelativeLayout{
             name.setText(span);
         }
 
-        private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
-            GiftBean bean = DemoHelper.getGiftById(body.getParams().get(MsgConstant.CUSTOM_GIFT_KEY_ID));
-            String num = body.getParams().get(MsgConstant.CUSTOM_LIKE_KEY_NUM);
+        private void showGiftMessage(TextView name, String nickName, boolean isSelf, Map<String, String> params) {
+            GiftBean bean = DemoHelper.getGiftById(params.get(MsgConstant.CUSTOM_GIFT_KEY_ID));
+            String num =params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM);
             String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -300,8 +303,8 @@ public class RoomMessagesView extends RelativeLayout{
             name.setText(span);
         }
 
-        private void showLikeMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
-            String content = context.getString(R.string.em_live_msg_like, nickName, body.getParams().get(MsgConstant.CUSTOM_LIKE_KEY_NUM));
+        private void showLikeMessage(TextView name, String nickName, boolean isSelf, Map<String, String> params) {
+            String content = context.getString(R.string.em_live_msg_like, nickName, params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM));
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
@@ -311,8 +314,8 @@ public class RoomMessagesView extends RelativeLayout{
             name.setText(span);
         }
 
-        private void showBarrageMessage(TextView name, String nickName, boolean isSelf, EMCustomMessageBody body) {
-            showText(name, nickName, isSelf, body.getParams().get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
+        private void showBarrageMessage(TextView name, String nickName, boolean isSelf, Map<String, String> params) {
+            showText(name, nickName, isSelf, params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
         }
 
         @Override

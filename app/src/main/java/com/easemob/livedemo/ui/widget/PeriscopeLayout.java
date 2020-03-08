@@ -27,6 +27,7 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
@@ -130,7 +131,6 @@ public class PeriscopeLayout extends RelativeLayout {
         Animator set = getAnimator(imageView);
         set.addListener(new AnimEndListener(imageView));
         set.start();
-
     }
 
     private Animator getAnimator(View target) {
@@ -214,8 +214,20 @@ public class PeriscopeLayout extends RelativeLayout {
         }
 
         @Override
+        public void onAnimationStart(Animator animation) {
+            super.onAnimationStart(animation);
+            Log.e("TAG", "onAnimationStart1 animation = "+animation + " targetView = "+target);
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation, boolean isReverse) {
+            Log.e("TAG", "onAnimationStart2 animation = "+animation + " targetView = "+target);
+        }
+
+        @Override
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
+            Log.e("TAG", "onAnimationEnd animation" + animation + " targetView = "+target);
             //因为不停的add 导致子view数量只增不减,所以在view动画结束后remove掉
             removeView((target));
         }

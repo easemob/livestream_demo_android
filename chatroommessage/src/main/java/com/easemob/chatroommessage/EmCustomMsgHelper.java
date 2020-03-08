@@ -14,20 +14,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatRoomMsgHelper implements EMMessageListener {
-    private static ChatRoomMsgHelper instance;
-    private ChatRoomMsgHelper(){}
+public class EmCustomMsgHelper implements EMMessageListener {
+    private static EmCustomMsgHelper instance;
+    private EmCustomMsgHelper(){}
 
     private Context context;
     private String chatRoomId;
     private String currentUser;
     private OnCustomMsgReceiveListener listener;
 
-    public static ChatRoomMsgHelper getInstance() {
+    public static EmCustomMsgHelper getInstance() {
         if(instance == null) {
-            synchronized (ChatRoomMsgHelper.class) {
+            synchronized (EmCustomMsgHelper.class) {
                 if(instance == null) {
-                    instance = new ChatRoomMsgHelper();
+                    instance = new EmCustomMsgHelper();
                 }
             }
         }
@@ -73,23 +73,30 @@ public class ChatRoomMsgHelper implements EMMessageListener {
                     if(TextUtils.isEmpty(event)) {
                         return;
                     }
-                    switch (event) {
-                        case MsgConstant.CUSTOM_GIFT :
-                            if(listener != null) {
-                                listener.onReceiveGiftMsg(message);
-                            }
-                            break;
-                        case MsgConstant.CUSTOM_LIKE :
-                            if(listener != null) {
-                                listener.onReceivePraiseMsg(message);
-                            }
-                            break;
-                        case MsgConstant.CUSTOM_BARRAGE :
-                            if(listener != null) {
-                                listener.onReceiveBarrageMsg(message);
-                            }
-                            break;
+                    EmCustomMsgType msgType = null;
+                    try {
+                        msgType = EmCustomMsgType.valueOf(event);
+                        switch (msgType) {
+                            case CHATROOM_GIFT:
+                                if(listener != null) {
+                                    listener.onReceiveGiftMsg(message);
+                                }
+                                break;
+                            case CHATROOM_LIKE:
+                                if(listener != null) {
+                                    listener.onReceivePraiseMsg(message);
+                                }
+                                break;
+                            case CHATROOM_BARRAGE:
+                                if(listener != null) {
+                                    listener.onReceiveBarrageMsg(message);
+                                }
+                                break;
+                        }
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
                     }
+
 
                 }
             }
@@ -141,7 +148,7 @@ public class ChatRoomMsgHelper implements EMMessageListener {
      */
     public void sendGiftMsg(Map<String, String> params, final OnMsgCallBack callBack) {
         final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(MsgConstant.CUSTOM_GIFT);
+        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_GIFT.name());
         body.setParams(params);
         sendMessage.addBody(body);
         sendMessage.setTo(chatRoomId);
@@ -196,7 +203,7 @@ public class ChatRoomMsgHelper implements EMMessageListener {
             return;
         }
         final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(MsgConstant.CUSTOM_LIKE);
+        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_LIKE.name());
         body.setParams(params);
         sendMessage.addBody(body);
         sendMessage.setTo(chatRoomId);
@@ -251,7 +258,7 @@ public class ChatRoomMsgHelper implements EMMessageListener {
             return;
         }
         final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(MsgConstant.CUSTOM_BARRAGE);
+        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_BARRAGE.name());
         body.setParams(params);
         sendMessage.addBody(body);
         sendMessage.setTo(chatRoomId);
@@ -296,5 +303,22 @@ public class ChatRoomMsgHelper implements EMMessageListener {
             return null;
         }
         return ((EMCustomMessageBody) body).getParams();
+    }
+
+    /**
+     * 获取自定义消息类型
+     * @param event
+     * @return
+     */
+    public EmCustomMsgType getCustomMsgType(String event) {
+        if(TextUtils.isEmpty(event)) {
+            return null;
+        }
+        try {
+            return EmCustomMsgType.valueOf(event);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

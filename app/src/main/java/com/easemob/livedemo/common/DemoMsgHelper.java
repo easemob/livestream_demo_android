@@ -1,17 +1,10 @@
 package com.easemob.livedemo.common;
 
-import android.text.TextUtils;
-
-import com.easemob.chatroommessage.ChatRoomMsgHelper;
+import com.easemob.chatroommessage.EmCustomMsgHelper;
 import com.easemob.chatroommessage.OnMsgCallBack;
-import com.easemob.livedemo.DemoConstants;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class DemoMsgHelper {
     private static DemoMsgHelper instance;
@@ -85,7 +78,7 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendGiftMsg(String giftId, int num, OnMsgCallBack callBack) {
-        ChatRoomMsgHelper.getInstance().sendGiftMsg(giftId, num, callBack);
+        EmCustomMsgHelper.getInstance().sendGiftMsg(giftId, num, callBack);
     }
 
     /**
@@ -94,7 +87,7 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendLikeMsg(int num, OnMsgCallBack callBack) {
-        ChatRoomMsgHelper.getInstance().sendLikeMsg(num, callBack);
+        EmCustomMsgHelper.getInstance().sendLikeMsg(num, callBack);
     }
 
     /**
@@ -103,6 +96,6 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendBarrageMsg(String content, OnMsgCallBack callBack) {
-        ChatRoomMsgHelper.getInstance().sendBarrageMsg(content, callBack);
+        EmCustomMsgHelper.getInstance().sendBarrageMsg(content, callBack);
     }
 }

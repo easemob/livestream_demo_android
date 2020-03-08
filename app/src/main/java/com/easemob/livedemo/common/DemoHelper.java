@@ -3,6 +3,7 @@ package com.easemob.livedemo.common;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.easemob.chatroommessage.EmCustomMsgType;
 import com.easemob.chatroommessage.MsgConstant;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.DemoConstants;
@@ -168,7 +169,7 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, MsgConstant.CUSTOM_GIFT)) {
+        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_GIFT.name())) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();
@@ -189,7 +190,7 @@ public class DemoHelper {
                 Log.e("TAG", "保存数据失败！");
             }else {
                 Log.i("TAG", "保存数据成功");
-                LiveDataBus.get().with(MsgConstant.CUSTOM_GIFT).postValue(true);
+                LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST).postValue(true);
             }
         }
     }
@@ -207,7 +208,7 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, MsgConstant.CUSTOM_LIKE)) {
+        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_LIKE.name())) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();
