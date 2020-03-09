@@ -169,7 +169,7 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_GIFT.name())) {
+        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_GIFT.name().toLowerCase())) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();
@@ -208,7 +208,7 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_LIKE.name())) {
+        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_LIKE.name().toLowerCase())) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();

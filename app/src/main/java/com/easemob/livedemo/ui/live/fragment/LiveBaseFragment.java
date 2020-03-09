@@ -27,6 +27,7 @@ import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.chatroommessage.OnMsgCallBack;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
@@ -37,6 +38,7 @@ import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
 import com.easemob.livedemo.ui.live.ChatRoomPresenter;
 import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
+import com.easemob.livedemo.ui.viewmodels.UserManageViewModel;
 import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
@@ -119,6 +121,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected boolean isMessageListInited;
     protected ChatRoomPresenter presenter;
     protected LivingViewModel viewModel;
+    private UserManageViewModel userManageViewModel;
+    private long joinTime;
 
     @Override
     protected void initArgument() {
@@ -152,6 +156,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void initViewModel() {
         super.initViewModel();
         viewModel = new ViewModelProvider(this).get(LivingViewModel.class);
+        userManageViewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
 
     }
 
@@ -169,6 +174,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     protected void initData() {
         super.initData();
+        joinTime = System.currentTimeMillis();
         DemoMsgHelper.getInstance().init(chatroomId);
         barrageView.initBarrage();
     }
@@ -400,46 +406,33 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 skipToListDialog();
             }
         });
-        ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<Void>() {
-            @Override public Void onRequest() throws HyphenateException {
-                try {
-                    chatroom = EMClient.getInstance()
-                            .chatroomManager()
-                            .fetchChatRoomFromServer(chatroomId, true);
+
+        userManageViewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<String>>() {
+                @Override
+                public void onSuccess(List<String> data) {
                     memberList.clear();
-                    List<String> tempList = new ArrayList<>();
-                    tempList.addAll(chatroom.getAdminList());
-                    tempList.addAll(chatroom.getMemberList());
-                    if (tempList.contains(chatroom.getOwner())) {
-                        tempList.remove(chatroom.getOwner());
+                    if (data.contains(chatroom.getOwner())) {
+                        data.remove(chatroom.getOwner());
                     }
-                    if(tempList.size() > MAX_SIZE) {
+                    if(data.size() > MAX_SIZE) {
                         for (int i = 0; i < MAX_SIZE; i++){
-                            memberList.add(i, tempList.get(i));
+                            memberList.add(i, data.get(i));
                         }
                     }else {
-                        memberList.addAll(tempList);
+                        memberList.addAll(data);
                     }
-                } catch (HyphenateException e) {
-                    e.printStackTrace();
+                    int size = chatroom.getMemberCount();
+                    audienceNumView.setText(String.valueOf(size));
+                    membersCount = size;
+                    //观看人数不包含主播
+                    watchedCount = membersCount;
+                    tvMemberNum.setText(String.valueOf(watchedCount));
+                    notifyDataSetChanged();
                 }
-                return null;
-            }
-
-            @Override public void onSuccess(Void aVoid) {
-                int size = chatroom.getMemberCount();
-                audienceNumView.setText(String.valueOf(size));
-                membersCount = size;
-                //观看人数不包含主播
-                watchedCount = membersCount;
-                tvMemberNum.setText(String.valueOf(watchedCount));
-                notifyDataSetChanged();
-            }
-
-            @Override public void onError(HyphenateException exception) {
-
-            }
+            });
         });
+        userManageViewModel.getMembers(chatroomId);
     }
 
     private float preX, preY;
@@ -536,6 +529,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onReceiveGiftMsg(EMMessage message) {
         DemoHelper.saveGiftInfo(message);
+        //加入直播间之前的礼物消息不再展示
+        if(message.getMsgTime() < joinTime - 2000) {
+            return;
+        }
         Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(message);
         Set<String> keySet = params.keySet();
         if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
@@ -551,7 +548,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
             }
         }
-
     }
 
     @Override
