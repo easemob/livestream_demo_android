@@ -82,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:hint="直播名称"
                     android:textSize="18sp"
+                    android:textColor="@color/common_black"
                     />
                 <EditText
                     android:id="@+id/edt_live_desc"
@@ -90,6 +91,7 @@
                     android:layout_marginTop="10dp"
                     android:hint="直播描述"
                     android:textSize="18sp"
+                    android:textColor="@color/common_black"
                     />
               <!--  <EditText
                     android:layout_width="match_parent"

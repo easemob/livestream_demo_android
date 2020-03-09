@@ -40,7 +40,7 @@ public class EmClientRepository extends BaseEMRepository {
                 runOnIOThread(()-> {
                     Map<String, String> headers = new HashMap<String, String>();
                     headers.put("Authorization", "Bearer " + EMClient.getInstance().getAccessToken());
-                    EMHttpClient.getInstance().uploadFile(localPath, null, headers, new EMCloudOperationCallback() {
+                    EMHttpClient.getInstance().uploadFile(localPath, "", headers, new EMCloudOperationCallback() {
                         @Override
                         public void onSuccess(String result) {
                             try {
