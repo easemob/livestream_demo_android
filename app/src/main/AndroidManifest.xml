@@ -55,6 +55,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.live.LiveAnchorActivity"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".ui.activity.MainActivity"
             android:screenOrientation="portrait">
             <meta-data

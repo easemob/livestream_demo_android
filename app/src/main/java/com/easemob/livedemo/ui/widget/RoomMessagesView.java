@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -156,12 +157,12 @@ public class RoomMessagesView extends RelativeLayout{
             SoftKeyboardChangeHelper.setOnSoftKeyboardChangeListener((Activity) getContext(), new SoftKeyboardChangeHelper.OnSoftKeyboardChangeListener() {
                 @Override
                 public void keyboardShow(int height) {
-                    Log.e("TAG", "软键盘展示");
+                    ((View)(RoomMessagesView.this.getParent())).scrollTo(0, height);
                 }
 
                 @Override
                 public void keyboardHide(int height) {
-                    Log.e("TAG", "软键盘隐藏");
+                    ((View)(RoomMessagesView.this.getParent())).scrollTo(0, 0);
                     setShowInputView(false);
                     if(messageViewListener != null){
                         messageViewListener.onHiderBottomBar();
@@ -170,6 +171,27 @@ public class RoomMessagesView extends RelativeLayout{
             });
         }
 
+    }
+
+    /**
+     * 用此方法的前提是Activity + Fragment，且在activity的布局中，子控件中只有一个frameLayout，且用户展示Fragment
+     * @param activity
+     * @return
+     */
+    public View getFragmentView(Activity activity) {
+        FrameLayout content = (FrameLayout) activity.getWindow().getDecorView();
+        View child = content.getChildAt(0);
+        if(child instanceof ViewGroup) {
+            int childCount = ((ViewGroup) child).getChildCount();
+            if(childCount > 0) {
+                for(int i = 0; i < childCount; i++) {
+                    if(((ViewGroup) child).getChildAt(i) instanceof FrameLayout) {
+                        return ((ViewGroup) child).getChildAt(i);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void hideKeyboard() {

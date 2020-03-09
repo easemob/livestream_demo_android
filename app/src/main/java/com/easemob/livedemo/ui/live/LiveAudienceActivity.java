@@ -1,41 +1,14 @@
 package com.easemob.livedemo.ui.live;
 
-import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import com.bumptech.glide.Glide;
-import com.easemob.livedemo.DemoConstants;
+
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ThreadPoolManager;
-import com.easemob.livedemo.common.OnConfirmClickListener;
-import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.data.restapi.LiveManager;
-import com.easemob.livedemo.data.restapi.LiveException;
-import com.easemob.livedemo.data.restapi.model.LiveStatusModule;
-import com.easemob.livedemo.data.restapi.model.StatisticsType;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
-import com.easemob.livedemo.ui.live.fragment.LiveGiftDialog;
-import com.easemob.livedemo.ui.live.fragment.LiveMemberListDialog;
-import com.hyphenate.EMError;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.exceptions.HyphenateException;
 import com.ucloud.uvod.UMediaProfile;
 import com.ucloud.uvod.UPlayerStateListener;
 import com.ucloud.uvod.widget.UVideoView;
@@ -54,7 +27,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.em_activity_live_audience);
         ButterKnife.bind(this);
-        setFitSystemForTheme(true, R.color.black);
+        setFitSystemForTheme(false, android.R.color.transparent);
     }
 
     @Override

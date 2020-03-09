@@ -71,8 +71,8 @@
             android:layout_marginRight="3dp"
             android:textSize="18sp"
             android:textColor="@color/common_black"
-            android:background="@drawable/em_live_input_et_bg_shape"
-            />
+            android:background="@drawable/em_live_input_et_bg_shape"/>
+
         <ImageView
             android:id="@+id/btn_send"
             android:layout_width="60dp"
