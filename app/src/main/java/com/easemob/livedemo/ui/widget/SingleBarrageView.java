@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easemob.chatroommessage.EmCustomMsgHelper;
 import com.easemob.chatroommessage.EmCustomMsgType;
 import com.easemob.chatroommessage.MsgConstant;
 import com.easemob.livedemo.DemoConstants;
@@ -122,12 +123,12 @@ public class SingleBarrageView extends BarrageView {
             EMMessageBody body = data.getMessage().getBody();
             if(body instanceof EMCustomMessageBody) {
                 String event = ((EMCustomMessageBody) body).event();
-                if(TextUtils.isEmpty(event) || !TextUtils.equals(event, EmCustomMsgType.CHATROOM_BARRAGE.name())) {
+                EmCustomMsgType type = EmCustomMsgHelper.getInstance().getCustomMsgType(event);
+                if(type != EmCustomMsgType.CHATROOM_BARRAGE) {
                     return;
                 }
-                Map<String, String> params = ((EMCustomMessageBody) body).getParams();
+                Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(data.getMessage());
                 if(params.containsKey(MsgConstant.CUSTOM_BARRAGE_KEY_TXT)) {
-                    Log.e("TAG", "barrage content = "+params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
                     mContent.setText(params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
                 }
 

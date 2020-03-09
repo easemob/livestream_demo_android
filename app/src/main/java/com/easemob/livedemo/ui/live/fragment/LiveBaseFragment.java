@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,10 @@ import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.chatroommessage.OnMsgCallBack;
+import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.ui.activity.BaseLiveFragment;
 import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
 import com.easemob.livedemo.ui.activity.RoomUserManagementDialog;
@@ -537,9 +540,15 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         Set<String> keySet = params.keySet();
         if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
             GiftBean bean = DemoHelper.getGiftById(params.get(MsgConstant.CUSTOM_GIFT_KEY_ID));
+            User user = new User();
+            user.setUsername(message.getFrom());
+            bean.setUser(user);
             if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
                 bean.setNum(Integer.valueOf(params.get(MsgConstant.CUSTOM_GIFT_KEY_NUM)));
-                barrageLayout.showGift(bean);
+                ThreadManager.getInstance().runOnMainThread(()-> {
+                    barrageLayout.showGift(bean);
+                });
+
             }
         }
 
@@ -562,6 +571,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
      */
     @Override
     public void onReceiveBarrageMsg(EMMessage message) {
-        barrageView.addData(message);
+        ThreadManager.getInstance().runOnMainThread(()-> {
+            barrageView.addData(message);
+        });
     }
 }

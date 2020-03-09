@@ -166,6 +166,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     }
 
     private void initData() {
+        swipeRefreshLayout.setRefreshing(true);
         showLiveList(false);
     }
 

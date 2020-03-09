@@ -8,7 +8,7 @@
       <item name="colorAccent">@color/colorAccent</item>
       <item name="android:windowBackground">@color/colorPrimaryDark</item>
       <item name="android:textColorSecondary">@color/textColorSecondary</item>
-      <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+      <item name="android:textColorPrimary">@color/common_black</item>
   </style>
 
   <style name="ToolbarNormal">
