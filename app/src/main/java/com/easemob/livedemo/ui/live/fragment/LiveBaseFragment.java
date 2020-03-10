@@ -43,6 +43,7 @@ import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
 import com.easemob.livedemo.ui.widget.SingleBarrageView;
+import com.easemob.livedemo.utils.KeyboardUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -490,6 +491,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             case MotionEvent.ACTION_DOWN :
                 preX = ev.getX();
                 preY = ev.getY();
+                hideSoftKeyBoard();
                 break;
             case MotionEvent.ACTION_MOVE:
                 float curX = ev.getX();
@@ -510,6 +512,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 break;
         }
         return true;
+    }
+
+    private void hideSoftKeyBoard() {
+        messageView.hideSoftKeyBoard();
     }
 
     @Override

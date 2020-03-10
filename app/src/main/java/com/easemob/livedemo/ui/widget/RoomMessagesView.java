@@ -17,6 +17,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -123,8 +124,7 @@ public class RoomMessagesView extends RelativeLayout{
         closeView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideKeyboard();
-                setShowInputView(false);
+                hideSoftKeyBoard();
                 if(messageViewListener != null){
                     messageViewListener.onHiderBottomBar();
                 }
@@ -134,6 +134,13 @@ public class RoomMessagesView extends RelativeLayout{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isBarrageMsg = isChecked;
+            }
+        });
+        listview.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideSoftKeyBoard();
+                return false;
             }
         });
 
@@ -173,28 +180,7 @@ public class RoomMessagesView extends RelativeLayout{
 
     }
 
-    /**
-     * 用此方法的前提是Activity + Fragment，且在activity的布局中，子控件中只有一个frameLayout，且用户展示Fragment
-     * @param activity
-     * @return
-     */
-    public View getFragmentView(Activity activity) {
-        FrameLayout content = (FrameLayout) activity.getWindow().getDecorView();
-        View child = content.getChildAt(0);
-        if(child instanceof ViewGroup) {
-            int childCount = ((ViewGroup) child).getChildCount();
-            if(childCount > 0) {
-                for(int i = 0; i < childCount; i++) {
-                    if(((ViewGroup) child).getChildAt(i) instanceof FrameLayout) {
-                        return ((ViewGroup) child).getChildAt(i);
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private void hideKeyboard() {
+    public void hideKeyboard() {
         Utils.hideKeyboard(this);
     }
 
@@ -204,6 +190,14 @@ public class RoomMessagesView extends RelativeLayout{
         }else{
             sendContainer.setVisibility(View.INVISIBLE);
         }
+    }
+
+    /**
+     * 隐藏输入框及软键盘
+     */
+    public void hideSoftKeyBoard() {
+        hideKeyboard();
+        setShowInputView(false);
     }
 
     private MessageViewListener messageViewListener;
@@ -285,6 +279,7 @@ public class RoomMessagesView extends RelativeLayout{
             }
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override public void onClick(View v) {
+                    hideSoftKeyBoard();
                     if (messageViewListener != null) {
                         messageViewListener.onItemClickListener(message);
                     }
