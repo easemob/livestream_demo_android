@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.easemob.livedemo.DemoConstants;
@@ -67,6 +68,8 @@ public class RoomUserDetailsDialog extends DialogFragment {
     TextView tvMuteStatus;
     @BindView(R.id.tv_white_status)
     TextView tvWhiteStatus;
+    @BindView(R.id.iv_close)
+    ImageView ivClose;
 
     private BaseActivity mContext;
     private String username;
@@ -293,6 +296,11 @@ public class RoomUserDetailsDialog extends DialogFragment {
         //  }
         //});
         //EMClient.getInstance().chatroomManager().asyncAddChatRoomAdmin(chatroomId, a);
+    }
+
+    @OnClick(R.id.iv_close)
+    void closeDialog() {
+        dismiss();
     }
 
     private List<String> getUserList() {

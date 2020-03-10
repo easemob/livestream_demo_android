@@ -96,6 +96,17 @@
         android:text="@string/em_live_user_star"
         style="@style/em_live_user_tv_num_title"/>
 
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/em_close_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:padding="10dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginRight="@dimen/em_margin_30"/>
+
 
     <LinearLayout
         android:id="@+id/layout_live_no_talk"
