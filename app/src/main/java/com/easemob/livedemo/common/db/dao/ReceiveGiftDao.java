@@ -18,15 +18,18 @@ public interface ReceiveGiftDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<ReceiveGiftEntity> entities);
 
-    @Query("select count(distinct `from`) from em_receive_gift")
-    LiveData<Integer> loadSenders();
+    @Query("select count(distinct `from`) from em_receive_gift where `to`=:chatRoomId")
+    LiveData<Integer> loadSenders(String chatRoomId);
 
-    @Query("select * from em_receive_gift order by timestamp desc")
-    LiveData<List<ReceiveGiftEntity>> loadAll();
+    @Query("select * from em_receive_gift where `to`=:chatRoomId order by timestamp desc")
+    LiveData<List<ReceiveGiftEntity>> loadAll(String chatRoomId);
 
-    @Query("select count(gift_num) from em_receive_gift")
-    int loadGiftTotalNum();
+    @Query("select * from em_receive_gift where `to`=:chatRoomId order by timestamp desc")
+    List<ReceiveGiftEntity> loadAllGift(String chatRoomId);
 
-    @Query("delete from em_receive_gift")
-    int clearData();
+    @Query("select sum(gift_num) from em_receive_gift where `to`=:chatRoomId")
+    int loadGiftTotalNum(String chatRoomId);
+
+    @Query("delete from em_receive_gift where `to`=:chatRoomId")
+    int clearData(String chatRoomId);
 }

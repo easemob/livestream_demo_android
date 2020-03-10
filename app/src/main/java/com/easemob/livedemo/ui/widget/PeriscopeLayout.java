@@ -214,20 +214,8 @@ public class PeriscopeLayout extends RelativeLayout {
         }
 
         @Override
-        public void onAnimationStart(Animator animation) {
-            super.onAnimationStart(animation);
-            Log.e("TAG", "onAnimationStart1 animation = "+animation + " targetView = "+target);
-        }
-
-        @Override
-        public void onAnimationStart(Animator animation, boolean isReverse) {
-            Log.e("TAG", "onAnimationStart2 animation = "+animation + " targetView = "+target);
-        }
-
-        @Override
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
-            Log.e("TAG", "onAnimationEnd animation" + animation + " targetView = "+target);
             //因为不停的add 导致子view数量只增不减,所以在view动画结束后remove掉
             removeView((target));
         }

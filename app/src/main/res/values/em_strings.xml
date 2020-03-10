@@ -65,7 +65,7 @@
     <string name="em_gift_show_send">送出礼物</string>
     <string name="em_live_dialog_quit_title">确定结束直播？</string>
     <string name="em_live_dialog_quit_btn_title">结束并退出</string>
-    <string name="em_live_msg_gift">%1$s 赠送了 %2$sx%3$s</string>
+    <string name="em_live_msg_gift">%1$s 赠送了 %2$s x%3$s</string>
     <string name="em_live_msg_like">%1$s 点了 %2$s个赞</string>
     <string name="em_live_msg_member_add">进入了直播间</string>
     <string name="em_live_user_manage_users">观众(%1$d)</string>

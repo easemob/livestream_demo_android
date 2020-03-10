@@ -139,6 +139,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getId();
         anchorId = liveRoom.getOwner();
+        //初始化设置消息帮助相关信息
+        DemoMsgHelper.getInstance().init(chatroomId);
 
         //设置相关的直播间信息
         EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId, EMClient.getInstance().getCurrentUser());
@@ -157,7 +159,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         super.initViewModel();
         viewModel = new ViewModelProvider(this).get(LivingViewModel.class);
         userManageViewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
-
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+            if(event != null && event) {
+                userManageViewModel.getMembers(chatroomId);
+            }
+        });
     }
 
     @Override
@@ -175,7 +181,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void initData() {
         super.initData();
         joinTime = System.currentTimeMillis();
-        DemoMsgHelper.getInstance().init(chatroomId);
         barrageView.initBarrage();
     }
 
@@ -229,6 +234,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
      * 展示观众列表（主播）
      */
     protected void showUserList() {
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT).postValue(true);
         RoomUserManagementDialog dialog = (RoomUserManagementDialog) getChildFragmentManager().findFragmentByTag("RoomUserManagementDialog");
         if(dialog == null) {
             dialog = new RoomUserManagementDialog(chatroomId);
@@ -411,8 +417,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             parseResource(response, new OnResourceParseCallback<List<String>>() {
                 @Override
                 public void onSuccess(List<String> data) {
+                    boolean haveOwner = data.contains(chatroom.getOwner());
                     memberList.clear();
-                    if (data.contains(chatroom.getOwner())) {
+                    if (haveOwner) {
                         data.remove(chatroom.getOwner());
                     }
                     if(data.size() > MAX_SIZE) {
@@ -423,6 +430,12 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                         memberList.addAll(data);
                     }
                     int size = chatroom.getMemberCount();
+                    if(haveOwner) {
+                        size--;
+                    }
+                    if(size < data.size()) {
+                        size = data.size();
+                    }
                     audienceNumView.setText(String.valueOf(size));
                     membersCount = size;
                     //观看人数不包含主播

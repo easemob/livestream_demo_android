@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ThreadPoolManager;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.ui.live.adapter.LiveMemberAdapter;
@@ -74,6 +76,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
                 public void onSuccess(List<String> list) {
                     tvMemberNum.setText(getString(R.string.em_live_member_num, list.size()));
                     adapter.setData(list);
+                    LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT).postValue(true);
                 }
             });
         });

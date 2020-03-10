@@ -15,6 +15,7 @@ public interface DemoConstants {
     String FRESH_LIVE_LIST = "fresh_live_list";
     String REFRESH_GIFT_LIST = "refresh_gift_list";
     String REFRESH_LIKE_NUM = "refresh_like_num";
+    String REFRESH_MEMBER_COUNT = "refresh_member_count";
 
     String TYPE_ANCHOR = "anchor";
     String TYPE_AUDIENCE = "audience";

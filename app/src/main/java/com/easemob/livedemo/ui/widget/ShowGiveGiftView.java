@@ -202,7 +202,7 @@ public class ShowGiveGiftView extends LinearLayout {
         if(timer != null) {
             timer.cancel();
         }
-        if(giftNumberAnim != null) {
+        if(giftNumberAnim != null && giftNumberAnim.lastAnimator != null && giftNumberAnim.lastAnimator.isRunning()) {
             giftNumberAnim.lastAnimator.cancel();
         }
     }
@@ -282,7 +282,7 @@ public class ShowGiveGiftView extends LinearLayout {
             AnimatorSet animSet = new AnimatorSet();
             animSet.playTogether(animScaleX, animScaleY);
             animSet.setDuration(duration);
-//            lastAnimator = animSet;
+            lastAnimator = animSet;
             animSet.start();
         }
     }

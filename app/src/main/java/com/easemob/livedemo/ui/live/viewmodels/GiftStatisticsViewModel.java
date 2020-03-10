@@ -4,6 +4,7 @@ import android.app.Application;
 import android.app.ListActivity;
 
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
 import com.easemob.livedemo.common.db.entity.ReceiveGiftEntity;
 
@@ -30,7 +31,7 @@ public class GiftStatisticsViewModel extends AndroidViewModel {
     }
 
     public void getGiftListFromDb() {
-        giftObservable.addSource(giftDao.loadAll(), response -> giftObservable.postValue(response));
+        giftObservable.addSource(giftDao.loadAll(DemoMsgHelper.getInstance().getCurrentRoomId()), response -> giftObservable.postValue(response));
     }
 
     public MediatorLiveData<Integer> getSenderNumObservable() {
@@ -38,6 +39,6 @@ public class GiftStatisticsViewModel extends AndroidViewModel {
     }
 
     public void getGiftSenderNumFromDb() {
-        senderNumObservable.addSource(giftDao.loadSenders(), response -> senderNumObservable.postValue(response));
+        senderNumObservable.addSource(giftDao.loadSenders(DemoMsgHelper.getInstance().getCurrentRoomId()), response -> senderNumObservable.postValue(response));
     }
 }

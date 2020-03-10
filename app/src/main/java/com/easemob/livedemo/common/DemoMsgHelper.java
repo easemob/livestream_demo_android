@@ -30,6 +30,10 @@ public class DemoMsgHelper {
         this.chatroomId = chatroomId;
     }
 
+    public String getCurrentRoomId() {
+        return this.chatroomId;
+    }
+
     /**
      * 发送文本消息
      * @param content

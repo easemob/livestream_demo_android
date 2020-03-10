@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.reponsitories.Resource;
@@ -201,7 +202,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
         LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
                 .observe(getViewLifecycleOwner(), response -> {
                     if(response != null && response) {
-                        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum();
+                        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
                         tvGiftNum.setText(String.valueOf(totalNum));
                     }
                 });
