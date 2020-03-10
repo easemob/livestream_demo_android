@@ -571,4 +571,12 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             barrageView.addData(message);
         });
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(barrageLayout != null) {
+            barrageLayout.destroy();
+        }
+    }
 }
