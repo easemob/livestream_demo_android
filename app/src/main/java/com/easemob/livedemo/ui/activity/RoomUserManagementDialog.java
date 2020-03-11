@@ -11,6 +11,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import com.easemob.livedemo.DemoConstants;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.reponsitories.Resource;
 import com.easemob.livedemo.ui.viewmodels.UserManageViewModel;
@@ -106,6 +108,11 @@ public class RoomUserManagementDialog extends DialogFragment {
                 }
             });
         });
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+            if(event != null && event) {
+                getDataFromServer();
+            }
+        });
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -114,6 +121,10 @@ public class RoomUserManagementDialog extends DialogFragment {
         setupViewPager();
         tabLayout.setupWithViewPager(viewPager);
 
+        getDataFromServer();
+    }
+
+    private void getDataFromServer() {
         viewModel.getMembers(chatroomId);
         viewModel.getWhiteList(chatroomId);
         viewModel.getMuteList(chatroomId);

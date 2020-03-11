@@ -16,8 +16,10 @@ package com.easemob.livedemo.common;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.easemob.livedemo.DemoApplication;
+import com.hyphenate.chat.EMClient;
 
 /**
  * 鉴于使用用户的username作为文件名，故需要在用户登录后，再进行初始化
@@ -66,7 +68,13 @@ public class PreferenceManager {
 	 */
 	public synchronized static PreferenceManager getInstance() {
 		if (mPreferencemManager == null) {
-			throw new RuntimeException("please init first!");
+			String currentUser = EMClient.getInstance().getCurrentUser();
+			if(!TextUtils.isEmpty(currentUser)) {
+			    init(DemoApplication.getInstance(), currentUser);
+			}
+			if(mPreferencemManager == null) {
+				throw new RuntimeException("please init first!");
+			}
 		}
 
 		return mPreferencemManager;

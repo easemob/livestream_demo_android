@@ -80,6 +80,11 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
                 }
             });
         });
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+            if(event != null && event) {
+                getMemberList();
+            }
+        });
     }
 
     @Override

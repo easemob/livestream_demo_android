@@ -3,6 +3,8 @@ package com.easemob.livedemo;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Process;
+import android.util.Log;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
@@ -14,12 +16,13 @@ import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.ucloud.ulive.UStreamingContext;
 
+import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 
 /**
  * Created by wei on 2016/5/27.
  */
-public class DemoApplication extends Application{
+public class DemoApplication extends Application implements Thread.UncaughtExceptionHandler {
   private static DemoApplication instance;
   private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
 
@@ -27,7 +30,7 @@ public class DemoApplication extends Application{
     super.onCreate();
     instance = this;
     registerActivityLifecycleCallbacks();
-
+    registerUncaughtExceptionHandler();
     initChatSdk();
 
     EmCustomMsgHelper.getInstance().init(this);
@@ -35,6 +38,10 @@ public class DemoApplication extends Application{
     //UEasyStreaming.initStreaming("publish3-key");
 
     UStreamingContext.init(getApplicationContext(), "publish3-key");
+  }
+
+  private void registerUncaughtExceptionHandler() {
+    Thread.setDefaultUncaughtExceptionHandler(this);
   }
 
   public static DemoApplication getInstance(){
@@ -82,4 +89,10 @@ public class DemoApplication extends Application{
     MultiDex.install(this);
   }
 
+  @Override
+  public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+      e.printStackTrace();
+      System.exit(1);
+      Process.killProcess(Process.myPid());
+  }
 }

@@ -1,8 +1,11 @@
 package com.easemob.livedemo.ui.widget;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -161,12 +164,57 @@ public class RoomMessagesView extends RelativeLayout{
             SoftKeyboardChangeHelper.setOnSoftKeyboardChangeListener((Activity) getContext(), new SoftKeyboardChangeHelper.OnSoftKeyboardChangeListener() {
                 @Override
                 public void keyboardShow(int height) {
-                    ((View)(RoomMessagesView.this.getParent())).scrollTo(0, height);
+                    ViewGroup parent = (ViewGroup) (RoomMessagesView.this.getParent());
+                    startAnimation(height, 100, new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            int value = (int) animation.getAnimatedValue();
+                            parent.scrollTo(0, value);
+                        }
+                    });
+
+                    int childCount = parent.getChildCount();
+                    for(int i = 0; i < childCount; i++) {
+                        View child = parent.getChildAt(i);
+                        if(child instanceof SingleBarrageView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
+                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.topMargin = (int) animation.getAnimatedValue() + originMarginTop;
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                    }
                 }
 
                 @Override
                 public void keyboardHide(int height) {
-                    ((View)(RoomMessagesView.this.getParent())).scrollTo(0, 0);
+                    ViewGroup parent = (ViewGroup) (RoomMessagesView.this.getParent());
+                    startAnimation(height, 100, new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            int value = (int) animation.getAnimatedValue();
+                            parent.scrollTo(0, height - value);
+                        }
+                    });
+                    int childCount = parent.getChildCount();
+                    for(int i = 0; i < childCount; i++) {
+                        View child = parent.getChildAt(i);
+                        if(child instanceof SingleBarrageView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
+                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.topMargin = height - originMarginTop * 2 -  (int) animation.getAnimatedValue();
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                    }
                     setShowInputView(false);
                     if(messageViewListener != null){
                         messageViewListener.onHiderBottomBar();
@@ -175,6 +223,18 @@ public class RoomMessagesView extends RelativeLayout{
             });
         }
 
+    }
+
+    /**
+     * 开始动画
+     * @param values
+     * @param listener
+     */
+    private void startAnimation(int values, int duration, ValueAnimator.AnimatorUpdateListener listener) {
+        ValueAnimator animator = ValueAnimator.ofInt(values);
+        animator.addUpdateListener(listener);
+        animator.setDuration(duration);
+        animator.start();
     }
 
     public void hideKeyboard() {

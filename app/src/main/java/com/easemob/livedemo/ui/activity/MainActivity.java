@@ -70,8 +70,8 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     protected void initData() {
         super.initData();
         skipToTarget(position);
-        checkoutLiving();
         Log.e("TAG", "user = "+EMClient.getInstance().getCurrentUser());
+        checkoutLiving();
     }
 
     private void checkoutLiving() {

@@ -286,13 +286,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     private synchronized void onRoomMemberExited(final String name) {
         memberList.remove(name);
         membersCount--;
+        watchedCount--;
         EMLog.e(TAG, name + "exited");
         requireActivity().runOnUiThread(new Runnable() {
             @Override public void run() {
                 audienceNumView.setText(String.valueOf(membersCount));
                 tvMemberNum.setText(String.valueOf(watchedCount));
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
-                if(name.equals(anchorId)){
+                if(name.equals(chatroom.getOwner())){
                     mContext.showLongToast("主播已结束直播");
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                 }
@@ -452,7 +453,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
      * @param endX
      */
     protected void slideToLeft(int startX, float endX) {
-        startAnimation(getView(), startX, endX);
+//        startAnimation(getView(), startX, endX);
     }
 
     /**
@@ -461,7 +462,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
      * @param endX
      */
     protected void slideToRight(float startX, float endX) {
-        startAnimation(getView(), startX, endX);
+//        startAnimation(getView(), startX, endX);
     }
 
     protected void startAnimation(View target, float startX, float endX) {
@@ -520,11 +521,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onChatRoomMemberAdded(String participant) {
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER).postValue(true);
         onRoomMemberAdded(participant);
     }
 
     @Override
     public void onChatRoomMemberExited(String participant) {
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER).postValue(true);
         onRoomMemberExited(participant);
     }
 
