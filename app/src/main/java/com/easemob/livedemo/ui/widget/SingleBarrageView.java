@@ -3,15 +3,13 @@ package com.easemob.livedemo.ui.widget;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.easemob.chatroommessage.EmCustomMsgHelper;
-import com.easemob.chatroommessage.EmCustomMsgType;
-import com.easemob.chatroommessage.MsgConstant;
-import com.easemob.livedemo.DemoConstants;
+import com.easemob.custommessage.EmCustomMsgHelper;
+import com.easemob.custommessage.EmCustomMsgType;
+import com.easemob.custommessage.MsgConstant;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.MessageBean;
 import com.easemob.livedemo.ui.widget.barrage.BarrageAdapter;
@@ -21,7 +19,6 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
-import com.hyphenate.chat.EMTextMessageBody;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.easemob.chatroommessage;
+package com.easemob.custommessage;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -143,7 +143,7 @@ public class EmCustomMsgHelper implements EMMessageListener {
      */
     public void sendGiftMsg(Map<String, String> params, final OnMsgCallBack callBack) {
         final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_GIFT.name().toLowerCase());
+        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_GIFT.getName());
         body.setParams(params);
         sendMessage.addBody(body);
         sendMessage.setTo(chatRoomId);
@@ -198,7 +198,7 @@ public class EmCustomMsgHelper implements EMMessageListener {
             return;
         }
         final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_LIKE.name().toLowerCase());
+        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_LIKE.getName());
         body.setParams(params);
         sendMessage.addBody(body);
         sendMessage.setTo(chatRoomId);
@@ -253,7 +253,7 @@ public class EmCustomMsgHelper implements EMMessageListener {
             return;
         }
         final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_BARRAGE.name().toLowerCase());
+        EMCustomMessageBody body = new EMCustomMessageBody(EmCustomMsgType.CHATROOM_BARRAGE.getName());
         body.setParams(params);
         sendMessage.addBody(body);
         sendMessage.setTo(chatRoomId);

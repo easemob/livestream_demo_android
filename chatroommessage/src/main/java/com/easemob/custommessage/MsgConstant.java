@@ -1,4 +1,4 @@
-package com.easemob.chatroommessage;
+package com.easemob.custommessage;
 
 public interface MsgConstant {
     // 定义的消息params中的key

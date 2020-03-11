@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +15,16 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.easemob.chatroommessage.EmCustomMsgHelper;
-import com.easemob.chatroommessage.MsgConstant;
-import com.easemob.chatroommessage.OnCustomMsgReceiveListener;
+import com.easemob.custommessage.EmCustomMsgHelper;
+import com.easemob.custommessage.MsgConstant;
+import com.easemob.custommessage.OnCustomMsgReceiveListener;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
-import com.easemob.chatroommessage.OnMsgCallBack;
+import com.easemob.custommessage.OnMsgCallBack;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
@@ -43,17 +41,14 @@ import com.easemob.livedemo.ui.widget.PeriscopeLayout;
 import com.easemob.livedemo.ui.widget.RoomMessagesView;
 import com.easemob.livedemo.ui.widget.ShowGiveGiftView;
 import com.easemob.livedemo.ui.widget.SingleBarrageView;
-import com.easemob.livedemo.utils.KeyboardUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
-import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -454,10 +449,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     /**
      * 向左滑动屏幕
      * @param startX
-     * @param endY
+     * @param endX
      */
-    protected void slideToLeft(int startX, float endY) {
-
+    protected void slideToLeft(int startX, float endX) {
+        startAnimation(getView(), startX, endX);
     }
 
     /**
@@ -466,7 +461,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
      * @param endX
      */
     protected void slideToRight(float startX, float endX) {
-
+        startAnimation(getView(), startX, endX);
     }
 
     protected void startAnimation(View target, float startX, float endX) {
@@ -478,10 +473,15 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             if(x != startX) {
                 return;
             }
-            View child = ((ViewGroup) target).getChildAt(0);
-            ObjectAnimator animator = ObjectAnimator.ofFloat(child, "translationX", startX, endX);
-            animator.setDuration(500);
-            animator.start();
+            int childCount = ((ViewGroup) target).getChildCount();
+            if(childCount > 0) {
+                for(int i = 0; i < childCount; i++) {
+                    View child = ((ViewGroup) target).getChildAt(i);
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(child, "translationX", startX, endX);
+                    animator.setDuration(500);
+                    animator.start();
+                }
+            }
         }
     }
 

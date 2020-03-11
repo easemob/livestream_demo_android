@@ -167,18 +167,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     @Override
-    protected void slideToLeft(int startX, float endX) {
-        super.slideToLeft(startX, endX);
-        startAnimation(getView(), startX, endX);
-    }
-
-    @Override
-    protected void slideToRight(float startX, float endX) {
-        super.slideToRight(startX, endX);
-        startAnimation(getView(), startX, endX);
-    }
-
-    @Override
     protected void skipToListDialog() {
         super.skipToListDialog();
         showUserList();

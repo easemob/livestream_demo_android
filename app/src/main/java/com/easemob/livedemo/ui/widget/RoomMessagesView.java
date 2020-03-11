@@ -15,23 +15,21 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.chatroommessage.EmCustomMsgHelper;
-import com.easemob.chatroommessage.EmCustomMsgType;
-import com.easemob.chatroommessage.MsgConstant;
+import com.easemob.custommessage.EmCustomMsgHelper;
+import com.easemob.custommessage.EmCustomMsgType;
+import com.easemob.custommessage.MsgConstant;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
@@ -44,7 +42,6 @@ import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.Map;
 

@@ -3,8 +3,8 @@ package com.easemob.livedemo.common;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.easemob.chatroommessage.EmCustomMsgType;
-import com.easemob.chatroommessage.MsgConstant;
+import com.easemob.custommessage.EmCustomMsgType;
+import com.easemob.custommessage.MsgConstant;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -169,7 +169,7 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_GIFT.name().toLowerCase())) {
+        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_GIFT.getName())) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();
@@ -208,7 +208,7 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_LIKE.name().toLowerCase())) {
+        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_LIKE.getName())) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();

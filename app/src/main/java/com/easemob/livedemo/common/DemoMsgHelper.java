@@ -1,7 +1,7 @@
 package com.easemob.livedemo.common;
 
-import com.easemob.chatroommessage.EmCustomMsgHelper;
-import com.easemob.chatroommessage.OnMsgCallBack;
+import com.easemob.custommessage.EmCustomMsgHelper;
+import com.easemob.custommessage.OnMsgCallBack;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;

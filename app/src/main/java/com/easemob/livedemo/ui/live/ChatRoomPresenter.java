@@ -1,11 +1,8 @@
 package com.easemob.livedemo.ui.live;
 
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.easemob.chatroommessage.OnMsgCallBack;
-import com.easemob.livedemo.DemoConstants;
-import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.custommessage.OnMsgCallBack;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
@@ -14,13 +11,10 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 
 import java.util.List;
-import java.util.Map;
 
 public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageListener {
     private BaseActivity mContext;

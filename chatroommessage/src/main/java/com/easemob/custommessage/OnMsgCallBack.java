@@ -1,4 +1,4 @@
-package com.easemob.chatroommessage;
+package com.easemob.custommessage;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMMessage;
