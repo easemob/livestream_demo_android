@@ -6,10 +6,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.ui.adapter.EaseBaseRecyclerViewAdapter;
+import com.easemob.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;

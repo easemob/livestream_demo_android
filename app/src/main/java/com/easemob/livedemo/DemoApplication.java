@@ -4,11 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Process;
-import android.util.Log;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
-import com.easemob.livedemo.ui.activity.MainActivity;
+import com.easemob.livedemo.ui.MainActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;

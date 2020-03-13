@@ -6,11 +6,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.data.model.GiftBean;
+import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
 
 import androidx.annotation.NonNull;
 

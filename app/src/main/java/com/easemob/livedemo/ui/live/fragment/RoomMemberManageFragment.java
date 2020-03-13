@@ -7,9 +7,7 @@ import android.widget.CompoundButton;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
-import com.easemob.livedemo.ui.activity.RoomUserManagementFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;

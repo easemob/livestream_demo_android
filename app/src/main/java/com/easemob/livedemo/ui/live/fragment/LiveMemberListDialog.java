@@ -6,15 +6,12 @@ import android.widget.TextView;
 
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
 import com.easemob.livedemo.ui.live.adapter.LiveMemberAdapter;
 import com.easemob.livedemo.ui.live.viewmodels.LiveMemberListViewModel;
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.List;
 

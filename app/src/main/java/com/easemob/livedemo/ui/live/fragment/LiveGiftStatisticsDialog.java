@@ -6,13 +6,9 @@ import android.widget.TextView;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.LiveDataBus;
-import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.data.model.User;
+import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
 import com.easemob.livedemo.ui.live.adapter.LiveGiftStatisticsAdapter;
 import com.easemob.livedemo.ui.live.viewmodels.GiftStatisticsViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FBFBFB"
     android:orientation="vertical"
-    tools:context="com.easemob.livedemo.ui.activity.AssociateLiveRoomActivity"
+    tools:context="com.easemob.livedemo.ui.other.AssociateLiveRoomActivity"
     >
 
     <androidx.appcompat.widget.Toolbar

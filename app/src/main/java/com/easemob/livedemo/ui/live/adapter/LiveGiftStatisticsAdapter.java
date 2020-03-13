@@ -1,9 +1,5 @@
 package com.easemob.livedemo.ui.live.adapter;
 
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.DynamicDrawableSpan;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +8,9 @@ import android.widget.TextView;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
-import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
 import com.easemob.livedemo.common.db.entity.ReceiveGiftEntity;
 import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.ui.adapter.EaseBaseRecyclerViewAdapter;
+import com.easemob.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 import androidx.annotation.NonNull;

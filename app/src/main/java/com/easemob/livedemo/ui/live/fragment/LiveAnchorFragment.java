@@ -1,48 +1,35 @@
 package com.easemob.livedemo.ui.live.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
-import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.LiveManager;
-import com.easemob.livedemo.ui.activity.AssociateLiveRoomActivity;
-import com.easemob.livedemo.ui.activity.RoomUserDetailsDialog;
-import com.easemob.livedemo.ui.activity.SimpleDialogFragment;
-import com.easemob.livedemo.ui.live.viewmodels.GiftStatisticsViewModel;
+import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
-import com.easemob.livedemo.ui.viewmodels.UserManageViewModel;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.exceptions.HyphenateException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

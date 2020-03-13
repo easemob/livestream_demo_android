@@ -2,16 +2,14 @@ package com.easemob.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.OnResourceParseCallback;
-import com.easemob.livedemo.ui.live.viewmodels.LiveListViewModel;
-import com.easemob.livedemo.ui.viewmodels.UserManageViewModel;
+import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
+import com.easemob.livedemo.ui.live.viewmodels.UserManageViewModel;
 import com.hyphenate.chat.EMChatRoom;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 

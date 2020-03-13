@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f2f0eb"
-    tools:context="com.easemob.livedemo.ui.activity.ChatFragment"
+    tools:context="com.easemob.livedemo.ui.other.fragment.ChatFragment"
     >
 
   <androidx.appcompat.widget.Toolbar

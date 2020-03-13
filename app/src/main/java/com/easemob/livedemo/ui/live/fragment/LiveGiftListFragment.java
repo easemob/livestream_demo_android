@@ -3,19 +3,17 @@ package com.easemob.livedemo.ui.live.fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.data.TestGiftRepository;
 import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.ui.activity.BaseLiveFragment;
+import com.easemob.livedemo.ui.base.BaseLiveFragment;
 import com.easemob.livedemo.ui.live.adapter.GiftListAdapter;
 import com.easemob.livedemo.ui.widget.recyclerview.HorizontalPageLayoutManager;
 import com.easemob.livedemo.ui.widget.recyclerview.PagingScrollHelper;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClickListener, LiveGiftNumDialog.OnGiftNumListener, LiveGiftNumDialog.OnDismissListener {

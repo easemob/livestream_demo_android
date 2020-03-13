@@ -5,8 +5,6 @@ import android.view.View;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.OnResourceParseCallback;
-import com.easemob.livedemo.ui.activity.RoomUserManagementFragment;
-import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.List;

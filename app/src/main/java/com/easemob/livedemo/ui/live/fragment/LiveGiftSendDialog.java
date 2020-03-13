@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.ui.DemoDialogFragment;
+import com.easemob.livedemo.ui.base.DemoDialogFragment;
 
 public class LiveGiftSendDialog extends DemoDialogFragment {
     private ImageView ivGiftIcon;

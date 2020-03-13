@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.OnConfirmClickListener;
+import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
 import com.easemob.livedemo.ui.live.adapter.GiftFragmentAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;

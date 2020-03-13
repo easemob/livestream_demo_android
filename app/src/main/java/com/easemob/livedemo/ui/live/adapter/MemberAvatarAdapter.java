@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.data.TestAvatarRepository;
-import com.easemob.livedemo.ui.adapter.EaseBaseRecyclerViewAdapter;
+import com.easemob.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 import androidx.annotation.NonNull;

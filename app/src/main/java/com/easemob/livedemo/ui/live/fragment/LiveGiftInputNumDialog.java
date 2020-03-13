@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ui.DemoDialogFragment;
+import com.easemob.livedemo.ui.base.DemoDialogFragment;
 
 public class LiveGiftInputNumDialog extends DemoDialogFragment {
     private EditText etInputNum;

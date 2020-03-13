@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/common_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.easemob.livedemo.ui.activity.SearchActivity">
+    tools:context="com.easemob.livedemo.ui.other.SearchActivity">
 
     <RelativeLayout
         style="@style/ToolbarNormal"

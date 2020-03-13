@@ -6,7 +6,7 @@ import com.easemob.custommessage.OnMsgCallBack;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
-import com.easemob.livedemo.ui.activity.BaseActivity;
+import com.easemob.livedemo.ui.base.BaseActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMMessageListener;
