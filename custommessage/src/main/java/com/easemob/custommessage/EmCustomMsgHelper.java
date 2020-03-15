@@ -64,7 +64,6 @@ public class EmCustomMsgHelper implements EMMessageListener {
                 // 单聊消息
                 username = message.getFrom();
             }
-            // 如果是当前会话的消息，刷新聊天页面
             if (username.equals(chatRoomId)) {
                 //判断是否是自定消息，然后区分礼物，点赞及弹幕消息
                 if(message.getType() == EMMessage.Type.CUSTOM) {
@@ -282,6 +281,128 @@ public class EmCustomMsgHelper implements EMMessageListener {
                 }
             }
         });
+    }
+
+    /**
+     * 获取礼物消息中礼物的id
+     * @param msg
+     * @return
+     */
+    public String getMsgGiftId(EMMessage msg) {
+        if(!isGiftMsg(msg)) {
+            return null;
+        }
+        Map<String, String> params = getCustomMsgParams(msg);
+        if(params.containsKey(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
+            return params.get(MsgConstant.CUSTOM_GIFT_KEY_ID);
+        }
+        return null;
+    }
+
+    /**
+     * 获取礼物消息中礼物的数量
+     * @param msg
+     * @return
+     */
+    public int getMsgGiftNum(EMMessage msg) {
+        if(!isGiftMsg(msg)) {
+            return 0;
+        }
+        Map<String, String> params = getCustomMsgParams(msg);
+        if(params.containsKey(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
+            String num = params.get(MsgConstant.CUSTOM_GIFT_KEY_NUM);
+            if(TextUtils.isEmpty(num)) {
+                return 0;
+            }
+            try {
+                return Integer.valueOf(num);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 获取点赞消息中点赞的数目
+     * @param msg
+     * @return
+     */
+    public int getMsgLikeNum(EMMessage msg) {
+        if(!isLikeMsg(msg)) {
+            return 0;
+        }
+        Map<String, String> params = getCustomMsgParams(msg);
+        if(params.containsKey(MsgConstant.CUSTOM_LIKE_KEY_NUM)) {
+            String num = params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM);
+            if(TextUtils.isEmpty(num)) {
+                return 0;
+            }
+            try {
+                return Integer.valueOf(num);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 获取弹幕消息中的文本
+     * @param msg
+     * @return
+     */
+    public String getMsgBarrageTxt(EMMessage msg) {
+        if(!isBarrageMsg(msg)) {
+            return null;
+        }
+        Map<String, String> params = getCustomMsgParams(msg);
+        if(params.containsKey(MsgConstant.CUSTOM_BARRAGE_KEY_TXT)) {
+            return params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT);
+        }
+        return null;
+    }
+
+    /**
+     * 判断是否是礼物消息
+     * @param msg
+     * @return
+     */
+    public boolean isGiftMsg(EMMessage msg) {
+        return getCustomMsgType(getCustomEvent(msg)) == EmCustomMsgType.CHATROOM_GIFT;
+    }
+
+    /**
+     * 判断是否是点赞消息
+     * @param msg
+     * @return
+     */
+    public boolean isLikeMsg(EMMessage msg) {
+        return getCustomMsgType(getCustomEvent(msg)) == EmCustomMsgType.CHATROOM_LIKE;
+    }
+
+    /**
+     * 判断是否是弹幕消息
+     * @param msg
+     * @return
+     */
+    public boolean isBarrageMsg(EMMessage msg) {
+        return getCustomMsgType(getCustomEvent(msg)) == EmCustomMsgType.CHATROOM_BARRAGE;
+    }
+
+    /**
+     * 获取自定义消息中的event字段
+     * @param message
+     * @return
+     */
+    public String getCustomEvent(EMMessage message) {
+        if(message == null) {
+            return null;
+        }
+        if(!(message.getBody() instanceof  EMCustomMessageBody)) {
+            return null;
+        }
+        return ((EMCustomMessageBody) message.getBody()).event();
     }
 
     /**

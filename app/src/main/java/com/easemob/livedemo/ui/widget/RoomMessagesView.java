@@ -317,21 +317,13 @@ public class RoomMessagesView extends RelativeLayout{
                     showText(holder.name, nickName, isSelf, content);
                 }
             }else if(message.getBody() instanceof EMCustomMessageBody) {
-                EMCustomMessageBody body = (EMCustomMessageBody) message.getBody();
-                Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(message);
-                EmCustomMsgType msgType = EmCustomMsgHelper.getInstance().getCustomMsgType(body.event());
-                if(msgType != null && params != null) {
-                    switch (msgType) {
-                        case CHATROOM_GIFT:
-                            showGiftMessage(holder.name, nickName, isSelf, params);
-                            break;
-                        case CHATROOM_LIKE:
-                            showLikeMessage(holder.name, nickName, isSelf, params);
-                            break;
-                        case CHATROOM_BARRAGE:
-                            showBarrageMessage(holder.name, nickName, isSelf, params);
-                            break;
-                    }
+                EmCustomMsgHelper msgHelper = EmCustomMsgHelper.getInstance();
+                if(msgHelper.isGiftMsg(message)) {
+                    showGiftMessage(holder.name, nickName, isSelf, message);
+                }else if(msgHelper.isLikeMsg(message)) {
+                    showLikeMessage(holder.name, nickName, isSelf, message);
+                }else if(msgHelper.isBarrageMsg(message)) {
+                    showBarrageMessage(holder.name, nickName, isSelf, message);
                 }
             }
             holder.itemView.setOnClickListener(new OnClickListener() {
@@ -364,9 +356,9 @@ public class RoomMessagesView extends RelativeLayout{
             name.setText(span);
         }
 
-        private void showGiftMessage(TextView name, String nickName, boolean isSelf, Map<String, String> params) {
-            GiftBean bean = DemoHelper.getGiftById(params.get(MsgConstant.CUSTOM_GIFT_KEY_ID));
-            String num =params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM);
+        private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
+            GiftBean bean = DemoHelper.getGiftById(EmCustomMsgHelper.getInstance().getMsgGiftId(message));
+            int num = EmCustomMsgHelper.getInstance().getMsgGiftNum(message);
             String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -377,8 +369,8 @@ public class RoomMessagesView extends RelativeLayout{
             name.setText(span);
         }
 
-        private void showLikeMessage(TextView name, String nickName, boolean isSelf, Map<String, String> params) {
-            String content = context.getString(R.string.em_live_msg_like, nickName, params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM));
+        private void showLikeMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
+            String content = context.getString(R.string.em_live_msg_like, nickName, EmCustomMsgHelper.getInstance().getMsgLikeNum(message));
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
@@ -388,8 +380,8 @@ public class RoomMessagesView extends RelativeLayout{
             name.setText(span);
         }
 
-        private void showBarrageMessage(TextView name, String nickName, boolean isSelf, Map<String, String> params) {
-            showText(name, nickName, isSelf, params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
+        private void showBarrageMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
+            showText(name, nickName, isSelf, EmCustomMsgHelper.getInstance().getMsgBarrageTxt(message));
         }
 
         @Override

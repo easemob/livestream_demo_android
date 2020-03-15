@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -553,32 +554,28 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if(message.getMsgTime() < joinTime - 2000) {
             return;
         }
-        Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(message);
-        Set<String> keySet = params.keySet();
-        if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
-            GiftBean bean = DemoHelper.getGiftById(params.get(MsgConstant.CUSTOM_GIFT_KEY_ID));
-            User user = new User();
-            user.setUsername(message.getFrom());
-            bean.setUser(user);
-            if(keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
-                bean.setNum(Integer.valueOf(params.get(MsgConstant.CUSTOM_GIFT_KEY_NUM)));
-                ThreadManager.getInstance().runOnMainThread(()-> {
-                    barrageLayout.showGift(bean);
-                });
-
-            }
+        String giftId = EmCustomMsgHelper.getInstance().getMsgGiftId(message);
+        if(TextUtils.isEmpty(giftId)) {
+            return;
         }
+        GiftBean bean = DemoHelper.getGiftById(giftId);
+        User user = new User();
+        user.setUsername(message.getFrom());
+        bean.setUser(user);
+        bean.setNum(EmCustomMsgHelper.getInstance().getMsgLikeNum(message));
+        ThreadManager.getInstance().runOnMainThread(()-> {
+            barrageLayout.showGift(bean);
+        });
     }
 
     @Override
     public void onReceivePraiseMsg(EMMessage message) {
         DemoHelper.saveLikeInfo(message);
-        Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(message);
-        Set<String> keySet = params.keySet();
-        if(keySet.contains(MsgConstant.CUSTOM_LIKE_KEY_NUM)) {
-            showPraise(Integer.valueOf(params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM)));
+        int likeNum = EmCustomMsgHelper.getInstance().getMsgLikeNum(message);
+        if(likeNum <= 0) {
+            return;
         }
-
+        showPraise(likeNum);
     }
 
     /**

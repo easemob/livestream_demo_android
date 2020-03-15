@@ -59,6 +59,8 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
 
         @Override
         public void setData(LiveRoom liveRoom, int position) {
+            author.setVisibility(View.VISIBLE);
+            audienceNum.setVisibility(View.VISIBLE);
             if(isOngoing) {
                 tvOngoingStatus.setVisibility(View.VISIBLE);
                 tvStatus.setVisibility(View.GONE);
@@ -67,21 +69,23 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
                 tvStatus.setVisibility(View.VISIBLE);
                 String status = liveRoom.getStatus();
                 if(DemoHelper.isLiving(status)) {
-                    if(!TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
+//                    if(!TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
                         groupLived.setVisibility(View.VISIBLE);
                         tvStatus.setVisibility(View.GONE);
-                    }else {
-                        groupLived.setVisibility(View.GONE);
-                        tvStatus.setVisibility(View.VISIBLE);
-                        tvStatus.setText(R.string.em_live_list_item_continue);
-                        tvStatus.setTextColor(ContextCompat.getColor(mContext, R.color.em_color_warning));
-                    }
+//                    }else {
+//                        groupLived.setVisibility(View.GONE);
+//                        tvStatus.setVisibility(View.VISIBLE);
+//                        tvStatus.setText(R.string.em_live_list_item_continue);
+//                        tvStatus.setTextColor(ContextCompat.getColor(mContext, R.color.em_color_warning));
+//                    }
 
                 }else {
                     groupLived.setVisibility(View.GONE);
                     tvStatus.setVisibility(View.VISIBLE);
                     tvStatus.setText(R.string.em_live_list_item_open);
                     tvStatus.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                    author.setVisibility(View.GONE);
+                    audienceNum.setVisibility(View.GONE);
                 }
             }
             author.setText(liveRoom.getName());

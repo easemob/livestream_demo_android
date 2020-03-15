@@ -117,18 +117,9 @@ public class SingleBarrageView extends BarrageView {
 
         @Override
         protected void onBind(MessageBean data) {
-            EMMessageBody body = data.getMessage().getBody();
-            if(body instanceof EMCustomMessageBody) {
-                String event = ((EMCustomMessageBody) body).event();
-                EmCustomMsgType type = EmCustomMsgHelper.getInstance().getCustomMsgType(event);
-                if(type != EmCustomMsgType.CHATROOM_BARRAGE) {
-                    return;
-                }
-                Map<String, String> params = EmCustomMsgHelper.getInstance().getCustomMsgParams(data.getMessage());
-                if(params.containsKey(MsgConstant.CUSTOM_BARRAGE_KEY_TXT)) {
-                    mContent.setText(params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT));
-                }
-
+            String barrageTxt = EmCustomMsgHelper.getInstance().getMsgBarrageTxt(data.getMessage());
+            if(!TextUtils.isEmpty(barrageTxt)) {
+                mContent.setText(barrageTxt);
             }
         }
     }

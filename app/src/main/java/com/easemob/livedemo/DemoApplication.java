@@ -49,10 +49,10 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
 
   private void initChatSdk(){
     EMOptions options = new EMOptions();
-    options.enableDNSConfig(true);
-    options.setRestServer("a1-hsb.easemob.com");
-    options.setIMServer("39.107.54.56");
-    options.setImPort(6717);
+//    options.enableDNSConfig(true);
+//    options.setRestServer("a1-hsb.easemob.com");
+//    options.setIMServer("39.107.54.56");
+//    options.setImPort(6717);
 
     EaseUI.getInstance().init(this, options);
     EMClient.getInstance().setDebugMode(true);
