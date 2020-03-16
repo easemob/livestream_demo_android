@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         tools:text="小仙女 送出"
-        android:textColor="@color/gray_normal"
+        android:textColor="@color/white"
         app:layout_constraintLeft_toRightOf="@id/img_avatar"
         app:layout_constraintTop_toTopOf="@id/img_avatar"
         app:layout_constraintBottom_toBottomOf="@id/img_avatar"

@@ -273,7 +273,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     private void notifyDataSetChanged(){
-        if(memberList.size() > 4){
+        if(memberList.size() > 6){
             layoutManager.setStackFromEnd(false);
         }else{
             layoutManager.setStackFromEnd(true);
@@ -562,7 +562,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         User user = new User();
         user.setUsername(message.getFrom());
         bean.setUser(user);
-        bean.setNum(EmCustomMsgHelper.getInstance().getMsgLikeNum(message));
+        bean.setNum(EmCustomMsgHelper.getInstance().getMsgGiftNum(message));
         ThreadManager.getInstance().runOnMainThread(()-> {
             barrageLayout.showGift(bean);
         });

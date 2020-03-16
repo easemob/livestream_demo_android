@@ -292,6 +292,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         EaseUI.getInstance().popActivity(mContext);
 
         if(mContext.isFinishing()) {
+            LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
             if(isMessageListInited) {
                 EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
 
@@ -310,12 +311,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
     }
 
     public void setOnLiveListener(OnLiveListener liveListener) {

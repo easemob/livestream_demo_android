@@ -252,12 +252,23 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    LiveAnchorFragment.this.liveRoom = liveRoom;
-                    changeAnchorLive();
+                    if(data.isLiving() && !DemoHelper.isOwner(data.getOwner())) {
+                        //退出房间
+                        mContext.showToast(getString(R.string.em_live_list_warning));
+                        exitRoom();
+                    }else {
+                        LiveAnchorFragment.this.liveRoom = liveRoom;
+                        changeAnchorLive();
+                    }
+
                 }
             });
         });
         viewModel.getLiveRoomDetails(liveId);
+    }
+
+    private void exitRoom() {
+        mContext.finish();
     }
 
     private void changeAnchorLive() {
@@ -268,7 +279,14 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     //开始直播，则开始统计点赞及礼物统计，实际开发中，应该由服务器进行统计，此处仅为展示用
                     DemoHelper.saveLikeNum(0);
                     DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
+                    LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                     startAnchorLive(liveRoom);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    exitRoom();
                 }
             });
         });
@@ -300,7 +318,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     @Override
                     public void onConfirmClick(View view, Object bean) {
                         stopLiving();
-                        LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                         if(listener != null) {
                             listener.onConfirmClick(view, bean);
                         }
@@ -363,6 +380,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
         // 把此activity 从foreground activity 列表里移除
         EaseUI.getInstance().popActivity(mContext);
+        if(mContext.isFinishing()) {
+            LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
+        }
     }
 
     @Override
