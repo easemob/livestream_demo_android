@@ -82,6 +82,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
     private UserDetailManageViewModel detailViewModel;
     private List<String> whiteList;
     private List<String> muteList;
+    private LiveRoom liveRoom;
 
     public static RoomUserDetailsDialog newInstance(String username, LiveRoom liveRoom) {
         return RoomUserDetailsDialog.newInstance(username,liveRoom, DemoConstants.TYPE_AUDIENCE);
@@ -133,10 +134,14 @@ public class RoomUserDetailsDialog extends DialogFragment {
             usernameView.setText(DemoHelper.getNickName(username));
             ivAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
         }
-        //设置礼物及点赞数
-        showGiftNum();
 
-        showLikeNum();
+        if(TextUtils.equals(username, liveRoom.getOwner())) {
+            //设置礼物及点赞数
+            showGiftNum();
+
+            showLikeNum();
+        }
+
         //mentionBtn.setText("@TA");
     }
 
@@ -164,7 +169,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
     private void initArgument() {
         if (getArguments() != null) {
             username = getArguments().getString("username");
-            LiveRoom liveRoom = (LiveRoom) getArguments().getSerializable("liveRoom");
+            liveRoom = (LiveRoom) getArguments().getSerializable("liveRoom");
             type = getArguments().getString("type");
             chatroomId = liveRoom.getId();
             liveId = liveRoom.getId();
@@ -218,19 +223,22 @@ public class RoomUserDetailsDialog extends DialogFragment {
             });
         });
 
-        LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
-                .observe(getViewLifecycleOwner(), response -> {
-                    if(response != null && response) {
-                        showGiftNum();
-                    }
-                });
+        if(TextUtils.equals(username, liveRoom.getOwner())) {
+            LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
+                    .observe(getViewLifecycleOwner(), response -> {
+                        if(response != null && response) {
+                            showGiftNum();
+                        }
+                    });
 
-        LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM, Boolean.class)
-                .observe(getViewLifecycleOwner(), response -> {
-                    if(response != null && response) {
-                        showLikeNum();
-                    }
-                });
+            LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM, Boolean.class)
+                    .observe(getViewLifecycleOwner(), response -> {
+                        if(response != null && response) {
+                            showLikeNum();
+                        }
+                    });
+        }
+
 
 //        viewModel.getWhiteList(chatroomId);
 //        viewModel.getMuteList(chatroomId);
