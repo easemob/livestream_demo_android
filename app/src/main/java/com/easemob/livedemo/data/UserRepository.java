@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * 用于解析及获取模拟用户数据
+ */
 public class UserRepository {
     private static UserRepository instance;
     private UserRepository(){}

@@ -12,6 +12,9 @@ import java.util.List;
 
 import okhttp3.RequestBody;
 
+/**
+ * 用于从app server获取数据
+ */
 public class AppServerRepository {
     private ApiService apiService;
 
@@ -24,7 +27,7 @@ public class AppServerRepository {
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoom>> callBack) {
-                callBack.onSuccess(apiService.createLiveRooms(module));
+                callBack.onSuccess(apiService.createLiveRoom(module));
             }
 
         }.asLiveData();
@@ -34,7 +37,7 @@ public class AppServerRepository {
         return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
-                callBack.onSuccess(apiService.getLiveRoomLists(limit, cursor));
+                callBack.onSuccess(apiService.getLiveRoomList(limit, cursor));
             }
         }.asLiveData();
     }
@@ -43,7 +46,7 @@ public class AppServerRepository {
         return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
-                callBack.onSuccess(apiService.getLivingRoomLists(limit, cursor));
+                callBack.onSuccess(apiService.getLivingRoomList(limit, cursor));
             }
         }.asLiveData();
     }
@@ -52,7 +55,7 @@ public class AppServerRepository {
         return new NetworkOnlyResource<LiveRoom, LiveRoom>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoom>> callBack) {
-                callBack.onSuccess(apiService.changeTestLiveStatus(roomId, username, status));
+                callBack.onSuccess(apiService.changeLiveStatus(roomId, username, status));
             }
         }.asLiveData();
     }
@@ -70,7 +73,7 @@ public class AppServerRepository {
         return new NetworkOnlyResource<LiveRoom, LiveRoom>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoom>> callBack) {
-                callBack.onSuccess(apiService.updateLiveRooms(roomId, body));
+                callBack.onSuccess(apiService.updateLiveRoom(roomId, body));
             }
         }.asLiveData();
     }

@@ -65,28 +65,28 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void searchLiveRoom(final String searchText){
-        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-            @Override public LiveRoom onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getLiveRoomDetails(searchText);
-            }
-
-            @Override public void onSuccess(LiveRoom liveRoom) {
-                emptyView.setVisibility(View.INVISIBLE);
-                searchedList.clear();
-                searchedList.add(liveRoom);
-
-                if(adapter == null) {
-                    adapter = new LiveListAdapter();
-                    recyclerView.setAdapter(adapter);
-                }
-
-                adapter.setData(searchedList);
-            }
-
-            @Override public void onError(HyphenateException exception) {
-                emptyView.setVisibility(View.VISIBLE);
-            }
-        });
+//        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
+//            @Override public LiveRoom onRequest() throws HyphenateException {
+//                return LiveManager.getInstance().getLiveRoomDetails(searchText);
+//            }
+//
+//            @Override public void onSuccess(LiveRoom liveRoom) {
+//                emptyView.setVisibility(View.INVISIBLE);
+//                searchedList.clear();
+//                searchedList.add(liveRoom);
+//
+//                if(adapter == null) {
+//                    adapter = new LiveListAdapter();
+//                    recyclerView.setAdapter(adapter);
+//                }
+//
+//                adapter.setData(searchedList);
+//            }
+//
+//            @Override public void onError(HyphenateException exception) {
+//                emptyView.setVisibility(View.VISIBLE);
+//            }
+//        });
 
     }
 

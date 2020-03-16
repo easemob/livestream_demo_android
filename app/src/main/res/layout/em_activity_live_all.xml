@@ -12,9 +12,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarDisplayHomeAsUpEnabled="true"
-        app:titleBarTitle="@string/em_live_list_all_title"
-        app:titleBarRightTitle="新建"
-        app:titleBarRightVisible="true"/>
+        app:titleBarTitle="@string/em_live_list_all_title"/>
 
     <FrameLayout
         android:id="@+id/fl_fragment"

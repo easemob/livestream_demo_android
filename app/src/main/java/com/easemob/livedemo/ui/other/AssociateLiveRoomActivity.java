@@ -64,24 +64,24 @@ public class AssociateLiveRoomActivity extends BaseActivity {
         startButton.setEnabled(true);
         loopView.setTextSize(18);
 
-        executeTask(new ThreadPoolManager.Task<List<String>>() {
-            @Override public List<String> onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getAssociatedRooms(EMClient.getInstance().getCurrentUser());
-            }
-
-            @Override public void onSuccess(List<String> list) {
-                liveIds = list;
-                if(liveIds.size() > 0) {
-                    loopView.setNotLoop();
-                    loopView.setItems(liveIds);
-                    loopView.setCurrentPosition(Math.round(liveIds.size() / 2));
-                }
-            }
-
-            @Override public void onError(HyphenateException exception) {
-
-            }
-        });
+//        executeTask(new ThreadPoolManager.Task<List<String>>() {
+//            @Override public List<String> onRequest() throws HyphenateException {
+//                return LiveManager.getInstance().getAssociatedRooms(EMClient.getInstance().getCurrentUser());
+//            }
+//
+//            @Override public void onSuccess(List<String> list) {
+//                liveIds = list;
+//                if(liveIds.size() > 0) {
+//                    loopView.setNotLoop();
+//                    loopView.setItems(liveIds);
+//                    loopView.setCurrentPosition(Math.round(liveIds.size() / 2));
+//                }
+//            }
+//
+//            @Override public void onError(HyphenateException exception) {
+//
+//            }
+//        });
     }
 
     @OnClick(R.id.txt_cancel) void cancel() {
@@ -101,31 +101,31 @@ public class AssociateLiveRoomActivity extends BaseActivity {
             selectedLiveId = liveIds.get(loopView.getSelectedItem());
 
             showProgressDialog("获取直播间信息...");
-            executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-                @Override public LiveRoom onRequest() throws HyphenateException {
-                    return LiveManager.getInstance().getLiveRoomDetails(selectedLiveId);
-                }
-
-                @Override public void onSuccess(LiveRoom liveRoom) {
-                    currentLiveRoom = liveRoom;
-                    liveIdView.setText(selectedLiveId);
-                    inputLayout.setVisibility(View.VISIBLE);
-                    startButton.setEnabled(true);
-                    liveNameView.setText(liveRoom.getName());
-                    liveDescView.setText(liveRoom.getDescription());
-                    if(liveRoom.getCover() != null){
-                        Glide.with(AssociateLiveRoomActivity.this)
-                                .load(liveRoom.getCover())
-                                .into(liveCoverView);
-                    }
-                    dismissProgressDialog();
-                }
-
-                @Override public void onError(HyphenateException exception) {
-                    dismissProgressDialog();
-                    showToast("获取直播间信息失败！");
-                }
-            });
+//            executeTask(new ThreadPoolManager.Task<LiveRoom>() {
+//                @Override public LiveRoom onRequest() throws HyphenateException {
+//                    return LiveManager.getInstance().getLiveRoomDetails(selectedLiveId);
+//                }
+//
+//                @Override public void onSuccess(LiveRoom liveRoom) {
+//                    currentLiveRoom = liveRoom;
+//                    liveIdView.setText(selectedLiveId);
+//                    inputLayout.setVisibility(View.VISIBLE);
+//                    startButton.setEnabled(true);
+//                    liveNameView.setText(liveRoom.getName());
+//                    liveDescView.setText(liveRoom.getDescription());
+//                    if(liveRoom.getCover() != null){
+//                        Glide.with(AssociateLiveRoomActivity.this)
+//                                .load(liveRoom.getCover())
+//                                .into(liveCoverView);
+//                    }
+//                    dismissProgressDialog();
+//                }
+//
+//                @Override public void onError(HyphenateException exception) {
+//                    dismissProgressDialog();
+//                    showToast("获取直播间信息失败！");
+//                }
+//            });
         }
     }
 
@@ -156,14 +156,14 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
         //EMHttpClient.getInstance().uploadFile();
 
-        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-            HyphenateException exception;
-            String coverUrl;
-            @Override public LiveRoom onRequest() throws HyphenateException {
-                if(coverPath != null){
-
-                    Map<String, String> headers = new HashMap<String, String>();
-                    headers.put("Authorization", "Bearer " + EMClient.getInstance().getAccessToken());
+//        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
+//            HyphenateException exception;
+//            String coverUrl;
+//            @Override public LiveRoom onRequest() throws HyphenateException {
+//                if(coverPath != null){
+//
+//                    Map<String, String> headers = new HashMap<String, String>();
+//                    headers.put("Authorization", "Bearer " + EMClient.getInstance().getAccessToken());
 //                    new HttpFileManager().uploadFile(coverPath, "", "", "", headers, new EMCloudOperationCallback() {
 //                        @Override public void onSuccess(String result) {
 //                            try {
@@ -185,40 +185,40 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 //
 //                        }
 //                    });
-                }
-                if(exception != null){
-                    throw exception;
-                }
-
-//                LiveRoom room =  LiveManager.getInstance().createLiveRoom(name, desc, coverUrl, selectedLiveId);
-                //现在服务器没有更新封面，手动调用更新
-//                try {
-//                    LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
-//                } catch (LiveException e) {
 //                }
-                return LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
-            }
-
-            @Override public void onSuccess(LiveRoom liveRoom) {
-                dismissProgressDialog();
-                startActivity(new Intent(AssociateLiveRoomActivity.this, LiveAnchorActivity.class)
-                        .putExtra("liveroom", liveRoom));
-                finish();
-            }
-            @Override public void onError(HyphenateException exception) {
-                exception.printStackTrace();
-                dismissProgressDialog();
-                // ugly
-                if(exception.getMessage().contains("current live room is ongoing") &&
-                        currentLiveRoom.getOwner().equals(EMClient.getInstance().getCurrentUser())){
-                    startActivity(new Intent(AssociateLiveRoomActivity.this, LiveAnchorActivity.class)
-                            .putExtra("liveroom", currentLiveRoom));
-                    finish();
-                }else {
-                    showLongToast("发起直播失败: " + exception.getMessage());
-                }
-            }
-        });
+//                if(exception != null){
+//                    throw exception;
+//                }
+//
+////                LiveRoom room =  LiveManager.getInstance().createLiveRoom(name, desc, coverUrl, selectedLiveId);
+//                //现在服务器没有更新封面，手动调用更新
+////                try {
+////                    LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
+////                } catch (LiveException e) {
+////                }
+//                return LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
+//            }
+//
+//            @Override public void onSuccess(LiveRoom liveRoom) {
+//                dismissProgressDialog();
+//                startActivity(new Intent(AssociateLiveRoomActivity.this, LiveAnchorActivity.class)
+//                        .putExtra("liveroom", liveRoom));
+//                finish();
+//            }
+//            @Override public void onError(HyphenateException exception) {
+//                exception.printStackTrace();
+//                dismissProgressDialog();
+//                // ugly
+//                if(exception.getMessage().contains("current live room is ongoing") &&
+//                        currentLiveRoom.getOwner().equals(EMClient.getInstance().getCurrentUser())){
+//                    startActivity(new Intent(AssociateLiveRoomActivity.this, LiveAnchorActivity.class)
+//                            .putExtra("liveroom", currentLiveRoom));
+//                    finish();
+//                }else {
+//                    showLongToast("发起直播失败: " + exception.getMessage());
+//                }
+//            }
+//        });
     }
 
 

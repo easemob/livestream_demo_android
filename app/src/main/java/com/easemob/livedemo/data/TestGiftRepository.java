@@ -14,6 +14,9 @@ import java.util.List;
 
 import androidx.core.content.ContextCompat;
 
+/**
+ * 用于获取本地礼物信息
+ */
 public class TestGiftRepository {
     static int SIZE = 8;
     static String[] names = {};
