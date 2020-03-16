@@ -82,7 +82,30 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendGiftMsg(String giftId, int num, OnMsgCallBack callBack) {
-        EmCustomMsgHelper.getInstance().sendGiftMsg(giftId, num, callBack);
+        EmCustomMsgHelper.getInstance().sendGiftMsg(giftId, num, new OnMsgCallBack() {
+            @Override
+            public void onSuccess(EMMessage message) {
+                DemoHelper.saveGiftInfo(message);
+                if(callBack != null) {
+                    callBack.onSuccess(message);
+                }
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+                super.onProgress(i, s);
+                if(callBack != null) {
+                    callBack.onProgress(i, s);
+                }
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                if(callBack != null) {
+                    callBack.onError(code, error);
+                }
+            }
+        });
     }
 
     /**
@@ -91,7 +114,30 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendLikeMsg(int num, OnMsgCallBack callBack) {
-        EmCustomMsgHelper.getInstance().sendLikeMsg(num, callBack);
+        EmCustomMsgHelper.getInstance().sendLikeMsg(num, new OnMsgCallBack() {
+            @Override
+            public void onSuccess(EMMessage message) {
+                DemoHelper.saveLikeInfo(message);
+                if(callBack != null) {
+                    callBack.onSuccess(message);
+                }
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+                super.onProgress(i, s);
+                if(callBack != null) {
+                    callBack.onProgress(i, s);
+                }
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                if(callBack != null) {
+                    callBack.onError(code, error);
+                }
+            }
+        });
     }
 
     /**

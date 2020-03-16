@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,7 +133,21 @@ public class RoomUserDetailsDialog extends DialogFragment {
             usernameView.setText(DemoHelper.getNickName(username));
             ivAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
         }
+        //设置礼物及点赞数
+        showGiftNum();
+
+        showLikeNum();
         //mentionBtn.setText("@TA");
+    }
+
+    private void showLikeNum() {
+        int likeNum = DemoHelper.getLikeNum(liveId);
+        tvAttentionNum.setText(String.valueOf(likeNum));
+    }
+
+    private void showGiftNum() {
+        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
+        tvGiftNum.setText(String.valueOf(totalNum));
     }
 
     private void customDialog() {
@@ -206,16 +221,14 @@ public class RoomUserDetailsDialog extends DialogFragment {
         LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
                 .observe(getViewLifecycleOwner(), response -> {
                     if(response != null && response) {
-                        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-                        tvGiftNum.setText(String.valueOf(totalNum));
+                        showGiftNum();
                     }
                 });
 
         LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM, Boolean.class)
                 .observe(getViewLifecycleOwner(), response -> {
                     if(response != null && response) {
-                        int likeNum = DemoHelper.getLikeNum();
-                        tvAttentionNum.setText(String.valueOf(likeNum));
+                        showLikeNum();
                     }
                 });
 

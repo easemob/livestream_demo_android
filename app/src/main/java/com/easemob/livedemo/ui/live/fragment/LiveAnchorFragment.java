@@ -88,7 +88,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
         tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, totalNum));
 
-        int likeNum = DemoHelper.getLikeNum();
+        int likeNum = DemoHelper.getLikeNum(liveId);
         tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, likeNum));
 
     }
@@ -114,7 +114,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM, Boolean.class)
                 .observe(getViewLifecycleOwner(), response -> {
                     if(response != null && response) {
-                        int likeNum = DemoHelper.getLikeNum();
+                        int likeNum = DemoHelper.getLikeNum(liveId);
                         tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, likeNum));
                     }
                 });
@@ -277,7 +277,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 @Override
                 public void onSuccess(LiveRoom data) {
                     //开始直播，则开始统计点赞及礼物统计，实际开发中，应该由服务器进行统计，此处仅为展示用
-                    DemoHelper.saveLikeNum(0);
+                    DemoHelper.saveLikeNum(data.getId(), 0);
                     DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                     startAnchorLive(liveRoom);
@@ -344,7 +344,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 public void onSuccess(LiveRoom data) {
                     DemoHelper.saveLivingId("");
                     DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
-                    DemoHelper.saveLikeNum(0);
+                    DemoHelper.saveLikeNum(data.getId(), 0);
                     mContext.finish();
                 }
 

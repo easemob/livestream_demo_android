@@ -219,18 +219,18 @@ public class DemoHelper {
         }
         if(!TextUtils.isEmpty(num)) {
             int like_num = Integer.valueOf(num);
-            int total = getLikeNum() + like_num;
-            saveLikeNum(total);
+            int total = getLikeNum(message.getTo()) + like_num;
+            saveLikeNum(message.getTo(), total);
             LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM).postValue(true);
         }
 
     }
 
-    public static void saveLikeNum(int num) {
-        PreferenceManager.getInstance().saveLikeNum(num);
+    public static void saveLikeNum(String roomId, int num) {
+        PreferenceManager.getInstance().saveLikeNum(roomId, num);
     }
 
-    public static int getLikeNum() {
-        return PreferenceManager.getInstance().getLikeNum();
+    public static int getLikeNum(String roomId) {
+        return PreferenceManager.getInstance().getLikeNum(roomId);
     }
 }

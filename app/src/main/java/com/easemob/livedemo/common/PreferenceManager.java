@@ -121,8 +121,11 @@ public class PreferenceManager {
 		return mSharedPreferences.getString(KEY_USER_ID, null);
 	}
 
-	public void saveLikeNum(int num) {
-		editor.putInt(KEY_LIKE_NUM, num);
+	public void saveLikeNum(String roomId, int num) {
+		if(TextUtils.isEmpty(roomId)) {
+		    return;
+		}
+		editor.putInt(roomId, num);
 		editor.apply();
 	}
 
@@ -130,7 +133,7 @@ public class PreferenceManager {
 	 * 获取点赞数目
 	 * @return
 	 */
-	public int getLikeNum() {
-		return mSharedPreferences.getInt(KEY_LIKE_NUM, 0);
+	public int getLikeNum(String roomId) {
+		return mSharedPreferences.getInt(roomId, 0);
 	}
 }
