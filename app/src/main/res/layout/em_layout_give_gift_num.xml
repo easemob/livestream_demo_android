@@ -19,7 +19,7 @@
         android:paddingBottom="3dp"
         android:inputType="number"
         android:maxLines="1"
-        android:maxLength="10"
+        android:maxLength="3"
         android:gravity="center_vertical"
         android:background="@drawable/em_live_gift_et_num_bg_shape"/>
 
