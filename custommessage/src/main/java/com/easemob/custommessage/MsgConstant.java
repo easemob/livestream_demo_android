@@ -5,7 +5,7 @@ public interface MsgConstant {
     String CUSTOM_GIFT_KEY_ID = "id";
     String CUSTOM_GIFT_KEY_NUM = "num";
 
-    String CUSTOM_LIKE_KEY_NUM = "num";
+    String CUSTOM_PRAISE_KEY_NUM = "num";
 
     String CUSTOM_BARRAGE_KEY_TXT = "txt";
 }

@@ -32,7 +32,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     registerUncaughtExceptionHandler();
     initChatSdk();
 
-    EmCustomMsgHelper.getInstance().init(this);
+    EmCustomMsgHelper.getInstance().init();
 
     //UEasyStreaming.initStreaming("publish3-key");
 

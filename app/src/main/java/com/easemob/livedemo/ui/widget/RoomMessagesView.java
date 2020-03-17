@@ -1,6 +1,5 @@
 package com.easemob.livedemo.ui.widget;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -31,8 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
-import com.easemob.custommessage.EmCustomMsgType;
-import com.easemob.custommessage.MsgConstant;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
@@ -320,8 +317,8 @@ public class RoomMessagesView extends RelativeLayout{
                 EmCustomMsgHelper msgHelper = EmCustomMsgHelper.getInstance();
                 if(msgHelper.isGiftMsg(message)) {
                     showGiftMessage(holder.name, nickName, isSelf, message);
-                }else if(msgHelper.isLikeMsg(message)) {
-                    showLikeMessage(holder.name, nickName, isSelf, message);
+                }else if(msgHelper.isPraiseMsg(message)) {
+                    showPraiseMessage(holder.name, nickName, isSelf, message);
                 }else if(msgHelper.isBarrageMsg(message)) {
                     showBarrageMessage(holder.name, nickName, isSelf, message);
                 }
@@ -369,8 +366,8 @@ public class RoomMessagesView extends RelativeLayout{
             name.setText(span);
         }
 
-        private void showLikeMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
-            String content = context.getString(R.string.em_live_msg_like, nickName, EmCustomMsgHelper.getInstance().getMsgLikeNum(message));
+        private void showPraiseMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
+            String content = context.getString(R.string.em_live_msg_like, nickName, EmCustomMsgHelper.getInstance().getMsgPraiseNum(message));
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),

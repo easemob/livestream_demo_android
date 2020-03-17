@@ -208,14 +208,14 @@ public class DemoHelper {
             return;
         }
         String event = ((EMCustomMessageBody) body).event();
-        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_LIKE.getName())) {
+        if(!TextUtils.equals(event, EmCustomMsgType.CHATROOM_PRAISE.getName())) {
             return;
         }
         Map<String, String> params = ((EMCustomMessageBody) body).getParams();
         Set<String> keySet = params.keySet();
         String num = null;
-        if(keySet.contains(MsgConstant.CUSTOM_LIKE_KEY_NUM)) {
-            num = params.get(MsgConstant.CUSTOM_LIKE_KEY_NUM);
+        if(keySet.contains(MsgConstant.CUSTOM_PRAISE_KEY_NUM)) {
+            num = params.get(MsgConstant.CUSTOM_PRAISE_KEY_NUM);
         }
         if(!TextUtils.isEmpty(num)) {
             int like_num = Integer.valueOf(num);

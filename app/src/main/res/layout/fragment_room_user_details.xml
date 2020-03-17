@@ -210,6 +210,7 @@
         android:layout_marginTop="@dimen/em_margin_30"
         android:layout_marginBottom="@dimen/em_margin_25"
         android:background="@drawable/em_live_btn_attention_bg_shape"
+        android:foreground="@drawable/em_ripple_click_gray"
         android:text="@string/em_live_user_attentions"
         android:drawableLeft="@drawable/em_live_plus_white"
         android:drawableStart="@drawable/em_live_plus_white"

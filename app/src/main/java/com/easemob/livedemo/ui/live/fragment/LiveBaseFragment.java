@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
-import com.easemob.custommessage.MsgConstant;
 import com.easemob.custommessage.OnCustomMsgReceiveListener;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -50,8 +49,6 @@ import com.hyphenate.util.EMLog;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -571,7 +568,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onReceivePraiseMsg(EMMessage message) {
         DemoHelper.saveLikeInfo(message);
-        int likeNum = EmCustomMsgHelper.getInstance().getMsgLikeNum(message);
+        int likeNum = EmCustomMsgHelper.getInstance().getMsgPraiseNum(message);
         if(likeNum <= 0) {
             return;
         }

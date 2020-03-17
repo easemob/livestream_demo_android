@@ -114,7 +114,7 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendLikeMsg(int num, OnMsgCallBack callBack) {
-        EmCustomMsgHelper.getInstance().sendLikeMsg(num, new OnMsgCallBack() {
+        EmCustomMsgHelper.getInstance().sendPraiseMsg(num, new OnMsgCallBack() {
             @Override
             public void onSuccess(EMMessage message) {
                 DemoHelper.saveLikeInfo(message);

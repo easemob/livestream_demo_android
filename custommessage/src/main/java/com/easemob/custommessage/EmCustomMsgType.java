@@ -1,5 +1,7 @@
 package com.easemob.custommessage;
 
+import android.text.TextUtils;
+
 public enum EmCustomMsgType {
     /**
      * 礼物消息
@@ -9,7 +11,7 @@ public enum EmCustomMsgType {
     /**
      * 点赞
      */
-    CHATROOM_LIKE("chatroom_like"),
+    CHATROOM_PRAISE("chatroom_praise"),
 
     /**
      * 弹幕
@@ -23,6 +25,15 @@ public enum EmCustomMsgType {
 
     public String getName() {
         return name;
+    }
+
+    public static EmCustomMsgType fromName(String name) {
+        for (EmCustomMsgType type : EmCustomMsgType.values()) {
+            if(TextUtils.equals(type.getName(), name)) {
+                return type;
+            }
+        }
+        return null;
     }
 
 }
