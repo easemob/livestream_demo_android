@@ -86,10 +86,10 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         groupGiftInfo.setVisibility(View.VISIBLE);
 
         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, totalNum));
+        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
 
         int likeNum = DemoHelper.getLikeNum(liveId);
-        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, likeNum));
+        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
 
     }
 
@@ -107,7 +107,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .observe(getViewLifecycleOwner(), response -> {
                     if(response != null && response) {
                         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-                        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, totalNum));
+                        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
                     }
                 });
 
@@ -115,7 +115,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .observe(getViewLifecycleOwner(), response -> {
                     if(response != null && response) {
                         int likeNum = DemoHelper.getLikeNum(liveId);
-                        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, likeNum));
+                        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
                     }
                 });
         startLive();

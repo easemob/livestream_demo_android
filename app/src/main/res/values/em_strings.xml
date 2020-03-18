@@ -32,8 +32,8 @@
     <string name="em_live_anchor_remove_from_white">从白名单移除</string>
     <string name="em_live_anchor_remove_white">删除</string>
     <string name="em_live_anchor_remove_mute">解禁</string>
-    <string name="em_live_anchor_like_info">被赞 %1$d</string>
-    <string name="em_live_anchor_receive_gift_info">礼物 %1$d</string>
+    <string name="em_live_anchor_like_info">被赞 %1$s</string>
+    <string name="em_live_anchor_receive_gift_info">礼物 %1$s</string>
     <string name="em_live_user_fans">粉丝</string>
     <string name="em_live_user_star">被赞</string>
     <string name="em_live_user_attentions">关注</string>

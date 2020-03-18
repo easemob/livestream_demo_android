@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -232,5 +233,17 @@ public class DemoHelper {
 
     public static int getLikeNum(String roomId) {
         return PreferenceManager.getInstance().getLikeNum(roomId);
+    }
+
+    /**
+     * 格式化数字
+     * @param num
+     * @return
+     */
+    public static String formatNum(double num) {
+        if(num < 10000) {
+            return String.valueOf((int) num);
+        }
+        return new DecimalFormat("#0.0").format(num / 10000) + "万";
     }
 }

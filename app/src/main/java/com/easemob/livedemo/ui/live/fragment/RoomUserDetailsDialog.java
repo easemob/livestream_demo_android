@@ -146,13 +146,12 @@ public class RoomUserDetailsDialog extends DialogFragment {
     }
 
     private void showLikeNum() {
-        int likeNum = DemoHelper.getLikeNum(liveId);
-        tvAttentionNum.setText(String.valueOf(likeNum));
+        tvAttentionNum.setText(DemoHelper.formatNum(DemoHelper.getLikeNum(liveId)));
     }
 
     private void showGiftNum() {
         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-        tvGiftNum.setText(String.valueOf(totalNum));
+        tvGiftNum.setText(DemoHelper.formatNum(totalNum));
     }
 
     private void customDialog() {
