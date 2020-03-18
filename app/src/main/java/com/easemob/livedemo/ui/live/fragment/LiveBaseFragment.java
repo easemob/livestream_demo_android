@@ -135,7 +135,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         DemoMsgHelper.getInstance().init(chatroomId);
 
         //设置相关的直播间信息
-        EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId, EMClient.getInstance().getCurrentUser());
+        EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId);
 
         usernameView.setText(anchorId);
         liveIdView.setText(getString(R.string.em_live_room_id, liveId));

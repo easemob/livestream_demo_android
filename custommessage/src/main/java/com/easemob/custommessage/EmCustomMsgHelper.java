@@ -13,12 +13,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 自定义消息的帮助类（目前主要用于聊天室中礼物，点赞及弹幕消息）。
+ * 用法如下：
+ * （1）初始化 {@link #init()}，添加消息监听，根据业务需求，选择合适的地方初始化。
+ * （2）设置聊天室信息 {@link #setChatRoomInfo(String)} 设置聊天室的id，用于筛选聊天室消息
+ * （3）设置自定义消息监听{@link #setOnCustomMsgReceiveListener(OnCustomMsgReceiveListener)}
+ *      用于接收不同的自定义消息类型（目前仅礼物，点赞及弹幕消息）。
+ * （4）发送自定义消息：
+ *      a、如果自定义消息类型与library相同，且所传参数相同或者相近，可以直接调用如下方法：
+ *      {@link #sendGiftMsg(String, int, OnMsgCallBack)},
+ *      {@link #sendPraiseMsg(int, OnMsgCallBack)},
+ *      {@link #sendBarrageMsg(String, OnMsgCallBack)} 或者
+ *      {@link #sendGiftMsg(Map, OnMsgCallBack)},
+ *      {@link #sendPraiseMsg(Map, OnMsgCallBack)},
+ *      {@link #sendBarrageMsg(Map, OnMsgCallBack)}
+ *      b、如果有其他自定义消息类型，可以调用如下方法：
+ *      {@link #sendCustomMsg(String, Map, OnMsgCallBack)},
+ *      {@link #sendCustomMsg(String, EMMessage.ChatType, String, Map, OnMsgCallBack)}。
+ * （5）自定义消息类型枚举{@link EmCustomMsgType} 定义了礼物，点赞及弹幕消息类型（以event区分）
+ */
 public class EmCustomMsgHelper implements EMMessageListener {
     private static EmCustomMsgHelper instance;
     private EmCustomMsgHelper(){}
 
     private String chatRoomId;
-    private String currentUser;
     private OnCustomMsgReceiveListener listener;
 
     public static EmCustomMsgHelper getInstance() {
@@ -32,13 +51,19 @@ public class EmCustomMsgHelper implements EMMessageListener {
         return instance;
     }
 
+    /**
+     * 根据业务要求，放在application或者其他需要初始化的地方
+     */
     public void init() {
         EMClient.getInstance().chatManager().addMessageListener(this);
     }
 
-    public void setChatRoomInfo(String chatRoomId, String currentUser) {
+    /**
+     * 设置聊天室id
+     * @param chatRoomId
+     */
+    public void setChatRoomInfo(String chatRoomId) {
         this.chatRoomId = chatRoomId;
-        this.currentUser = currentUser;
     }
 
     /**
@@ -50,7 +75,7 @@ public class EmCustomMsgHelper implements EMMessageListener {
     }
 
     /**
-     * 移除监听
+     * 移除监听（在页面中初始化后，记得在onDestroy()生命周期中移除）
      */
     public void removeListener() {
         EMClient.getInstance().chatManager().removeMessageListener(this);
@@ -63,42 +88,43 @@ public class EmCustomMsgHelper implements EMMessageListener {
             if(message.getType() != EMMessage.Type.CUSTOM) {
                 continue;
             }
-            String username = null;
-            // 群组消息
-            if (message.getChatType() == EMMessage.ChatType.GroupChat
-                    || message.getChatType() == EMMessage.ChatType.ChatRoom) {
-                username = message.getTo();
-            } else {
-                // 单聊消息
-                username = message.getFrom();
+            // 再排除单聊
+            if(message.getChatType() != EMMessage.ChatType.GroupChat && message.getChatType() != EMMessage.ChatType.ChatRoom) {
+                continue;
             }
-            if (username.equals(chatRoomId)) {
-                //判断是否是自定消息，然后区分礼物，点赞及弹幕消息
-                EMCustomMessageBody body = (EMCustomMessageBody) message.getBody();
-                String event = body.event();
-                if(TextUtils.isEmpty(event)) {
-                    continue;
-                }
-                EmCustomMsgType msgType = getCustomMsgType(event);
-                if(msgType != null) {
-                    switch (msgType) {
-                        case CHATROOM_GIFT:
-                            if(listener != null) {
-                                listener.onReceiveGiftMsg(message);
-                            }
-                            break;
-                        case CHATROOM_PRAISE:
-                            if(listener != null) {
-                                listener.onReceivePraiseMsg(message);
-                            }
-                            break;
-                        case CHATROOM_BARRAGE:
-                            if(listener != null) {
-                                listener.onReceiveBarrageMsg(message);
-                            }
-                            break;
+            String username = message.getTo();
+            // 判断是否同一个聊天室或者群组
+            if(!TextUtils.equals(username, chatRoomId)) {
+                continue;
+            }
+            // 判断是否是自定消息，然后区分礼物，点赞及弹幕消息
+            EMCustomMessageBody body = (EMCustomMessageBody) message.getBody();
+            String event = body.event();
+            // 如果event为空，则不处理
+            if(TextUtils.isEmpty(event)) {
+                continue;
+            }
+            EmCustomMsgType msgType = getCustomMsgType(event);
+            if(msgType == null) {
+                continue;
+            }
+            // 最后返回各自的消息类型
+            switch (msgType) {
+                case CHATROOM_GIFT:
+                    if(listener != null) {
+                        listener.onReceiveGiftMsg(message);
                     }
-                }
+                    break;
+                case CHATROOM_PRAISE:
+                    if(listener != null) {
+                        listener.onReceivePraiseMsg(message);
+                    }
+                    break;
+                case CHATROOM_BARRAGE:
+                    if(listener != null) {
+                        listener.onReceiveBarrageMsg(message);
+                    }
+                    break;
             }
         }
     }
@@ -396,7 +422,6 @@ public class EmCustomMsgHelper implements EMMessageListener {
 
     /**
      * 获取自定义消息类型
-     * 注意：需要event转为大写，才能获取到正确的type值
      * @param event
      * @return
      */
