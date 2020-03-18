@@ -2,6 +2,7 @@ package com.easemob.livedemo.ui.other.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -59,12 +60,18 @@ public class AboutMeFragment extends BaseLiveFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.item_about :
-                AboutHxActivity.actionStart(mContext);
+                startToAbout();
                 break;
             case R.id.btn_out:
                 showOutDialog();
                 break;
         }
+    }
+
+    private void startToAbout() {
+        Uri uri = Uri.parse("http://www.easemob.com/about");
+        Intent it = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(it);
     }
 
     @Override
