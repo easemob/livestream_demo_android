@@ -1,5 +1,6 @@
 package com.easemob.livedemo.ui.live;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.easemob.custommessage.OnMsgCallBack;
@@ -106,7 +107,11 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
 
     @Override
     public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
-
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            if(onChatRoomListener != null) {
+                onChatRoomListener.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
+            }
+        }
     }
 
     @Override
@@ -263,6 +268,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
     }
 
     public interface OnChatRoomListener {
+        void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner);
         /**
          * 观众进入房间
          * @param participant

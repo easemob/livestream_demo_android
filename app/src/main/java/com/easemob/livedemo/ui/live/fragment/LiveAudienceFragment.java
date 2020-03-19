@@ -1,6 +1,7 @@
 package com.easemob.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,6 +22,7 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
@@ -165,6 +167,16 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     protected void showPraise(int count) {
         //观众端不展示动画
+    }
+
+    @Override
+    public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+        super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
+        // 如果直播间主播被调整为自己
+        if(TextUtils.equals(chatroomId, chatRoomId) && TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
+            LiveAnchorActivity.actionStart(mContext, liveRoom);
+            mContext.finish();
+        }
     }
 
     private void showGiftDialog() {

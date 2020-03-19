@@ -3,6 +3,7 @@ package com.easemob.livedemo.ui.live.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -25,6 +26,7 @@ import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;
@@ -174,6 +176,15 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             fragment = RoomManageUserDialog.getNewInstance(chatroomId, username);
         }
         fragment.show(getChildFragmentManager(), "RoomManageUserDialog");
+    }
+
+    @Override
+    public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+        super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
+        if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
+            LiveAnchorActivity.actionStart(mContext, liveRoom);
+            mContext.finish();
+        }
     }
 
     /**

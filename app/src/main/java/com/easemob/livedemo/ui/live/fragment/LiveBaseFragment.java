@@ -516,6 +516,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     @Override
+    public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+        // owner changed
+    }
+
+    @Override
     public void onChatRoomMemberAdded(String participant) {
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER).postValue(true);
         onRoomMemberAdded(participant);
