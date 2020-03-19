@@ -67,9 +67,9 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation(project(':easeui')) {
-        exclude module: 'support-v4'
-    }
+//    implementation(project(':easeui')) {
+//        exclude module: 'support-v4'
+//    }
 //    compile(project(':ulive-android-sdk')) {
 //        exclude module: 'support-v4'
 //    }
@@ -91,6 +91,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.weigan:loopView:0.1.1'
     testImplementation 'junit:junit:4.12'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.17'

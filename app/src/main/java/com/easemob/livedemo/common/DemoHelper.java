@@ -130,7 +130,9 @@ public class DemoHelper {
         if(user == null) {
             return defaultDrawable == 0 ? R.drawable.em_live_logo : defaultDrawable;
         }
-        return user.getAvatarResource();
+        DemoApplication context = DemoApplication.getInstance();
+        int resId = context.getResources().getIdentifier("em_avatar_"+user.getAvatarResource(), "drawable", context.getPackageName());
+        return resId == 0 ? R.drawable.em_live_logo : resId;
     }
 
     /**

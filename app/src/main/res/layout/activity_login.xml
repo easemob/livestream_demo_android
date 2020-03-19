@@ -26,7 +26,7 @@
         android:background="@null"
         android:text="注册"
         android:textSize="18sp"
-        android:textColor="@color/black"
+        android:textColor="@color/common_black"
         />
   </androidx.appcompat.widget.Toolbar>
 

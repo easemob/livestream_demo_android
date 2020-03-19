@@ -50,10 +50,6 @@
                 android:value=".ui.MainActivity"/>
         </activity>
         <activity
-            android:name=".ui.other.ChatActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.live.LiveAnchorActivity"
             android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".ui.MainActivity"

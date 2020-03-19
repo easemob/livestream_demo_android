@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="16sp"
-        android:textColor="@color/black"
+        android:textColor="@color/common_black"
         android:text="@string/ease_list_no_data_text"/>
 
 </RelativeLayout>

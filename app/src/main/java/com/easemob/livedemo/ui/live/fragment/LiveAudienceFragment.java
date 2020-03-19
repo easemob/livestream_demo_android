@@ -26,7 +26,6 @@ import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.controller.EaseUI;
 
 import java.util.Random;
 
@@ -268,7 +267,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void onResume() {
         super.onResume();
         if (isMessageListInited) messageView.refresh();
-        EaseUI.getInstance().pushActivity(mContext);
         // register the event listener when enter the foreground
         EMClient.getInstance().chatManager().addMessageListener(presenter);
     }
@@ -279,9 +277,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         // unregister this event listener when this activity enters the
         // background
         EMClient.getInstance().chatManager().removeMessageListener(presenter);
-
-        // 把此activity 从foreground activity 列表里移除
-        EaseUI.getInstance().popActivity(mContext);
 
         if(mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);

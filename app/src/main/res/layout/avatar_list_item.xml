@@ -26,6 +26,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="3056"
         android:textSize="@dimen/em_size_small"
-        android:textColor="@color/white"/>
+        android:textColor="@color/common_white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,8 +13,8 @@
     <style name="TabLayout.Gift" parent="Base.Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
         <item name="android:textSize">@dimen/em_size_normal</item>
-        <item name="tabTextColor">@color/white</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="tabTextColor">@color/common_white</item>
+        <item name="android:textColor">@color/common_white</item>
     </style>
 
     <style name="TabLayout.UserManage" parent="Base.Widget.Design.TabLayout">
@@ -32,4 +32,26 @@
     <style name="SwitchTheme" parent="@android:style/TextAppearance.Small">
         <item name="android:textColor">@color/em_switch_text_selector</item>
     </style>
+
+    <style name="Toolbar.PopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <!--设置背景色-->
+        <!--<item name="android:background">@color/white</item>-->
+        <!--设置字体颜色-->
+        <item name="android:textColor">@color/common_black</item>
+        <!--设置不覆盖锚点，即不覆盖三个点-->
+        <item name="overlapAnchor">false</item>
+    </style>
+
+    <declare-styleable name="EaseImageView">
+        <attr name="ease_border_color" format="color" />
+        <attr name="ease_border_width" format="dimension" />
+        <attr name="ease_press_alpha" format="integer" />
+        <attr name="ease_press_color" format="color" />
+        <attr name="ease_radius" format="dimension" />
+        <attr name="ease_shape_type" format="enum">
+            <enum name="none" value="0" />
+            <enum name="round" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

@@ -3,6 +3,7 @@ package com.easemob.livedemo.ui.live.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.animation.Animation;
@@ -29,7 +30,6 @@ import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.controller.EaseUI;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -300,7 +300,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     private void startAnchorLive(LiveRoom liveRoom) {
         DemoHelper.saveLivingId(liveRoom.getId());
         usernameView.setText(DemoHelper.getNickName(EMClient.getInstance().getCurrentUser()));
-        ivIcon.setImageResource(DemoHelper.getAvatarResource(EMClient.getInstance().getCurrentUser()));
+        Log.e("TAG", "image resource = "+DemoHelper.getAvatarResource(EMClient.getInstance().getCurrentUser()));
+//        ivIcon.setImageResource(DemoHelper.getAvatarResource(EMClient.getInstance().getCurrentUser()));
+        ivIcon.setImageResource(R.drawable.em_avatar_1);
         addChatRoomChangeListener();
         onMessageListInit();
         mContext.showToast("直播开始！");
@@ -366,7 +368,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     public void onResume() {
         super.onResume();
         if (isMessageListInited) messageView.refresh();
-        EaseUI.getInstance().pushActivity(mContext);
         // register the event listener when enter the foreground
         EMClient.getInstance().chatManager().addMessageListener(presenter);
     }
@@ -379,7 +380,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         EMClient.getInstance().chatManager().removeMessageListener(presenter);
 
         // 把此activity 从foreground activity 列表里移除
-        EaseUI.getInstance().popActivity(mContext);
         if(mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
         }

@@ -81,4 +81,8 @@
     <string name="em_set_select_switch">切换</string>
     <string name="em_set_logout">退出</string>
     <string name="em_set_logout_confirm">是否退出？</string>
+
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="prompt">提示</string>
 </resources>
