@@ -104,7 +104,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/em_live_logo"
+            android:src="@drawable/em_live"
             android:padding="5dp"/>
 
     </RelativeLayout>
