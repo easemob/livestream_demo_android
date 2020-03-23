@@ -11,7 +11,7 @@ import com.easemob.livedemo.ui.base.BaseLiveActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveListFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
-public class LiveAllActivity extends BaseLiveActivity implements EaseTitleBar.OnBackPressListener {
+public class LiveAllActivity extends BaseLiveActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener {
     private EaseTitleBar titleBar;
 
     public static void actionStart(Context context) {
@@ -34,6 +34,7 @@ public class LiveAllActivity extends BaseLiveActivity implements EaseTitleBar.On
     protected void initListener() {
         super.initListener();
         titleBar.setOnBackPressListener(this);
+        titleBar.setOnRightClickListener(this);
     }
 
     @Override
@@ -51,4 +52,8 @@ public class LiveAllActivity extends BaseLiveActivity implements EaseTitleBar.On
         onBackPressed();
     }
 
+    @Override
+    public void onRightClick(View view) {
+        CreateLiveRoomActivity.actionStart(mContext);
+    }
 }

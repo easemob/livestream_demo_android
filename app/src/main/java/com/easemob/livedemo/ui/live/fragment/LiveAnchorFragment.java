@@ -27,6 +27,7 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;
@@ -182,7 +183,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
         super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
         if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
-            LiveAnchorActivity.actionStart(mContext, liveRoom);
+            LiveAudienceActivity.actionStart(mContext, liveRoom);
             mContext.finish();
         }
     }

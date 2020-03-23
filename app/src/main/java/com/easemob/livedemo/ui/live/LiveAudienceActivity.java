@@ -1,5 +1,7 @@
 package com.easemob.livedemo.ui.live;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
@@ -8,6 +10,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
 import com.ucloud.uvod.UMediaProfile;
 import com.ucloud.uvod.UPlayerStateListener;
@@ -22,6 +25,12 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     volatile boolean isReconnecting;
     Thread reconnectThread;
     private LiveAudienceFragment fragment;
+
+    public static void actionStart(Context context, LiveRoom liveRoom) {
+        Intent intent = new Intent(context, LiveAudienceActivity.class);
+        intent.putExtra("liveroom", liveRoom);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {

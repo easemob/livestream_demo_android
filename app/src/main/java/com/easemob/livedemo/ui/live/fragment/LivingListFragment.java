@@ -12,8 +12,7 @@ public class LivingListFragment extends LiveListFragment {
     @Override
     public void onItemClick(View view, int position) {
         LiveRoom liveRoom = adapter.getItem(position);
-        startActivity(new Intent(mContext, LiveAudienceActivity.class)
-                .putExtra("liveroom", liveRoom));
+        LiveAudienceActivity.actionStart(mContext, liveRoom);
     }
 
     @Override
