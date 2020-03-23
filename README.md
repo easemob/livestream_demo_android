@@ -86,5 +86,5 @@
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)
     demo中有两个repository，EmClientRepository及AppServerRepository。其中EmClientRepository用户处理环信SDK提供     的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管    理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。
 ## 文档 ##
-> 环信及ucloud文档地址：
-> [http://docs.easemob.com/im/200androidclientintegration/50singlechat](http://docs.easemob.com/im/200androidclientintegration/50singlechat)。
+> 环信文档地址：
+> [http://docs-im.easemob.com/im/other/integrationcases/live-chatroom](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)。
