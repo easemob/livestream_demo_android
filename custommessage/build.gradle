@@ -28,5 +28,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api 'com.hyphenate:hyphenate-sdk-lite:3.6.5'
 //    implementation project(path: ':emclient-android')
-//    implementation project(path: ':emclient-android:hyphenatechatsdk')
+//    api project(path: ':emclient-android:hyphenatechatsdk')
 }
