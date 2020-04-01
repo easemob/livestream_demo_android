@@ -61,7 +61,8 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
 //    options.setImPort(6717);
 
     EmClientInit(this, options);
-    EMClient.getInstance().setDebugMode(true);
+
+    EMClient.getInstance().setDebugMode(BuildConfig.DEBUG);
 
     EMClient.getInstance().addConnectionListener(new EMConnectionListener() {
       @Override public void onConnected() {

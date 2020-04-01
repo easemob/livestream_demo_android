@@ -1,8 +1,10 @@
 package com.easemob.livedemo.ui.base;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,6 +41,24 @@ public abstract class BaseLiveDialogFragment extends BaseDialogFragment {
             dialogWindow.setAttributes(lp);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void initListener() {
+        super.initListener();
+        // 保证activity finish之前，应该先dismiss dialog
+        if(getDialog() != null) {
+            getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                    if(keyCode == KeyEvent.KEYCODE_BACK) {
+                        dismiss();
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

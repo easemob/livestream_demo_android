@@ -1,6 +1,7 @@
 package com.easemob.livedemo.ui.live.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,11 +16,14 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.reponsitories.Resource;
+import com.easemob.livedemo.ui.base.BaseDialogFragment;
+import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
 import com.easemob.livedemo.ui.live.adapter.FragmentAdapter;
 import com.easemob.livedemo.ui.base.BaseActivity;
 import com.easemob.livedemo.ui.live.viewmodels.UserManageViewModel;
 import com.google.android.material.tabs.TabLayout;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +37,7 @@ import java.util.List;
  * Created by wei on 2017/3/3.
  */
 
-public class RoomUserManagementDialog extends DialogFragment {
+public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     private BaseActivity mContext;
     private String chatroomId;
     TabLayout tabLayout;
@@ -53,29 +57,20 @@ public class RoomUserManagementDialog extends DialogFragment {
         mContext = (BaseActivity) context;
     }
 
-    @Nullable @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.dialog_room_user_management, container, false);
-        Window window = getDialog().getWindow();
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        window.getDecorView().setPadding(0, 0, 0, 0);
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(wlp);
-        return view;
+    @Override
+    public int getLayoutId() {
+        return R.layout.dialog_room_user_management;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
-        viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
-        initViewModel();
+    public void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
     }
 
-    private void initViewModel() {
+    @Override
+    public void initViewModel() {
         viewModel = new ViewModelProvider(mContext).get(UserManageViewModel.class);
         viewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<String>>() {
@@ -117,9 +112,9 @@ public class RoomUserManagementDialog extends DialogFragment {
         });
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    @Override
+    public void initData() {
+        super.initData();
         setupViewPager();
         tabLayout.setupWithViewPager(viewPager);
 
@@ -143,15 +138,4 @@ public class RoomUserManagementDialog extends DialogFragment {
         viewPager.setAdapter(adapter);
     }
 
-    /**
-     * 解析Resource<T>
-     * @param response
-     * @param callback
-     * @param <T>
-     */
-    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
-        if(mContext != null) {
-            mContext.parseResource(response, callback);
-        }
-    }
 }

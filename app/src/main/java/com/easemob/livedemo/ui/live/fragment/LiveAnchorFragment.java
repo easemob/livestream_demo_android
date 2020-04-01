@@ -70,6 +70,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         }
     };
     private LivingViewModel viewModel;
+    private boolean isOnGoing;
 
     @Override
     protected int getLayoutId() {
@@ -230,7 +231,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
                     if (count == COUNTDOWN_END_INDEX
                             //&& mEasyStreaming != null
-                            && !isShutDownCountdown) {
+                            && !isShutDownCountdown && mContext != null && !mContext.isFinishing()) {
                         EMClient.getInstance()
                                 .chatroomManager()
                                 .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
@@ -310,6 +311,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void startAnchorLive(LiveRoom liveRoom) {
+        isOnGoing = true;
         DemoHelper.saveLivingId(liveRoom.getId());
         usernameView.setText(DemoHelper.getNickName(EMClient.getInstance().getCurrentUser()));
         Log.e("TAG", "image resource = "+DemoHelper.getAvatarResource(EMClient.getInstance().getCurrentUser()));
@@ -348,7 +350,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if(cameraListener != null) {
             cameraListener.onStopCamera();
         }
-        leaveRoom();
+        if(isOnGoing) {
+            leaveRoom();
+        }
     }
 
     private void leaveRoom() {
@@ -393,6 +397,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
         // 把此activity 从foreground activity 列表里移除
         if(mContext.isFinishing()) {
+            handler.removeCallbacksAndMessages(null);
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
         }
     }
