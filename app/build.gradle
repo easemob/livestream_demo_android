@@ -100,8 +100,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
-    implementation(name: 'ucommon-android-sdk-1.0.0', ext: 'aar')
-    implementation(name: 'ulive-android-sdk-1.5.1', ext: 'aar')
-    implementation(name: 'uvod-android-sdk-1.5.8', ext: 'aar')
     implementation project(path: ':custommessage')
+
+    // qiniu
+    implementation 'com.qiniu:happy-dns:0.2.7'
 }

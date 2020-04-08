@@ -19,8 +19,10 @@
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
-    <uses-sdk xmlns:tools="http://schemas.android.com/tools"
-        tools:overrideLibrary="com.ucloud.ulive"/>
+    <!-- qiniu need permission start -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <!-- qiniu need permission end -->
 
     <application
         android:name=".DemoApplication"

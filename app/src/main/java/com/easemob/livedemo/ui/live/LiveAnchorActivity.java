@@ -13,13 +13,8 @@ import butterknife.ButterKnife;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ucloud.AVOption;
-import com.easemob.livedemo.ucloud.LiveCameraView;
+import com.easemob.livedemo.qiniu.LiveCameraView;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
-import com.ucloud.ulive.UFilterProfile;
-import com.ucloud.ulive.UNetworkListener;
-import com.ucloud.ulive.UStreamStateListener;
-import com.ucloud.ulive.UVideoProfile;
 
 public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
     private static final String TAG = LiveAnchorActivity.class.getSimpleName();
@@ -30,13 +25,6 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     //protected UEasyStreaming mEasyStreaming;
     protected String rtmpPushStreamDomain = "publish3.cdn.ucloud.com.cn";
-    //private LiveSettings mSettings;
-    //private UStreamingProfile mStreamingProfile;
-    //UEasyStreaming.UEncodingType encodingType;
-
-    boolean isStarted;
-
-    private AVOption mAVOption;
 
     private LiveAnchorFragment fragment;
 
@@ -85,29 +73,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     }
 
     public void initLiveEnv() {
-        mAVOption = new AVOption();
-        mAVOption.streamUrl = liveRoom.getLivePushUrl();
-        mAVOption.videoFilterMode = UFilterProfile.FilterMode.GPU;
-        mAVOption.videoCodecType = UVideoProfile.CODEC_MODE_HARD;
-        mAVOption.videoCaptureOrientation = UVideoProfile.ORIENTATION_PORTRAIT;
-        mAVOption.videoFramerate = 20;
-        mAVOption.videoBitrate = UVideoProfile.VIDEO_BITRATE_NORMAL;
-        mAVOption.videoResolution = UVideoProfile.Resolution.RATIO_AUTO.ordinal();
-    }
-
-    private void startPreview() {
-//        cameraView.init(mAVOption);
-    }
-
-    private void stopPreview() {
-        cameraView.stopRecordingAndDismissPreview();
-    }
-
-    @Override
-    public void onBackPressed() {
-        //mEasyStreaming.();
-        stopPreview();
-        super.onBackPressed();
+        cameraView.init("");
     }
 
 //    /**
@@ -130,91 +96,34 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     @Override
     protected void onPause() {
         super.onPause();
-        //mEasyStreaming.onPause();
         cameraView.onPause();
-        stopPreview();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //mEasyStreaming.onResume();
-        startPreview();
-        if (isStarted) {
-            cameraView.startRecording();
-        }
+        cameraView.onResume();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //mEasyStreaming.onDestroy();
-        try {
-            cameraView.release();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    UStreamStateListener mStreamStateListener = new UStreamStateListener() {
-        //stream state
-        @Override public void onStateChanged(UStreamStateListener.State state, Object o) {
-        }
-
-        @Override public void onStreamError(UStreamStateListener.Error error, Object extra) {
-            switch (error) {
-                case IOERROR:
-                    if (isStarted && cameraView.isPreviewed()) {
-                        LiveCameraView.getInstance().restart();
-                    }
-                    break;
-            }
-        }
-    };
-
-    UNetworkListener mNetworkListener = new UNetworkListener() {
-        @Override public void onNetworkStateChanged(State state, Object o) {
-            switch (state) {
-                case NETWORK_SPEED:
-                    break;
-                case PUBLISH_STREAMING_TIME:
-                    break;
-                case DISCONNECT:
-                    break;
-                case RECONNECT:
-                    //网络重新连接
-                    if (isStarted && cameraView.isPreviewed()) {
-                        LiveCameraView.getInstance().restart();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
 
     @Override
     public void onStartCamera() {
-        cameraView.startRecording();
-        isStarted = true;
-        cameraView.addStreamStateListener(mStreamStateListener);
-        cameraView.addNetworkListener(mNetworkListener);
+
     }
 
     @Override
     public void switchCamera() {
-        cameraView.switchCamera();
+        //
     }
 
     @Override
     public void onStopCamera() {
         cameraView.onPause();
-        stopPreview();
+    }
 
-        if (!isStarted) {
-            finish();
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cameraView.onDestroy();
     }
 }
