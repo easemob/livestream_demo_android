@@ -57,7 +57,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     EMOptions options = new EMOptions();
 //    options.enableDNSConfig(true);
 //    options.setRestServer("a1-hsb.easemob.com");
-//    options.setIMServer("39.107.54.56");
+//    options.setIMServer("116.85.43.118");
 //    options.setImPort(6717);
 
     EmClientInit(this, options);
