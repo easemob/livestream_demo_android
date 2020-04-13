@@ -10,12 +10,12 @@ import android.util.Log;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
+import com.easemob.livedemo.qiniu.PushStreamHelper;
 import com.easemob.livedemo.ui.MainActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
-import com.ucloud.ulive.UStreamingContext;
 
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +42,9 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
 
     //UEasyStreaming.initStreaming("publish3-key");
 
-    UStreamingContext.init(getApplicationContext(), "publish3-key");
+    PushStreamHelper.getInstance().init(this);
+
+//    UStreamingContext.init(getApplicationContext(), "publish3-key");
   }
 
   private void registerUncaughtExceptionHandler() {

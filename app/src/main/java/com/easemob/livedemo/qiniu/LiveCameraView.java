@@ -110,6 +110,7 @@ public class LiveCameraView extends GLSurfaceView implements StreamingStateChang
 
 
     public void init(String url) {
+        Log.i(TAG, "push url = "+url);
         publishURLFromServer = url;
         if(TextUtils.isEmpty(publishURLFromServer)) {
             Log.e(TAG, "publishURLFromServer = "+publishURLFromServer);
@@ -263,8 +264,8 @@ public class LiveCameraView extends GLSurfaceView implements StreamingStateChang
      * 对应activity的onResume
      */
     public void onResume() {
-        super.onResume();
         if(mMediaStreamingManager != null) {
+            super.onResume();
             mMediaStreamingManager.resume();
         }
     }
@@ -273,8 +274,8 @@ public class LiveCameraView extends GLSurfaceView implements StreamingStateChang
      * 对应activity的onPause
      */
     public void onPause() {
-        super.onPause();
         if(mMediaStreamingManager != null) {
+            super.onPause();
             // You must invoke pause here.
             mMediaStreamingManager.pause();
         }

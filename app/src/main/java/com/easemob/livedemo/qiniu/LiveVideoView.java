@@ -1,0 +1,134 @@
+package com.easemob.livedemo.qiniu;
+
+import android.content.Context;
+import android.media.session.MediaController;
+import android.util.AttributeSet;
+import android.view.View;
+
+import com.pili.pldroid.player.AVOptions;
+import com.pili.pldroid.player.PLOnCompletionListener;
+import com.pili.pldroid.player.PLOnErrorListener;
+import com.pili.pldroid.player.PLOnInfoListener;
+import com.pili.pldroid.player.PLOnPreparedListener;
+import com.pili.pldroid.player.PLOnVideoSizeChangedListener;
+import com.pili.pldroid.player.widget.PLVideoTextureView;
+
+/**
+ * SDK设置文档：https://developer.qiniu.com/pili/sdk/1210/the-android-client-sdk
+ */
+public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedListener, PLOnInfoListener, PLOnCompletionListener, PLOnVideoSizeChangedListener, PLOnErrorListener {
+
+    public LiveVideoView(Context context) {
+        this(context, null);
+    }
+
+    public LiveVideoView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public LiveVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    /**
+     * 设置加载动画
+     * 在播放器进入缓冲状态时，自动显示加载界面，缓冲结束后，自动隐藏加载界面
+     * @param loadingView
+     */
+    public void setLoadingView(View loadingView) {
+        this.setBufferingIndicator(loadingView);
+    }
+
+    public void attachView() {
+        setOnPreparedListener(this);
+        setOnInfoListener(this);
+        setOnCompletionListener(this);
+        setOnVideoSizeChangedListener(this);
+        setOnErrorListener(this);
+    }
+
+    @Override
+    public void onPrepared(int i) {
+
+    }
+
+    @Override
+    public void onInfo(int i, int i1) {
+
+    }
+
+    @Override
+    public void onCompletion() {
+
+    }
+
+    @Override
+    public void onVideoSizeChanged(int i, int i1) {
+
+    }
+
+    @Override
+    public boolean onError(int i) {
+        return false;
+    }
+
+    /**
+     * 需要在开始播放之前设置
+     */
+    public void setAvOptions() {
+        AVOptions options = new AVOptions();
+        /**
+         * DNS 服务器设置
+         * 若不设置此项，则默认使用 DNSPod 的 httpdns 服务
+         * 若设置为 127.0.0.1，则会使用系统的 DNS 服务器
+         * 若设置为其他 DNS 服务器地址，则会使用设置的服务器
+         */
+        //options.setString(AVOptions.KEY_DNS_SERVER, server);
+
+        /**
+         * DNS 缓存设置
+         * 若不设置此项，则每次播放未缓存的域名时都会进行 DNS 解析，并将结果缓存
+         * 参数为 String[]，包含了要缓存 DNS 结果的域名列表
+         * SDK 在初始化时会解析列表中的域名，并将结果缓存
+         */
+        //options.setStringArray(AVOptions.KEY_DOMAIN_LIST, domainList);
+
+        /**
+         * 解码方式
+         * 具体用法见：https://developer.qiniu.com/pili/sdk/1210/the-android-client-sdk /5.1 播放参数配置
+         */
+        //options.setInteger(AVOptions.KEY_MEDIACODEC, codec);
+        // 若设置为 1，则底层会进行一些针对直播流的优化
+        options.setInteger(AVOptions.KEY_LIVE_STREAMING, 1);
+        // 快开模式，启用后会加快该播放器实例再次打开相同协议的视频流的速度
+        options.setInteger(AVOptions.KEY_FAST_OPEN, 1);
+        // 打开重试次数，设置后若打开流地址失败，则会进行重试
+        options.setInteger(AVOptions.KEY_OPEN_RETRY_TIMES, 5);
+        // 预设置 SDK 的 log 等级， 0-4 分别为 v/d/i/w/e
+        options.setInteger(AVOptions.KEY_LOG_LEVEL, 2);
+        // 打开视频时单次 http 请求的超时时间，一次打开过程最多尝试五次，单位为 ms
+        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
+        // 默认的缓存大小，单位是 ms，默认值是：500
+        options.setInteger(AVOptions.KEY_CACHE_BUFFER_DURATION, 500);
+        // 最大的缓存大小，单位是 ms
+        // 默认值是：2000，若设置值小于 KEY_CACHE_BUFFER_DURATION 则不会生效
+        options.setInteger(AVOptions.KEY_MAX_CACHE_BUFFER_DURATION, 4000);
+        // 是否开启直播优化，1 为开启，0 为关闭。若开启，视频暂停后再次开始播放时会触发追帧机制
+        // 默认为 0
+        //options.setInteger(AVOptions.KEY_LIVE_STREAMING, 0);
+        // 设置拖动模式，1 位精准模式，即会拖动到时间戳的那一秒；0 为普通模式，会拖动到时间戳最近的关键帧。默认为 0
+        //options.setInteger(AVOptions.KEY_SEEK_MODE, 0);
+        // 开启解码后的视频数据回调
+        // 默认值为 0，设置为 1 则开启
+        options.setInteger(AVOptions.KEY_VIDEO_DATA_CALLBACK, 1);
+        // 开启解码后的音频数据回调
+        // 默认值为 0，设置为 1 则开启
+        options.setInteger(AVOptions.KEY_VIDEO_DATA_CALLBACK, 1);
+        // 设置开始播放位置
+        // 默认不开启，单位为 ms
+        options.setInteger(AVOptions.KEY_START_POSITION, 10 * 1000);
+
+        // 请在开始播放之前配置
+        this.setAVOptions(options);
+    }
+}

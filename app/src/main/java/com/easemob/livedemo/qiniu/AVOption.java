@@ -7,7 +7,7 @@ package com.easemob.livedemo.qiniu;
 public class AVOption {
     public int videoFramerate = StreamProfileUtil.AVOptionsHolder.DefaultVideoCaptureFps;
     public int videoBitrate = StreamProfileUtil.AVOptionsHolder.DefaultVideoBitrate;
-    public int videoResolution = StreamProfileUtil.AVOptionsHolder.DefaultVideoResolution.ordinal();
+//    public int videoResolution = StreamProfileUtil.AVOptionsHolder.DefaultVideoResolution.ordinal();
     public int videoCodecType = StreamProfileUtil.AVOptionsHolder.DefaultVideoCodecType;
     public int videoCaptureOrientation = StreamProfileUtil.AVOptionsHolder.DefaultVideoCaptureOrientation;
     public int audioBitrate = StreamProfileUtil.AVOptionsHolder.DefaultAudioBitrate;

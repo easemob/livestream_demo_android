@@ -6,17 +6,26 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.qiniu.LiveCameraView;
+import com.easemob.livedemo.qiniu.PushStreamHelper;
+import com.easemob.livedemo.qiniu.Util;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
 
+import java.net.URI;
+import java.util.UUID;
+
 public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
+    private static final String GENERATE_STREAM_TEXT = "https://api-demo.qnsdk.com/v1/live/stream/";
+
     private static final String TAG = LiveAnchorActivity.class.getSimpleName();
     @BindView(R.id.container)
     LiveCameraView cameraView;
@@ -73,7 +82,27 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     }
 
     public void initLiveEnv() {
-        cameraView.init("");
+        ThreadManager.getInstance().runOnIOThread(()->{
+            String publishUrl = Util.syncRequest(GENERATE_STREAM_TEXT + UUID.randomUUID());
+            if(!TextUtils.isEmpty(publishUrl)) {
+                // make an unauthorized GENERATE_STREAM_TEXT for effect
+                try {
+                    URI u = new URI(publishUrl);
+                    publishUrl = String.format("rtmp://401.qbox.net%s?%s", u.getPath(), u.getRawQuery());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(!TextUtils.isEmpty(publishUrl)) {
+                    String finalPublishUrl = publishUrl;
+                    ThreadManager.getInstance().runOnMainThread(()-> {
+                        cameraView.init(finalPublishUrl);
+                    });
+
+                }
+            }
+        });
+
+
     }
 
 //    /**
@@ -113,7 +142,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     @Override
     public void switchCamera() {
-        //
+        cameraView.switchCamera();
     }
 
     @Override
