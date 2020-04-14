@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
-import android.widget.Toast;
-
 import butterknife.ButterKnife;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.qiniu.LiveVideoView;
+import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
 
 import java.io.File;

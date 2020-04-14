@@ -21,13 +21,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    api 'com.hyphenate:hyphenate-sdk-lite:3.6.6'
-    api 'com.hyphenate:hyphenate-sdk:3.6.6'
-//    implementation project(path: ':emclient-android')
-//    api project(path: ':emclient-android:hyphenatechatsdk')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+    api 'com.qiniu:happy-dns:0.2.7'
 }

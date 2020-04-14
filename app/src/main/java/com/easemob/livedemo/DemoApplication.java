@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
-import com.easemob.livedemo.qiniu.PushStreamHelper;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.easemob.livedemo.ui.MainActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -57,10 +57,10 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
 
   private void initChatSdk(){
     EMOptions options = new EMOptions();
-    options.enableDNSConfig(true);
-    options.setRestServer("a1-hsb.easemob.com");
-    options.setIMServer("116.85.43.118");
-    options.setImPort(6717);
+//    options.enableDNSConfig(true);
+//    options.setRestServer("a1-hsb.easemob.com");
+//    options.setIMServer("116.85.43.118");
+//    options.setImPort(6717);
 
     EmClientInit(this, options);
 

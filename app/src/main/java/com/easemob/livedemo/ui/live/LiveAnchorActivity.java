@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import butterknife.BindView;
@@ -15,9 +16,8 @@ import butterknife.ButterKnife;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.qiniu.LiveCameraView;
-import com.easemob.livedemo.qiniu.PushStreamHelper;
-import com.easemob.livedemo.qiniu.Util;
+import com.easemob.qiniu_sdk.LiveCameraView;
+import com.easemob.qiniu_sdk.Util;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
 
 import java.net.URI;
@@ -84,6 +84,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     public void initLiveEnv() {
         ThreadManager.getInstance().runOnIOThread(()->{
             String publishUrl = Util.syncRequest(GENERATE_STREAM_TEXT + UUID.randomUUID());
+            Log.e("TAG", "publishUrl = "+publishUrl);
             if(!TextUtils.isEmpty(publishUrl)) {
                 // make an unauthorized GENERATE_STREAM_TEXT for effect
                 try {
@@ -95,6 +96,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
                 if(!TextUtils.isEmpty(publishUrl)) {
                     String finalPublishUrl = publishUrl;
                     ThreadManager.getInstance().runOnMainThread(()-> {
+                        Log.e("TAG", "finalPublishUrl = "+finalPublishUrl);
                         cameraView.init(finalPublishUrl);
                     });
 

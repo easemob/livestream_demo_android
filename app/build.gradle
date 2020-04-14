@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    compileSdkVersion rootProject.ext.compile_sdk_version
+    buildToolsVersion rootProject.ext.build_tools_version
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.easemob.livedemo"
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion rootProject.ext.min_sdk_version
+        targetSdkVersion rootProject.ext.target_skd_version
         versionCode 105
         versionName "1.0.5"
         multiDexEnabled true
@@ -75,28 +75,24 @@ dependencies {
     //        exclude module: 'support-v4'
     //    }
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation "com.jakewharton:butterknife:$butterknife_version"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.room:room-runtime:2.2.4'
-    annotationProcessor "androidx.room:room-compiler:2.2.4"
+    implementation "androidx.lifecycle:lifecycle-livedata:$ax_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$ax_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$ax_lifecycle_version"
+    implementation "androidx.room:room-runtime:$ax_room_version"
+    annotationProcessor "androidx.room:room-compiler:$ax_room_version"
     implementation 'com.github.florent37:viewanimator:1.0.4'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.weigan:loopView:0.1.1'
     testImplementation 'junit:junit:4.12'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
     implementation project(path: ':custommessage')
     // qiniu
-    implementation 'com.qiniu:happy-dns:0.2.7'
-    implementation files('libs/pldroid-player-2.1.9.jar')
+    implementation project(path: ':qiniu_sdk')
 }
