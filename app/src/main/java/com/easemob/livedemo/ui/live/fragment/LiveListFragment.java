@@ -31,6 +31,8 @@ import com.easemob.livedemo.ui.live.adapter.LiveListAdapter;
 import com.easemob.livedemo.ui.base.BaseFragment;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.viewmodels.LiveListViewModel;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
@@ -192,13 +194,34 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         boolean living = DemoHelper.isLiving(status);
         if(living) {
             if(TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
-                LiveAnchorActivity.actionStart(mContext, liveRoom);
+                PushStreamHelper.getInstance().getPublishUrl(EMClient.getInstance().getCurrentUser(), new OnCallBack<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        LiveAnchorActivity.actionStart(mContext, liveRoom, data);
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+
+                    }
+                });
+
             }else {
                 showDialog();
             }
 
         }else {
-            LiveAnchorActivity.actionStart(mContext, liveRoom);
+            PushStreamHelper.getInstance().getPublishUrl(EMClient.getInstance().getCurrentUser(), new OnCallBack<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    LiveAnchorActivity.actionStart(mContext, liveRoom, data);
+                }
+
+                @Override
+                public void onFail(String message) {
+
+                }
+            });
         }
     }
 
