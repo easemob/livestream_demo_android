@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="em_live_welcome">欢迎使用环信直播聊天室</string>
+    <string name="em_main_title_home">直播大厅</string>
+    <string name="em_main_title_live">直播大厅</string>
+    <string name="em_main_title_me">我</string>
+
+    <string name="em_live_common_cancel">取消</string>
+
+    <string name="ease_list_no_data_text">暂无数据</string>
+
+    <string name="em_live_list_all_title">选择聊天室开始直播</string>
+
+    <string name="em_live_list_item_living">正在直播</string>
+    <string name="em_live_list_item_open">立即开播</string>
+    <string name="em_live_list_item_continue">继续直播</string>
+    <string name="em_live_list_item_ongoing">主播在播</string>
+    <string name="em_live_list_item_lived">主播在播\n不能选择</string>
+    <string name="em_live_list_warning">已经有主播在播，请选择其他房间</string>
+
+    <string name="em_live_input_hint">和大家来聊天吧</string>
+    <string name="em_live_attention">关注</string>
+    <string name="em_live_member_num">观众（%1$d）</string>
+    <string name="em_live_room_id">房间号：%1$s</string>
+    <string name="em_live_anchor_self">主播</string>
+    <string name="em_live_anchor_mute_all">全员禁言</string>
+    <string name="em_live_anchor_unmute_all">全员解禁</string>
+    <string name="em_live_anchor_mute">禁言</string>
+    <string name="em_live_anchor_muted">已禁言</string>
+    <string name="em_live_audience_muted">禁言中</string>
+    <string name="em_live_anchor_add_white">加入白名单</string>
+    <string name="em_live_anchor_remove_from_white">从白名单移除</string>
+    <string name="em_live_anchor_remove_white">删除</string>
+    <string name="em_live_anchor_remove_mute">解禁</string>
+    <string name="em_live_anchor_like_info">被赞 %1$s</string>
+    <string name="em_live_anchor_receive_gift_info">礼物 %1$s</string>
+    <string name="em_live_user_fans">粉丝</string>
+    <string name="em_live_user_star">被赞</string>
+    <string name="em_live_user_attentions">关注</string>
+    <string name="em_live_user_gift">礼物</string>
+    <string name="em_live_user_send_gift">礼物</string>
+    <string name="em_live_user_receive_gift">收到礼物</string>
+    <string name="em_live_gift_name">礼物</string>
+    <string name="em_live_gift_history">礼物记录</string>
+    <string name="em_live_gift_total">共 %1$d 份</string>
+    <string name="em_live_gift_send_total">打赏人数 %1$d</string>
+    <string name="em_live_gift_gift_info">X %1$d</string>
+    <string name="em_live_gift_sender_info">%1$s 送出</string>
+    <string name="em_gift_default_name_1">香水玫瑰</string>
+    <string name="em_gift_default_name_2">心想事成</string>
+    <string name="em_gift_default_name_3">比翼双飞</string>
+    <string name="em_gift_default_name_4">生日蛋糕</string>
+    <string name="em_gift_default_name_5">大礼包</string>
+    <string name="em_gift_default_name_6">春花烂漫</string>
+    <string name="em_gift_default_name_7">小狗狗</string>
+    <string name="em_gift_default_name_8">金镯子</string>
+    <string name="em_gift_default_name_9">金手镯</string>
+    <string name="em_gift_default_name_10">大钻石</string>
+    <string name="em_gift_default_name_11">心心相映</string>
+    <string name="em_gift_default_name_12">白金项链</string>
+    <string name="em_gift_send">赠送</string>
+    <string name="em_gift_send_confirm">是否赠送</string>
+    <string name="em_gift_send_info">%1$d个 %2$s</string>
+    <string name="em_gift_input_num_title">输入赠送数量</string>
+    <string name="em_gift_show_send">送出礼物</string>
+    <string name="em_live_dialog_quit_title">确定结束直播？</string>
+    <string name="em_live_dialog_quit_btn_title">结束并退出</string>
+    <string name="em_live_msg_gift">%1$s 赠送了 %2$s x%3$d</string>
+    <string name="em_live_msg_like">%1$s 点了 %2$d个赞</string>
+    <string name="em_live_msg_member_add">进入了直播间</string>
+    <string name="em_live_user_manage_users">观众(%1$d)</string>
+    <string name="em_live_user_manage_white">白名单(%1$d)</string>
+    <string name="em_live_user_manage_mute">用户禁言(%1$d)</string>
+    <string name="em_live_msg_normal">普</string>
+    <string name="em_live_msg_barrage">弹</string>
+
+    <string name="em_set_title">设置</string>
+    <string name="em_set_live_room">环信直播聊天室</string>
+    <string name="em_set_select_auto">是否切换为访客模式？</string>
+    <string name="em_set_select_login">是否切换为登录模式？</string>
+    <string name="em_set_select_switch">切换</string>
+    <string name="em_set_logout">退出</string>
+    <string name="em_set_logout_confirm">是否退出？</string>
+
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="prompt">提示</string>
+</resources>

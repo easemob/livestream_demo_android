@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray">#ffe9e9e9</color>
+
+    <color name="em_color_brand">#ff04aef0</color>
+    <color name="em_color_warning">#ffff2b2b</color>
+    <color name="em_color_disable">#ff999999</color>
+
+    <color name="em_color_common_text_black">#ff333333</color>
+    <color name="em_color_common_text_gray">#ff999999</color>
+
+    <color name="em_main_color_tab_normal">@color/em_color_common_text_black</color>
+    <color name="em_main_color_tab_selected">#ff04aef0</color>
+
+    <color name="em_color_gift_dialog_half_bg">#80000000</color>
+
+    <color name="em_switch_color_checked">#ff04aef0</color>
+    <color name="em_switch_color_unchecked">#ffe9e9e9</color>
+
+    <color name="em_toolbar_color_title">@color/common_black</color>
+    <color name="em_toolbar_color_title_right">@color/common_black</color>
+</resources>

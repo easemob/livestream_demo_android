@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/common_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.easemob.livedemo.ui.activity.SearchActivity">
+    tools:context="com.easemob.livedemo.ui.other.SearchActivity">
 
     <RelativeLayout
         style="@style/ToolbarNormal"
@@ -60,11 +60,11 @@
             android:layout_marginTop="80dp"
             android:layout_gravity="center_horizontal"
         />
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recView"
-            app:layoutManager="android.support.v7.widget.GridLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             />
     </FrameLayout>

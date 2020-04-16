@@ -1,26 +1,49 @@
 package com.easemob.livedemo.ui.widget;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.custommessage.EmCustomMsgHelper;
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
+import com.easemob.livedemo.data.model.GiftBean;
+import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+
+import java.util.Map;
 
 /**
  * Created by wei on 2016/6/3.
@@ -31,9 +54,11 @@ public class RoomMessagesView extends RelativeLayout{
 
     RecyclerView listview;
     EditText editview;
-    Button sendBtn;
+    ImageView sendBtn;
     View sendContainer;
     ImageView closeView;
+    Switch switchMsgType;
+    boolean isBarrageMsg;
     //ImageView danmuImage;
 
     public boolean isBarrageShow = false;
@@ -57,9 +82,10 @@ public class RoomMessagesView extends RelativeLayout{
         LayoutInflater.from(context).inflate(R.layout.widget_room_messages, this);
         listview = (RecyclerView) findViewById(R.id.listview);
         editview = (EditText) findViewById(R.id.edit_text);
-        sendBtn = (Button) findViewById(R.id.btn_send);
+        sendBtn = (ImageView) findViewById(R.id.btn_send);
         closeView = (ImageView) findViewById(R.id.close_image);
         sendContainer = findViewById(R.id.container_send);
+        switchMsgType = findViewById(R.id.switch_msg_type);
         //danmuImage = (ImageView) findViewById(R.id.danmu_image);
 
     }
@@ -69,10 +95,16 @@ public class RoomMessagesView extends RelativeLayout{
     }
 
     public void init(String chatroomId){
+        addSoftKeyboardListener();
         conversation = EMClient.getInstance().chatManager().getConversation(chatroomId, EMConversation.EMConversationType.ChatRoom, true);
         adapter = new ListAdapter(getContext(), conversation);
         listview.setLayoutManager(new LinearLayoutManager(getContext()));
         listview.setAdapter(adapter);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setSize(0, (int) EaseCommonUtils.dip2px(getContext(), 4));
+        itemDecoration.setDrawable(drawable);
+        listview.addItemDecoration(itemDecoration);
         sendBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +113,7 @@ public class RoomMessagesView extends RelativeLayout{
                         Toast.makeText(getContext(), "文字内容不能为空！", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    messageViewListener.onMessageSend(editview.getText().toString());
+                    messageViewListener.onMessageSend(editview.getText().toString(), isBarrageMsg);
                     editview.setText("");
                 }
             }
@@ -89,10 +121,23 @@ public class RoomMessagesView extends RelativeLayout{
         closeView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                setShowInputView(false);
+                hideSoftKeyBoard();
                 if(messageViewListener != null){
                     messageViewListener.onHiderBottomBar();
                 }
+            }
+        });
+        switchMsgType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isBarrageMsg = isChecked;
+            }
+        });
+        listview.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideSoftKeyBoard();
+                return false;
             }
         });
 
@@ -111,6 +156,88 @@ public class RoomMessagesView extends RelativeLayout{
 
     }
 
+    private void addSoftKeyboardListener() {
+        if(getContext() instanceof Activity) {
+            SoftKeyboardChangeHelper.setOnSoftKeyboardChangeListener((Activity) getContext(), new SoftKeyboardChangeHelper.OnSoftKeyboardChangeListener() {
+                @Override
+                public void keyboardShow(int height) {
+                    ViewGroup parent = (ViewGroup) (RoomMessagesView.this.getParent());
+                    startAnimation(height, 100, new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            int value = (int) animation.getAnimatedValue();
+                            parent.scrollTo(0, value);
+                        }
+                    });
+
+                    int childCount = parent.getChildCount();
+                    for(int i = 0; i < childCount; i++) {
+                        View child = parent.getChildAt(i);
+                        if(child instanceof SingleBarrageView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
+                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.topMargin = (int) animation.getAnimatedValue() + originMarginTop;
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void keyboardHide(int height) {
+                    ViewGroup parent = (ViewGroup) (RoomMessagesView.this.getParent());
+                    startAnimation(height, 100, new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            int value = (int) animation.getAnimatedValue();
+                            parent.scrollTo(0, height - value);
+                        }
+                    });
+                    int childCount = parent.getChildCount();
+                    for(int i = 0; i < childCount; i++) {
+                        View child = parent.getChildAt(i);
+                        if(child instanceof SingleBarrageView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
+                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.topMargin = height - originMarginTop * 2 -  (int) animation.getAnimatedValue();
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                    }
+                    setShowInputView(false);
+                    if(messageViewListener != null){
+                        messageViewListener.onHiderBottomBar();
+                    }
+                }
+            });
+        }
+
+    }
+
+    /**
+     * 开始动画
+     * @param values
+     * @param listener
+     */
+    private void startAnimation(int values, int duration, ValueAnimator.AnimatorUpdateListener listener) {
+        ValueAnimator animator = ValueAnimator.ofInt(values);
+        animator.addUpdateListener(listener);
+        animator.setDuration(duration);
+        animator.start();
+    }
+
+    public void hideKeyboard() {
+        Utils.hideKeyboard(this);
+    }
+
     public void setShowInputView(boolean showInputView){
         if(showInputView){
             sendContainer.setVisibility(View.VISIBLE);
@@ -119,9 +246,17 @@ public class RoomMessagesView extends RelativeLayout{
         }
     }
 
+    /**
+     * 隐藏输入框及软键盘
+     */
+    public void hideSoftKeyBoard() {
+        hideKeyboard();
+        setShowInputView(false);
+    }
+
     private MessageViewListener messageViewListener;
     public interface MessageViewListener{
-        void onMessageSend(String content);
+        void onMessageSend(String content, boolean isBarrageMsg);
         void onItemClickListener(EMMessage message);
         void onHiderBottomBar();
     }
@@ -163,22 +298,87 @@ public class RoomMessagesView extends RelativeLayout{
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             final EMMessage message = messages[position];
+            String from = message.getFrom();
+            String nickName = DemoHelper.getNickName(from);
+            boolean isSelf = EMClient.getInstance().getCurrentUser().equals(from);
             if(message.getBody() instanceof EMTextMessageBody) {
-                holder.name.setText(message.getFrom());
-                holder.content.setText(((EMTextMessageBody) message.getBody()).getMessage());
-                if (EMClient.getInstance().getCurrentUser().equals(message.getFrom())) {
-                    holder.content.setTextColor(getResources().getColor(R.color.color_room_my_msg));
-                } else {
-                    holder.content.setTextColor(getResources().getColor(R.color.common_white));
+                boolean memberAdd = false;
+                Map<String, Object> ext = message.ext();
+                if(ext.containsKey(DemoConstants.MSG_KEY_MEMBER_ADD)) {
+                    memberAdd = (boolean) ext.get(DemoConstants.MSG_KEY_MEMBER_ADD);
                 }
-                holder.itemView.setOnClickListener(new OnClickListener() {
-                    @Override public void onClick(View v) {
-                        if (messageViewListener != null) {
-                            messageViewListener.onItemClickListener(message);
-                        }
-                    }
-                });
+                String content = ((EMTextMessageBody) message.getBody()).getMessage();
+                if(memberAdd) {
+                    showMemberAddMsg(holder.name, nickName, content);
+                }else {
+                    showText(holder.name, nickName, isSelf, content);
+                }
+            }else if(message.getBody() instanceof EMCustomMessageBody) {
+                EmCustomMsgHelper msgHelper = EmCustomMsgHelper.getInstance();
+                if(msgHelper.isGiftMsg(message)) {
+                    showGiftMessage(holder.name, nickName, isSelf, message);
+                }else if(msgHelper.isPraiseMsg(message)) {
+                    showPraiseMessage(holder.name, nickName, isSelf, message);
+                }else if(msgHelper.isBarrageMsg(message)) {
+                    showBarrageMessage(holder.name, nickName, isSelf, message);
+                }
             }
+            holder.itemView.setOnClickListener(new OnClickListener() {
+                @Override public void onClick(View v) {
+                    hideSoftKeyBoard();
+                    if (messageViewListener != null) {
+                        messageViewListener.onItemClickListener(message);
+                    }
+                }
+            });
+        }
+
+        private void showMemberAddMsg(TextView name, String nickName, String content) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(nickName).append(" ").append(context.getString(R.string.em_live_msg_member_add));
+            SpannableString span = new SpannableString(builder.toString());
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
+                    nickName.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showText(TextView name, String nickName, boolean isSelf, String content) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(nickName).append(":").append(content);
+            SpannableString span = new SpannableString(builder.toString());
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(isSelf ? ContextCompat.getColor(getContext(), R.color.color_room_my_msg) : Color.parseColor("#FFC700")),
+                    nickName.length() + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
+            GiftBean bean = DemoHelper.getGiftById(EmCustomMsgHelper.getInstance().getMsgGiftId(message));
+            int num = EmCustomMsgHelper.getInstance().getMsgGiftNum(message);
+            String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
+            SpannableString span = new SpannableString(content);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
+                    nickName.length() + 1, nickName.length() + 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(Color.parseColor("#ff68ff95")),
+                    nickName.length() + 4, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showPraiseMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
+            String content = context.getString(R.string.em_live_msg_like, nickName, EmCustomMsgHelper.getInstance().getMsgPraiseNum(message));
+            SpannableString span = new SpannableString(content);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
+                    nickName.length() + 1, nickName.length() + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(Color.parseColor("#ff68ff95")),
+                    nickName.length() + 3, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            name.setText(span);
+        }
+
+        private void showBarrageMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
+            showText(name, nickName, isSelf, EmCustomMsgHelper.getInstance().getMsgBarrageTxt(message));
         }
 
         @Override

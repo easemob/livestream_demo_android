@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LiveDemo</string>
+    <string name="app_name">环信聊天室</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">用户名</string>

@@ -2,9 +2,9 @@ package com.easemob.livedemo;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
 import com.hyphenate.exceptions.HyphenateException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

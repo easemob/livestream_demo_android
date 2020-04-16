@@ -1,15 +1,16 @@
 package com.easemob.livedemo.ui.widget;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import com.easemob.livedemo.R;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Created by wei on 2017/3/13.
  */
 
-public class MySwipeRefreshLayout extends SwipeRefreshLayout{
+public class MySwipeRefreshLayout extends SwipeRefreshLayout {
     public MySwipeRefreshLayout(Context context) {
         super(context);
         setProgressBarColor();

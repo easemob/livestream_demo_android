@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/common_bg"
     android:orientation="vertical"
-    tools:context=".ui.activity.MyProfileFragment"
+    tools:context=".ui.other.fragment.MyProfileFragment"
     >
 
   <LinearLayout

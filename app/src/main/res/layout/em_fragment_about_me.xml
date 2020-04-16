@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/em_live_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/em_margin_25"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_logo"
+        android:layout_marginTop="@dimen/em_margin_15"
+        android:text="@string/em_set_live_room"
+        android:textSize="@dimen/em_size_normal"
+        android:textColor="@color/black"/>
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="0dp"
+        android:layout_height="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        android:background="#fff9f9f9"
+        android:layout_marginTop="@dimen/em_margin_30"/>
+
+    <com.easemob.livedemo.ui.widget.ArrowItemView
+        android:id="@+id/item_version"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        app:arrowItemTitle="版本"
+        app:arrowItemShowArrow="false"
+        app:arrowItemShowDivider="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_divider"/>
+
+    <com.easemob.livedemo.ui.widget.ArrowItemView
+        android:id="@+id/item_about"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        app:arrowItemTitle="关于环信"
+        app:arrowItemShowArrow="true"
+        app:arrowItemShowDivider="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_version"
+        android:foreground="@drawable/em_ripple_click_gray"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_about"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#fff9f9f9"/>
+
+    <Button
+        android:id="@+id/btn_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/em_set_logout"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big"
+        android:background="@color/em_color_warning"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="@dimen/em_margin_40"
+        android:layout_marginRight="@dimen/em_margin_40"
+        android:layout_marginBottom="@dimen/em_margin_40"
+        android:visibility="gone"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

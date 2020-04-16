@@ -1,120 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="@dimen/em_margin_15"
+        android:layout_marginStart="@dimen/em_margin_15"
+        android:layout_marginRight="@dimen/em_margin_15"
+        android:layout_marginEnd="@dimen/em_margin_15"
+        android:background="@drawable/em_live_user_detail_bg_shape"/>
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ease_default_avatar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:ease_shape_type="round"/>
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        tools:text="username"
+        android:textColor="@color/common_black"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_avatar"/>
+
+    <TextView
+        android:id="@+id/tv_fan_num"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_gift_num"
+        app:layout_constraintTop_toBottomOf="@id/tv_username"
+        app:layout_constraintHorizontal_weight="1.5"
+        android:layout_marginTop="@dimen/em_margin_20"
+        android:layout_marginLeft="75dp"
+        android:text="0"
+        style="@style/em_live_user_tv_num" />
+
+    <TextView
+        app:layout_constraintRight_toLeftOf="@id/tv_fan_num"
+        app:layout_constraintTop_toTopOf="@id/tv_fan_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
+        android:text="@string/em_live_user_fans"
+        style="@style/em_live_user_tv_num_title"/>
+
+
+    <TextView
+        android:id="@+id/tv_gift_num"
+        app:layout_constraintLeft_toRightOf="@id/tv_fan_num"
+        app:layout_constraintRight_toLeftOf="@id/tv_attention_num"
+        app:layout_constraintTop_toTopOf="@id/tv_fan_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
+        app:layout_constraintHorizontal_weight="1.2"
+        android:layout_marginRight="@dimen/em_margin_20"
+        android:text="0"
+        style="@style/em_live_user_tv_num"/>
+
+    <TextView
+        app:layout_constraintRight_toLeftOf="@id/tv_gift_num"
+        app:layout_constraintTop_toTopOf="@id/tv_gift_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_gift_num"
+        android:text="@string/em_live_user_send_gift"
+        style="@style/em_live_user_tv_num_title"/>
+
+    <TextView
+        android:id="@+id/tv_attention_num"
+        app:layout_constraintLeft_toRightOf="@id/tv_gift_num"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_fan_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
+        app:layout_constraintHorizontal_weight="1"
+        android:text="0"
+        style="@style/em_live_user_tv_num"/>
+
+    <TextView
+        app:layout_constraintRight_toLeftOf="@id/tv_attention_num"
+        app:layout_constraintTop_toTopOf="@id/tv_attention_num"
+        app:layout_constraintBottom_toBottomOf="@id/tv_attention_num"
+        android:text="@string/em_live_user_star"
+        style="@style/em_live_user_tv_num_title"/>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/em_close_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:padding="10dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginRight="@dimen/em_margin_30"/>
+
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/layout_live_no_talk"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fff"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        >
-        <com.hyphenate.easeui.widget.EaseImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/ease_default_avatar"
-            />
-        <TextView
-            android:id="@+id/tv_username"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/layout_live_add_whitelist"
+        app:layout_constraintTop_toBottomOf="@id/tv_gift_num"
+        android:layout_marginTop="@dimen/em_margin_30">
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="username"
-            android:textColor="@color/common_black"
-            android:textSize="18sp"
-            />
+            android:src="@drawable/live_notalk" />
 
-        <RelativeLayout
-            android:id="@+id/layout_management"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_mute_status"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            >
-            <LinearLayout
-                android:id="@+id/layout_live_no_talk"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/live_notalk"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="禁言"
-                    android:textColor="#909090"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_live_add_blacklist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_vertical"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/live_add_blacklist"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="加入黑名单"
-                    android:textColor="#909090"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_live_kick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:gravity="center_vertical"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/live_kick"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="踢人"
-                    android:textColor="#909090"
-                    />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/btn_set_admin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
-            android:text="设为房管"
-            android:background="@drawable/common_blue_btn_bg"
-            android:textStyle="bold"
-            android:textColor="@color/common_white"
-            android:textSize="18sp"
-            />
+            android:layout_marginLeft="2dp"
+            android:text="@string/em_live_anchor_mute"
+            android:textColor="#909090" />
 
     </LinearLayout>
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/layout_live_add_whitelist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toRightOf="@id/layout_live_no_talk"
+        app:layout_constraintRight_toLeftOf="@id/layout_live_kick"
+        app:layout_constraintTop_toTopOf="@id/layout_live_no_talk"
+        app:layout_constraintBottom_toBottomOf="@id/layout_live_no_talk">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/live_add_blacklist" />
+
+        <TextView
+            android:id="@+id/tv_white_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="@string/em_live_anchor_add_white"
+            android:textColor="#909090" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_live_kick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toRightOf="@id/layout_live_add_whitelist"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layout_live_no_talk"
+        app:layout_constraintBottom_toBottomOf="@id/layout_live_no_talk"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/live_kick" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text="踢人"
+            android:textColor="#909090" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_set_admin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:text="设为房管"
+        android:background="@drawable/common_blue_btn_bg"
+        android:textStyle="bold"
+        android:textColor="@color/common_white"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/layout_live_no_talk"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
+    
+    <Button
+        android:id="@+id/btn_attention"
+        android:layout_width="120dp"
+        android:layout_height="35dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_live_no_talk"
+        android:layout_marginTop="@dimen/em_margin_30"
+        android:layout_marginBottom="@dimen/em_margin_25"
+        android:background="@drawable/em_live_btn_attention_bg_shape"
+        android:foreground="@drawable/em_ripple_click_gray"
+        android:text="@string/em_live_user_attentions"
+        android:drawableLeft="@drawable/em_live_plus_white"
+        android:drawableStart="@drawable/em_live_plus_white"
+        android:paddingLeft="@dimen/em_margin_25"
+        android:paddingStart="@dimen/em_margin_25"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big_notify"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/layout_management"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="layout_live_no_talk,layout_live_add_whitelist" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

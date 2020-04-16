@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tv_mute"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_white"
+        tools:text="禁言"
+        android:gravity="center"
+        android:textColor="#ffffc700"
+        android:textSize="@dimen/em_size_big"
+        android:background="#99000000"
+        android:foreground="@drawable/em_ripple_click_gray"/>
+
+    <TextView
+        android:id="@+id/tv_white"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_cancel"
+        android:layout_marginBottom="@dimen/em_margin_10"
+        tools:text="加入白名单"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big"
+        android:background="#99000000"
+        android:foreground="@drawable/em_ripple_click_gray"/>
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="34dp"
+        android:text="@string/em_live_common_cancel"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big"
+        android:background="#99000000"
+        android:foreground="@drawable/em_ripple_click_gray"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

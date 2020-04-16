@@ -1,30 +1,33 @@
 package com.easemob.livedemo.data.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Created by wei on 2016/5/27.
  */
-public class LiveRoom implements Serializable {
+public class LiveRoom extends BaseBean implements Serializable {
     @SerializedName(value = "liveroom_id", alternate = {"id"})
     private String id;
-    @SerializedName("title")
     private String name;
-    @SerializedName("current_user_count")
-    private int audienceNum;
-    @SerializedName("cover_picture_url")
+    @SerializedName("affiliations_count")
+    private Integer audienceNum;
     private String cover;
     @SerializedName("chatroom_id")
     private String chatroomId;
-    @SerializedName("anchor")
-    private String anchorId;
-    @SerializedName("desc")
+    private String owner;
     private String description;
     @SerializedName("mobile_push_url")
     private String livePushUrl;
     @SerializedName("mobile_pull_url")
     private String livePullUrl;
+    private String status;
+    private Map ext;
+    private Integer maxusers;
+    private String[] members;
     //@SerializedName("liveshow_id")
     //private String showId;
 
@@ -45,10 +48,10 @@ public class LiveRoom implements Serializable {
     }
 
     public int getAudienceNum() {
-        return audienceNum;
+        return audienceNum == null?0:audienceNum;
     }
 
-    public void setAudienceNum(int audienceNum) {
+    public void setAudienceNum(Integer audienceNum) {
         this.audienceNum = audienceNum;
     }
 
@@ -68,12 +71,12 @@ public class LiveRoom implements Serializable {
         this.chatroomId = chatroomId;
     }
 
-    public String getAnchorId() {
-        return anchorId;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setAnchorId(String anchorId) {
-        this.anchorId = anchorId;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getDescription() {
@@ -100,6 +103,38 @@ public class LiveRoom implements Serializable {
         this.livePullUrl = livePullUrl;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Map getExt() {
+        return ext;
+    }
+
+    public void setExt(Map ext) {
+        this.ext = ext;
+    }
+
+    public int getMaxusers() {
+        return maxusers == null ? 0 : maxusers;
+    }
+
+    public void setMaxusers(Integer maxusers) {
+        this.maxusers = maxusers;
+    }
+
+    public String[] getMembers() {
+        return members;
+    }
+
+    public void setMembers(String[] members) {
+        this.members = members;
+    }
+
     //public String getShowId() {
     //    return showId;
     //}
@@ -107,4 +142,8 @@ public class LiveRoom implements Serializable {
     //public void setShowId(String showId) {
     //    this.showId = showId;
     //}
+
+    public boolean isLiving() {
+        return !TextUtils.isEmpty(status) && TextUtils.equals(status, "ongoing");
+    }
 }
