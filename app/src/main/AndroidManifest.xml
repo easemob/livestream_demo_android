@@ -51,6 +51,7 @@
             android:name=".ui.live.LiveAudienceActivity"
             android:parentActivityName=".ui.MainActivity"
             android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -60,6 +61,7 @@
             android:name=".ui.live.LiveAnchorActivity"
             android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".ui.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

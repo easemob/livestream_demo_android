@@ -30,6 +30,8 @@ import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -184,8 +186,19 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
         super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
         if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
-            LiveAudienceActivity.actionStart(mContext, liveRoom);
-            mContext.finish();
+            PushStreamHelper.getInstance().getPublishUrl(newOwner, new OnCallBack<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    LiveAudienceActivity.actionStart(mContext, liveRoom);
+                    mContext.finish();
+                }
+
+                @Override
+                public void onFail(String message) {
+
+                }
+            });
+
         }
     }
 

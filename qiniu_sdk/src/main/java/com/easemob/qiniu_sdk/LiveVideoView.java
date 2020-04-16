@@ -3,6 +3,7 @@ package com.easemob.qiniu_sdk;
 import android.content.Context;
 import android.media.session.MediaController;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.pili.pldroid.player.AVOptions;
@@ -17,6 +18,9 @@ import com.pili.pldroid.player.widget.PLVideoTextureView;
  * SDK设置文档：https://developer.qiniu.com/pili/sdk/1210/the-android-client-sdk
  */
 public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedListener, PLOnInfoListener, PLOnCompletionListener, PLOnVideoSizeChangedListener, PLOnErrorListener {
+
+    private static final String TAG = LiveVideoView.class.getSimpleName();
+    private OnVideoListener videoListener;
 
     public LiveVideoView(Context context) {
         this(context, null);
@@ -49,26 +53,92 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
 
     @Override
     public void onPrepared(int i) {
-
+        if(this.videoListener != null) {
+            videoListener.onPrepared(i);
+        }
     }
 
     @Override
-    public void onInfo(int i, int i1) {
-
+    public void onInfo(int what, int extra) {
+        switch (what) {
+            case MEDIA_INFO_UNKNOWN ://未知消息
+                Log.i(TAG, "未知消息");
+                break;
+            case MEDIA_INFO_CONNECTED ://连接成功
+                Log.i(TAG, "连接成功");
+                break;
+            case MEDIA_INFO_BUFFERING_START ://开始缓冲
+                Log.i(TAG, "开始缓冲");
+                break;
+            case MEDIA_INFO_BUFFERING_END ://停止缓冲
+                Log.i(TAG, "停止缓冲");
+                break;
+            case MEDIA_INFO_SWITCHING_SW_DECODE ://硬解失败，自动切换软解
+                Log.i(TAG, "硬解失败，自动切换软解");
+                break;
+            case MEDIA_INFO_VIDEO_ROTATION_CHANGED ://获取到视频的播放角度
+                Log.i(TAG, "获取到视频的播放角度:"+extra);
+                break;
+            case MEDIA_INFO_VIDEO_GOP_TIME ://获取视频的I帧间隔
+                Log.i(TAG, "获取视频的I帧间隔:"+extra);
+                break;
+            case MEDIA_INFO_VIDEO_BITRATE ://视频的码率统计结果
+                Log.i(TAG, "视频的码率统计结果:"+extra);
+                break;
+            case MEDIA_INFO_VIDEO_FPS ://视频的帧率统计结果
+                Log.i(TAG, "视频的帧率统计结果:"+extra);
+                break;
+            case MEDIA_INFO_AUDIO_BITRATE ://音频的帧率统计结果
+                Log.i(TAG, "音频的帧率统计结果:"+extra);
+                break;
+            case MEDIA_INFO_AUDIO_FPS ://音频的帧率统计结果
+                Log.i(TAG, "音频的帧率统计结果:"+extra);
+                break;
+        }
     }
 
     @Override
     public void onCompletion() {
-
+        if(videoListener != null) {
+            videoListener.onCompletion();
+        }
     }
 
     @Override
     public void onVideoSizeChanged(int i, int i1) {
-
+        if(videoListener != null) {
+            videoListener.onVideoSizeChanged(i, i1);
+        }
     }
 
     @Override
-    public boolean onError(int i) {
+    public boolean onError(int errorCode) {
+        switch (errorCode) {
+            case MEDIA_ERROR_UNKNOWN ://未知错误
+                Log.e(TAG, "未知错误");
+                break;
+            case ERROR_CODE_OPEN_FAILED ://播放器打开失败
+                Log.e(TAG, "播放器打开失败");
+                break;
+            case ERROR_CODE_IO_ERROR ://网络异常
+                Log.e(TAG, "网络异常");
+                break;
+            case ERROR_CODE_CACHE_FAILED ://预加载失败
+                Log.e(TAG, "预加载失败");
+                break;
+            case ERROR_CODE_HW_DECODE_FAILURE ://硬解失败
+                Log.e(TAG, "硬解失败");
+                break;
+            case ERROR_CODE_PLAYER_DESTROYED ://播放器已被销毁，需要再次 setVideoURL 或 prepareAsync
+                Log.e(TAG, "播放器已被销毁");
+                break;
+            case ERROR_CODE_PLAYER_VERSION_NOT_MATCH ://so 库版本不匹配，需要升级
+                Log.e(TAG, "so 库版本不匹配，需要升级");
+                break;
+        }
+        if(videoListener != null) {
+            return videoListener.onError(errorCode);
+        }
         return false;
     }
 
@@ -130,5 +200,31 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
 
         // 请在开始播放之前配置
         this.setAVOptions(options);
+    }
+
+    public void setOnVideoListener(OnVideoListener listener) {
+        this.videoListener = listener;
+    }
+
+    public interface OnVideoListener {
+        /**
+         * 当 prepare 完成后，SDK 会回调该对象的 onPrepared 接口，下一步则可以调用播放器的 start() 启动播放
+         * @param preparedTime
+         */
+        void onPrepared(int preparedTime);
+
+        /**
+         * 该对象用于监听播放结束的消息
+         */
+        void onCompletion();
+
+        boolean onError(int errorCode);
+
+        /**
+         * 该回调用于监听当前播放的视频流的尺寸信息，在 SDK 解析出视频的尺寸信息后，会触发该回调，开发者可以在该回调中调整 UI 的视图尺寸
+         * @param width
+         * @param height
+         */
+        void onVideoSizeChanged(int width, int height);
     }
 }
