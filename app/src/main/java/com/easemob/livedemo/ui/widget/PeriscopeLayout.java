@@ -27,6 +27,7 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
@@ -130,7 +131,6 @@ public class PeriscopeLayout extends RelativeLayout {
         Animator set = getAnimator(imageView);
         set.addListener(new AnimEndListener(imageView));
         set.start();
-
     }
 
     private Animator getAnimator(View target) {

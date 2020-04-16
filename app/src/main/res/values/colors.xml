@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#323232</color>
-  <color name="colorPrimaryDark">#323232</color>
-  <color name="colorAccent">#ff00ba6e</color>
+  <color name="colorPrimary">#ffffff</color>
+  <color name="colorPrimaryDark">#ffffff</color>
+  <color name="colorAccent">#00ba6e</color>
   <color name="colorTextPrimary">#ffffff</color>
+  <color name="textColorSecondary">@color/gray</color>
 
   <color name="common_bottom_bar_normal_bg">#323232</color>
   <color name="common_bottom_bar_selected_bg">#fff</color>
@@ -13,6 +14,9 @@
 
   <color name="common_bg">#E6E6EB</color>
   <color name="tab_indicator">#323232</color>
+
+  <color name="white">#feffffff</color>
+  <color name="black">#ff000000</color>
 
   <color name="common_red">#FF4C4C</color>
   <color name="common_white">#fff</color>
@@ -34,4 +38,15 @@
   <color name="color_room_manager_orange">#FF8042</color>
 
   <color name="color_text_primary">#5E5E5E</color>
+
+  <color name="gray_pressed">#b5b5b6</color>
+  <color name="gray_normal">#666667</color>
+
+  <color name="btn_blue_normal">#1e90ff</color>
+  <color name="btn_blue_pressed">#0066FF</color>
+
+  <color name="holo_blue_bright">#ff00ddff</color>
+  <color name="holo_green_light">#ff99cc00</color>
+  <color name="holo_orange_light">#ffffbb33</color>
+  <color name="holo_red_light">#ffff4444</color>
 </resources>

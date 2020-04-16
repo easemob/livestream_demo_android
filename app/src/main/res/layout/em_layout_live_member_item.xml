@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:minHeight="60dp">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/img_avatar"
+        android:layout_width="@dimen/size_avatar"
+        android:layout_height="@dimen/size_avatar"
+        android:layout_margin="10dp"
+        android:src="@drawable/ease_default_avatar"
+        app:ease_shape_type="round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/txt_usernick"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_usernick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        tools:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintLeft_toRightOf="@id/img_avatar"
+        app:layout_constraintTop_toTopOf="@id/img_avatar"
+        app:layout_constraintBottom_toBottomOf="@id/img_avatar"
+        android:layout_marginLeft="@dimen/em_margin_10"
+        android:layout_marginStart="@dimen/em_margin_10"/>
+
+    <TextView
+        android:id="@+id/tv_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="标签"
+        app:layout_constraintLeft_toRightOf="@id/txt_usernick"
+        app:layout_constraintTop_toTopOf="@id/txt_usernick"
+        app:layout_constraintBottom_toBottomOf="@id/txt_usernick"
+        android:drawablePadding="3dp"
+        android:drawableLeft="@drawable/em_living_icon"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/em_margin_10"
+        android:layout_marginStart="@dimen/em_margin_10"
+        android:paddingLeft="4dp"
+        android:paddingRight="6dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"
+        android:background="@drawable/em_live_living_bg_shape"/>
+
+    <Button
+        android:id="@+id/btn_manager"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/room_user_manager_btn"
+        tools:text="移除房管"
+        android:textColor="#FF8042"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
+
+    <Switch
+        android:id="@+id/switch_mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:switchMinWidth="20dp"
+        android:thumb="@drawable/em_switch_thumb_selector"
+        android:track="@drawable/em_switch_track_selector"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="@dimen/em_margin_15"
+        android:layout_marginEnd="@dimen/em_margin_15"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_mute_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="房间禁言"
+        android:textColor="@color/gray_normal"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintRight_toLeftOf="@id/switch_mute"
+        app:layout_constraintTop_toTopOf="@id/switch_mute"
+        app:layout_constraintBottom_toBottomOf="@id/switch_mute"
+        android:layout_marginRight="@dimen/em_margin_5"
+        android:layout_marginEnd="@dimen/em_margin_5"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

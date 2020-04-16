@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f2f0eb"
-    tools:context="com.easemob.livedemo.ui.activity.ChatFragment"
+    tools:context="com.easemob.livedemo.ui.other.fragment.ChatFragment"
     >
 
-  <android.support.v7.widget.Toolbar
+  <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar"
       android:background="@color/common_white"
       app:navigationIcon="@drawable/ic_black_back"
@@ -29,7 +29,7 @@
         android:src="@drawable/popup_close"
         />
 
-  </android.support.v7.widget.Toolbar>
+  </androidx.appcompat.widget.Toolbar>
 
   <com.hyphenate.easeui.widget.EaseChatMessageList
       android:id="@+id/message_list"

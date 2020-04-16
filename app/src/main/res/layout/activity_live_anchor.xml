@@ -5,7 +5,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.easemob.livedemo.ui.activity.LiveAnchorActivity"
+    tools:context="com.easemob.livedemo.ui.live.LiveAnchorActivity"
     >
     <RelativeLayout
         android:id="@+id/live_container"

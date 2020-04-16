@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/em_live_chat_item_bg_shape"
     android:gravity="center_vertical"
+    android:layout_marginLeft="@dimen/em_margin_15"
+    android:layout_marginStart="@dimen/em_margin_15"
     android:paddingLeft="5dp"
-    >
+    android:paddingRight="@dimen/em_margin_5">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -17,7 +20,7 @@
         android:layout_marginLeft="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="幸福士大夫"
+        tools:text="幸福士大夫"
         android:textSize="17sp"
         android:textColor="#aaffffff"
         />
@@ -28,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="17sp"
-        android:text="似的发射点"
-        android:textColor="#ffffff"
+        tools:text="似的发射点"
+        android:textColor="#FFC700"
         />
 </LinearLayout>
