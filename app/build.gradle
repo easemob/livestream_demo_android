@@ -42,7 +42,7 @@ android {
         debug {
             //buildConfigField("String", "BASE_URL", '"http://a1-hsb.easemob.com/appserver/"')
             buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/appserver/"')
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
     lintOptions {
