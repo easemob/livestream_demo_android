@@ -29,7 +29,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
@@ -63,6 +62,8 @@ public class RoomMessagesView extends RelativeLayout{
     //ImageView danmuImage;
 
     public boolean isBarrageShow = false;
+    private int giftOiginMarginBottom;
+    private int barrageOriginMarginTop;
 
 
     public RoomMessagesView(Context context) {
@@ -176,11 +177,22 @@ public class RoomMessagesView extends RelativeLayout{
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
-                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
-                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                            barrageOriginMarginTop = params.topMargin;
+                            startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
-                                    params.topMargin = (int) animation.getAnimatedValue() + originMarginTop;
+                                    params.topMargin = (int) animation.getAnimatedValue() + barrageOriginMarginTop;
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                        if(child instanceof ShowGiveGiftView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            giftOiginMarginBottom = params.bottomMargin;
+                            startAnimation(giftOiginMarginBottom  - 10, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.bottomMargin = giftOiginMarginBottom - (int) animation.getAnimatedValue();
                                     child.setLayoutParams(params);
                                 }
                             });
@@ -203,11 +215,20 @@ public class RoomMessagesView extends RelativeLayout{
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
-                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
-                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                            startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
-                                    params.topMargin = height - originMarginTop * 2 -  (int) animation.getAnimatedValue();
+                                    params.topMargin = height - barrageOriginMarginTop * 2 -  (int) animation.getAnimatedValue();
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                        if(child instanceof ShowGiveGiftView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            startAnimation(giftOiginMarginBottom - 10, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.bottomMargin = 10 + (int) animation.getAnimatedValue();
                                     child.setLayoutParams(params);
                                 }
                             });
