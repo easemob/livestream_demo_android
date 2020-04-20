@@ -35,12 +35,14 @@ android {
             minifyEnabled false
             debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // base url为http://a1.easemob.com/，为了方便使用将appserver放置到base url中
             buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/appserver/"')
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField("String", "BASE_URL", '"http://a1-hsb.easemob.com/appserver/"')
-            signingConfig signingConfigs.debug
+            //buildConfigField("String", "BASE_URL", '"http://a1-hsb.easemob.com/appserver/"')
+            buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/appserver/"')
+            signingConfig signingConfigs.release
         }
     }
     lintOptions {

@@ -85,6 +85,10 @@
 **4、本直播demo采用Google推荐的架构进行开发。**
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)
     demo中有两个repository，EmClientRepository及AppServerRepository。其中EmClientRepository用户处理环信SDK提供     的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管    理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。
+## 工具要求 ##
+demo中用到了Jetpack库，而使用Jetpack有如下要求：
+>（1）Android Studio 3.2或更高版本。</br>
+>（2）如果使用Androidx官方建议使用支持库的最终版本：版本28.0.0。需要SDK targetVersion至少为26。
 ## 文档 ##
 > 环信文档地址：
 > [http://docs-im.easemob.com/im/other/integrationcases/live-chatroom](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)。

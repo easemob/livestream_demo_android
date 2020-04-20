@@ -29,10 +29,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
+import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.SoftKeyboardChangeHelper;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.utils.Utils;
@@ -62,6 +62,8 @@ public class RoomMessagesView extends RelativeLayout{
     //ImageView danmuImage;
 
     public boolean isBarrageShow = false;
+    private int giftOiginMarginBottom;
+    private int barrageOriginMarginTop;
 
 
     public RoomMessagesView(Context context) {
@@ -175,11 +177,22 @@ public class RoomMessagesView extends RelativeLayout{
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
-                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
-                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                            barrageOriginMarginTop = params.topMargin;
+                            startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
-                                    params.topMargin = (int) animation.getAnimatedValue() + originMarginTop;
+                                    params.topMargin = (int) animation.getAnimatedValue() + barrageOriginMarginTop;
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                        if(child instanceof ShowGiveGiftView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            giftOiginMarginBottom = params.bottomMargin;
+                            startAnimation(giftOiginMarginBottom  - 10, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.bottomMargin = giftOiginMarginBottom - (int) animation.getAnimatedValue();
                                     child.setLayoutParams(params);
                                 }
                             });
@@ -202,11 +215,20 @@ public class RoomMessagesView extends RelativeLayout{
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
-                            int originMarginTop = (int) EaseCommonUtils.dip2px(getContext(), 20);
-                            startAnimation(height - originMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
+                            startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
-                                    params.topMargin = height - originMarginTop * 2 -  (int) animation.getAnimatedValue();
+                                    params.topMargin = height - barrageOriginMarginTop * 2 -  (int) animation.getAnimatedValue();
+                                    child.setLayoutParams(params);
+                                }
+                            });
+                        }
+                        if(child instanceof ShowGiveGiftView) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
+                            startAnimation(giftOiginMarginBottom - 10, 100, new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    params.bottomMargin = 10 + (int) animation.getAnimatedValue();
                                     child.setLayoutParams(params);
                                 }
                             });
@@ -314,7 +336,7 @@ public class RoomMessagesView extends RelativeLayout{
                     showText(holder.name, nickName, isSelf, content);
                 }
             }else if(message.getBody() instanceof EMCustomMessageBody) {
-                EmCustomMsgHelper msgHelper = EmCustomMsgHelper.getInstance();
+                DemoMsgHelper msgHelper = DemoMsgHelper.getInstance();
                 if(msgHelper.isGiftMsg(message)) {
                     showGiftMessage(holder.name, nickName, isSelf, message);
                 }else if(msgHelper.isPraiseMsg(message)) {
@@ -354,8 +376,8 @@ public class RoomMessagesView extends RelativeLayout{
         }
 
         private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
-            GiftBean bean = DemoHelper.getGiftById(EmCustomMsgHelper.getInstance().getMsgGiftId(message));
-            int num = EmCustomMsgHelper.getInstance().getMsgGiftNum(message);
+            GiftBean bean = DemoHelper.getGiftById(DemoMsgHelper.getInstance().getMsgGiftId(message));
+            int num = DemoMsgHelper.getInstance().getMsgGiftNum(message);
             String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -367,7 +389,7 @@ public class RoomMessagesView extends RelativeLayout{
         }
 
         private void showPraiseMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
-            String content = context.getString(R.string.em_live_msg_like, nickName, EmCustomMsgHelper.getInstance().getMsgPraiseNum(message));
+            String content = context.getString(R.string.em_live_msg_like, nickName, DemoMsgHelper.getInstance().getMsgPraiseNum(message));
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
@@ -378,7 +400,7 @@ public class RoomMessagesView extends RelativeLayout{
         }
 
         private void showBarrageMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
-            showText(name, nickName, isSelf, EmCustomMsgHelper.getInstance().getMsgBarrageTxt(message));
+            showText(name, nickName, isSelf, DemoMsgHelper.getInstance().getMsgBarrageTxt(message));
         }
 
         @Override
