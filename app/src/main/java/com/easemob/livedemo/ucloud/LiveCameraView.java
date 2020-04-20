@@ -97,7 +97,7 @@ public class LiveCameraView extends UAspectFrameLayout implements TextureView.Su
 
     public void startRecording() {
         if (!isPreviewed()) {
-            Toast.makeText(getContext(), "call start after previewed.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "call start after previewed.", Toast.LENGTH_SHORT).show();
             return;
         }
         streamEnvHolder.streamingProfile.setStreamUrl(streamEnvHolder.avOption.streamUrl);

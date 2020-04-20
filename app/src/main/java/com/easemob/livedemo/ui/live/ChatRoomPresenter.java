@@ -4,6 +4,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.easemob.custommessage.OnMsgCallBack;
+import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
@@ -68,31 +70,35 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
 
     @Override
     public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
-        for(String name : mutes){
-            showMemberChangeEvent(name, "被禁言");
+        if(mutes.contains(EMClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.em_live_in_mute_list));
         }
     }
 
     @Override
     public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
-        for(String name : mutes){
-            showMemberChangeEvent(name, "被解除禁言");
+        if(mutes.contains(EMClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.em_live_out_mute_list));
         }
     }
 
     @Override
     public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
-
+        if(whitelist.contains(EMClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.em_live_anchor_add_white));
+        }
     }
 
     @Override
     public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
-
+        if(whitelist.contains(EMClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.em_live_anchor_remove_from_white));
+        }
     }
 
     @Override
     public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
-
+        mContext.showToast(isMuted ? mContext.getString(R.string.em_live_mute_all) : mContext.getString(R.string.em_live_out_mute_all));
     }
 
     @Override
