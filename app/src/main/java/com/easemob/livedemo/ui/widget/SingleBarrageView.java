@@ -11,6 +11,7 @@ import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.custommessage.EmCustomMsgType;
 import com.easemob.custommessage.MsgConstant;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.data.model.MessageBean;
 import com.easemob.livedemo.ui.widget.barrage.BarrageAdapter;
 import com.easemob.livedemo.ui.widget.barrage.BarrageView;
@@ -117,7 +118,7 @@ public class SingleBarrageView extends BarrageView {
 
         @Override
         protected void onBind(MessageBean data) {
-            String barrageTxt = EmCustomMsgHelper.getInstance().getMsgBarrageTxt(data.getMessage());
+            String barrageTxt = DemoMsgHelper.getInstance().getMsgBarrageTxt(data.getMessage());
             if(!TextUtils.isEmpty(barrageTxt)) {
                 mContent.setText(barrageTxt);
             }
