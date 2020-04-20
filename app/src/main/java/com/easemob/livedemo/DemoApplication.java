@@ -38,8 +38,6 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     registerUncaughtExceptionHandler();
     initChatSdk();
 
-    EmCustomMsgHelper.getInstance().init();
-
     //UEasyStreaming.initStreaming("publish3-key");
 
     UStreamingContext.init(getApplicationContext(), "publish3-key");

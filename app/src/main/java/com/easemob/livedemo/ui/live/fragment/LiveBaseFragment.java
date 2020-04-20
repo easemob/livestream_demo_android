@@ -53,6 +53,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 基本介绍：
+ * 1、{@link com.hyphenate.EMChatRoomChangeListener}和{@link com.hyphenate.EMMessageListener}均放在{@link ChatRoomPresenter}中实现。
+ * 2、发送消息的逻辑均放在{@link DemoMsgHelper}这个单例中。
+ * 3、消息列表展示在{@link RoomMessagesView}中。
+ *
+ */
 public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnCustomMsgReceiveListener {
     private static final int MAX_SIZE = 10;
     protected static final String TAG = "LiveActivity";
@@ -134,9 +141,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         //初始化设置消息帮助相关信息
         DemoMsgHelper.getInstance().init(chatroomId);
 
-        //设置相关的直播间信息
-        EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId);
-
         usernameView.setText(anchorId);
         liveIdView.setText(getString(R.string.em_live_room_id, liveId));
         audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
@@ -166,7 +170,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         liveReceiveGift.setOnClickListener(this);
         getView().setOnTouchListener(this);
         presenter.setOnChatRoomListener(this);
-        EmCustomMsgHelper.getInstance().setOnCustomMsgReceiveListener(this);
+        DemoMsgHelper.getInstance().setOnCustomMsgReceiveListener(this);
     }
 
     @Override
@@ -556,7 +560,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if(message.getMsgTime() < joinTime - 2000) {
             return;
         }
-        String giftId = EmCustomMsgHelper.getInstance().getMsgGiftId(message);
+        String giftId = DemoMsgHelper.getInstance().getMsgGiftId(message);
         if(TextUtils.isEmpty(giftId)) {
             return;
         }
@@ -564,7 +568,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         User user = new User();
         user.setUsername(message.getFrom());
         bean.setUser(user);
-        bean.setNum(EmCustomMsgHelper.getInstance().getMsgGiftNum(message));
+        bean.setNum(DemoMsgHelper.getInstance().getMsgGiftNum(message));
         ThreadManager.getInstance().runOnMainThread(()-> {
             barrageLayout.showGift(bean);
         });
@@ -573,7 +577,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onReceivePraiseMsg(EMMessage message) {
         DemoHelper.saveLikeInfo(message);
-        int likeNum = EmCustomMsgHelper.getInstance().getMsgPraiseNum(message);
+        int likeNum = DemoMsgHelper.getInstance().getMsgPraiseNum(message);
         if(likeNum <= 0) {
             return;
         }
@@ -597,5 +601,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if(barrageLayout != null) {
             barrageLayout.destroy();
         }
+        DemoMsgHelper.getInstance().removeCustomMsgLisenter();
     }
 }
