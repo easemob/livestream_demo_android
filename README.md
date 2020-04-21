@@ -1,7 +1,7 @@
 ## 简介 ##
 **1、本直播demo展示了环信SDK提供直播聊天室的能力。除了提供基本的聊天外，还提供了赠送礼物，点赞及弹幕消息三种自定义消息，开发者可以根据自己的实际需求添加新的自定义消息。**
 
-**2、本demo主要包含直播列表页面（LivingListFragment及LiveListFragment），观众直播间页面（LiveAudienceActivity）及主播直播页面（LiveAnchorActivity）。为了便于集成第三方视频直播，直播页面将直播聊天室相关逻辑抽取到了LiveAudienceFragment和LiveAnchorFragment中，视频直播的相关逻辑可以直接在activity中实现。**
+**2、demo的核心类为：LiveAudienceActivity（观众直播间页面）及LiveAnchorActivity（主播直播页面）。为了便于集成第三方视频直播，直播页面将直播聊天室相关逻辑抽取到了LiveAudienceFragment和LiveAnchorFragment中，视频直播的相关逻辑可以直接在activity中实现。**
 
 **3、为了便于开发者使用自定义消息，demo中将自定义消息相关的逻辑放到custom message library中。**
 
@@ -88,7 +88,60 @@
 ## 工具要求 ##
 demo中用到了Jetpack库，而使用Jetpack有如下要求：
 >（1）Android Studio 3.2或更高版本。</br>
->（2）如果使用Androidx官方建议使用支持库的最终版本：版本28.0.0。需要SDK targetVersion至少为26。
+>（2）SDK targetVersion至少为26。
 ## 文档 ##
 > 环信文档地址：
 > [http://docs-im.easemob.com/im/other/integrationcases/live-chatroom](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)。
+## 针对非AndroidX构建的方案 ##
+**情形一、在非AndroidX构建的情况下运行demo，可进行如下工作：**</br>
+>（1）注释掉demo中gradle.properties的如下设置：
+>```Java
+>#android.enableJetifier=true //Android 插件会通过重写现有第三方库的二进制文件，自动将这些库迁移为使用 AndroidX
+>#android.useAndroidX=true    //Android 插件会使用对应的 AndroidX 库而非支持库
+>```
+>（2）将AndroidX构建工件替换为旧构建工件
+>```Java
+>dependencies {
+>    ...
+>    implementation "com.jakewharton:butterknife:$butterknife_version"
+>    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+>    implementation 'com.google.android.material:material:1.1.0'
+>    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+>    implementation "androidx.lifecycle:lifecycle-livedata:$ax_lifecycle_version"
+>    implementation "androidx.lifecycle:lifecycle-viewmodel:$ax_lifecycle_version"
+>    implementation "androidx.lifecycle:lifecycle-extensions:$ax_lifecycle_version"
+>    implementation "androidx.room:room-runtime:$ax_room_version"
+>    annotationProcessor "androidx.room:room-compiler:$ax_room_version"
+>    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+>    ...
+>}
+>```
+>修改为：
+>```Java
+>dependencies {
+>    ...
+>    implementation "com.jakewharton:butterknife:9.0.0"
+>    annotationProcessor "com.jakewharton:butterknife-compiler:9.0.0"
+>    implementation 'com.android.support:design:28.0.0'
+>    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+>    implementation "android.arch.lifecycle:livedata:$ax_lifecycle_version"
+>    implementation "android.arch.lifecycle:viewmodel:$ax_lifecycle_version"
+>    implementation "android.arch.lifecycle:extensions:$ax_lifecycle_version"
+>    implementation "android.arch.persistence.room:runtime:$ax_room_version"
+>    annotationProcessor "android.arch.persistence.room:compiler:$ax_room_version"
+>    implementation 'com.android.support:support-v4:28.0.0'
+>    ...
+>}
+>```
+>注：a、butterknife因10.0.0以上支持androidX，故需降为9.0.0。b、ax_lifecycle_version等的版本号，可以通过Android Stuido的Add Library Dependency去搜索。File ->Project Structure ->app ->Dependencies ->点击右上角添加+ ->Library  dependency ->输入要搜索的远程库名称，如 design。</br>
+>如果遇到与迁移有关的问题，请参考下面这些表来确定从支持库到对应的 AndroidX 工件和类的正确映射：</br>
+>[Maven 工件映射](https://developer.android.google.cn/jetpack/androidx/migrate/artifact-mappings)</br>
+>[类映射](https://developer.android.google.cn/jetpack/androidx/migrate/class-mappings)</br>
+>（3）全局替换androidX下的控件的引用路径及xml中的控件路径，如androidx.recyclerview.widget.RecyclerView -> android.support.v7.widget.RecyclerView。</br>
+>（4）替换ViewPager2为ViewPager，参考：[Migrate from ViewPager to ViewPager2](https://developer.android.google.cn/training/animation/vp2-migration?hl=zh_cn)</br>
+>（5）其他未提到的事项。</br>
+
+**情形二、仅使用demo中的核心类**</br>
+
+>如果只打算使用demo的核心类，建议您关注于com.easemob.livedemo.ui.live目录下相关类，核心类为LiveAnchorActivity和LiveAudienceActivity，以及他们相应的fragment。然后从这两个activity出发，逐步替换需要的类中有关androidX的控件。
+
