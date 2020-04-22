@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +27,7 @@ public abstract class LiveBaseActivity extends BaseActivity {
             finish();
             return;
         }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         onActivityCreated(savedInstanceState);
         initView();
         initListener();

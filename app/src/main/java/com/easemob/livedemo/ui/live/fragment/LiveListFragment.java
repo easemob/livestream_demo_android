@@ -194,7 +194,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         boolean living = DemoHelper.isLiving(status);
         if(living) {
             if(TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
-                PushStreamHelper.getInstance().getPublishUrl(EMClient.getInstance().getCurrentUser(), new OnCallBack<String>() {
+                PushStreamHelper.getInstance().getPublishUrl(liveRoom.getId(), new OnCallBack<String>() {
                     @Override
                     public void onSuccess(String data) {
                         LiveAnchorActivity.actionStart(mContext, liveRoom, data);
@@ -211,7 +211,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
             }
 
         }else {
-            PushStreamHelper.getInstance().getPublishUrl(EMClient.getInstance().getCurrentUser(), new OnCallBack<String>() {
+            PushStreamHelper.getInstance().getPublishUrl(liveRoom.getId(), new OnCallBack<String>() {
                 @Override
                 public void onSuccess(String data) {
                     LiveAnchorActivity.actionStart(mContext, liveRoom, data);

@@ -104,7 +104,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    PushStreamHelper.getInstance().getPublishUrl(EMClient.getInstance().getCurrentUser(), new OnCallBack<String>() {
+                    PushStreamHelper.getInstance().getPublishUrl(data.getId(), new OnCallBack<String>() {
                         @Override
                         public void onSuccess(String url) {
                             LiveAnchorActivity.actionStart(mContext, data, url);

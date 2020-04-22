@@ -186,7 +186,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
         super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
         if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
-            PushStreamHelper.getInstance().getPublishUrl(newOwner, new OnCallBack<String>() {
+            PushStreamHelper.getInstance().getPublishUrl(chatRoomId, new OnCallBack<String>() {
                 @Override
                 public void onSuccess(String data) {
                     LiveAudienceActivity.actionStart(mContext, liveRoom);

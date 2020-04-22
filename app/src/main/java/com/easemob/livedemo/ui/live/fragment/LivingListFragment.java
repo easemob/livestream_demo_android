@@ -14,7 +14,7 @@ public class LivingListFragment extends LiveListFragment {
     @Override
     public void onItemClick(View view, int position) {
         LiveRoom liveRoom = adapter.getItem(position);
-        PushStreamHelper.getInstance().getPublishUrl(liveRoom.getOwner(), new OnCallBack<String>() {
+        PushStreamHelper.getInstance().getPublishUrl(liveRoom.getId(), new OnCallBack<String>() {
             @Override
             public void onSuccess(String data) {
                 LiveAudienceActivity.actionStart(mContext, liveRoom, data);
