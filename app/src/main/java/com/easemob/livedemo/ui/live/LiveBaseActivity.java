@@ -3,14 +3,17 @@ package com.easemob.livedemo.ui.live;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseActivity;
+import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 
 /**
  * Created by wei on 2016/6/12.
@@ -46,5 +49,25 @@ public abstract class LiveBaseActivity extends BaseActivity {
 
     protected void initListener() {}
 
-    protected void initData() {}
+    protected void initData() {
+        StreamViewModel viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel.getPublishUrl(liveRoom.getId());
+
+        viewModel.getPublishUrlObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    getStreamUrlSuccess(data);
+                }
+            });
+        });
+    }
+
+    /**
+     * 获取推流地址
+     * @param url
+     */
+    protected void getStreamUrlSuccess(String url) {
+
+    }
 }

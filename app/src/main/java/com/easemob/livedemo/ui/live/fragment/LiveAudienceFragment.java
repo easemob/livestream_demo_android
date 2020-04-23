@@ -176,19 +176,8 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
         // 如果直播间主播被调整为自己
         if(TextUtils.equals(chatroomId, chatRoomId) && TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
-            PushStreamHelper.getInstance().getPublishUrl(chatRoomId, new OnCallBack<String>() {
-                @Override
-                public void onSuccess(String data) {
-                    LiveAnchorActivity.actionStart(mContext, liveRoom, data);
-                    mContext.finish();
-                }
-
-                @Override
-                public void onFail(String message) {
-
-                }
-            });
-
+            LiveAnchorActivity.actionStart(mContext, liveRoom);
+            mContext.finish();
         }
     }
 

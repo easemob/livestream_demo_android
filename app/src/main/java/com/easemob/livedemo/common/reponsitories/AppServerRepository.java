@@ -7,9 +7,12 @@ import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.ApiService;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 
 import java.util.List;
 
+import androidx.lifecycle.MutableLiveData;
 import okhttp3.RequestBody;
 
 /**
@@ -74,6 +77,25 @@ public class AppServerRepository {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoom>> callBack) {
                 callBack.onSuccess(apiService.updateLiveRoom(roomId, body));
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<String>> getPublishUrl(String roomId) {
+        return new NetworkOnlyResource<String, String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                PushStreamHelper.getInstance().getPublishUrl(roomId, new OnCallBack<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        callBack.onSuccess(new MutableLiveData<String>(data));
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        callBack.onError(ErrorCode.UNKNOWN_ERROR, message);
+                    }
+                });
             }
         }.asLiveData();
     }

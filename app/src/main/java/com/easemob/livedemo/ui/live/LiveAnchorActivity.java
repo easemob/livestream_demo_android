@@ -18,27 +18,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.qiniu_sdk.LiveCameraView;
 import com.easemob.qiniu_sdk.PushStreamHelper;
-import com.easemob.qiniu_sdk.Util;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
-import com.qiniu.pili.droid.streaming.AVCodecType;
-import com.qiniu.pili.droid.streaming.AudioSourceCallback;
-import com.qiniu.pili.droid.streaming.CameraStreamingSetting;
-import com.qiniu.pili.droid.streaming.MediaStreamingManager;
-import com.qiniu.pili.droid.streaming.StreamStatusCallback;
-import com.qiniu.pili.droid.streaming.StreamingProfile;
-import com.qiniu.pili.droid.streaming.StreamingSessionListener;
-import com.qiniu.pili.droid.streaming.StreamingState;
-import com.qiniu.pili.droid.streaming.StreamingStateChangedListener;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.UUID;
 
 public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
 
@@ -105,8 +88,15 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     public void initLiveEnv() {
         String publishUrl = getIntent().getStringExtra("publishUrl");
+        Log.e("TAG", "publishUrl = "+publishUrl);
         streamHelper = PushStreamHelper.getInstance();
         streamHelper.initPublishVideo(cameraView, publishUrl);
+    }
+
+    @Override
+    protected void getStreamUrlSuccess(String url) {
+        super.getStreamUrlSuccess(url);
+        streamHelper.setPublishUrl(url);
     }
 
 //    /**

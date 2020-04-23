@@ -89,6 +89,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         usernameView.setText("");
+        switchCameraView.setVisibility(View.VISIBLE);
         groupGiftInfo.setVisibility(View.VISIBLE);
 
         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
@@ -186,19 +187,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
         super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
         if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
-            PushStreamHelper.getInstance().getPublishUrl(chatRoomId, new OnCallBack<String>() {
-                @Override
-                public void onSuccess(String data) {
-                    LiveAudienceActivity.actionStart(mContext, liveRoom);
-                    mContext.finish();
-                }
-
-                @Override
-                public void onFail(String message) {
-
-                }
-            });
-
+            LiveAudienceActivity.actionStart(mContext, liveRoom);
+            mContext.finish();
         }
     }
 

@@ -97,19 +97,8 @@ public class CreateLiveRoomActivity extends BaseActivity {
             parseResource(response, new OnResourceParseCallback<LiveRoom>(true) {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    PushStreamHelper.getInstance().getPublishUrl(data.getId(), new OnCallBack<String>() {
-                        @Override
-                        public void onSuccess(String url) {
-                            LiveAnchorActivity.actionStart(mContext, data, url);
-                            finish();
-                        }
-
-                        @Override
-                        public void onFail(String message) {
-
-                        }
-                    });
-
+                    LiveAnchorActivity.actionStart(mContext, data);
+                    finish();
                 }
 
                 @Override

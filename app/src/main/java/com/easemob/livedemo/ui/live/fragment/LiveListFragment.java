@@ -46,7 +46,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     private RecyclerView recyclerView;
     private ProgressBar loadmorePB;
 
-    protected static final int pageSize = 8;
+    protected static final int pageSize = 100;
     private String cursor;
     private boolean hasMoreData;
     private boolean isLoading;
@@ -194,34 +194,13 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         boolean living = DemoHelper.isLiving(status);
         if(living) {
             if(TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
-                PushStreamHelper.getInstance().getPublishUrl(liveRoom.getId(), new OnCallBack<String>() {
-                    @Override
-                    public void onSuccess(String data) {
-                        LiveAnchorActivity.actionStart(mContext, liveRoom, data);
-                    }
-
-                    @Override
-                    public void onFail(String message) {
-
-                    }
-                });
-
+                LiveAnchorActivity.actionStart(mContext, liveRoom);
             }else {
                 showDialog();
             }
 
         }else {
-            PushStreamHelper.getInstance().getPublishUrl(liveRoom.getId(), new OnCallBack<String>() {
-                @Override
-                public void onSuccess(String data) {
-                    LiveAnchorActivity.actionStart(mContext, liveRoom, data);
-                }
-
-                @Override
-                public void onFail(String message) {
-
-                }
-            });
+            LiveAnchorActivity.actionStart(mContext, liveRoom);
         }
     }
 

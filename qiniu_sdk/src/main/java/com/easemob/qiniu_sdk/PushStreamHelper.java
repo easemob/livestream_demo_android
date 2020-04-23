@@ -6,7 +6,6 @@ import android.opengl.GLSurfaceView;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.qiniu.pili.droid.streaming.AVCodecType;
 import com.qiniu.pili.droid.streaming.AudioSourceCallback;
 import com.qiniu.pili.droid.streaming.CameraStreamingSetting;
 import com.qiniu.pili.droid.streaming.MediaStreamingManager;
@@ -28,11 +27,15 @@ import java.util.List;
 public class PushStreamHelper implements StreamingStateChangedListener, StreamingSessionListener, StreamStatusCallback, AudioSourceCallback {
     private static final String GENERATE_STREAM_TEXT = "https://api-demo.qnsdk.com/v1/live/stream/";
     private static final String TAG = "PushStreamHelper";
+    //private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt?e=1587644086&token=QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:nJeMAL3vKgA0sJ1pIfHkxZ9mn1o=";
+    private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt";
     private static PushStreamHelper instance;
 
     private StreamingProfile mProfile;
     private MediaStreamingManager mMediaStreamingManager;
     private CameraStreamingSetting cameraStreamingSetting;
+    private String publishUrl = DEFAULT_PUBLISH_URL;
+    private EncodingConfig config;
 
     private PushStreamHelper(){}
 
@@ -70,12 +73,64 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
         }.start();
     }
 
+    public void initPublishVideo(GLSurfaceView surfaceView) {
+        if(this.config == null) {
+            this.config = new EncodingConfig();
+        }
+        try {
+            setCameraStreamingSetting();
+            initProfile(this.publishUrl);
+            setMediaStreamManager(surfaceView);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void initPublishVideo(GLSurfaceView surfaceView, String publishUrl) {
-        if(!TextUtils.isEmpty(publishUrl)) {
+        this.publishUrl = publishUrl;
+        if(TextUtils.isEmpty(this.publishUrl)) {
+            this.publishUrl = DEFAULT_PUBLISH_URL;
+        }
+        if(this.config == null) {
+            this.config = new EncodingConfig();
+        }
+        try {
+            setCameraStreamingSetting();
+            initProfile(this.publishUrl);
+            setMediaStreamManager(surfaceView);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initPublishVideo(GLSurfaceView surfaceView, String publishUrl, EncodingConfig config) {
+        this.publishUrl = publishUrl;
+        this.config = config;
+        if(this.config == null) {
+            this.config = new EncodingConfig();
+        }
+        try {
+            setCameraStreamingSetting();
+            initProfile(publishUrl);
+            setMediaStreamManager(surfaceView);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 设置推流地址
+     * @param publishUrl
+     */
+    public void setPublishUrl(String publishUrl) {
+        this.publishUrl = publishUrl;
+        if(!TextUtils.isEmpty(this.publishUrl)) {
+            if(mProfile == null || mMediaStreamingManager == null) {
+                return;
+            }
             try {
-                setCameraStreamingSetting();
-                initProfile(publishUrl);
-                setMediaStreamManager(surfaceView);
+                initProfile(this.publishUrl);
+                mMediaStreamingManager.setStreamingProfile(mProfile);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -86,10 +141,17 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
         //encoding setting
         Log.e(TAG, "initProfile");
         mProfile = new StreamingProfile();
-        mProfile.setVideoQuality(StreamingProfile.VIDEO_QUALITY_HIGH1)              // 设置视频质量
-                .setAudioQuality(StreamingProfile.AUDIO_QUALITY_MEDIUM2)            // 设置音频质量
-                .setEncodingSizeLevel(StreamingProfile.VIDEO_ENCODING_HEIGHT_480)
-                .setEncoderRCMode(StreamingProfile.EncoderRCModes.QUALITY_PRIORITY) // 软编的EncoderRCModes,默认为EncoderRCModes.QUALITY_PRIORITY
+        if(config.mIsPictureStreamingEnabled) {
+            if(config.mPictureStreamingFilePath == null) {
+                mProfile.setPictureStreamingResourceId(R.drawable.pause_publish);
+            }else {
+                mProfile.setPictureStreamingFilePath(config.mPictureStreamingFilePath);
+            }
+        }
+        mProfile.setVideoQuality(config.mVideoQualityPreset)              // 设置视频质量
+                .setAudioQuality(config.mAudioQualityPreset)            // 设置音频质量
+                .setEncodingSizeLevel(config.mVideoSizePreset)
+                .setEncoderRCMode(config.mEncoderRCMode) // 软编的EncoderRCModes,默认为EncoderRCModes.QUALITY_PRIORITY
                 .setPublishUrl(publishUrl);                               // 设置推流地址
     }
 
@@ -109,19 +171,17 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
         Log.e(TAG, "setCameraStreamingSetting");
         //preview setting
         cameraStreamingSetting = new CameraStreamingSetting();
-        cameraStreamingSetting.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT) //默认后置摄像头，设置后置摄像头，CAMERA_FACING_FRONT为前置
-                .setContinuousFocusModeEnabled(true)    //自动对焦，默认开启
-                .setFocusMode(CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_VIDEO)   //设置对焦模式，默认是VIDEO，可选FOCUS_MODE_CONTINUOUS_PICTURE
+        cameraStreamingSetting.setCameraId(config.mFrontFacing ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK) //默认后置摄像头，设置后置摄像头，CAMERA_FACING_FRONT为前置
+                .setContinuousFocusModeEnabled(config.mContinuousAutoFocus)    //自动对焦，默认开启
+                .setFocusMode(config.mFocusMode)   //设置对焦模式，默认是VIDEO，可选FOCUS_MODE_CONTINUOUS_PICTURE
                 // 及FOCUS_MODE_AUTO, PICTURE 对焦会比 VIDEO 更加频繁，
                 // 功耗会更高，建议使用 VIDEO
                 //.setFaceBeautySetting(new CameraStreamingSetting.FaceBeautySetting(1.0f, 1.0f, 0.8f)) //初始化美颜参数
                 //.setVideoFilter(CameraStreamingSetting.VIDEO_FILTER_TYPE.VIDEO_FILTER_BEAUTY)
-                .setCameraPrvSizeLevel(CameraStreamingSetting.PREVIEW_SIZE_LEVEL.MEDIUM)
-                .setCameraPrvSizeRatio(CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_16_9)
-                .setFocusMode(CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_PICTURE)
-                .setContinuousFocusModeEnabled(true)
-                .setFrontCameraPreviewMirror(false)
-                .setFrontCameraMirror(false)
+                .setCameraPrvSizeLevel(config.mSizeLevel)
+                .setCameraPrvSizeRatio(config.mSizeRatio)
+                .setFrontCameraPreviewMirror(config.mPreviewMirror)
+                .setFrontCameraMirror(config.mEncodingMirror)
                 .setRecordingHint(false)
                 .setResetTouchFocusDelayInMs(3000);
     }
@@ -138,7 +198,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      */
     private void setMediaStreamManager(GLSurfaceView surfaceView) {
         //streaming engine init and setListener
-        mMediaStreamingManager = new MediaStreamingManager(surfaceView.getContext(), surfaceView, AVCodecType.SW_VIDEO_WITH_SW_AUDIO_CODEC);  // soft codec
+        mMediaStreamingManager = new MediaStreamingManager(surfaceView.getContext(), surfaceView, config.mCodecType);  // soft codec
         mMediaStreamingManager.prepare(cameraStreamingSetting, mProfile);
         Log.e(TAG, "setMediaStreamManager");
         mMediaStreamingManager.setAutoRefreshOverlay(true);
@@ -171,6 +231,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      * 释放不紧要资源。
      */
     public void destroy() {
+        this.publishUrl = DEFAULT_PUBLISH_URL;
         if(mMediaStreamingManager != null) {
             mMediaStreamingManager.destroy();
         }

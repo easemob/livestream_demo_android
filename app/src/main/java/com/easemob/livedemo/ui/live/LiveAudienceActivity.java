@@ -78,6 +78,13 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "live_audience").commit();
     }
 
+    @Override
+    protected void getStreamUrlSuccess(String url) {
+        super.getStreamUrlSuccess(url);
+        videoview.setVideoPath(url);
+        Log.e("TAG", "publish url = "+url);
+    }
+
     /**
      * 开发者可以修改此处替换为自己的直播流
      */
