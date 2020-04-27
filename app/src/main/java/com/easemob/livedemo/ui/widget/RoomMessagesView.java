@@ -176,6 +176,7 @@ public class RoomMessagesView extends RelativeLayout{
                     for(int i = 0; i < childCount; i++) {
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
+                            child.setBackgroundColor(Color.parseColor("#01ffffff"));
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
                             barrageOriginMarginTop = params.topMargin;
                             startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
@@ -214,6 +215,7 @@ public class RoomMessagesView extends RelativeLayout{
                     for(int i = 0; i < childCount; i++) {
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
+                            child.setBackground(null);
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
                             startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
                                 @Override

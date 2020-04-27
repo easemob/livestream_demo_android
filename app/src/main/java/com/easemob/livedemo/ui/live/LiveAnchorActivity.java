@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,7 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 import com.easemob.qiniu_sdk.LiveCameraView;
 import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
@@ -72,6 +75,21 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
         super.initData();
         initLiveEnv();
         initFragment();
+        initViewModel();
+    }
+
+    private void initViewModel() {
+        StreamViewModel viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel.getPublishUrl(liveRoom.getId());
+
+        viewModel.getPublishUrlObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    getStreamUrlSuccess(data);
+                }
+            });
+        });
     }
 
     private void initFragment() {
@@ -93,9 +111,8 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
         streamHelper.initPublishVideo(cameraView, publishUrl);
     }
 
-    @Override
     protected void getStreamUrlSuccess(String url) {
-        super.getStreamUrlSuccess(url);
+        Log.e("TAG", "url = "+url);
         streamHelper.setPublishUrl(url);
     }
 
@@ -119,6 +136,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     @Override
     protected void onPause() {
         super.onPause();
+        //如果需要页面不可见后停止推流调用此方法
         streamHelper.pause();
     }
 

@@ -50,24 +50,5 @@ public abstract class LiveBaseActivity extends BaseActivity {
     protected void initListener() {}
 
     protected void initData() {
-        StreamViewModel viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
-        viewModel.getPublishUrl(liveRoom.getId());
-
-        viewModel.getPublishUrlObservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<String>() {
-                @Override
-                public void onSuccess(String data) {
-                    getStreamUrlSuccess(data);
-                }
-            });
-        });
-    }
-
-    /**
-     * 获取推流地址
-     * @param url
-     */
-    protected void getStreamUrlSuccess(String url) {
-
     }
 }

@@ -29,6 +29,10 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     private static final String TAG = "PushStreamHelper";
     //private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt?e=1587644086&token=QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:nJeMAL3vKgA0sJ1pIfHkxZ9mn1o=";
     private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt";
+    private static final String PUBLISH_HOST = "rtmp://";
+    private static final String RTMP_PUBLISH_DOMAIN = "pili-publish.easemob.com";
+    private static final String RTMP_PLAY_DOMAIN = "pili-live-rtmp.easemob.com";
+    private static final String HUB = "es-liveroom";
     private static PushStreamHelper instance;
 
     private StreamingProfile mProfile;
@@ -64,13 +68,25 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      * @param callBack
      */
     public void getPublishUrl(String userId, OnCallBack<String> callBack) {
+//        if(callBack != null) {
+//            callBack.onSuccess(PUBLISH_HOST + RTMP_PUBLISH_DOMAIN + "/" + HUB + "/" + userId);
+//        }
         new Thread(){
             public void run(){
-                if(callBack != null) {
-                    callBack.onSuccess(Util.syncRequest(GENERATE_STREAM_TEXT + userId));
-                }
+                callBack.onSuccess(Util.syncRequest(GENERATE_STREAM_TEXT + userId));
             }
         }.start();
+    }
+
+    /**
+     * 获取拉流地址
+     * @param userId
+     * @param callBack
+     */
+    public void getPlayUrl(String userId, OnCallBack<String> callBack) {
+        if(callBack != null) {
+            callBack.onSuccess(PUBLISH_HOST + RTMP_PLAY_DOMAIN + "/" + HUB + "/" + userId);
+        }
     }
 
     public void initPublishVideo(GLSurfaceView surfaceView) {
@@ -197,6 +213,8 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      * @param surfaceView
      */
     private void setMediaStreamManager(GLSurfaceView surfaceView) {
+        surfaceView.setZOrderOnTop(true);
+        surfaceView.setZOrderMediaOverlay(true);
         //streaming engine init and setListener
         mMediaStreamingManager = new MediaStreamingManager(surfaceView.getContext(), surfaceView, config.mCodecType);  // soft codec
         mMediaStreamingManager.prepare(cameraStreamingSetting, mProfile);
@@ -293,6 +311,9 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
                 break;
             case TORCH_INFO:
                 Log.e(TAG, "开启闪光灯");
+                break;
+            case CAMERA_SWITCHED:
+                Log.e(TAG, "切换摄像头 "+extra);
                 break;
         }
     }

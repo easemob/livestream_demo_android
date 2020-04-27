@@ -7,11 +7,14 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import butterknife.ButterKnife;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
 
@@ -76,13 +79,28 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         }
         fragment.setOnLiveListener(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "live_audience").commit();
+
+        initViewModel();
     }
 
-    @Override
+
+    private void initViewModel() {
+        StreamViewModel viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel.getPublishUrl(liveRoom.getId());
+
+        viewModel.getPublishUrlObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    getStreamUrlSuccess(data);
+                }
+            });
+        });
+    }
+
     protected void getStreamUrlSuccess(String url) {
-        super.getStreamUrlSuccess(url);
+        Log.e("TAG", "play url = "+url);
         videoview.setVideoPath(url);
-        Log.e("TAG", "publish url = "+url);
     }
 
     /**
