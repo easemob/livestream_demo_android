@@ -3,18 +3,26 @@ package com.easemob.livedemo.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import butterknife.ButterKnife;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.LiveDataBus;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Random;
 
 public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener, LiveVideoView.OnVideoListener {
@@ -23,6 +31,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     private View llStreamLoading;
     private String url;
     private boolean isPrepared;
+    private StreamViewModel viewModel;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent intent = new Intent(context, LiveAudienceActivity.class);
@@ -76,13 +85,41 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         }
         fragment.setOnLiveListener(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "live_audience").commit();
+
+        initViewModel();
     }
 
-    @Override
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel.getPlayUrl(liveRoom.getId());
+
+        viewModel.getPlayUrlOberservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    getStreamUrlSuccess(data);
+                }
+            });
+        });
+
+        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
+            stopVideo();
+        });
+
+        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN, Boolean.class).observe(mContext, event -> {
+            videoview.attachView();
+            videoview.setOnVideoListener(this);
+            videoview.setAvOptions();
+            videoview.setLoadingView(llStreamLoading);
+            viewModel.getPlayUrl(liveRoom.getId());
+        });
+    }
+
     protected void getStreamUrlSuccess(String url) {
-        super.getStreamUrlSuccess(url);
+        this.url = url;
+        Log.e("TAG", "play url = "+url);
         videoview.setVideoPath(url);
-        Log.e("TAG", "publish url = "+url);
     }
 
     /**
@@ -108,6 +145,22 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if(mContext.isFinishing()) {
+            stopVideo();
+        }
+    }
+
+    private void stopVideo() {
+        Log.e("TAG", "stopVideo");
+        isPrepared = false;
+        videoview.stopPlayback();
+        videoview.setVisibility(View.GONE);
+        llStreamLoading.setVisibility(View.GONE);
+    }
+
+    @Override
     public void onLiveOngoing() {
         connectLiveStream();
     }
@@ -121,6 +174,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     @Override
     public void onPrepared(int preparedTime) {
         Log.e("TAG", "onPrepared");
+        videoview.setVisibility(View.VISIBLE);
         isPrepared = true;
         videoview.start();
     }
@@ -132,11 +186,17 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     @Override
     public boolean onError(int errorCode) {
+        Log.e("TAG", "onError = "+errorCode);
         return false;
     }
 
     @Override
     public void onVideoSizeChanged(int width, int height) {
 
+    }
+
+    @Override
+    public void onStopVideo() {
+        runOnUiThread(this::stopVideo);
     }
 }

@@ -18,6 +18,9 @@ public interface DemoConstants {
     String REFRESH_MEMBER = "refresh_member";
     String REFRESH_MEMBER_COUNT = "refresh_member_count";
 
+    String EVENT_ANCHOR_FINISH_LIVE = "event_anchor_finish_live";
+    String EVENT_ANCHOR_JOIN = "event_anchor_join";
+
     String TYPE_ANCHOR = "anchor";
     String TYPE_AUDIENCE = "audience";
 

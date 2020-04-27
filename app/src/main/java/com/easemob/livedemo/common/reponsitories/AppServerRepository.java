@@ -1,5 +1,7 @@
 package com.easemob.livedemo.common.reponsitories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -36,8 +38,8 @@ public class AppServerRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<LiveRoom>>> getLiveRoomList(int limit, String cursor) {
-        return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
+    public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getLiveRoomList(int limit, String cursor) {
+        return new NetworkOnlyResource<ResponseModule<List<LiveRoom>>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
                 callBack.onSuccess(apiService.getLiveRoomList(limit, cursor));
@@ -45,8 +47,8 @@ public class AppServerRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<LiveRoom>>> getLivingRoomLists(int limit, String cursor) {
-        return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
+    public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getLivingRoomLists(int limit, String cursor) {
+        return new NetworkOnlyResource<ResponseModule<List<LiveRoom>>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
                 callBack.onSuccess(apiService.getLivingRoomList(limit, cursor));
@@ -88,6 +90,27 @@ public class AppServerRepository {
                 PushStreamHelper.getInstance().getPublishUrl(roomId, new OnCallBack<String>() {
                     @Override
                     public void onSuccess(String data) {
+                        Log.e("TAG", "get publish url = "+data);
+                        callBack.onSuccess(new MutableLiveData<String>(data));
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        callBack.onError(ErrorCode.UNKNOWN_ERROR, message);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<String>> getPlayUrl(String roomId) {
+        return new NetworkOnlyResource<String, String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                PushStreamHelper.getInstance().getPlayUrl(roomId, new OnCallBack<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        Log.e("TAG", "get play url = "+data);
                         callBack.onSuccess(new MutableLiveData<String>(data));
                     }
 

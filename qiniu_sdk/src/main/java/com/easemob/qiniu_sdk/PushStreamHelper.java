@@ -1,6 +1,7 @@
 package com.easemob.qiniu_sdk;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
 import android.text.TextUtils;
@@ -23,12 +24,17 @@ import java.util.List;
 /**
  * 作为推流的帮助类
  * 推流SDK设置参考：https://developer.qiniu.com/pili/sdk/3719/PLDroidMediaStreaming-function-using
+ * {@link RTMP_PUBLISH_DOMAIN}和{@link RTMP_PLAY_DOMAIN}需要替换为自己的域名，{@link HUB}为直播空间名
  */
-public class PushStreamHelper implements StreamingStateChangedListener, StreamingSessionListener, StreamStatusCallback, AudioSourceCallback {
+public class PushStreamHelper implements StreamingStateChangedListener, StreamingSessionListener, StreamStatusCallback, AudioSourceCallback/*, PLAuthenticationResultCallback*/ {
     private static final String GENERATE_STREAM_TEXT = "https://api-demo.qnsdk.com/v1/live/stream/";
     private static final String TAG = "PushStreamHelper";
     //private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt?e=1587644086&token=QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:nJeMAL3vKgA0sJ1pIfHkxZ9mn1o=";
     private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt";
+    private static final String PUBLISH_HOST = "rtmp://";
+    private static final String RTMP_PUBLISH_DOMAIN = "";
+    private static final String RTMP_PLAY_DOMAIN = "";
+    private static final String HUB = "";
     private static PushStreamHelper instance;
 
     private StreamingProfile mProfile;
@@ -59,18 +65,32 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     }
 
     /**
-     * 获取推流地址
+     * 获取推流地址，此处为演示，为未校验鉴权
+     * 实际开发中，应通过app server获取推流地址，并进行鉴权避免直播内容的盗用。
      * @param userId
      * @param callBack
      */
     public void getPublishUrl(String userId, OnCallBack<String> callBack) {
-        new Thread(){
-            public void run(){
-                if(callBack != null) {
-                    callBack.onSuccess(Util.syncRequest(GENERATE_STREAM_TEXT + userId));
-                }
-            }
-        }.start();
+        if(callBack != null) {
+            callBack.onSuccess(PUBLISH_HOST + RTMP_PUBLISH_DOMAIN + "/" + HUB + "/" + userId);
+        }
+//        new Thread(){
+//            public void run(){
+//                callBack.onSuccess(Util.syncRequest(GENERATE_STREAM_TEXT + userId));
+//            }
+//        }.start();
+    }
+
+    /**
+     * 获取拉流地址，此处为演示，为未校验鉴权
+     * 实际开发中，应通过app server获取播放地址。
+     * @param userId
+     * @param callBack
+     */
+    public void getPlayUrl(String userId, OnCallBack<String> callBack) {
+        if(callBack != null) {
+            callBack.onSuccess(PUBLISH_HOST + RTMP_PLAY_DOMAIN + "/" + HUB + "/" + userId);
+        }
     }
 
     public void initPublishVideo(GLSurfaceView surfaceView) {
@@ -197,6 +217,8 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      * @param surfaceView
      */
     private void setMediaStreamManager(GLSurfaceView surfaceView) {
+        surfaceView.setZOrderOnTop(true);
+        surfaceView.setZOrderMediaOverlay(true);
         //streaming engine init and setListener
         mMediaStreamingManager = new MediaStreamingManager(surfaceView.getContext(), surfaceView, config.mCodecType);  // soft codec
         mMediaStreamingManager.prepare(cameraStreamingSetting, mProfile);
@@ -206,6 +228,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
         mMediaStreamingManager.setStreamingSessionListener(this);
         mMediaStreamingManager.setStreamStatusCallback(this);
         mMediaStreamingManager.setAudioSourceCallback(this);
+        //StreamingEnv.checkAuthentication(this);
         Log.e(TAG, "setMediaStreamManager end");
     }
 
@@ -294,6 +317,9 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
             case TORCH_INFO:
                 Log.e(TAG, "开启闪光灯");
                 break;
+            case CAMERA_SWITCHED:
+                Log.e(TAG, "切换摄像头 "+extra);
+                break;
         }
     }
 
@@ -335,4 +361,9 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
             }
         }).start();
     }
+
+    /*@Override
+    public void onAuthorizationResult(int result) {
+        Log.e("TAG", "result = "+result);
+    }*/
 }

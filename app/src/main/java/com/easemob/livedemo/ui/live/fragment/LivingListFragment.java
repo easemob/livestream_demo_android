@@ -18,7 +18,7 @@ public class LivingListFragment extends LiveListFragment {
     }
 
     @Override
-    protected void showLiveList(boolean isLoadMore) {
-        viewModel.getLivingRoomLists(pageSize);
+    protected void loadLiveList(int limit, String cursor) {
+        viewModel.getLivingRoomLists(limit, cursor);
     }
 }
