@@ -3,6 +3,7 @@ package com.easemob.livedemo.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -18,6 +19,8 @@ import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Random;
 
 public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener, LiveVideoView.OnVideoListener {
@@ -99,6 +102,15 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     }
 
     protected void getStreamUrlSuccess(String url) {
+        try {
+            URI u = new URI(url);
+            Log.e("TAG", "host = "+u.getHost() + "  rawQuery = "+u.getRawQuery() + " path = "+u.getPath());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        if(!TextUtils.isEmpty(url) && url.contains("?")) {
+            url = url.split("\\?")[0];
+        }
         Log.e("TAG", "play url = "+url);
         videoview.setVideoPath(url);
     }
@@ -123,6 +135,14 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     protected void onPause() {
         super.onPause();
         videoview.pause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mContext.isFinishing()) {
+            videoview.stopPlayback();
+        }
     }
 
     @Override

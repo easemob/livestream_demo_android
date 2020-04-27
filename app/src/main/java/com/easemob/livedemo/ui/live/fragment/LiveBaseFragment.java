@@ -1,6 +1,7 @@
 package com.easemob.livedemo.ui.live.fragment;
 
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;

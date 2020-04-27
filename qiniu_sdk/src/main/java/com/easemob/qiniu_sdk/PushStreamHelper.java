@@ -1,6 +1,7 @@
 package com.easemob.qiniu_sdk;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
 import android.text.TextUtils;
@@ -68,14 +69,14 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      * @param callBack
      */
     public void getPublishUrl(String userId, OnCallBack<String> callBack) {
-//        if(callBack != null) {
-//            callBack.onSuccess(PUBLISH_HOST + RTMP_PUBLISH_DOMAIN + "/" + HUB + "/" + userId);
-//        }
-        new Thread(){
-            public void run(){
-                callBack.onSuccess(Util.syncRequest(GENERATE_STREAM_TEXT + userId));
-            }
-        }.start();
+        if(callBack != null) {
+            callBack.onSuccess(PUBLISH_HOST + RTMP_PUBLISH_DOMAIN + "/" + HUB + "/" + userId);
+        }
+//        new Thread(){
+//            public void run(){
+//                callBack.onSuccess(Util.syncRequest(GENERATE_STREAM_TEXT + userId));
+//            }
+//        }.start();
     }
 
     /**
