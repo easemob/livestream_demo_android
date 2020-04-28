@@ -64,7 +64,8 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     }
 
     /**
-     * 获取推流地址
+     * 获取推流地址，此处为演示，为未校验鉴权
+     * 实际开发中，应通过app server获取推流地址，并进行鉴权避免直播内容的盗用。
      * @param userId
      * @param callBack
      */
@@ -80,7 +81,8 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     }
 
     /**
-     * 获取拉流地址
+     * 获取拉流地址，此处为演示，为未校验鉴权
+     * 实际开发中，应通过app server获取播放地址。
      * @param userId
      * @param callBack
      */

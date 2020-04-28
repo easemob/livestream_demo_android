@@ -92,9 +92,9 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     private void initViewModel() {
         viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
-        viewModel.getPublishUrl(liveRoom.getId());
+        viewModel.getPlayUrl(liveRoom.getId());
 
-        viewModel.getPublishUrlObservable().observe(this, response -> {
+        viewModel.getPlayUrlOberservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
