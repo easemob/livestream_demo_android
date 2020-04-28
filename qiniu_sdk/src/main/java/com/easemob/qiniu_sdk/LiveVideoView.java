@@ -12,6 +12,7 @@ import com.pili.pldroid.player.PLOnErrorListener;
 import com.pili.pldroid.player.PLOnInfoListener;
 import com.pili.pldroid.player.PLOnPreparedListener;
 import com.pili.pldroid.player.PLOnVideoSizeChangedListener;
+import com.pili.pldroid.player.common.Util;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
 import com.pili.pldroid.player.widget.PLVideoView;
 
@@ -124,6 +125,7 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
                 break;
             case ERROR_CODE_IO_ERROR ://网络异常
                 Log.e(TAG, "网络异常");
+                checkNetWork();
                 break;
             case ERROR_CODE_CACHE_FAILED ://预加载失败
                 Log.e(TAG, "预加载失败");
@@ -142,6 +144,14 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
             return videoListener.onError(errorCode);
         }
         return false;
+    }
+
+    private void checkNetWork() {
+        if(!Util.isNetworkConnected(this.getContext())) {
+            if(videoListener != null) {
+                videoListener.onStopVideo();
+            }
+        }
     }
 
     /**
@@ -230,5 +240,10 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
          * @param height
          */
         void onVideoSizeChanged(int width, int height);
+
+        /**
+         * 结束播放
+         */
+        void onStopVideo();
     }
 }

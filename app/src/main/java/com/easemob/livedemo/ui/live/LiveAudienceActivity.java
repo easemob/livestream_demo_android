@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import butterknife.ButterKnife;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
@@ -29,6 +31,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     private View llStreamLoading;
     private String url;
     private boolean isPrepared;
+    private StreamViewModel viewModel;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent intent = new Intent(context, LiveAudienceActivity.class);
@@ -88,7 +91,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
 
     private void initViewModel() {
-        StreamViewModel viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
         viewModel.getPublishUrl(liveRoom.getId());
 
         viewModel.getPublishUrlObservable().observe(this, response -> {
@@ -98,6 +101,19 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
                     getStreamUrlSuccess(data);
                 }
             });
+        });
+
+        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
+            stopVideo();
+        });
+
+        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN, Boolean.class).observe(mContext, event -> {
+            videoview.setVisibility(View.VISIBLE);
+            videoview.attachView();
+            videoview.setOnVideoListener(this);
+            videoview.setAvOptions();
+            videoview.setLoadingView(llStreamLoading);
+            viewModel.getPublishUrl(liveRoom.getId());
         });
     }
 
@@ -132,8 +148,15 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     protected void onStop() {
         super.onStop();
         if(mContext.isFinishing()) {
-            videoview.stopPlayback();
+            stopVideo();
         }
+    }
+
+    private void stopVideo() {
+        Log.e("TAG", "stopVideo");
+        videoview.stopPlayback();
+        videoview.setVisibility(View.GONE);
+        llStreamLoading.setVisibility(View.GONE);
     }
 
     @Override
@@ -168,5 +191,10 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     @Override
     public void onVideoSizeChanged(int width, int height) {
 
+    }
+
+    @Override
+    public void onStopVideo() {
+        runOnUiThread(this::stopVideo);
     }
 }

@@ -268,6 +268,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 @Override public void run() {
                     audienceNumView.setText(String.valueOf(membersCount));
                     tvMemberNum.setText(String.valueOf(watchedCount));
+                    if(name.equals(chatroom.getOwner())){
+                        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
+                    }
                     notifyDataSetChanged();
                 }
             });
@@ -296,6 +299,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
                 if(name.equals(chatroom.getOwner())){
                     mContext.showLongToast("主播已结束直播");
+                    LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                 }
             }
