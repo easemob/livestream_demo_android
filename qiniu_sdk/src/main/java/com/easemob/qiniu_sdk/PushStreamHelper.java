@@ -25,7 +25,7 @@ import java.util.List;
  * 作为推流的帮助类
  * 推流SDK设置参考：https://developer.qiniu.com/pili/sdk/3719/PLDroidMediaStreaming-function-using
  */
-public class PushStreamHelper implements StreamingStateChangedListener, StreamingSessionListener, StreamStatusCallback, AudioSourceCallback {
+public class PushStreamHelper implements StreamingStateChangedListener, StreamingSessionListener, StreamStatusCallback, AudioSourceCallback/*, PLAuthenticationResultCallback*/ {
     private static final String GENERATE_STREAM_TEXT = "https://api-demo.qnsdk.com/v1/live/stream/";
     private static final String TAG = "PushStreamHelper";
     //private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt?e=1587644086&token=QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:nJeMAL3vKgA0sJ1pIfHkxZ9mn1o=";
@@ -225,6 +225,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
         mMediaStreamingManager.setStreamingSessionListener(this);
         mMediaStreamingManager.setStreamStatusCallback(this);
         mMediaStreamingManager.setAudioSourceCallback(this);
+        //StreamingEnv.checkAuthentication(this);
         Log.e(TAG, "setMediaStreamManager end");
     }
 
@@ -357,4 +358,9 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
             }
         }).start();
     }
+
+    /*@Override
+    public void onAuthorizationResult(int result) {
+        Log.e("TAG", "result = "+result);
+    }*/
 }

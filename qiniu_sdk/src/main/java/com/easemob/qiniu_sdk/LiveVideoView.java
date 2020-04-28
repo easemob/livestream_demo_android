@@ -13,6 +13,7 @@ import com.pili.pldroid.player.PLOnInfoListener;
 import com.pili.pldroid.player.PLOnPreparedListener;
 import com.pili.pldroid.player.PLOnVideoSizeChangedListener;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
+import com.pili.pldroid.player.widget.PLVideoView;
 
 /**
  * SDK设置文档：https://developer.qiniu.com/pili/sdk/1210/the-android-client-sdk
@@ -113,6 +114,7 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
 
     @Override
     public boolean onError(int errorCode) {
+        Log.e("TAG", "errorCode = "+errorCode);
         switch (errorCode) {
             case MEDIA_ERROR_UNKNOWN ://未知错误
                 Log.e(TAG, "未知错误");
@@ -177,12 +179,14 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
         // 预设置 SDK 的 log 等级， 0-4 分别为 v/d/i/w/e
         options.setInteger(AVOptions.KEY_LOG_LEVEL, 2);
         // 打开视频时单次 http 请求的超时时间，一次打开过程最多尝试五次，单位为 ms
-        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
+        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);//
+        // 解码方式
+        options.setInteger(AVOptions.KEY_MEDIACODEC, AVOptions.MEDIA_CODEC_SW_DECODE);
         // 默认的缓存大小，单位是 ms，默认值是：500
-        options.setInteger(AVOptions.KEY_CACHE_BUFFER_DURATION, 500);
+        //options.setInteger(AVOptions.KEY_CACHE_BUFFER_DURATION, 500);
         // 最大的缓存大小，单位是 ms
         // 默认值是：2000，若设置值小于 KEY_CACHE_BUFFER_DURATION 则不会生效
-        options.setInteger(AVOptions.KEY_MAX_CACHE_BUFFER_DURATION, 4000);
+        //options.setInteger(AVOptions.KEY_MAX_CACHE_BUFFER_DURATION, 4000);
         // 是否开启直播优化，1 为开启，0 为关闭。若开启，视频暂停后再次开始播放时会触发追帧机制
         // 默认为 0
         //options.setInteger(AVOptions.KEY_LIVE_STREAMING, 0);
@@ -190,13 +194,13 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
         //options.setInteger(AVOptions.KEY_SEEK_MODE, 0);
         // 开启解码后的视频数据回调
         // 默认值为 0，设置为 1 则开启
-        options.setInteger(AVOptions.KEY_VIDEO_DATA_CALLBACK, 1);
+        //options.setInteger(AVOptions.KEY_VIDEO_DATA_CALLBACK, 1);
         // 开启解码后的音频数据回调
         // 默认值为 0，设置为 1 则开启
-        options.setInteger(AVOptions.KEY_VIDEO_DATA_CALLBACK, 1);
+        //options.setInteger(AVOptions.KEY_VIDEO_DATA_CALLBACK, 1);
         // 设置开始播放位置
         // 默认不开启，单位为 ms
-        options.setInteger(AVOptions.KEY_START_POSITION, 10 * 1000);
+        //options.setInteger(AVOptions.KEY_START_POSITION, 10 * 1000);
 
         // 请在开始播放之前配置
         this.setAVOptions(options);

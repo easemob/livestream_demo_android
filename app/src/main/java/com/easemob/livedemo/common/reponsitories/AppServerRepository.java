@@ -38,8 +38,8 @@ public class AppServerRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<LiveRoom>>> getLiveRoomList(int limit, String cursor) {
-        return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
+    public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getLiveRoomList(int limit, String cursor) {
+        return new NetworkOnlyResource<ResponseModule<List<LiveRoom>>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
                 callBack.onSuccess(apiService.getLiveRoomList(limit, cursor));
@@ -47,8 +47,8 @@ public class AppServerRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<LiveRoom>>> getLivingRoomLists(int limit, String cursor) {
-        return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
+    public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getLivingRoomLists(int limit, String cursor) {
+        return new NetworkOnlyResource<ResponseModule<List<LiveRoom>>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
                 callBack.onSuccess(apiService.getLivingRoomList(limit, cursor));

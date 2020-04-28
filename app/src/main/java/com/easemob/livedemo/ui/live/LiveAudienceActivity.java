@@ -102,15 +102,6 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     }
 
     protected void getStreamUrlSuccess(String url) {
-        try {
-            URI u = new URI(url);
-            Log.e("TAG", "host = "+u.getHost() + "  rawQuery = "+u.getRawQuery() + " path = "+u.getPath());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        if(!TextUtils.isEmpty(url) && url.contains("?")) {
-            url = url.split("\\?")[0];
-        }
         Log.e("TAG", "play url = "+url);
         videoview.setVideoPath(url);
     }
@@ -170,6 +161,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     @Override
     public boolean onError(int errorCode) {
+        Log.e("TAG", "onError = "+errorCode);
         return false;
     }
 
