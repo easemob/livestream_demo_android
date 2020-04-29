@@ -177,7 +177,14 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                     @Override
                     public void onChanged(Boolean aBoolean) {
                         if(aBoolean != null && aBoolean) {
-                            showLiveList(false);
+                            int limit = pageSize;
+                            try {
+                                limit = adapter.getData().size();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            isLoadMore = false;
+                            loadLiveList(limit, null);
                         }
                     }
                 });
@@ -197,7 +204,16 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         if(!isLoadMore) {
             cursor = null;
         }
-        viewModel.getLiveRoomList(pageSize, cursor);
+        loadLiveList(pageSize, cursor);
+    }
+
+    /**
+     * 加载数据
+     * @param limit
+     * @param cursor
+     */
+    protected void loadLiveList(int limit, String cursor) {
+        viewModel.getLiveRoomList(limit, cursor);
     }
 
     private void hideLoadingView(boolean isLoadMore){

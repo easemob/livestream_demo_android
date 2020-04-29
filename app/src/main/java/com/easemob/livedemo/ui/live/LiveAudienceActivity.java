@@ -108,16 +108,16 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         });
 
         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN, Boolean.class).observe(mContext, event -> {
-            videoview.setVisibility(View.VISIBLE);
             videoview.attachView();
             videoview.setOnVideoListener(this);
             videoview.setAvOptions();
             videoview.setLoadingView(llStreamLoading);
-            viewModel.getPublishUrl(liveRoom.getId());
+            viewModel.getPlayUrl(liveRoom.getId());
         });
     }
 
     protected void getStreamUrlSuccess(String url) {
+        this.url = url;
         Log.e("TAG", "play url = "+url);
         videoview.setVideoPath(url);
     }
@@ -154,6 +154,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     private void stopVideo() {
         Log.e("TAG", "stopVideo");
+        isPrepared = false;
         videoview.stopPlayback();
         videoview.setVisibility(View.GONE);
         llStreamLoading.setVisibility(View.GONE);
@@ -173,6 +174,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     @Override
     public void onPrepared(int preparedTime) {
         Log.e("TAG", "onPrepared");
+        videoview.setVisibility(View.VISIBLE);
         isPrepared = true;
         videoview.start();
     }
