@@ -380,7 +380,11 @@ public class RoomMessagesView extends RelativeLayout{
         private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
             GiftBean bean = DemoHelper.getGiftById(DemoMsgHelper.getInstance().getMsgGiftId(message));
             int num = DemoMsgHelper.getInstance().getMsgGiftNum(message);
-            String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
+            String giftName = "礼物";
+            if(bean != null) {
+                giftName = bean.getName();
+            }
+            String content = context.getString(R.string.em_live_msg_gift, nickName, giftName, num);
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),

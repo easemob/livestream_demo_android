@@ -570,6 +570,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             return;
         }
         GiftBean bean = DemoHelper.getGiftById(giftId);
+        if(bean == null) {
+            return;
+        }
         User user = new User();
         user.setUsername(message.getFrom());
         bean.setUser(user);
