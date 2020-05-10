@@ -97,18 +97,18 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
      */
     @WorkerThread
     private ResultType transformDefault(RequestType response) {
-        if(response instanceof ResponseModule) {
-            Object result = ((ResponseModule) response).data;
-            if(result != null) {
-                try {
-                    return (ResultType) result;
-                } catch (Exception e) {
-                    return null;
-                }
-            }else {
-                return null;
-            }
-        }
+//        if(response instanceof ResponseModule) {
+//            Object result = ((ResponseModule) response).data;
+//            if(result != null) {
+//                try {
+//                    return (ResultType) result;
+//                } catch (Exception e) {
+//                    return null;
+//                }
+//            }else {
+//                return null;
+//            }
+//        }
         try {
             return (ResultType) response;
         } catch (Exception e) {

@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/black">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/cover_image"
@@ -18,7 +17,7 @@
         android:visibility="gone"
         tools:src="@drawable/em_live_default_bg"/>
 
-    <com.easemob.livedemo.ucloud.LiveCameraView
+    <com.easemob.qiniu_sdk.LiveCameraView
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="0dp"

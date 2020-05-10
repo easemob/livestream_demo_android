@@ -2,7 +2,6 @@ package com.easemob.livedemo.utils;
 
 import android.os.Environment;
 import android.util.Log;
-import com.ucloud.ucommon.xlog.L;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,7 +109,7 @@ public class Log2FileUtil {
 		createLogDir();
 		String logFileName = "ucloud-" + sdf.format(new Date()) + ".log";// name
 
-		L.i(TAG, "Log stored in SDcard, the path is:" + LOG_PATH_SDCARD_DIR  + File.separator + logFileName);
+		Log.i(TAG, "Log stored in SDcard, the path is:" + LOG_PATH_SDCARD_DIR  + File.separator + logFileName);
 		return LOG_PATH_SDCARD_DIR + File.separator + logFileName;
 
 	}

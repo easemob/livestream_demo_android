@@ -23,6 +23,8 @@ import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;

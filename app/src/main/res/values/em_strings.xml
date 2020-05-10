@@ -32,6 +32,7 @@
     <string name="em_live_mute_all">已全体禁言</string>
     <string name="em_live_out_mute_all">解除全体禁言</string>
     <string name="em_live_audience_muted">禁言中</string>
+    <string name="em_live_audience_loading">加载中...</string>
     <string name="em_live_anchor_add_white">加入白名单</string>
     <string name="em_live_anchor_remove_from_white">从白名单移除</string>
     <string name="em_live_anchor_remove_white">删除</string>
