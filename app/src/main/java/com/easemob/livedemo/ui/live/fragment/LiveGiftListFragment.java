@@ -14,6 +14,7 @@ import com.easemob.livedemo.ui.live.adapter.GiftListAdapter;
 import com.easemob.livedemo.ui.widget.recyclerview.HorizontalPageLayoutManager;
 import com.easemob.livedemo.ui.widget.recyclerview.PagingScrollHelper;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClickListener, LiveGiftNumDialog.OnGiftNumListener, LiveGiftNumDialog.OnDismissListener {
@@ -71,7 +72,13 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
     }
 
     private void showNumDialog(GiftBean item) {
-        LiveGiftNumDialog dialog = LiveGiftNumDialog.getNewInstance(item);
+        LiveGiftNumDialog dialog = (LiveGiftNumDialog) getChildFragmentManager().findFragmentByTag("gift_num");
+        if(dialog == null) {
+            dialog = LiveGiftNumDialog.getNewInstance(item);
+        }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.setOnGiftNumListener(this);
         dialog.setOnDismissListener(this);
         dialog.show(getChildFragmentManager(), "gift_num");
@@ -80,7 +87,13 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
     @Override
     public void onGiftNum(View view, int num) {
         giftBean.setNum(num);
-        LiveGiftSendDialog dialog = LiveGiftSendDialog.getNewInstance(giftBean);
+        LiveGiftSendDialog dialog = (LiveGiftSendDialog) getChildFragmentManager().findFragmentByTag("gift_send");
+        if(dialog == null) {
+            dialog = LiveGiftSendDialog.getNewInstance(giftBean);
+        }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.setOnConfirmClickListener(new OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view, Object bean) {

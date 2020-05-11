@@ -368,6 +368,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if(dialog == null) {
             dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
         }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.show(getChildFragmentManager(), "RoomUserDetailsDialog");
         dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
             @Override public void onKickMember(String username) {
