@@ -143,6 +143,9 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if(dialog == null) {
             dialog = LiveMemberListDialog.getNewInstance(chatroomId);
         }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.show(getChildFragmentManager(), "liveMember");
         dialog.setOnItemClickListener(new LiveMemberListDialog.OnMemberItemClickListener() {
             @Override
@@ -183,6 +186,9 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         LiveGiftDialog dialog = (LiveGiftDialog) getChildFragmentManager().findFragmentByTag("live_gift");
         if(dialog == null) {
             dialog = LiveGiftDialog.getNewInstance();
+        }
+        if(dialog.isAdded()) {
+           return;
         }
         dialog.show(getChildFragmentManager(), "live_gift");
         dialog.setOnConfirmClickListener(new OnConfirmClickListener() {

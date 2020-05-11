@@ -104,7 +104,13 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     }
 
     private void showInputNumDialog() {
-        LiveGiftInputNumDialog dialog = LiveGiftInputNumDialog.getNewInstance(Integer.valueOf(tvGiftNum.getText().toString().trim()));
+        LiveGiftInputNumDialog dialog = (LiveGiftInputNumDialog) getChildFragmentManager().findFragmentByTag("gift_input_num");
+        if(dialog == null) {
+            dialog = LiveGiftInputNumDialog.getNewInstance(Integer.valueOf(tvGiftNum.getText().toString().trim()));
+        }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.setOnConfirmClickListener(this);
         dialog.show(getChildFragmentManager(), "gift_input_num");
     }
