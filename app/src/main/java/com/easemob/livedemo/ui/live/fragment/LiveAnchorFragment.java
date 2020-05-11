@@ -171,6 +171,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if(dialog == null) {
             dialog = LiveGiftStatisticsDialog.getNewInstance();
         }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.show(getChildFragmentManager(), "git_statistics");
     }
 
@@ -179,6 +182,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         RoomManageUserDialog fragment = (RoomManageUserDialog) getChildFragmentManager().findFragmentByTag("RoomManageUserDialog");
         if(fragment == null) {
             fragment = RoomManageUserDialog.getNewInstance(chatroomId, username);
+        }
+        if(fragment.isAdded()) {
+            return;
         }
         fragment.show(getChildFragmentManager(), "RoomManageUserDialog");
     }
