@@ -20,11 +20,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseActivity;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.chat.EMClient;
 
 import java.io.File;

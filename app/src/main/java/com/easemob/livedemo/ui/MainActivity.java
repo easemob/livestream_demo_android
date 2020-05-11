@@ -23,6 +23,8 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.runtimepermissions.PermissionsManager;
+import com.easemob.livedemo.runtimepermissions.PermissionsResultAction;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
 import com.easemob.livedemo.ui.live.LiveAllActivity;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
@@ -31,6 +33,8 @@ import com.easemob.livedemo.ui.live.fragment.LivingListFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.other.LoginActivity;
 import com.easemob.livedemo.ui.other.fragment.AboutMeFragment;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -72,7 +76,22 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         super.initData();
         skipToTarget(position);
         Log.e("TAG", "user = "+EMClient.getInstance().getCurrentUser());
+        requestPermissions();
         checkoutLiving();
+    }
+
+    private void requestPermissions() {
+        PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
+            @Override
+            public void onGranted() {
+//				Toast.makeText(MainActivity.this, "All permissions have been granted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDenied(String permission) {
+                //Toast.makeText(MainActivity.this, "Permission " + permission + " has been denied", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void checkoutLiving() {

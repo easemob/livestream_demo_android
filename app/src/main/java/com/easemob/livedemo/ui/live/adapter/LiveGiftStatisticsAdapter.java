@@ -45,7 +45,9 @@ public class LiveGiftStatisticsAdapter extends EaseBaseRecyclerViewAdapter<Recei
         public void setData(ReceiveGiftEntity item, int position) {
             String giftId = item.getGift_id();
             GiftBean giftBean = DemoHelper.getGiftById(giftId);
-            ivGiftIcon.setImageResource(giftBean.getResource());
+            if(giftBean != null) {
+                ivGiftIcon.setImageResource(giftBean.getResource());
+            }
             tvGiftInfo.setText(mContext.getString(R.string.em_live_gift_gift_info, item.getGift_num()));
 
             txtUsernick.setText(mContext.getString(R.string.em_live_gift_sender_info, DemoHelper.getNickName(item.getFrom())));

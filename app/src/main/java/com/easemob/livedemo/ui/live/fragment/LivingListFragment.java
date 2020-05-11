@@ -6,6 +6,8 @@ import android.view.View;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveListFragment;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 
 public class LivingListFragment extends LiveListFragment {
 
@@ -16,7 +18,7 @@ public class LivingListFragment extends LiveListFragment {
     }
 
     @Override
-    protected void showLiveList(boolean isLoadMore) {
-        viewModel.getLivingRoomLists(pageSize);
+    protected void loadLiveList(int limit, String cursor) {
+        viewModel.getLivingRoomLists(limit, cursor);
     }
 }
