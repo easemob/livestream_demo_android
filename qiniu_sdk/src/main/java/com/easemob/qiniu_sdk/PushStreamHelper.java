@@ -31,9 +31,9 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     //private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt?e=1587644086&token=QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:nJeMAL3vKgA0sJ1pIfHkxZ9mn1o=";
     private static final String DEFAULT_PUBLISH_URL = "rtmp://pili-publish.qnsdk.com/sdk-live/defualt";
     private static final String PUBLISH_HOST = "rtmp://";
-    private static final String RTMP_PUBLISH_DOMAIN = "pili-publish.easemob.com";
-    private static final String RTMP_PLAY_DOMAIN = "pili-live-rtmp.easemob.com";
-    private static final String HUB = "es-liveroom";
+    private static final String RTMP_PUBLISH_DOMAIN = "";
+    private static final String RTMP_PLAY_DOMAIN = "";
+    private static final String HUB = "";
     private static PushStreamHelper instance;
 
     private StreamingProfile mProfile;

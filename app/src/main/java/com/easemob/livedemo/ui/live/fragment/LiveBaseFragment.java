@@ -313,7 +313,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override
                     public void onMessageSend(String content, boolean isBarrageMsg) {
-                        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnMsgCallBack() {
+                        presenter.sendTxtMsg(content, isBarrageMsg, new OnMsgCallBack() {
                             @Override
                             public void onSuccess(EMMessage message) {
                                 //刷新消息列表
@@ -322,16 +322,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                                 if(isBarrageMsg) {
                                     barrageView.addData(message);
                                 }
-                            }
-
-                            @Override
-                            public void onError(int code, String error) {
-                                mContext.showToast("消息发送失败！errorCode = "+code+"; errorMsg = "+error);
-                            }
-
-                            @Override
-                            public void onProgress(int progress, String status) {
-
                             }
                         });
                     }
