@@ -20,6 +20,27 @@ public abstract class OnMsgCallBack implements EMCallBack {
      */
     public abstract void onSuccess(EMMessage message);
 
+    /**
+     * @see #onError(String, int, String)
+     * @param code
+     * @param error
+     */
+    @Deprecated
+    @Override
+    public void onError(int code, String error) {
+
+    }
+
+    /**
+     * 返回消息id，方便根据错误对相应的消息进行删除
+     * @param messageId
+     * @param code
+     * @param error
+     */
+    public void onError(String messageId, int code, String error){
+
+    }
+
     @Override
     public void onProgress(int i, String s) {
 

@@ -5,15 +5,15 @@ import android.util.Log;
 
 import com.easemob.custommessage.OnMsgCallBack;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.DemoMsgHelper;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.ui.base.BaseActivity;
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
+import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 
@@ -24,6 +24,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
     private String chatroomId;
     private String currentUser;
     private OnChatRoomListener onChatRoomListener;
+    private EMConversation conversation;
 
     public ChatRoomPresenter(BaseActivity context, String chatroomId) {
         this.mContext = context;
@@ -223,7 +224,8 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
             }
 
             @Override
-            public void onError(int code, String error) {
+            public void onError(String messageId, int code, String error) {
+                deleteMuteMsg(messageId, code);
                 mContext.showToast("errorCode = " + code + "; errorMsg = "+error);
             }
 
@@ -243,12 +245,13 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
      * @param bean
      * @param callBack
      */
-    public void sendGiftMsg(GiftBean bean, EMCallBack callBack) {
+    public void sendGiftMsg(GiftBean bean, OnMsgCallBack callBack) {
         DemoMsgHelper.getInstance().sendGiftMsg(bean.getId(), bean.getNum(), new OnMsgCallBack() {
             @Override
             public void onSuccess(EMMessage message) {
                 if(callBack != null) {
                     callBack.onSuccess();
+                    callBack.onSuccess(message);
                 }
                 ThreadManager.getInstance().runOnMainThread(()-> {
                     if(onChatRoomListener != null) {
@@ -258,10 +261,13 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
             }
 
             @Override
-            public void onError(int code, String error) {
+            public void onError(String messageId, int code, String error) {
                 if(callBack != null) {
                     callBack.onError(code, error);
+                    callBack.onError(messageId, code, error);
                 }
+                deleteMuteMsg(messageId, code);
+                mContext.showToast("errorCode = " + code + "; errorMsg = "+error);
             }
 
             @Override
@@ -271,6 +277,53 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
                 }
             }
         });
+    }
+
+    /**
+     * 发送文本或者弹幕消息
+     * @param content
+     * @param isBarrageMsg
+     * @param callBack
+     */
+    public void sendTxtMsg(String content, boolean isBarrageMsg, OnMsgCallBack callBack) {
+        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnMsgCallBack() {
+            @Override
+            public void onSuccess(EMMessage message) {
+                if(callBack != null) {
+                    callBack.onSuccess(message);
+                }
+            }
+
+            @Override
+            public void onError(String messageId, int code, String error) {
+                if(callBack != null) {
+                    callBack.onError(messageId, code, error);
+                }
+                deleteMuteMsg(messageId, code);
+                mContext.showToast("消息发送失败！errorCode = "+code+"; errorMsg = "+error);
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+                if(callBack != null) {
+                    callBack.onProgress(i, s);
+                }
+            }
+        });
+    }
+
+    /**
+     * 删除被禁言期间的消息
+     * @param messageId
+     * @param code
+     */
+    private void deleteMuteMsg(String messageId, int code) {
+        if(code == EMError.USER_MUTED || code == EMError.MESSAGE_ILLEGAL_WHITELIST) {
+            if(conversation == null) {
+                conversation = EMClient.getInstance().chatManager().getConversation(chatroomId, EMConversation.EMConversationType.ChatRoom, true);
+            }
+            conversation.removeMessage(messageId);
+        }
     }
 
     public interface OnChatRoomListener {
