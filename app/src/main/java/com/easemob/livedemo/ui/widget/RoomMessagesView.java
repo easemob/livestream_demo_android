@@ -176,6 +176,7 @@ public class RoomMessagesView extends RelativeLayout{
                     for(int i = 0; i < childCount; i++) {
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
+                            child.setBackgroundColor(Color.parseColor("#01ffffff"));
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
                             barrageOriginMarginTop = params.topMargin;
                             startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
@@ -214,6 +215,7 @@ public class RoomMessagesView extends RelativeLayout{
                     for(int i = 0; i < childCount; i++) {
                         View child = parent.getChildAt(i);
                         if(child instanceof SingleBarrageView) {
+                            child.setBackground(null);
                             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) child.getLayoutParams();
                             startAnimation(height - barrageOriginMarginTop * 3, 100, new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
@@ -378,7 +380,11 @@ public class RoomMessagesView extends RelativeLayout{
         private void showGiftMessage(TextView name, String nickName, boolean isSelf, EMMessage message) {
             GiftBean bean = DemoHelper.getGiftById(DemoMsgHelper.getInstance().getMsgGiftId(message));
             int num = DemoMsgHelper.getInstance().getMsgGiftNum(message);
-            String content = context.getString(R.string.em_live_msg_gift, nickName, bean.getName(), num);
+            String giftName = "礼物";
+            if(bean != null) {
+                giftName = bean.getName();
+            }
+            String content = context.getString(R.string.em_live_msg_gift, nickName, giftName, num);
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),

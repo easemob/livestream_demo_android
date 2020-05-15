@@ -3,28 +3,29 @@ package com.easemob.livedemo.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.widget.Toast;
-
-import butterknife.ButterKnife;
-
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.LiveDataBus;
+import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.LiveRoomUrlBean;
+import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
+import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
-import com.ucloud.uvod.UMediaProfile;
-import com.ucloud.uvod.UPlayerStateListener;
-import com.ucloud.uvod.widget.UVideoView;
-import java.util.Random;
 
-public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerStateListener, LiveAudienceFragment.OnLiveListener {
-    String rtmpPlayStreamUrl = "rtmp://vlive3.rtmp.cdn.ucloud.com.cn/ucloud/";
-    private UVideoView mVideoView;
-    private UMediaProfile profile;
-    volatile boolean isSteamConnected;
-    volatile boolean isReconnecting;
-    Thread reconnectThread;
+public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener, LiveVideoView.OnVideoListener {
     private LiveAudienceFragment fragment;
+    private LiveVideoView videoview;
+    private View llStreamLoading;
+    private String url;
+    private boolean isPrepared;
+    private StreamViewModel viewModel;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent intent = new Intent(context, LiveAudienceActivity.class);
@@ -32,28 +33,43 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         context.startActivity(intent);
     }
 
+    public static void actionStart(Context context, LiveRoom liveRoom, String url) {
+        Intent intent = new Intent(context, LiveAudienceActivity.class);
+        intent.putExtra("liveroom", liveRoom);
+        intent.putExtra("url", url);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.em_activity_live_audience);
-        ButterKnife.bind(this);
         setFitSystemForTheme(false, android.R.color.transparent);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        mVideoView = (UVideoView) findViewById(R.id.videoview);
+        url = getIntent().getStringExtra("url");
+        llStreamLoading = findViewById(R.id.ll_stream_loading);
+        videoview = findViewById(R.id.videoview);
+        videoview.attachView();
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-
+        videoview.setOnVideoListener(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
+        videoview.setAvOptions();
+        //提供了设置加载动画的接口，在播放器进入缓冲状态时，自动显示加载界面，缓冲结束后，自动隐藏加载界面
+        videoview.setLoadingView(llStreamLoading);
+        //在调用播放器的控制接口之前，必须先设置好播放地址.传入播放地址，可以是 /path/to/local.mp4 本地文件绝对路径，或 HLS URL，或 RTMP URL
+        videoview.setVideoPath(url);
+
         fragment = (LiveAudienceFragment) getSupportFragmentManager().findFragmentByTag("live_audience");
         if(fragment == null) {
             fragment = new LiveAudienceFragment();
@@ -63,123 +79,79 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
         }
         fragment.setOnLiveListener(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "live_audience").commit();
+
+        initViewModel();
+    }
+
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel.getPlayUrl(liveRoom.getId());
+
+        viewModel.getPlayUrlObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoomUrlBean>() {
+                @Override
+                public void onSuccess(LiveRoomUrlBean data) {
+                    getStreamUrlSuccess(data.getData());
+                }
+            });
+        });
+
+        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
+            stopVideo();
+        });
+
+        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN, Boolean.class).observe(mContext, event -> {
+            videoview.attachView();
+            videoview.setOnVideoListener(this);
+            videoview.setAvOptions();
+            videoview.setLoadingView(llStreamLoading);
+            viewModel.getPlayUrl(liveRoom.getId());
+        });
+    }
+
+    protected void getStreamUrlSuccess(String url) {
+        this.url = url;
+        Log.e("TAG", "play url = "+url);
+        videoview.setVideoPath(url);
     }
 
     /**
      * 开发者可以修改此处替换为自己的直播流
      */
     private void connectLiveStream(){
-        profile = new UMediaProfile();
-        profile.setInteger(UMediaProfile.KEY_START_ON_PREPARED, 1);
-        profile.setInteger(UMediaProfile.KEY_ENABLE_BACKGROUND_PLAY, 0);
-        profile.setInteger(UMediaProfile.KEY_LIVE_STREAMING, 1);
-        profile.setInteger(UMediaProfile.KEY_MEDIACODEC, 1);
-
-        profile.setInteger(UMediaProfile.KEY_PREPARE_TIMEOUT, 1000 * 5);
-        profile.setInteger(UMediaProfile.KEY_MIN_READ_FRAME_TIMEOUT_RECONNECT_INTERVAL, 3);
-
-        profile.setInteger(UMediaProfile.KEY_READ_FRAME_TIMEOUT, 1000 * 5);
-        profile.setInteger(UMediaProfile.KEY_MIN_PREPARE_TIMEOUT_RECONNECT_INTERVAL, 3);
-
-        if (mVideoView != null && mVideoView.isInPlaybackState()) {
-            mVideoView.stopPlayback();
-            mVideoView.release(true);
-        }
-
-        mVideoView.setMediaPorfile(profile);//set before setVideoPath
-        mVideoView.setOnPlayerStateListener(this);//set before setVideoPath
-//        mVideoView.setVideoPath(liveRoom.getLivePullUrl());
 
     }
 
-
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
-        mVideoView.onResume();
+        Log.e("TAG", "onResume");
+        if(isPrepared) {
+            videoview.start();
+        }
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
-        mVideoView.onPause();
+        videoview.pause();
     }
 
-    @Override protected void onDestroy() {
-        super.onDestroy();
-        mVideoView.onDestroy();
-    }
-
-    @Override public void onPlayerStateChanged(State state, int i, Object o) {
-        switch (state) {
-            case START:
-                isSteamConnected = true;
-                isReconnecting = false;
-                mVideoView.applyAspectRatio(UVideoView.VIDEO_RATIO_FILL_PARENT);//set after start
-                break;
-            case VIDEO_SIZE_CHANGED:
-                break;
-            case COMPLETED:
-                Toast.makeText(this, "直播已结束", Toast.LENGTH_LONG).show();
-                break;
-            case RECONNECT:
-                isReconnecting = true;
-                break;
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mContext.isFinishing()) {
+            stopVideo();
         }
     }
 
-    @Override public void onPlayerInfo(Info info, int extra1, Object o) {
-    }
-
-    @Override public void onPlayerError(Error error, int extra1, Object o) {
-        isSteamConnected = false;
-        isReconnecting = false;
-        switch (error) {
-            case IOERROR:
-                reconnect();
-                break;
-            case PREPARE_TIMEOUT:
-                break;
-            case READ_FRAME_TIMEOUT:
-                System.out.println();
-                break;
-            case UNKNOWN:
-                Toast.makeText(this, "Error: " + extra1, Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    /**
-     * 重连到直播server
-     */
-    private void reconnect(){
-        if(isSteamConnected || isReconnecting)
-            return;
-        if(reconnectThread != null &&reconnectThread.isAlive())
-            return;
-
-        reconnectThread = new Thread(){
-            @Override public void run() {
-                while (!isFinishing() && !isSteamConnected){
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            if(!isReconnecting) {
-                                isReconnecting = true;
-                                connectLiveStream();
-                            }
-                            //mVideoView.setVideoPath(liveRoom.getLivePullUrl());
-                        }
-                    });
-                    try {
-                        // TODO 根据reconnect次数动态改变sleep时间
-                        Thread.sleep(3000 + new Random().nextInt(3000));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                }
-            }
-        };
-        reconnectThread.setDaemon(true);
-        reconnectThread.start();
+    private void stopVideo() {
+        Log.e("TAG", "stopVideo");
+        isPrepared = false;
+        videoview.stopPlayback();
+        videoview.setVisibility(View.GONE);
+        llStreamLoading.setVisibility(View.GONE);
     }
 
     @Override
@@ -191,5 +163,34 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
     public void onLiveClosed() {
         showLongToast("直播间已关闭");
         finish();
+    }
+
+    @Override
+    public void onPrepared(int preparedTime) {
+        Log.e("TAG", "onPrepared");
+        videoview.setVisibility(View.VISIBLE);
+        isPrepared = true;
+        videoview.start();
+    }
+
+    @Override
+    public void onCompletion() {
+        Log.e("TAG", "onCompletion");
+    }
+
+    @Override
+    public boolean onError(int errorCode) {
+        Log.e("TAG", "onError = "+errorCode);
+        return false;
+    }
+
+    @Override
+    public void onVideoSizeChanged(int width, int height) {
+
+    }
+
+    @Override
+    public void onStopVideo() {
+        runOnUiThread(this::stopVideo);
     }
 }

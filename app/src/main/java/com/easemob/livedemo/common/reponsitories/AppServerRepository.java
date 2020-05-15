@@ -1,15 +1,21 @@
 package com.easemob.livedemo.common.reponsitories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.data.restapi.ApiService;
 import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 
 import java.util.List;
 
+import androidx.lifecycle.MutableLiveData;
 import okhttp3.RequestBody;
 
 /**
@@ -33,8 +39,8 @@ public class AppServerRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<LiveRoom>>> getLiveRoomList(int limit, String cursor) {
-        return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
+    public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getLiveRoomList(int limit, String cursor) {
+        return new NetworkOnlyResource<ResponseModule<List<LiveRoom>>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
                 callBack.onSuccess(apiService.getLiveRoomList(limit, cursor));
@@ -42,8 +48,8 @@ public class AppServerRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<LiveRoom>>> getLivingRoomLists(int limit, String cursor) {
-        return new NetworkOnlyResource<List<LiveRoom>, ResponseModule<List<LiveRoom>>>() {
+    public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getLivingRoomLists(int limit, String cursor) {
+        return new NetworkOnlyResource<ResponseModule<List<LiveRoom>>, ResponseModule<List<LiveRoom>>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<ResponseModule<List<LiveRoom>>>> callBack) {
                 callBack.onSuccess(apiService.getLivingRoomList(limit, cursor));
@@ -74,6 +80,24 @@ public class AppServerRepository {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoom>> callBack) {
                 callBack.onSuccess(apiService.updateLiveRoom(roomId, body));
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<LiveRoomUrlBean>> getPublishUrl(String roomId) {
+        return new NetworkOnlyResource<LiveRoomUrlBean, LiveRoomUrlBean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoomUrlBean>> callBack) {
+                callBack.onSuccess(apiService.getLiveRoomPublishUrl(roomId));
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<LiveRoomUrlBean>> getPlayUrl(String roomId) {
+        return new NetworkOnlyResource<LiveRoomUrlBean, LiveRoomUrlBean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoomUrlBean>> callBack) {
+                callBack.onSuccess(apiService.getLiveRoomPublishUrl(roomId));
             }
         }.asLiveData();
     }

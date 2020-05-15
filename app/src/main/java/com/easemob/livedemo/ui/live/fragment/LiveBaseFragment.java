@@ -1,6 +1,7 @@
 package com.easemob.livedemo.ui.live.fragment;
 
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -267,6 +268,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 @Override public void run() {
                     audienceNumView.setText(String.valueOf(membersCount));
                     tvMemberNum.setText(String.valueOf(watchedCount));
+                    if(name.equals(chatroom.getOwner())){
+                        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
+                    }
                     notifyDataSetChanged();
                 }
             });
@@ -295,6 +299,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 horizontalRecyclerView.getAdapter().notifyDataSetChanged();
                 if(name.equals(chatroom.getOwner())){
                     mContext.showLongToast("主播已结束直播");
+                    LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                 }
             }
@@ -308,7 +313,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override
                     public void onMessageSend(String content, boolean isBarrageMsg) {
-                        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnMsgCallBack() {
+                        presenter.sendTxtMsg(content, isBarrageMsg, new OnMsgCallBack() {
                             @Override
                             public void onSuccess(EMMessage message) {
                                 //刷新消息列表
@@ -317,16 +322,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                                 if(isBarrageMsg) {
                                     barrageView.addData(message);
                                 }
-                            }
-
-                            @Override
-                            public void onError(int code, String error) {
-                                mContext.showToast("消息发送失败！errorCode = "+code+"; errorMsg = "+error);
-                            }
-
-                            @Override
-                            public void onProgress(int progress, String status) {
-
                             }
                         });
                     }
@@ -362,6 +357,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         RoomUserDetailsDialog dialog = (RoomUserDetailsDialog) getChildFragmentManager().findFragmentByTag("RoomUserDetailsDialog");
         if(dialog == null) {
             dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
+        }
+        if(dialog.isAdded()) {
+            return;
         }
         dialog.show(getChildFragmentManager(), "RoomUserDetailsDialog");
         dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
@@ -555,7 +553,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onReceiveGiftMsg(EMMessage message) {
-        DemoHelper.saveGiftInfo(message);
+        //加入直播间之后才统计相关点赞信息
+        if(message.getMsgTime() >= joinTime) {
+            DemoHelper.saveGiftInfo(message);
+        }
         //加入直播间之前的礼物消息不再展示
         if(message.getMsgTime() < joinTime - 2000) {
             return;
@@ -565,6 +566,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             return;
         }
         GiftBean bean = DemoHelper.getGiftById(giftId);
+        if(bean == null) {
+            return;
+        }
         User user = new User();
         user.setUsername(message.getFrom());
         bean.setUser(user);
@@ -576,7 +580,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onReceivePraiseMsg(EMMessage message) {
-        DemoHelper.saveLikeInfo(message);
+        //加入直播间之后才统计相关点赞信息
+        if(message.getMsgTime() >= joinTime) {
+            DemoHelper.saveLikeInfo(message);
+        }
         int likeNum = DemoMsgHelper.getInstance().getMsgPraiseNum(message);
         if(likeNum <= 0) {
             return;

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.easemob.custommessage.OnMsgCallBack;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.LiveDataBus;
@@ -23,11 +24,14 @@ import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.easemob.qiniu_sdk.OnCallBack;
+import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 
 import java.util.Random;
 
@@ -143,6 +147,9 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if(dialog == null) {
             dialog = LiveMemberListDialog.getNewInstance(chatroomId);
         }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.show(getChildFragmentManager(), "liveMember");
         dialog.setOnItemClickListener(new LiveMemberListDialog.OnMemberItemClickListener() {
             @Override
@@ -184,27 +191,20 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if(dialog == null) {
             dialog = LiveGiftDialog.getNewInstance();
         }
+        if(dialog.isAdded()) {
+           return;
+        }
         dialog.show(getChildFragmentManager(), "live_gift");
         dialog.setOnConfirmClickListener(new OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view, Object bean) {
                 if(bean instanceof GiftBean) {
-                    presenter.sendGiftMsg((GiftBean) bean, new EMCallBack() {
+                    presenter.sendGiftMsg((GiftBean) bean, new OnMsgCallBack() {
                         @Override
-                        public void onSuccess() {
+                        public void onSuccess(EMMessage message) {
                             ThreadManager.getInstance().runOnMainThread(()-> {
                                 barrageLayout.showGift((GiftBean) bean);
                             });
-                        }
-
-                        @Override
-                        public void onError(int code, String error) {
-                            mContext.showToast("errorCode = " + code + "; errorMsg = "+error);
-                        }
-
-                        @Override
-                        public void onProgress(int progress, String status) {
-
                         }
                     });
 

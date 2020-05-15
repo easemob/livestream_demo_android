@@ -270,6 +270,7 @@ public class EmCustomMsgHelper implements EMMessageListener {
             public void onError(int i, String s) {
                 if(callBack != null) {
                     callBack.onError(i, s);
+                    callBack.onError(sendMessage.getMsgId(), i, s);
                 }
             }
 
