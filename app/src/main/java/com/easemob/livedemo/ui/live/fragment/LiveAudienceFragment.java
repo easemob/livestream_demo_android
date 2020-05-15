@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.easemob.custommessage.OnMsgCallBack;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.LiveDataBus;
@@ -30,6 +31,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 
 import java.util.Random;
 
@@ -197,22 +199,12 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             @Override
             public void onConfirmClick(View view, Object bean) {
                 if(bean instanceof GiftBean) {
-                    presenter.sendGiftMsg((GiftBean) bean, new EMCallBack() {
+                    presenter.sendGiftMsg((GiftBean) bean, new OnMsgCallBack() {
                         @Override
-                        public void onSuccess() {
+                        public void onSuccess(EMMessage message) {
                             ThreadManager.getInstance().runOnMainThread(()-> {
                                 barrageLayout.showGift((GiftBean) bean);
                             });
-                        }
-
-                        @Override
-                        public void onError(int code, String error) {
-                            mContext.showToast("errorCode = " + code + "; errorMsg = "+error);
-                        }
-
-                        @Override
-                        public void onProgress(int progress, String status) {
-
                         }
                     });
 

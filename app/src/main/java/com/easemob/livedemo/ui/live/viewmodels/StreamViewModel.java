@@ -5,6 +5,7 @@ import android.app.Application;
 import com.easemob.livedemo.common.reponsitories.AppServerRepository;
 import com.easemob.livedemo.common.reponsitories.Resource;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -13,8 +14,8 @@ import androidx.lifecycle.MediatorLiveData;
 
 public class StreamViewModel extends AndroidViewModel {
     private AppServerRepository repository;
-    private MediatorLiveData<Resource<String>> publishUrlObservable;
-    private MediatorLiveData<Resource<String>> playUrlObservable;
+    private MediatorLiveData<Resource<LiveRoomUrlBean>> publishUrlObservable;
+    private MediatorLiveData<Resource<LiveRoomUrlBean>> playUrlObservable;
 
     public StreamViewModel(@NonNull Application application) {
         super(application);
@@ -23,11 +24,11 @@ public class StreamViewModel extends AndroidViewModel {
         playUrlObservable = new MediatorLiveData<>();
     }
 
-    public LiveData<Resource<String>> getPublishUrlObservable() {
+    public LiveData<Resource<LiveRoomUrlBean>> getPublishUrlObservable() {
         return publishUrlObservable;
     }
 
-    public LiveData<Resource<String>> getPlayUrlOberservable() {
+    public LiveData<Resource<LiveRoomUrlBean>> getPlayUrlObservable() {
         return playUrlObservable;
     }
 

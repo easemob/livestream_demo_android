@@ -79,12 +79,14 @@ public class DemoMsgHelper {
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
+                callBack.onSuccess();
                 callBack.onSuccess(message);
             }
 
             @Override
             public void onError(int i, String s) {
                 callBack.onError(i, s);
+                callBack.onError(message.getMsgId(), i, s);
             }
 
             @Override
@@ -106,6 +108,7 @@ public class DemoMsgHelper {
             public void onSuccess(EMMessage message) {
                 DemoHelper.saveGiftInfo(message);
                 if(callBack != null) {
+                    callBack.onSuccess();
                     callBack.onSuccess(message);
                 }
             }
@@ -119,9 +122,10 @@ public class DemoMsgHelper {
             }
 
             @Override
-            public void onError(int code, String error) {
+            public void onError(String messageId, int code, String error) {
                 if(callBack != null) {
                     callBack.onError(code, error);
+                    callBack.onError(messageId, code, error);
                 }
             }
         });
@@ -151,9 +155,10 @@ public class DemoMsgHelper {
             }
 
             @Override
-            public void onError(int code, String error) {
+            public void onError(String messageId, int code, String error) {
                 if(callBack != null) {
                     callBack.onError(code, error);
+                    callBack.onError(messageId, code, error);
                 }
             }
         });

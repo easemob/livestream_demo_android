@@ -313,7 +313,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override
                     public void onMessageSend(String content, boolean isBarrageMsg) {
-                        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnMsgCallBack() {
+                        presenter.sendTxtMsg(content, isBarrageMsg, new OnMsgCallBack() {
                             @Override
                             public void onSuccess(EMMessage message) {
                                 //刷新消息列表
@@ -322,16 +322,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                                 if(isBarrageMsg) {
                                     barrageView.addData(message);
                                 }
-                            }
-
-                            @Override
-                            public void onError(int code, String error) {
-                                mContext.showToast("消息发送失败！errorCode = "+code+"; errorMsg = "+error);
-                            }
-
-                            @Override
-                            public void onProgress(int progress, String status) {
-
                             }
                         });
                     }
@@ -563,7 +553,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onReceiveGiftMsg(EMMessage message) {
-        DemoHelper.saveGiftInfo(message);
+        //加入直播间之后才统计相关点赞信息
+        if(message.getMsgTime() >= joinTime) {
+            DemoHelper.saveGiftInfo(message);
+        }
         //加入直播间之前的礼物消息不再展示
         if(message.getMsgTime() < joinTime - 2000) {
             return;
@@ -587,7 +580,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onReceivePraiseMsg(EMMessage message) {
-        DemoHelper.saveLikeInfo(message);
+        //加入直播间之后才统计相关点赞信息
+        if(message.getMsgTime() >= joinTime) {
+            DemoHelper.saveLikeInfo(message);
+        }
         int likeNum = DemoMsgHelper.getInstance().getMsgPraiseNum(message);
         if(likeNum <= 0) {
             return;

@@ -3,27 +3,21 @@ package com.easemob.livedemo.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import butterknife.ButterKnife;
-
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Random;
 
 public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener, LiveVideoView.OnVideoListener {
     private LiveAudienceFragment fragment;
@@ -94,11 +88,11 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
         viewModel.getPlayUrl(liveRoom.getId());
 
-        viewModel.getPlayUrlOberservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<String>() {
+        viewModel.getPlayUrlObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoomUrlBean>() {
                 @Override
-                public void onSuccess(String data) {
-                    getStreamUrlSuccess(data);
+                public void onSuccess(LiveRoomUrlBean data) {
+                    getStreamUrlSuccess(data.getData());
                 }
             });
         });
