@@ -3,6 +3,7 @@ package com.easemob.livedemo.data.restapi;
 import androidx.lifecycle.LiveData;
 
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import java.util.List;
 import okhttp3.RequestBody;
@@ -74,5 +75,21 @@ public interface ApiService {
      */
     @GET("liverooms/{id}")
     LiveData<LiveRoom> getLiveRoomDetail(@Path("id") String roomId);
+
+    /**
+     * 获取推流地址
+     * @param streamKey
+     * @return
+     */
+    @GET("streams/url/publish/")
+    LiveData<LiveRoomUrlBean> getLiveRoomPublishUrl(@Query("streamKey")String streamKey);
+
+    /**
+     * 获取播放地址
+     * @param streamKey
+     * @return
+     */
+    @GET("streams/url/play/")
+    LiveData<LiveRoomUrlBean> getLiveRoomPlayUrl(@Query("streamKey")String streamKey);
 
 }

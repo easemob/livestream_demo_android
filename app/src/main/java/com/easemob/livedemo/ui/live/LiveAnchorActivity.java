@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 import com.easemob.qiniu_sdk.LiveCameraView;
 import com.easemob.qiniu_sdk.PushStreamHelper;
@@ -83,10 +84,10 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
         viewModel.getPublishUrl(liveRoom.getId());
 
         viewModel.getPublishUrlObservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<String>() {
+            parseResource(response, new OnResourceParseCallback<LiveRoomUrlBean>() {
                 @Override
-                public void onSuccess(String data) {
-                    getStreamUrlSuccess(data);
+                public void onSuccess(LiveRoomUrlBean data) {
+                    getStreamUrlSuccess(data.getData());
                 }
             });
         });
