@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 
 /**
@@ -30,6 +32,12 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
   private static final String TAG = DemoApplication.class.getSimpleName();
   private static DemoApplication instance;
   private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
+
+  static {
+      if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+          AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+      }
+  }
 
   @Override public void onCreate() {
     super.onCreate();
