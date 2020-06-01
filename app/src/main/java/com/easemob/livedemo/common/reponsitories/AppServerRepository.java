@@ -97,7 +97,7 @@ public class AppServerRepository {
         return new NetworkOnlyResource<LiveRoomUrlBean, LiveRoomUrlBean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoomUrlBean>> callBack) {
-                callBack.onSuccess(apiService.getLiveRoomPublishUrl(roomId));
+                callBack.onSuccess(apiService.getLiveRoomPlayUrl(roomId));
             }
         }.asLiveData();
     }
