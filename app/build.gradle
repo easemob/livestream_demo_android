@@ -5,7 +5,7 @@ android {
     compileSdkVersion rootProject.ext.compile_sdk_version
     buildToolsVersion rootProject.ext.build_tools_version
     //use legacy for android > 6.0
-    useLibrary 'org.apache.http.legacy'
+    //useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.easemob.livedemo"
