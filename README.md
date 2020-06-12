@@ -3,7 +3,15 @@
 
 **2、demo的核心类为：LiveAudienceActivity（观众直播间页面）及LiveAnchorActivity（主播直播页面）。为了便于集成第三方视频直播，直播页面将直播聊天室相关逻辑抽取到了LiveAudienceFragment和LiveAnchorFragment中，视频直播的相关逻辑可以直接在activity中实现。**
 
-**3、为了便于开发者使用自定义消息，demo中将自定义消息相关的逻辑放到custom message library中。**
+**3、添加远程依赖**
+>```Java
+>api 'com.hyphenate:hyphenate-sdk-lite:3.6.8'
+>```
+集成文档：</br>
+ [Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)；</br>
+ [Android SDK 更新日志](http://docs-im.easemob.com/im/android/sdk/releasenote)；
+ 
+**4、为了便于开发者使用自定义消息，demo中将自定义消息相关的逻辑放到custom message library中。**
 
     开发者可以根据自己的需求对这个library进行更改。
     EmCustomMsgHelper用于监听接收自定义消息，发送自定义消息。
@@ -82,11 +90,11 @@
 >
 >public boolean isBarrageMsg(EMMessage msg); //弹幕消息判断
 >```
-**4、本直播demo采用Google推荐的架构进行开发。**
+**5、本直播demo采用Google推荐的架构进行开发。**
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)
     demo中有两个repository，EmClientRepository及AppServerRepository。其中EmClientRepository用户处理环信SDK提供     的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管    理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。</br>
 
-**5、集成三方视频直播说明(以七牛为例)。**</br>
+**6、集成三方视频直播说明(以七牛为例)。**</br>
 
 demo中视频直播采用的是七牛直播SDK，集成了直播推流SDK和播放器SDK，展示了视频直播与直播聊天室结合的场景。</br>
 集成七牛直播SDK步骤如下（其他直播SDK可参考）：</br>

@@ -5,7 +5,7 @@ android {
     compileSdkVersion rootProject.ext.compile_sdk_version
     buildToolsVersion rootProject.ext.build_tools_version
     //use legacy for android > 6.0
-    useLibrary 'org.apache.http.legacy'
+    //useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.easemob.livedemo"
@@ -88,7 +88,6 @@ dependencies {
     implementation "androidx.room:room-runtime:$ax_room_version"
     annotationProcessor "androidx.room:room-compiler:$ax_room_version"
     implementation 'com.github.florent37:viewanimator:1.0.4'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.weigan:loopView:0.1.1'
     testImplementation 'junit:junit:4.12'
