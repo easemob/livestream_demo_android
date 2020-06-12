@@ -13,7 +13,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -31,8 +30,6 @@ public class LiveManager {
 
     private LiveManager(){
 
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         LoggerInterceptor logger = new LoggerInterceptor("LoggerInterceptor", true, true);
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(new RequestInterceptor())
@@ -55,7 +52,6 @@ public class LiveManager {
 
         @Override public okhttp3.Response intercept(Chain chain) throws IOException {
             Request original = chain.request();
-            Log.e("TAG", "token = "+"Bearer " + EMClient.getInstance().getAccessToken());
             Request request = original.newBuilder()
                     .header("Authorization", "Bearer " + EMClient.getInstance().getAccessToken())
                     .header("Accept", "application/json")
