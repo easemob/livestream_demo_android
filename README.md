@@ -5,7 +5,7 @@
 
 **3、添加远程依赖**
 >```Java
->api 'com.hyphenate:hyphenate-sdk-lite:3.6.9'
+>api 'com.hyphenate:hyphenate-sdk-lite:3.7.0'
 >```
 集成文档：</br>
  [Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)；</br>
