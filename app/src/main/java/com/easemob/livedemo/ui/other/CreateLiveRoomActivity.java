@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -14,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import butterknife.BindView;
@@ -25,10 +28,16 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseActivity;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
+import com.easemob.livedemo.ui.live.fragment.DemoListDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
 import com.easemob.qiniu_sdk.OnCallBack;
 import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.widget.EaseImageView;
+import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
 
@@ -36,15 +45,24 @@ public class CreateLiveRoomActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_PICK = 1;
     private static final int REQUEST_CODE_CUTTING = 2;
+    private static final String[] calls = {"相机拍摄", "相册选择"};
+    private static final int REQUEST_CODE_CAMERA = 100;
 
-    @BindView(R.id.img_live_cover) ImageView coverView;
-    @BindView(R.id.txt_cover_hint) TextView hintView;
-    @BindView(R.id.edt_live_name) EditText liveNameView;
-    @BindView(R.id.edt_live_desc) EditText liveDescView;
+    @BindView(R.id.title_bar)
+    EaseTitleBar titleBar;
+    @BindView(R.id.img_live_cover)
+    EaseImageView coverView;
+    @BindView(R.id.txt_cover_hint)
+    TextView hintView;
+    @BindView(R.id.edt_live_name)
+    EditText liveNameView;
+    @BindView(R.id.edt_live_desc)
+    EditText liveDescView;
 
     private String coverPath;
     private File cacheFile;
     private CreateLiveViewModel viewmodel;
+    protected File cameraFile;
 
     public static void actionStart(Context context) {
         Intent starter = new Intent(context, CreateLiveRoomActivity.class);
@@ -55,25 +73,19 @@ public class CreateLiveRoomActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_live_room);
         ButterKnife.bind(this);
-        getActionBarToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                finish();
+        setFitSystemForTheme(true);
+        titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
+            @Override
+            public void onRightClick(View view) {
+                onBackPressed();
             }
         });
-
-        String restServer = EMClient.getInstance().getOptions().getRestServer();
-        Log.e("TAG", "restServer = "+restServer);
-
         viewmodel = new ViewModelProvider(this).get(CreateLiveViewModel.class);
-
     }
 
 
-    @OnClick(R.id.layout_live_cover) void setLiveCover(){
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, null);
-        pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                "image/*");
-        startActivityForResult(pickIntent, REQUEST_CODE_PICK);
+    @OnClick(R.id.img_live_cover) void setLiveCover(){
+        showSelectDialog();
     }
 
     @OnClick(R.id.txt_associate_room) void associateRoom(){
@@ -89,6 +101,11 @@ public class CreateLiveRoomActivity extends BaseActivity {
         }
         if (!TextUtils.isEmpty(liveDescView.getText())){
             desc = liveDescView.getText().toString();
+        }
+        
+        if(TextUtils.isEmpty(name)) {
+            showToast(getResources().getString(R.string.em_live_create_room_check_info));
+            return;
         }
 
         viewmodel.createLiveRoom(name, desc, coverPath);
@@ -136,15 +153,92 @@ public class CreateLiveRoomActivity extends BaseActivity {
                     setPicToView(data);
                 }
                 break;
+            case REQUEST_CODE_CAMERA:
+                if (cameraFile != null && cameraFile.exists()) {
+                    startPhotoZoom(getUriForFile(mContext, cameraFile));
+                }
+                break;
             default:
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void showSelectDialog() {
+        new DemoListDialogFragment.Builder(mContext)
+                //.setTitle(R.string.em_single_call_type)
+                .setData(calls)
+                .setCancelColorRes(R.color.black)
+                .setWindowAnimations(R.style.animate_dialog)
+                .setOnItemClickListener(new DemoListDialogFragment.OnDialogItemClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        switch (position) {
+                            case 0 :
+                                selectPicFromCamera();
+                                break;
+                            case 1 :
+                                selectImageFromLocal();
+                                break;
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void selectImageFromLocal() {
+        Intent intent = null;
+        if(VersionUtils.isTargetQ(mContext)) {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+        }else {
+            if (Build.VERSION.SDK_INT < 19) {
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+            } else {
+                intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            }
+        }
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_CODE_PICK);
+    }
+
+    /**
+     * select picture from camera
+     */
+    private void selectPicFromCamera() {
+        if(!checkSdCardExist()) {
+            return;
+        }
+        cameraFile = new File(PathUtil.getInstance().getImagePath(), EMClient.getInstance().getCurrentUser()
+                + System.currentTimeMillis() + ".jpg");
+        //noinspection ResultOfMethodCallIgnored
+        cameraFile.getParentFile().mkdirs();
+        startActivityForResult(
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(mContext, cameraFile)),
+                REQUEST_CODE_CAMERA);
+    }
+
+    private static Uri getUriForFile(Context context, @NonNull File file) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return FileProvider.getUriForFile(context, context.getPackageName() + ".fileProvider", file);
+        } else {
+            return Uri.fromFile(file);
+        }
+    }
+
+    /**
+     * 检查sd卡是否挂载
+     * @return
+     */
+    private boolean checkSdCardExist() {
+        return EaseCommonUtils.isSdcardExist();
+    }
+
     private void startPhotoZoom(Uri uri) {
         cacheFile = new File(getExternalCacheDir(), "cover_temp.jpg");
         Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", true);
         intent.putExtra("aspectX", 1);

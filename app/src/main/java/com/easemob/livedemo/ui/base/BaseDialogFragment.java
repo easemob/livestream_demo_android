@@ -4,9 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.reponsitories.Resource;
@@ -102,6 +105,32 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
         if(mContext != null) {
             mContext.parseResource(response, callback);
+        }
+    }
+
+    /**
+     * dialog宽度占满，高度自定义
+     */
+    public void setDialogParams() {
+        try {
+            Window dialogWindow = getDialog().getWindow();
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.dimAmount = 0.6f;
+            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            lp.gravity =  Gravity.BOTTOM;
+            setDialogParams(lp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setDialogParams(WindowManager.LayoutParams layoutParams) {
+        try {
+            Window dialogWindow = getDialog().getWindow();
+            dialogWindow.setAttributes(layoutParams);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

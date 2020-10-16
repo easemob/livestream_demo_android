@@ -79,6 +79,9 @@
     <string name="em_live_msg_normal">普</string>
     <string name="em_live_msg_barrage">弹</string>
 
+    <string name="em_live_create_room">创建直播间</string>
+    <string name="em_live_create_room_check_info">请填写完整</string>
+
     <string name="em_set_title">设置</string>
     <string name="em_set_live_room">环信直播聊天室</string>
     <string name="em_set_select_auto">是否切换为访客模式？</string>
@@ -90,4 +93,7 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="prompt">提示</string>
+    <string name="em_create_room_name_hint">请输入直播间名称</string>
+    <string name="em_create_room_cover_hint">设置一个吸引人的封面</string>
+    <string name="em_create_room">开始直播</string>
 </resources>

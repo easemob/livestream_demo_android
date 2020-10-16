@@ -31,6 +31,7 @@ import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveListFragment;
 import com.easemob.livedemo.ui.live.fragment.LivingListFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
+import com.easemob.livedemo.ui.other.CreateLiveRoomActivity;
 import com.easemob.livedemo.ui.other.LoginActivity;
 import com.easemob.livedemo.ui.other.fragment.AboutMeFragment;
 import com.easemob.qiniu_sdk.OnCallBack;
@@ -211,7 +212,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
                 skipToTarget(1);
                 break;
             case R.id.rl_home_live :
-                LiveAllActivity.actionStart(mContext);
+                CreateLiveRoomActivity.actionStart(mContext);
                 break;
         }
     }
