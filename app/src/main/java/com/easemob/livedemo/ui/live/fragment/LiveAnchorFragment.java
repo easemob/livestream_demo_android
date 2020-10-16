@@ -1,7 +1,6 @@
 package com.easemob.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,12 +25,9 @@ import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
-import com.easemob.qiniu_sdk.OnCallBack;
-import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -62,15 +58,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     protected boolean isShutDownCountdown = false;
     boolean isStarted;
     private OnCameraListener cameraListener;
-    private Handler handler = new Handler() {
-        @Override public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_UPDATE_COUNTDOWN:
-                    handleUpdateCountdown(msg.arg1);
-                    break;
-            }
-        }
-    };
     private LivingViewModel viewModel;
     private boolean isOnGoing;
 
@@ -195,6 +182,16 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
             LiveAudienceActivity.actionStart(mContext, liveRoom);
             mContext.finish();
+        }
+    }
+
+    @Override
+    public void handleHandlerMessage(Message msg) {
+        super.handleHandlerMessage(msg);
+        switch (msg.what) {
+            case MSG_UPDATE_COUNTDOWN:
+                handleUpdateCountdown(msg.arg1);
+                break;
         }
     }
 
@@ -332,6 +329,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if(cameraListener != null) {
             cameraListener.onStartCamera();
         }
+        handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
     }
 
     private void showDialog(OnConfirmClickListener listener) {
@@ -406,7 +404,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
         // 把此activity 从foreground activity 列表里移除
         if(mContext.isFinishing()) {
-            handler.removeCallbacksAndMessages(null);
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
         }
     }
