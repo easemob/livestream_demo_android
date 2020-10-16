@@ -1,6 +1,6 @@
 ext {
     compile_sdk_version = 29
-    min_sdk_version = 16
+    min_sdk_version = 19
     target_skd_version = 29
     build_tools_version = '29.0.3'
 
