@@ -1,6 +1,7 @@
 package com.easemob.livedemo.ui.live.viewmodels;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -42,21 +43,34 @@ public class CreateLiveViewModel extends AndroidViewModel {
      * @param localPath
      */
     public void createLiveRoom(String name, String description,String localPath) {
-        LiveData<Resource<LiveRoom>> liveData = Transformations.switchMap(emClientRepository.updateRoomCover(localPath), input -> {
-            if (input.status == Status.ERROR) {
-                return new MutableLiveData<>(Resource.error(input.errorCode, input.getMessage(), null));
-            } else if (input.status == Status.SUCCESS) {
-                LiveRoom liveRoom = new LiveRoom();
-                liveRoom.setName(name);
-                liveRoom.setDescription(description);
-                liveRoom.setOwner(EMClient.getInstance().getCurrentUser());
-                liveRoom.setCover(input.data);
-                liveRoom.setMaxusers(200);
-                return repository.createLiveRoom(liveRoom);
-            } else {
-                return new MutableLiveData<>(Resource.loading(null));
-            }
-        });
+        LiveData<Resource<LiveRoom>> liveData = null;
+        if(TextUtils.isEmpty(localPath)) {
+            LiveRoom liveRoom = getLiveRoom(name, description, null);
+            liveData = repository.createLiveRoom(liveRoom);
+        }else {
+            liveData = Transformations.switchMap(emClientRepository.updateRoomCover(localPath), input -> {
+                if (input.status == Status.ERROR) {
+                    return new MutableLiveData<>(Resource.error(input.errorCode, input.getMessage(), null));
+                } else if (input.status == Status.SUCCESS) {
+                    LiveRoom liveRoom = getLiveRoom(name, description, input.data);
+                    return repository.createLiveRoom(liveRoom);
+                } else {
+                    return new MutableLiveData<>(Resource.loading(null));
+                }
+            });
+        }
         createObservable.addSource(liveData, response -> createObservable.postValue(response));
+    }
+
+    private LiveRoom getLiveRoom(String name, String description, String cover) {
+        LiveRoom liveRoom = new LiveRoom();
+        liveRoom.setName(name);
+        liveRoom.setDescription(description);
+        liveRoom.setOwner(EMClient.getInstance().getCurrentUser());
+        liveRoom.setCover(cover);
+        liveRoom.setMaxusers(200);
+        //直播间默认是持续存在的，想要主播离开房间一段时间后销毁，需主动设置为false
+        liveRoom.setPersistent(false);
+        return liveRoom;
     }
 }
