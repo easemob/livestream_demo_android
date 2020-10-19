@@ -37,7 +37,20 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
         if(viewType == VIEW_TYPE_EMPTY) {
             return getEmptyViewHolder(parent);
         }
-        return getViewHolder(parent, viewType);
+        ViewHolder holder = getViewHolder(parent, viewType);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClickAction(v, holder.getAdapterPosition());
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return itemLongClickAction(v, holder.getAdapterPosition());
+            }
+        });
+        return holder;
     }
 
     @Override
@@ -55,18 +68,6 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
         T item = mData.get(position);
         holder.setData(item, position);
         holder.setDataList(mData, position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickAction(v, position);
-            }
-        });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return itemLongClickAction(v, position);
-            }
-        });
     }
 
     public boolean itemLongClickAction(View v, int position) {
