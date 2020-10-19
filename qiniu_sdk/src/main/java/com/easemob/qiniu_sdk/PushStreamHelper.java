@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 作为推流的帮助类
  * 推流SDK设置参考：https://developer.qiniu.com/pili/sdk/3719/PLDroidMediaStreaming-function-using
- * {@link RTMP_PUBLISH_DOMAIN}和{@link RTMP_PLAY_DOMAIN}需要替换为自己的域名，{@link HUB}为直播空间名
+ * {@link #RTMP_PUBLISH_DOMAIN}和{@link #RTMP_PLAY_DOMAIN}需要替换为自己的域名，{@link #HUB}为直播空间名
  */
 public class PushStreamHelper implements StreamingStateChangedListener, StreamingSessionListener, StreamStatusCallback, AudioSourceCallback/*, PLAuthenticationResultCallback*/ {
     private static final String GENERATE_STREAM_TEXT = "https://api-demo.qnsdk.com/v1/live/stream/";

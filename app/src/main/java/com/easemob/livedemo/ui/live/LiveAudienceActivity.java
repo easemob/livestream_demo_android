@@ -3,18 +3,23 @@ package com.easemob.livedemo.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.data.model.ExtBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.LiveRoomUrlBean;
+import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
 import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
@@ -26,6 +31,9 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     private String url;
     private boolean isPrepared;
     private StreamViewModel viewModel;
+    private int videoWidth;
+    private int videoHeight;
+    private LivingViewModel livingViewModel;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent intent = new Intent(context, LiveAudienceActivity.class);
@@ -86,13 +94,36 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     private void initViewModel() {
         viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
-        viewModel.getPlayUrl(liveRoom.getId());
+        livingViewModel = new ViewModelProvider(this).get(LivingViewModel.class);
 
         viewModel.getPlayUrlObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<LiveRoomUrlBean>() {
                 @Override
                 public void onSuccess(LiveRoomUrlBean data) {
                     getStreamUrlSuccess(data.getData());
+                }
+            });
+        });
+
+        livingViewModel.getRoomDetailObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    liveRoom = data;
+                    if(DemoHelper.isLiving(liveRoom.getStatus())) {
+                        String videoType = liveRoom.getVideo_type();
+                        if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+                            ExtBean ext = liveRoom.getExt();
+                            if(ext != null && ext.getPlay() != null && !TextUtils.isEmpty(ext.getPlay().getRtmp())) {
+                                coverImage.setVisibility(View.GONE);
+                                getStreamUrlSuccess(ext.getPlay().getRtmp());
+                            }else {
+                                viewModel.getPlayUrl(liveRoom.getId());
+                            }
+                        }else {
+                            viewModel.getPlayUrl(liveRoom.getId());
+                        }
+                    }
                 }
             });
         });
@@ -108,6 +139,8 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
             videoview.setLoadingView(llStreamLoading);
             viewModel.getPlayUrl(liveRoom.getId());
         });
+
+        livingViewModel.getLiveRoomDetails(liveRoom.getId());
     }
 
     protected void getStreamUrlSuccess(String url) {
@@ -118,8 +151,9 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     /**
      * 开发者可以修改此处替换为自己的直播流
+     * @param data
      */
-    private void connectLiveStream(){
+    private void connectLiveStream(LiveRoom data){
 
     }
 
@@ -155,8 +189,8 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     }
 
     @Override
-    public void onLiveOngoing() {
-        connectLiveStream();
+    public void onLiveOngoing(LiveRoom data) {
+        connectLiveStream(data);
     }
 
     @Override
@@ -186,7 +220,37 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     @Override
     public void onVideoSizeChanged(int width, int height) {
+        //正常的直播不进行视频尺寸的调节
+        if(liveRoom == null || !liveRoom.getVideo_type().equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+            return;
+        }
+        Log.e("TAG", "width = "+width + " height = "+height);
+        if(width <= 0 || height <= 0) {
+            return;
+        }
+        if(videoWidth == width && videoHeight == height) {
+            return;
+        }
+        int vWidth = videoview.getWidth();
+        int vHeight = videoview.getHeight();
+        Log.e("TAG", "videoviewWidth = "+vWidth+ " videoviewHeight = "+vHeight);
+        if(vWidth <= 0 || vHeight <= 0) {
+            return;
+        }
+        //调整视频的尺寸
+        //(1)判断宽高比 如果视频宽高比更大，取其宽度作为match, 高度方向相应缩放
+        if(width * 1.0f / height > vWidth * 1.0f / vHeight) {
+            videoWidth = vWidth;
+            videoHeight = videoWidth * height / width;
+        }else {
+            videoHeight = vHeight;
+            videoWidth = width * videoHeight / height;
+        }
+        Log.e("TAG", "videoWidth = "+ videoWidth + " videoHeight = "+ videoHeight);
 
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) videoview.getLayoutParams();
+        layoutParams.height = videoHeight;
+        layoutParams.width = videoWidth;
     }
 
     @Override

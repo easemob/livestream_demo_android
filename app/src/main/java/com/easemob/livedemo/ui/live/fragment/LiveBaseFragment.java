@@ -164,7 +164,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        viewModel = new ViewModelProvider(this).get(LivingViewModel.class);
+        viewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
         userManageViewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT, Boolean.class).observe(getViewLifecycleOwner(), event -> {
             if(event != null && event) {
@@ -304,14 +304,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     
     private synchronized void onRoomMemberChange(LiveRoom room) {
         watchedCount = room.getAudienceNum();
-        List<MemberBean> members = room.getMembers();
-        if(members != null && !members.isEmpty()) {
-            memberList = room.getMemberList(MAX_SIZE);
-            ThreadManager.getInstance().runOnMainThread(() -> {
-                tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
-                notifyDataSetChanged();
-            });
-        }
+        memberList = room.getMemberList(MAX_SIZE);
+        ThreadManager.getInstance().runOnMainThread(() -> {
+            tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
+            notifyDataSetChanged();
+        });
     }
 
     private synchronized void onRoomMemberAdded(String name) {
