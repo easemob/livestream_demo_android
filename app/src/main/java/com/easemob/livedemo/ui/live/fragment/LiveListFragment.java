@@ -43,13 +43,13 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class LiveListFragment extends BaseFragment implements OnItemClickListener {
-    private SwipeRefreshLayout swipeRefreshLayout;
+    protected SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar loadmorePB;
 
     protected static final int pageSize = 10;
     protected String cursor;
-    private boolean hasMoreData;
+    protected boolean hasMoreData;
     private boolean isLoading;
     protected boolean isLoadMore;
     private final List<LiveRoom> liveRoomList = new ArrayList<>();
@@ -102,7 +102,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         adapter.setStatus(status);
     }
 
-    private void initViewModel() {
+    protected void initViewModel() {
         viewModel = new ViewModelProvider(this).get(LiveListViewModel.class);
         viewModel.getAllObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
@@ -128,35 +128,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                 }
             });
         });
-        viewModel.getLivingRoomsObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
-                @Override
-                public void onSuccess(ResponseModule<List<LiveRoom>> data) {
-                    cursor = data.cursor;
-                    hasMoreData = true;
-                    if(data.data.size() < pageSize) {
-                        hasMoreData = false;
-                    }
-                    if(isLoadMore) {
-                        adapter.addData(data.data);
-                    }else {
-                        adapter.setData(data.data);
-                    }
-                }
-
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    hideLoadingView(isLoadMore);
-                }
-            });
-        });
     }
 
     private void initListener() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                showLiveList(false);
+                refreshList();
             }
         });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -190,7 +167,11 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                 });
     }
 
-    private void initData() {
+    protected void refreshList() {
+        showLiveList(false);
+    }
+
+    protected void initData() {
         swipeRefreshLayout.setRefreshing(true);
         showLiveList(false);
     }
@@ -216,7 +197,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         viewModel.getLiveRoomList(limit, cursor);
     }
 
-    private void hideLoadingView(boolean isLoadMore){
+    protected void hideLoadingView(boolean isLoadMore){
         isLoading = false;
         if(!isLoadMore)
             swipeRefreshLayout.setRefreshing(false);

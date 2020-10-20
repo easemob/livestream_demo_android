@@ -18,6 +18,7 @@ public class LiveListViewModel extends AndroidViewModel {
     private AppServerRepository repository;
     private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> AllObservable;
     private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> livingRoomsObservable;
+    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> vodRoomsObservable;
 
 
     public LiveListViewModel(@NonNull Application application) {
@@ -25,6 +26,7 @@ public class LiveListViewModel extends AndroidViewModel {
         repository = new AppServerRepository();
         AllObservable = new MediatorLiveData<>();
         livingRoomsObservable = new MediatorLiveData<>();
+        vodRoomsObservable = new MediatorLiveData<>();
     }
 
     public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getAllObservable() {
@@ -39,7 +41,15 @@ public class LiveListViewModel extends AndroidViewModel {
         return livingRoomsObservable;
     }
 
-    public void getLivingRoomLists(int limit, String cursor) {
-        livingRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor), response -> livingRoomsObservable.postValue(response));
+    public void getLivingRoomList(int limit, String cursor) {
+        livingRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, "live"), response -> livingRoomsObservable.postValue(response));
+    }
+
+    public MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> getVodRoomsObservable() {
+        return vodRoomsObservable;
+    }
+
+    public void getVodRoomList(int limit, String cursor) {
+        vodRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, "vod"), response -> vodRoomsObservable.postValue(response));
     }
 }
