@@ -168,13 +168,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         userManageViewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT, Boolean.class).observe(getViewLifecycleOwner(), event -> {
             if(event != null && event) {
-                userManageViewModel.getMembers(chatroomId);
+                viewModel.getRoomMemberNumber(chatroomId);
             }
         });
         viewModel.getMemberNumberObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
+                    handler.removeMessages(CYCLE_REFRESH);
                     handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
                     onRoomMemberChange(data);
                 }
@@ -182,6 +183,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
+                    handler.removeMessages(CYCLE_REFRESH);
                     handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
                 }
             });

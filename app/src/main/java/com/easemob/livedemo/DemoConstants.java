@@ -26,4 +26,6 @@ public interface DemoConstants {
 
     String MSG_KEY_MEMBER_ADD = "member_add";
 
+    int MAX_SHOW_MEMBERS_COUNT = 200;
+
 }

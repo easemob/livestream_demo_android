@@ -4,25 +4,30 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.data.model.LiveRoom;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
+
 
 public class RoomMemberManageFragment extends RoomUserManagementFragment {
 
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        viewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
+        livingViewModel.getMemberNumberObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
-                public void onSuccess(List<String> data) {
-                    Log.e("TAG", "getObservable = "+data.size());
-                    setAdapter(data);
+                public void onSuccess(LiveRoom data) {
+                    Log.e("TAG", "getObservable = "+data.getMembers().size());
+                    LinkedList<String> memberList = data.getMemberList(DemoConstants.MAX_SHOW_MEMBERS_COUNT);
+                    setAdapter(memberList);
                 }
 
                 @Override

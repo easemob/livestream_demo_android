@@ -9,10 +9,13 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
 import com.easemob.livedemo.ui.live.adapter.LiveMemberAdapter;
 import com.easemob.livedemo.ui.live.viewmodels.LiveMemberListViewModel;
+import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -27,7 +30,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
     private LiveMemberAdapter adapter;
     private String chatRoomId;
     private OnMemberItemClickListener listener;
-    private LiveMemberListViewModel viewModel;
+    private LivingViewModel viewModel;
 
     public static LiveMemberListDialog getNewInstance(String chatRoomId) {
         LiveMemberListDialog dialog = new LiveMemberListDialog();
@@ -66,22 +69,22 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
     @Override
     public void initViewModel() {
         super.initViewModel();
-        viewModel = new ViewModelProvider(this).get(LiveMemberListViewModel.class);
-        viewModel.getMembersObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
+        viewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
+        viewModel.getMemberNumberObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
-                public void onSuccess(List<String> list) {
-                    tvMemberNum.setText(getString(R.string.em_live_member_num, list.size()));
-                    adapter.setData(list);
-                    LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT).postValue(true);
+                public void onSuccess(LiveRoom data) {
+                    tvMemberNum.setText(getString(R.string.em_live_member_num, data.getAudienceNum()));
+                    LinkedList<String> memberList = data.getMemberList(DemoConstants.MAX_SHOW_MEMBERS_COUNT);
+                    adapter.setData(memberList);
                 }
             });
         });
-        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER, Boolean.class).observe(getViewLifecycleOwner(), event -> {
-            if(event != null && event) {
-                getMemberList();
-            }
-        });
+//        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+//            if(event != null && event) {
+//                getMemberList();
+//            }
+//        });
     }
 
     @Override
@@ -104,7 +107,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
     }
 
     private void getMemberList() {
-        viewModel.getMembers(chatRoomId);
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT).postValue(true);
     }
 
     public void setOnItemClickListener(OnMemberItemClickListener listener) {
