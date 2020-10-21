@@ -75,7 +75,6 @@ public class DemoMsgHelper {
     public void sendTxtMsg(String content, OnMsgCallBack callBack) {
         EMMessage message = EMMessage.createTxtSendMessage(content, chatroomId);
         message.setChatType(EMMessage.ChatType.ChatRoom);
-        EMClient.getInstance().chatManager().sendMessage(message);
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -94,6 +93,7 @@ public class DemoMsgHelper {
                 callBack.onProgress(i, s);
             }
         });
+        EMClient.getInstance().chatManager().sendMessage(message);
     }
 
     /**

@@ -11,8 +11,10 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -74,6 +76,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
         setContentView(R.layout.activity_create_live_room);
         ButterKnife.bind(this);
         setFitSystemForTheme(true);
+        adjustTitle();
         titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
             @Override
             public void onRightClick(View view) {
@@ -81,6 +84,14 @@ public class CreateLiveRoomActivity extends BaseActivity {
             }
         });
         viewmodel = new ViewModelProvider(this).get(CreateLiveViewModel.class);
+    }
+
+    private void adjustTitle() {
+        RelativeLayout rightLayout = titleBar.getRightLayout();
+        ViewGroup.LayoutParams params = rightLayout.getLayoutParams();
+        if(params instanceof RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams) params).rightMargin = (int) EaseCommonUtils.dip2px(mContext, 5);
+        }
     }
 
 

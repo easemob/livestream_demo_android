@@ -256,7 +256,6 @@ public class EmCustomMsgHelper implements EMMessageListener {
         sendMessage.addBody(body);
         sendMessage.setTo(to);
         sendMessage.setChatType(chatType);
-        EMClient.getInstance().chatManager().sendMessage(sendMessage);
         sendMessage.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -281,6 +280,7 @@ public class EmCustomMsgHelper implements EMMessageListener {
                 }
             }
         });
+        EMClient.getInstance().chatManager().sendMessage(sendMessage);
     }
 
     /**

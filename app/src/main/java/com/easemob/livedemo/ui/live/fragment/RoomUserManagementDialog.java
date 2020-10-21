@@ -79,7 +79,7 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    String title = getString(R.string.em_live_user_manage_users, data.getAudienceNum());
+                    String title = getString(R.string.em_live_user_manage_users, data.getAudienceNum() + 1);
                     adapter.getTitles().remove(0);
                     adapter.getTitles().add(0, title);
                     adapter.notifyDataSetChanged();
@@ -133,7 +133,7 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     private void setupViewPager() {
         adapter = new FragmentAdapter(getChildFragmentManager());
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
-                RoomUserManagementFragment.ManagementType.MEMBER), "观众");
+                RoomUserManagementFragment.ManagementType.MEMBER), "成员");
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
                 RoomUserManagementFragment.ManagementType.BLACKLIST), "白名单");
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,

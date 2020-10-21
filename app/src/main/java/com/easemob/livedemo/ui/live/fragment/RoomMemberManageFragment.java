@@ -1,5 +1,6 @@
 package com.easemob.livedemo.ui.live.fragment;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -9,6 +10,7 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.hyphenate.chat.EMClient;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +29,12 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
                 public void onSuccess(LiveRoom data) {
                     Log.e("TAG", "getObservable = "+data.getMembers().size());
                     LinkedList<String> memberList = data.getMemberList(DemoConstants.MAX_SHOW_MEMBERS_COUNT);
+                    if(TextUtils.equals(data.getOwner(), EMClient.getInstance().getCurrentUser())) {
+                        if(memberList == null) {
+                            memberList = new LinkedList<>();
+                        }
+                        memberList.add(0, EMClient.getInstance().getCurrentUser());
+                    }
                     setAdapter(memberList);
                 }
 

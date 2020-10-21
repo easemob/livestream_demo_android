@@ -73,7 +73,7 @@
     <string name="em_live_msg_gift">%1$s 赠送了 %2$s x%3$d</string>
     <string name="em_live_msg_like">%1$s 点了 %2$d个赞</string>
     <string name="em_live_msg_member_add">进入了直播间</string>
-    <string name="em_live_user_manage_users">观众(%1$d)</string>
+    <string name="em_live_user_manage_users">成员(%1$d)</string>
     <string name="em_live_user_manage_white">白名单(%1$d)</string>
     <string name="em_live_user_manage_mute">用户禁言(%1$d)</string>
     <string name="em_live_msg_normal">普</string>
