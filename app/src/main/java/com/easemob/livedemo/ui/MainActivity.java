@@ -102,10 +102,18 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         }
         LivingViewModel viewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
         viewModel.getRoomDetailObservable().observe(mContext, response -> {
-            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>(true) {
                 @Override
                 public void onSuccess(LiveRoom data) {
                     LiveAnchorActivity.actionStart(mContext, data);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    if(code == 404) {
+                        DemoHelper.saveLivingId("");
+                    }
                 }
             });
         });
