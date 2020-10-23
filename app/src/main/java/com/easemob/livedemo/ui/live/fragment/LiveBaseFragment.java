@@ -285,6 +285,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if(dialog == null) {
             dialog = new RoomUserManagementDialog(chatroomId);
         }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.show(getChildFragmentManager(), "RoomUserManagementDialog");
     }
 

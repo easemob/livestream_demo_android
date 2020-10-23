@@ -24,6 +24,7 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
+import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
@@ -79,8 +80,13 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         switchCameraView.setVisibility(View.VISIBLE);
         groupGiftInfo.setVisibility(View.VISIBLE);
 
-        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
+        ReceiveGiftDao giftDao = DemoHelper.getReceiveGiftDao();
+        if(giftDao != null) {
+            int totalNum = giftDao.loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
+            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
+        }else {
+            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(0)));
+        }
 
         int likeNum = DemoHelper.getLikeNum(liveId);
         tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
