@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.text.TextUtils;
@@ -18,16 +19,21 @@ import android.view.WindowManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.LiveDataBus;
+import com.easemob.livedemo.common.OnCancelClickListener;
+import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
+import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.qiniu_sdk.LiveCameraView;
 import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
 
-public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
+public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener, PushStreamHelper.OnPushStageChange {
 
     @BindView(R.id.container)
     LiveCameraView cameraView;
@@ -110,6 +116,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
         Log.e("TAG", "publishUrl = "+publishUrl);
         streamHelper = PushStreamHelper.getInstance();
         streamHelper.initPublishVideo(cameraView, publishUrl);
+        streamHelper.setOnPushStageChange(this);
     }
 
     protected void getStreamUrlSuccess(String url) {
@@ -172,4 +179,41 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
         streamHelper.destroy();
     }
 
+    @Override
+    public void ioError() {
+
+    }
+
+    @Override
+    public void openCameraFail() {
+        runOnUiThread(()-> {
+            showDialog(R.string.em_live_open_camera_fail, new OnConfirmClickListener() {
+                @Override
+                public void onConfirmClick(View view, Object bean) {
+                    LiveDataBus.get().with(DemoConstants.FINISH_LIVE).postValue(true);
+                }
+            }, new OnCancelClickListener() {
+                @Override
+                public void onCancelClick(View view, Object bean) {
+
+                }
+            });
+        });
+    }
+
+    @Override
+    public void disconnected() {
+
+    }
+
+    private void showDialog(@StringRes int title, OnConfirmClickListener listener, OnCancelClickListener cancelListener) {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(title)
+                .setConfirmButtonTxt(R.string.ok)
+                .setConfirmColor(R.color.em_color_warning)
+                .setOnConfirmClickListener(listener)
+                .setOnCancelClickListener(cancelListener)
+                .build()
+                .show(getSupportFragmentManager(), "dialog");
+    }
 }

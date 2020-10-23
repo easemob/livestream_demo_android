@@ -34,6 +34,7 @@ public class LiveRoom extends BaseBean implements Serializable {
     //是否持续
     private boolean persistent;
     private String video_type;
+    private boolean mute;
     //@SerializedName("liveshow_id")
     //private String showId;
 
@@ -155,6 +156,14 @@ public class LiveRoom extends BaseBean implements Serializable {
 
     public void setVideo_type(String video_type) {
         this.video_type = video_type;
+    }
+
+    public boolean isMute() {
+        return mute;
+    }
+
+    public void setMute(boolean mute) {
+        this.mute = mute;
     }
 
     public LinkedList<String> getMemberList(int max_size) {

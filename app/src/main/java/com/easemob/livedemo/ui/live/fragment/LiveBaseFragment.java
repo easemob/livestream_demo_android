@@ -132,6 +132,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             handleHandlerMessage(msg);
         }
     };
+    private boolean isStartCycleRefresh;
 
 
     @Override
@@ -178,6 +179,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     handler.removeMessages(CYCLE_REFRESH);
                     handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
                     onRoomMemberChange(data);
+                    checkLiveStatus(data);
                 }
 
                 @Override
@@ -188,6 +190,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 }
             });
         });
+    }
+
+    /**
+     * 检查直播状态
+     * @param data
+     */
+    protected void checkLiveStatus(LiveRoom data) {
+
     }
 
     @Override
@@ -224,10 +234,40 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(isStartCycleRefresh) {
+            startCycleRefresh();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(isStartCycleRefresh) {
+            stopCycleRefresh();
+        }
+    }
+
+    private void startCycleRefresh() {
+        if(handler != null) {
+            handler.removeMessages(CYCLE_REFRESH);
+            handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
+        }
+    }
+
+    private void stopCycleRefresh() {
+        if(handler != null) {
+            handler.removeMessages(CYCLE_REFRESH);
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         if(mContext != null && mContext.isFinishing()) {
             handler.removeCallbacksAndMessages(null);
+            isStartCycleRefresh = false;
         }
     }
 
@@ -239,6 +279,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         switch (msg.what) {
             case CYCLE_REFRESH :
                 if(!TextUtils.isEmpty(chatroomId)) {
+                    isStartCycleRefresh = true;
                     viewModel.getRoomMemberNumber(chatroomId);
                 }
                 break;

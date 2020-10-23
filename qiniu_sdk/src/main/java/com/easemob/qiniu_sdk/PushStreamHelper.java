@@ -43,6 +43,8 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     private String publishUrl = DEFAULT_PUBLISH_URL;
     private EncodingConfig config;
 
+    private OnPushStageChange stageChange;
+
     private PushStreamHelper(){}
 
     public static PushStreamHelper getInstance() {
@@ -305,14 +307,23 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
             case IOERROR:
                 // Network connect error.
                 Log.e(TAG, "网络连接失败");
+                if(stageChange != null) {
+                    stageChange.ioError();
+                }
                 break;
             case OPEN_CAMERA_FAIL:
                 Log.e(TAG, "摄像头打开失败");
                 // Failed to open camera.
+                if(stageChange != null) {
+                    stageChange.openCameraFail();
+                }
                 break;
             case DISCONNECTED:
                 Log.e(TAG, "已经断开连接");
                 // The socket is broken while streaming
+                if(stageChange != null) {
+                    stageChange.disconnected();
+                }
                 break;
             case TORCH_INFO:
                 Log.e(TAG, "开启闪光灯");
@@ -366,4 +377,25 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     public void onAuthorizationResult(int result) {
         Log.e("TAG", "result = "+result);
     }*/
+
+    public void setOnPushStageChange(OnPushStageChange change) {
+        this.stageChange = change;
+    }
+
+    public interface OnPushStageChange {
+        /**
+         * 网络连接失败
+         */
+        void ioError();
+
+        /**
+         * 摄像头打开失败
+         */
+        void openCameraFail();
+
+        /**
+         * The socket is broken while streaming
+         */
+        void disconnected();
+    }
 }

@@ -118,6 +118,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                         tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
                     }
                 });
+        LiveDataBus.get().with(DemoConstants.FINISH_LIVE, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if(response != null && response) {
+                        stopLiving();
+                    }
+                });
         startLive();
     }
 
@@ -201,6 +207,14 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         }
     }
 
+    @Override
+    protected void checkLiveStatus(LiveRoom data) {
+        super.checkLiveStatus(data);
+        if(DemoHelper.isOwner(data.getOwner()) && !data.isLiving()) {
+            changeAnchorLive();
+        }
+    }
+
     /**
      * 开始直播
      */
@@ -244,19 +258,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     if (count == COUNTDOWN_END_INDEX
                             //&& mEasyStreaming != null
                             && !isShutDownCountdown && mContext != null && !mContext.isFinishing()) {
-                        EMClient.getInstance()
-                                .chatroomManager()
-                                .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
-                                    @Override public void onSuccess(EMChatRoom emChatRoom) {
-                                        chatroom = emChatRoom;
-                                        ThreadManager.getInstance().runOnMainThread(LiveAnchorFragment.this::getLiveRoomDetail);
-                                    }
-
-                                    @Override public void onError(int i, String s) {
-                                        mContext.showToast("加入聊天室失败");
-                                        mContext.finish();
-                                    }
-                                });
+                        joinChatRoom();
                     }
                 }
 
@@ -270,6 +272,22 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 countdownView.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void joinChatRoom() {
+        EMClient.getInstance()
+                .chatroomManager()
+                .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
+                    @Override public void onSuccess(EMChatRoom emChatRoom) {
+                        chatroom = emChatRoom;
+                        ThreadManager.getInstance().runOnMainThread(LiveAnchorFragment.this::getLiveRoomDetail);
+                    }
+
+                    @Override public void onError(int i, String s) {
+                        mContext.showToast("加入聊天室失败");
+                        mContext.finish();
+                    }
+                });
     }
 
     private void getLiveRoomDetail() {

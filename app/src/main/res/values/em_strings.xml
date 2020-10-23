@@ -78,6 +78,8 @@
     <string name="em_live_user_manage_mute">用户禁言(%1$d)</string>
     <string name="em_live_msg_normal">普</string>
     <string name="em_live_msg_barrage">弹</string>
+    <string name="em_live_shutdown">直播中断，是否重新开始直播？</string>
+    <string name="em_live_open_camera_fail">摄像头打开失败，是否退出？</string>
 
     <string name="em_live_create_room">创建直播间</string>
     <string name="em_live_create_room_check_info">请填写完整</string>

@@ -27,7 +27,7 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    Log.e("TAG", "getObservable = "+data.getMembers().size());
+                    isAllMuted = data.isMute();
                     LinkedList<String> memberList = data.getMemberList(DemoConstants.MAX_SHOW_MEMBERS_COUNT);
                     if(TextUtils.equals(data.getOwner(), EMClient.getInstance().getCurrentUser())) {
                         if(memberList == null) {
