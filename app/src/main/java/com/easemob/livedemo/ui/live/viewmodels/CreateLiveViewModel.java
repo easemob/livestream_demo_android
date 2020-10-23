@@ -2,6 +2,7 @@ package com.easemob.livedemo.ui.live.viewmodels;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -11,6 +12,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.easemob.livedemo.common.SingleSourceLiveData;
 import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.common.reponsitories.AppServerRepository;
 import com.easemob.livedemo.common.reponsitories.EmClientRepository;
@@ -23,16 +25,16 @@ import retrofit2.http.Body;
 public class CreateLiveViewModel extends AndroidViewModel {
     private AppServerRepository repository;
     private EmClientRepository emClientRepository;
-    private MediatorLiveData<Resource<LiveRoom>> createObservable;
+    private SingleSourceLiveData<Resource<LiveRoom>> createObservable;
 
     public CreateLiveViewModel(@NonNull Application application) {
         super(application);
         repository = new AppServerRepository();
         emClientRepository = new EmClientRepository();
-        createObservable = new MediatorLiveData<>();
+        createObservable = new SingleSourceLiveData<>();
     }
 
-    public MediatorLiveData<Resource<LiveRoom>> getCreateObservable() {
+    public LiveData<Resource<LiveRoom>> getCreateObservable() {
         return createObservable;
     }
 
@@ -59,7 +61,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
                 }
             });
         }
-        createObservable.addSource(liveData, response -> createObservable.postValue(response));
+        createObservable.setSource(liveData);
     }
 
     private LiveRoom getLiveRoom(String name, String description, String cover) {
