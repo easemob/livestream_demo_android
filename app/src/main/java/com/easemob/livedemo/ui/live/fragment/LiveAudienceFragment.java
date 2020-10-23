@@ -294,12 +294,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
 
                 //postUserChangeEvent(StatisticsType.LEAVE, EMClient.getInstance().getCurrentUser());
             }
-
-            if (presenter != null) {
-                EMClient.getInstance()
-                        .chatroomManager()
-                        .removeChatRoomListener(presenter);
-            }
         }
     }
 
