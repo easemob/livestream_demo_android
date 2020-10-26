@@ -10,6 +10,7 @@ import android.os.Process;
 import android.util.Log;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
+import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
 import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.easemob.livedemo.ui.MainActivity;
@@ -74,7 +75,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
 
     EMClient.getInstance().addConnectionListener(new EMConnectionListener() {
       @Override public void onConnected() {
-
+         LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED).postValue(true);
       }
 
       @Override public void onDisconnected(int errorCode) {

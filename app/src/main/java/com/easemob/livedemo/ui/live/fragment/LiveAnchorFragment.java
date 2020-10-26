@@ -32,6 +32,7 @@ import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.util.EMLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,6 +62,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     private OnCameraListener cameraListener;
     private LivingViewModel viewModel;
     private boolean isOnGoing;
+    private boolean reChangeLiveStatus;
 
     @Override
     protected int getLayoutId() {
@@ -211,7 +213,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     protected void checkLiveStatus(LiveRoom data) {
         super.checkLiveStatus(data);
         if(DemoHelper.isOwner(data.getOwner()) && !data.isLiving()) {
-            changeAnchorLive();
+            restartAnchorLive();
         }
     }
 
@@ -315,6 +317,17 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void changeAnchorLive() {
+        reChangeLiveStatus = false;
+        changeAnchorLiveByServer();
+    }
+
+    private void restartAnchorLive() {
+        EMLog.d(TAG, "restartAnchorLive");
+        reChangeLiveStatus = true;
+        changeAnchorLiveByServer();
+    }
+
+    private void changeAnchorLiveByServer() {
         viewModel.getChangeObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
@@ -323,7 +336,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     DemoHelper.saveLikeNum(data.getId(), 0);
                     DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
-                    startAnchorLive(liveRoom);
+                    if(!reChangeLiveStatus) {
+                        startAnchorLive(liveRoom);
+                    }
                 }
 
                 @Override
@@ -333,9 +348,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 }
             });
         });
-        if(liveRoom.isLiving()) {
+        if(liveRoom.isLiving() && !reChangeLiveStatus) {
+            EMLog.d(TAG, "restartAnchorLive 直接开播");
             startAnchorLive(liveRoom);
         }else {
+            EMLog.d(TAG, "restartAnchorLive 调用接口");
             viewModel.changeLiveStatus(liveId, EMClient.getInstance().getCurrentUser(), "ongoing");
         }
     }
@@ -353,7 +370,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if(cameraListener != null) {
             cameraListener.onStartCamera();
         }
-        handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
+        startCycleRefresh();
     }
 
     private void showDialog(OnConfirmClickListener listener) {

@@ -44,6 +44,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     private PushStreamHelper streamHelper;
     private boolean isStartCamera;
+    private boolean is_disconnected;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent starter = new Intent(context, LiveAnchorActivity.class);
@@ -96,6 +97,13 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
                     getStreamUrlSuccess(data.getData());
                 }
             });
+        });
+
+        LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED, Boolean.class).observe(this, response -> {
+            if(response != null && response && is_disconnected) {
+                Log.e("PushStreamHelper", "网络重新连接，重新开始推流");
+                streamHelper.startStreamingInternal();
+            }
         });
     }
 
@@ -151,10 +159,13 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     @Override
     protected void onResume() {
         super.onResume();
+        rePushStream();
+    }
+
+    private void rePushStream() {
         if(isStartCamera) {
             streamHelper.resume();
         }
-
     }
 
     @Override
@@ -181,7 +192,8 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     @Override
     public void ioError() {
-
+        showToast(getString(R.string.em_live_network_connect_fail));
+        is_disconnected = true;
     }
 
     @Override

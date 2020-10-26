@@ -239,6 +239,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      */
     public void pause() {
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media pause");
             mMediaStreamingManager.pause();
         }
     }
@@ -248,6 +249,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      */
     public void resume() {
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media resume");
             mMediaStreamingManager.resume();
         }
     }
@@ -258,6 +260,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     public void destroy() {
         this.publishUrl = DEFAULT_PUBLISH_URL;
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media destroy");
             mMediaStreamingManager.destroy();
         }
     }
@@ -267,6 +270,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      */
     public void switchCamera() {
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media switchCamera");
             mMediaStreamingManager.switchCamera();
         }
     }
@@ -365,7 +369,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
 
     }
 
-    private void startStreamingInternal() {
+    public void startStreamingInternal() {
         new Thread(()-> {
             if (mMediaStreamingManager != null) {
                 mMediaStreamingManager.startStreaming();

@@ -176,6 +176,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
+                    liveRoom = data;
                     handler.removeMessages(CYCLE_REFRESH);
                     handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
                     onRoomMemberChange(data);
@@ -249,14 +250,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         }
     }
 
-    private void startCycleRefresh() {
+    protected void startCycleRefresh() {
         if(handler != null) {
             handler.removeMessages(CYCLE_REFRESH);
             handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
         }
     }
 
-    private void stopCycleRefresh() {
+    protected void stopCycleRefresh() {
         if(handler != null) {
             handler.removeMessages(CYCLE_REFRESH);
         }
