@@ -3,28 +3,38 @@ package com.easemob.livedemo.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.LiveDataBus;
+import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.ExtBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
+import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
+import com.pili.pldroid.player.PLOnErrorListener;
 
 public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener, LiveVideoView.OnVideoListener {
+    private static final int RESTART_VIDEO = 10;
+    private static final int MAX_RESTART_TIMES = 5;
     private LiveAudienceFragment fragment;
     private LiveVideoView videoview;
     private View llStreamLoading;
@@ -34,6 +44,18 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     private int videoWidth;
     private int videoHeight;
     private LivingViewModel livingViewModel;
+    private int restart_video_times;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case RESTART_VIDEO :
+                    startVideo();
+                    break;
+            }
+        }
+    };
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent intent = new Intent(context, LiveAudienceActivity.class);
@@ -135,15 +157,32 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
             stopVideo();
         });
 
+        LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED, Boolean.class).observe(this, event -> {
+            if(event != null && event && !isPrepared) {
+                Log.e("TAG", "断网重连后");
+                if(isPrepared) {
+                    videoview.start();
+                }else {
+                    startVideo();
+                }
+
+            }
+        });
+
         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN, Boolean.class).observe(mContext, event -> {
-            videoview.attachView();
-            videoview.setOnVideoListener(this);
-            videoview.setAvOptions();
-            videoview.setLoadingView(llStreamLoading);
-            viewModel.getPlayUrl(liveRoom.getId());
+            startVideo();
         });
 
         livingViewModel.getLiveRoomDetails(liveRoom.getId());
+    }
+
+    private void startVideo() {
+        Log.e("TAG", "startVideo");
+        videoview.attachView();
+        videoview.setOnVideoListener(this);
+        videoview.setAvOptions();
+        videoview.setLoadingView(llStreamLoading);
+        viewModel.getPlayUrl(liveRoom.getId());
     }
 
     protected void getStreamUrlSuccess(String url) {
@@ -218,6 +257,15 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     @Override
     public boolean onError(int errorCode) {
         Log.e("TAG", "onError = "+errorCode);
+        if(errorCode == PLOnErrorListener.ERROR_CODE_OPEN_FAILED) {
+            //如果播放器打开失败，则轮询5次，5次后弹框结束页面
+            if(restart_video_times >= MAX_RESTART_TIMES) {
+                runOnUiThread(() -> showDialogFragment(R.string.em_live_open_video_fail_title));
+                return false;
+            }
+            handler.sendEmptyMessageDelayed(RESTART_VIDEO, restart_video_times == 0 ? 0 : 15000);
+            restart_video_times++;
+        }
         return false;
     }
 
@@ -229,6 +277,25 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
 
     @Override
     public void onStopVideo() {
-        runOnUiThread(this::stopVideo);
+        //runOnUiThread(()-> showDialogFragment(R.string.em_live_disconnect_title));
+    }
+
+    private void showDialogFragment(int title) {
+        DialogFragment fragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag("disconnected");
+        if(fragment != null && fragment.isAdded()) {
+            return;
+        }
+        fragment = new SimpleDialogFragment.Builder(mContext)
+                .setTitle(title)
+                .setConfirmButtonTxt(R.string.em_live_dialog_quit_btn_title)
+                .setOnConfirmClickListener(new OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view, Object bean) {
+                        stopVideo();
+                        finish();
+                    }
+                })
+                .build();
+        fragment.show(getSupportFragmentManager(), "disconnected");
     }
 }
