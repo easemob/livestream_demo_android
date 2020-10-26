@@ -115,7 +115,10 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
                         if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
                             ExtBean ext = liveRoom.getExt();
                             if(ext != null && ext.getPlay() != null && !TextUtils.isEmpty(ext.getPlay().getRtmp())) {
+                                //隐藏背景图
                                 coverImage.setVisibility(View.GONE);
+                                //设置videoView模式为适应父布局
+                                videoview.setDisplayFitParent();
                                 getStreamUrlSuccess(ext.getPlay().getRtmp());
                             }else {
                                 viewModel.getPlayUrl(liveRoom.getId());
@@ -221,36 +224,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     @Override
     public void onVideoSizeChanged(int width, int height) {
         //正常的直播不进行视频尺寸的调节
-        if(liveRoom == null || !liveRoom.getVideo_type().equalsIgnoreCase(LiveRoom.Type.vod.name())) {
-            return;
-        }
         Log.e("TAG", "width = "+width + " height = "+height);
-        if(width <= 0 || height <= 0) {
-            return;
-        }
-        if(videoWidth == width && videoHeight == height) {
-            return;
-        }
-        int vWidth = videoview.getWidth();
-        int vHeight = videoview.getHeight();
-        Log.e("TAG", "videoviewWidth = "+vWidth+ " videoviewHeight = "+vHeight);
-        if(vWidth <= 0 || vHeight <= 0) {
-            return;
-        }
-        //调整视频的尺寸
-        //(1)判断宽高比 如果视频宽高比更大，取其宽度作为match, 高度方向相应缩放
-        if(width * 1.0f / height > vWidth * 1.0f / vHeight) {
-            videoWidth = vWidth;
-            videoHeight = videoWidth * height / width;
-        }else {
-            videoHeight = vHeight;
-            videoWidth = width * videoHeight / height;
-        }
-        Log.e("TAG", "videoWidth = "+ videoWidth + " videoHeight = "+ videoHeight);
-
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) videoview.getLayoutParams();
-        layoutParams.height = videoHeight;
-        layoutParams.width = videoWidth;
     }
 
     @Override

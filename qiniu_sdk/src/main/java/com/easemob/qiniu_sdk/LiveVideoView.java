@@ -51,6 +51,20 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
         setOnCompletionListener(this);
         setOnVideoSizeChangedListener(this);
         setOnErrorListener(this);
+        setDefaultDisplayRatio();
+    }
+
+    /**
+     * 设置画面预览模式
+     * 提供了各种画面预览模式，包括：原始尺寸、适应屏幕、全屏铺满、16:9、4:3
+     * PLVideoView.ASPECT_RATIO_ORIGIN ASPECT_RATIO_FIT_PARENT ASPECT_RATIO_PAVED_PARENT ASPECT_RATIO_16_9 ASPECT_RATIO_4_3
+     */
+    private void setDefaultDisplayRatio() {
+        setDisplayAspectRatio(PLVideoView.ASPECT_RATIO_PAVED_PARENT);
+    }
+
+    public void setDisplayFitParent() {
+        setDisplayAspectRatio(PLVideoView.ASPECT_RATIO_FIT_PARENT);
     }
 
     @Override
@@ -152,6 +166,11 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
                 videoListener.onStopVideo();
             }
         }
+    }
+
+    @Override
+    public void start() {
+        super.start();
     }
 
     /**
