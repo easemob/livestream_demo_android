@@ -11,9 +11,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.DemoConstants;
@@ -134,24 +132,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
                 @Override
                 public void onSuccess(LiveRoom data) {
                     liveRoom = data;
-                    if(DemoHelper.isLiving(liveRoom.getStatus())) {
-                        String videoType = liveRoom.getVideo_type();
-                        if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
-                            ExtBean ext = liveRoom.getExt();
-                            if(ext != null && ext.getPlay() != null && ext.getPlay() != null && ext.getPlay().size() > 0) {
-                                //隐藏背景图
-                                coverImage.setVisibility(View.GONE);
-                                //设置videoView模式为适应父布局
-                                videoview.setDisplayFitParent();
-                                String playUrl = getPlayUrl(ext.getPlay());
-                                getStreamUrlSuccess(playUrl);
-                            }else {
-                                viewModel.getPlayUrl(liveRoom.getId());
-                            }
-                        }else {
-                            viewModel.getPlayUrl(liveRoom.getId());
-                        }
-                    }
+                    getStreamUrl();
                 }
             });
         });
@@ -179,6 +160,30 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         livingViewModel.getLiveRoomDetails(liveRoom.getId());
     }
 
+    private void getStreamUrl() {
+        if(liveRoom == null) {
+            return;
+        }
+        if(DemoHelper.isLiving(liveRoom.getStatus())) {
+            String videoType = liveRoom.getVideo_type();
+            if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+                ExtBean ext = liveRoom.getExt();
+                if(ext != null && ext.getPlay() != null && ext.getPlay() != null && ext.getPlay().size() > 0) {
+                    //隐藏背景图
+                    coverImage.setVisibility(View.GONE);
+                    //设置videoView模式为适应父布局
+                    videoview.setDisplayFitParent();
+                    String playUrl = getPlayUrl(ext.getPlay());
+                    getStreamUrlSuccess(playUrl);
+                }else {
+                    viewModel.getPlayUrl(liveRoom.getId());
+                }
+            }else {
+                viewModel.getPlayUrl(liveRoom.getId());
+            }
+        }
+    }
+
     /**
      * 选择相应协议的拉流地址
      * @param mapUrl
@@ -197,7 +202,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         videoview.setOnVideoListener(this);
         videoview.setAvOptions();
         videoview.setLoadingView(llStreamLoading);
-        viewModel.getPlayUrl(liveRoom.getId());
+        getStreamUrl();
     }
 
     protected void getStreamUrlSuccess(String url) {
@@ -268,6 +273,13 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     @Override
     public void onCompletion() {
         Log.e("TAG", "onCompletion");
+        if(liveRoom != null) {
+            String videoType = liveRoom.getVideo_type();
+            if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+                stopVideo();
+                startVideo();
+            }
+        }
     }
 
     @Override
