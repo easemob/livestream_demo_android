@@ -32,6 +32,8 @@ import com.easemob.qiniu_sdk.LiveVideoView;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
 import com.pili.pldroid.player.PLOnErrorListener;
 
+import java.util.Map;
+
 public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener, LiveVideoView.OnVideoListener {
     private static final int RESTART_VIDEO = 10;
     private static final int MAX_RESTART_TIMES = 5;
@@ -136,12 +138,13 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
                         String videoType = liveRoom.getVideo_type();
                         if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
                             ExtBean ext = liveRoom.getExt();
-                            if(ext != null && ext.getPlay() != null && !TextUtils.isEmpty(ext.getPlay().getRtmp())) {
+                            if(ext != null && ext.getPlay() != null && ext.getPlay() != null && ext.getPlay().size() > 0) {
                                 //隐藏背景图
                                 coverImage.setVisibility(View.GONE);
                                 //设置videoView模式为适应父布局
                                 videoview.setDisplayFitParent();
-                                getStreamUrlSuccess(ext.getPlay().getRtmp());
+                                String playUrl = getPlayUrl(ext.getPlay());
+                                getStreamUrlSuccess(playUrl);
                             }else {
                                 viewModel.getPlayUrl(liveRoom.getId());
                             }
@@ -176,6 +179,18 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         livingViewModel.getLiveRoomDetails(liveRoom.getId());
     }
 
+    /**
+     * 选择相应协议的拉流地址
+     * @param mapUrl
+     * @return
+     */
+    private String getPlayUrl(Map<String, String> mapUrl) {
+        if(mapUrl.containsKey("m3u8")) {
+            return mapUrl.get("m3u8");
+        }
+        return mapUrl.values().iterator().next();
+    }
+
     private void startVideo() {
         Log.e("TAG", "startVideo");
         videoview.attachView();
@@ -188,7 +203,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     protected void getStreamUrlSuccess(String url) {
         this.url = url;
         Log.e("TAG", "play url = "+url);
-        videoview.setVideoPath(url);
+        videoview.setVideoPath(this.url);
     }
 
     /**
@@ -247,6 +262,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         videoview.setVisibility(View.VISIBLE);
         isPrepared = true;
         videoview.start();
+        restart_video_times = 0;
     }
 
     @Override

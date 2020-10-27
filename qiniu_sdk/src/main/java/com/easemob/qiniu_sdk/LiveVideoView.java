@@ -51,7 +51,7 @@ public class LiveVideoView extends PLVideoTextureView implements PLOnPreparedLis
         setOnCompletionListener(this);
         setOnVideoSizeChangedListener(this);
         setOnErrorListener(this);
-        setDefaultDisplayRatio();
+        //setDefaultDisplayRatio();
     }
 
     /**

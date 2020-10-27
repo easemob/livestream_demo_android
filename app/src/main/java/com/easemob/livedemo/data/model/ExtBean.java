@@ -1,13 +1,15 @@
 package com.easemob.livedemo.data.model;
 
-public class ExtBean extends BaseBean {
-    private ExtPlayBean play;
+import java.util.Map;
 
-    public ExtPlayBean getPlay() {
+public class ExtBean extends BaseBean {
+    private Map<String, String> play;
+
+    public Map<String, String> getPlay() {
         return play;
     }
 
-    public void setPlay(ExtPlayBean play) {
+    public void setPlay(Map<String, String> play) {
         this.play = play;
     }
 }

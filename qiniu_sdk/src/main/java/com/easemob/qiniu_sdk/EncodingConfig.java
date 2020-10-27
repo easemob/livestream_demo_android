@@ -43,7 +43,7 @@ public class EncodingConfig implements Serializable {
     // 是否质量优先
     public boolean mVideoRateControlQuality;
     // 默认质量优先
-    public StreamingProfile.EncoderRCModes mEncoderRCMode = StreamingProfile.EncoderRCModes.QUALITY_PRIORITY;
+    public StreamingProfile.EncoderRCModes mEncoderRCMode = StreamingProfile.EncoderRCModes.BITRATE_PRIORITY;
 
     // 自适应码率，sdk默认是关闭的
     public StreamingProfile.BitrateAdjustMode mBitrateAdjustMode = StreamingProfile.BitrateAdjustMode.Auto;
