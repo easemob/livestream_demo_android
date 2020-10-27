@@ -170,6 +170,9 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
                 mProfile.setPictureStreamingFilePath(config.mPictureStreamingFilePath);
             }
         }
+        //开启QUIC推流
+        //QUIC 是基于 UDP 开发的可靠传输协议，在弱网下拥有更好的推流效果，相比于 TCP 拥有更低的延迟，可抵抗更高的丢包率。
+        mProfile.setQuicEnable(true);
         mProfile.setVideoQuality(config.mVideoQualityPreset)              // 设置视频质量
                 .setAudioQuality(config.mAudioQualityPreset)            // 设置音频质量
                 .setEncodingSizeLevel(config.mVideoSizePreset)
