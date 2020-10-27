@@ -179,6 +179,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     liveRoom = data;
                     handler.removeMessages(CYCLE_REFRESH);
                     handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
+                    LiveDataBus.get().with(DemoConstants.LIVING_STATUS).postValue(data.getStatus());
                     onRoomMemberChange(data);
                     checkLiveStatus(data);
                 }

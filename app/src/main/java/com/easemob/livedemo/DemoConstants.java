@@ -18,6 +18,7 @@ public interface DemoConstants {
     String REFRESH_MEMBER = "refresh_member";
     String REFRESH_MEMBER_COUNT = "refresh_member_count";
     String FINISH_LIVE = "finish_live";
+    String LIVING_STATUS = "living_status";
 
     String NETWORK_CONNECTED = "network_connected";
 

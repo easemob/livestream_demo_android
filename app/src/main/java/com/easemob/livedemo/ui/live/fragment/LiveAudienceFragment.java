@@ -252,7 +252,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         chatroom = emChatRoom;
                         addChatRoomChangeListener();
                         onMessageListInit();
-                        handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
+                        startCycleRefresh();
                         //postUserChangeEvent(StatisticsType.JOIN, EMClient.getInstance().getCurrentUser());
                     }
 

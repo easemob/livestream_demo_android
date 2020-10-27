@@ -51,6 +51,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
             super.handleMessage(msg);
             switch (msg.what) {
                 case RESTART_VIDEO :
+                    restart_video_times++;
                     startVideo();
                     break;
             }
@@ -154,7 +155,15 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         });
 
         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN, Boolean.class).observe(mContext, event -> {
+            Log.e("TAG", "主播加入");
             startVideo();
+        });
+
+        LiveDataBus.get().with(DemoConstants.LIVING_STATUS, String.class).observe(mContext, event -> {
+            Log.e("TAG", "live status = "+event);
+            if(DemoHelper.isLiving(event) && !isPrepared) {
+                startVideo();
+            }
         });
 
         livingViewModel.getLiveRoomDetails(liveRoom.getId());
@@ -285,14 +294,14 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     @Override
     public boolean onError(int errorCode) {
         Log.e("TAG", "onError = "+errorCode);
-        if(errorCode == PLOnErrorListener.ERROR_CODE_OPEN_FAILED) {
+        if(errorCode == PLOnErrorListener.ERROR_CODE_OPEN_FAILED || errorCode == PLOnErrorListener.ERROR_CODE_IO_ERROR) {
             //如果播放器打开失败，则轮询5次，5次后弹框结束页面
             if(restart_video_times >= MAX_RESTART_TIMES) {
                 runOnUiThread(() -> showDialogFragment(R.string.em_live_open_video_fail_title));
                 return false;
             }
+            Log.e("TAG", "restart_video_times = "+restart_video_times);
             handler.sendEmptyMessageDelayed(RESTART_VIDEO, restart_video_times == 0 ? 0 : 15000);
-            restart_video_times++;
         }
         return false;
     }

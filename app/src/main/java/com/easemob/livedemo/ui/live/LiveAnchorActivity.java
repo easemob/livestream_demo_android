@@ -32,6 +32,7 @@ import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.qiniu_sdk.LiveCameraView;
 import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
+import com.pili.pldroid.player.common.Util;
 
 public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener, PushStreamHelper.OnPushStageChange {
 
@@ -45,6 +46,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     private PushStreamHelper streamHelper;
     private boolean isStartCamera;
     private boolean is_disconnected;
+    private String url;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent starter = new Intent(context, LiveAnchorActivity.class);
@@ -128,8 +130,9 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     }
 
     protected void getStreamUrlSuccess(String url) {
+        this.url = url;
         Log.e("TAG", "url = "+url);
-        streamHelper.setPublishUrl(url);
+        streamHelper.setPublishUrl(this.url);
     }
 
 //    /**
@@ -192,8 +195,23 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     @Override
     public void ioError() {
-        showToast(getString(R.string.em_live_network_connect_fail));
-        is_disconnected = true;
+        if(!Util.isNetworkConnected(mContext)) {
+            showToast(getString(R.string.em_live_network_connect_fail));
+            is_disconnected = true;
+        }else {
+            restartPushStream();
+        }
+
+    }
+
+    private void restartPushStream() {
+        Log.e("PushStreamHelper", "restartPushStream");
+        if(streamHelper != null && !TextUtils.isEmpty(this.url)) {
+            streamHelper.destroy();
+            streamHelper.initPublishVideo(cameraView, null);
+            streamHelper.setOnPushStageChange(this);
+            streamHelper.setPublishUrl(this.url);
+        }
     }
 
     @Override
