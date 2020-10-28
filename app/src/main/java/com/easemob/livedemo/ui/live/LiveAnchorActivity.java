@@ -47,6 +47,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     private boolean isStartCamera;
     private boolean is_disconnected;
     private String url;
+    private StreamViewModel viewModel;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent starter = new Intent(context, LiveAnchorActivity.class);
@@ -89,7 +90,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     }
 
     private void initViewModel() {
-        StreamViewModel viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
         viewModel.getPublishUrl(liveRoom.getId());
 
         viewModel.getPublishUrlObservable().observe(this, response -> {
@@ -101,10 +102,24 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
             });
         });
 
+        viewModel.getNewPublishUrlObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoomUrlBean>() {
+                @Override
+                public void onSuccess(LiveRoomUrlBean data) {
+                    url = data.getData();
+                    Log.e("TAG", "url = "+url);
+                    streamHelper.setPublishUrl(url);
+                    streamHelper.startStreamingInternal();
+                }
+            });
+        });
+
         LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED, Boolean.class).observe(this, response -> {
             if(response != null && response && is_disconnected) {
                 Log.e("PushStreamHelper", "网络重新连接，重新开始推流");
-                streamHelper.startStreamingInternal();
+                if(liveRoom != null) {
+                    viewModel.getNewPublishUrl(liveRoom.getId());
+                }
             }
         });
     }
@@ -195,22 +210,9 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     @Override
     public void ioError() {
+        is_disconnected = true;
         if(!Util.isNetworkConnected(mContext)) {
             showToast(getString(R.string.em_live_network_connect_fail));
-            is_disconnected = true;
-        }else {
-            restartPushStream();
-        }
-
-    }
-
-    private void restartPushStream() {
-        Log.e("PushStreamHelper", "restartPushStream");
-        if(streamHelper != null && !TextUtils.isEmpty(this.url)) {
-            streamHelper.destroy();
-            streamHelper.initPublishVideo(cameraView, null);
-            streamHelper.setOnPushStageChange(this);
-            streamHelper.setPublishUrl(this.url);
         }
     }
 

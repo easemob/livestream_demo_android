@@ -164,7 +164,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void skipToListDialog() {
         super.skipToListDialog();
-        showUserList();
+        try {
+            showUserList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showGiftDialog() {

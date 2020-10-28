@@ -15,17 +15,23 @@ import androidx.lifecycle.MediatorLiveData;
 public class StreamViewModel extends AndroidViewModel {
     private AppServerRepository repository;
     private MediatorLiveData<Resource<LiveRoomUrlBean>> publishUrlObservable;
+    private MediatorLiveData<Resource<LiveRoomUrlBean>> newPublishUrlObservable;
     private MediatorLiveData<Resource<LiveRoomUrlBean>> playUrlObservable;
 
     public StreamViewModel(@NonNull Application application) {
         super(application);
         repository = new AppServerRepository();
         publishUrlObservable = new MediatorLiveData<>();
+        newPublishUrlObservable = new MediatorLiveData<>();
         playUrlObservable = new MediatorLiveData<>();
     }
 
     public LiveData<Resource<LiveRoomUrlBean>> getPublishUrlObservable() {
         return publishUrlObservable;
+    }
+
+    public LiveData<Resource<LiveRoomUrlBean>> getNewPublishUrlObservable() {
+        return newPublishUrlObservable;
     }
 
     public LiveData<Resource<LiveRoomUrlBean>> getPlayUrlObservable() {
@@ -34,6 +40,10 @@ public class StreamViewModel extends AndroidViewModel {
 
     public void getPublishUrl(String roomId) {
         publishUrlObservable.addSource(repository.getPublishUrl(roomId), response -> publishUrlObservable.postValue(response));
+    }
+
+    public void getNewPublishUrl(String roomId) {
+        newPublishUrlObservable.addSource(repository.getPublishUrl(roomId), response -> newPublishUrlObservable.postValue(response));
     }
 
     public void getPlayUrl(String roomId) {

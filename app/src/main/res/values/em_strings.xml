@@ -85,7 +85,7 @@
     <string name="em_live_create_room">创建直播间</string>
     <string name="em_live_create_room_check_info">请填写完整</string>
     <string name="em_live_disconnect_title">网络连接中断，是否退出房间？</string>
-    <string name="em_live_open_video_fail_title">播放器打开失败，是否退出房间？</string>
+    <string name="em_live_open_video_fail_title">播放失败，是否退出房间？</string>
 
     <string name="em_set_title">设置</string>
     <string name="em_set_live_room">环信直播聊天室</string>

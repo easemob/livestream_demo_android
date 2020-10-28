@@ -139,7 +139,12 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         });
 
         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
-            stopVideo();
+            //只有非点播模式下，才会去关闭播放器
+            if(liveRoom != null
+                    && !TextUtils.isEmpty(liveRoom.getVideo_type())
+                    && !liveRoom.getVideo_type().equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+                stopVideo();
+            }
         });
 
         LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED, Boolean.class).observe(this, event -> {
