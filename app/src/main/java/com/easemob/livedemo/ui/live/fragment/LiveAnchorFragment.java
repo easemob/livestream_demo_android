@@ -1,7 +1,6 @@
 package com.easemob.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,16 +24,15 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
+import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
-import com.easemob.qiniu_sdk.OnCallBack;
-import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.util.EMLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,17 +60,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     protected boolean isShutDownCountdown = false;
     boolean isStarted;
     private OnCameraListener cameraListener;
-    private Handler handler = new Handler() {
-        @Override public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_UPDATE_COUNTDOWN:
-                    handleUpdateCountdown(msg.arg1);
-                    break;
-            }
-        }
-    };
     private LivingViewModel viewModel;
     private boolean isOnGoing;
+    private boolean reChangeLiveStatus;
 
     @Override
     protected int getLayoutId() {
@@ -92,8 +82,13 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         switchCameraView.setVisibility(View.VISIBLE);
         groupGiftInfo.setVisibility(View.VISIBLE);
 
-        int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
+        ReceiveGiftDao giftDao = DemoHelper.getReceiveGiftDao();
+        if(giftDao != null) {
+            int totalNum = giftDao.loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
+            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
+        }else {
+            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(0)));
+        }
 
         int likeNum = DemoHelper.getLikeNum(liveId);
         tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
@@ -123,6 +118,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     if(response != null && response) {
                         int likeNum = DemoHelper.getLikeNum(liveId);
                         tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
+                    }
+                });
+        LiveDataBus.get().with(DemoConstants.FINISH_LIVE, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if(response != null && response) {
+                        stopLiving();
                     }
                 });
         startLive();
@@ -163,7 +164,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void skipToListDialog() {
         super.skipToListDialog();
-        showUserList();
+        try {
+            showUserList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showGiftDialog() {
@@ -195,6 +200,25 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
             LiveAudienceActivity.actionStart(mContext, liveRoom);
             mContext.finish();
+        }
+    }
+
+    @Override
+    public void handleHandlerMessage(Message msg) {
+        super.handleHandlerMessage(msg);
+        switch (msg.what) {
+            case MSG_UPDATE_COUNTDOWN:
+                handleUpdateCountdown(msg.arg1);
+                break;
+        }
+    }
+
+    @Override
+    protected void checkLiveStatus(LiveRoom data) {
+        super.checkLiveStatus(data);
+        //页面没有销毁，直播一直在进行，但是直播状态不是"ongoing"状态
+        if(mContext != null && !mContext.isFinishing() && isOnGoing && DemoHelper.isOwner(data.getOwner()) && !data.isLiving()) {
+            restartAnchorLive();
         }
     }
 
@@ -241,19 +265,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     if (count == COUNTDOWN_END_INDEX
                             //&& mEasyStreaming != null
                             && !isShutDownCountdown && mContext != null && !mContext.isFinishing()) {
-                        EMClient.getInstance()
-                                .chatroomManager()
-                                .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
-                                    @Override public void onSuccess(EMChatRoom emChatRoom) {
-                                        chatroom = emChatRoom;
-                                        ThreadManager.getInstance().runOnMainThread(LiveAnchorFragment.this::getLiveRoomDetail);
-                                    }
-
-                                    @Override public void onError(int i, String s) {
-                                        mContext.showToast("加入聊天室失败");
-                                        mContext.finish();
-                                    }
-                                });
+                        joinChatRoom();
                     }
                 }
 
@@ -267,6 +279,22 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 countdownView.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void joinChatRoom() {
+        EMClient.getInstance()
+                .chatroomManager()
+                .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
+                    @Override public void onSuccess(EMChatRoom emChatRoom) {
+                        chatroom = emChatRoom;
+                        ThreadManager.getInstance().runOnMainThread(LiveAnchorFragment.this::getLiveRoomDetail);
+                    }
+
+                    @Override public void onError(int i, String s) {
+                        mContext.showToast("加入聊天室失败");
+                        mContext.finish();
+                    }
+                });
     }
 
     private void getLiveRoomDetail() {
@@ -294,6 +322,17 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void changeAnchorLive() {
+        reChangeLiveStatus = false;
+        changeAnchorLiveByServer();
+    }
+
+    private void restartAnchorLive() {
+        EMLog.d(TAG, "restartAnchorLive");
+        reChangeLiveStatus = true;
+        changeAnchorLiveByServer();
+    }
+
+    private void changeAnchorLiveByServer() {
         viewModel.getChangeObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
@@ -302,7 +341,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     DemoHelper.saveLikeNum(data.getId(), 0);
                     DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
-                    startAnchorLive(liveRoom);
+                    if(!reChangeLiveStatus) {
+                        startAnchorLive(liveRoom);
+                    }
                 }
 
                 @Override
@@ -312,9 +353,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 }
             });
         });
-        if(liveRoom.isLiving()) {
+        if(liveRoom.isLiving() && !reChangeLiveStatus) {
+            EMLog.d(TAG, "restartAnchorLive 直接开播");
             startAnchorLive(liveRoom);
         }else {
+            EMLog.d(TAG, "restartAnchorLive 调用接口");
             viewModel.changeLiveStatus(liveId, EMClient.getInstance().getCurrentUser(), "ongoing");
         }
     }
@@ -332,6 +375,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         if(cameraListener != null) {
             cameraListener.onStartCamera();
         }
+        startCycleRefresh();
     }
 
     private void showDialog(OnConfirmClickListener listener) {
@@ -360,6 +404,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             cameraListener.onStopCamera();
         }
         if(isOnGoing) {
+            isOnGoing = false;
             leaveRoom();
         }
     }
@@ -406,7 +451,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
         // 把此activity 从foreground activity 列表里移除
         if(mContext.isFinishing()) {
-            handler.removeCallbacksAndMessages(null);
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
         }
     }

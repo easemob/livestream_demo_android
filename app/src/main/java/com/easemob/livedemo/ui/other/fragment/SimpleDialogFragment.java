@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.easemob.livedemo.common.OnCancelClickListener;
 import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.ui.base.DemoDialogFragment;
 import com.easemob.livedemo.ui.base.BaseActivity;
@@ -17,6 +18,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
     public static final String MESSAGE_KEY = "message";
     private String message;
     private OnConfirmClickListener mOnConfirmClickListener;
+    private OnCancelClickListener mOnCancelClickListener;
 
     public static void showDialog(BaseActivity context, String message, OnConfirmClickListener listener) {
         SimpleDialogFragment fragment = new SimpleDialogFragment();
@@ -83,6 +85,14 @@ public class SimpleDialogFragment extends DemoDialogFragment {
         }
     }
 
+    @Override
+    public void onCancelClick(View v) {
+        super.onCancelClick(v);
+        if(mOnCancelClickListener != null) {
+            mOnCancelClickListener.onCancelClick(v, null);
+        }
+    }
+
     /**
      * 设置确定按钮的点击事件
      * @param listener
@@ -91,12 +101,21 @@ public class SimpleDialogFragment extends DemoDialogFragment {
         this.mOnConfirmClickListener = listener;
     }
 
+    /**
+     * 设置取消按钮的点击事件
+     * @param listener
+     */
+    public void setOnCancelClickListener(OnCancelClickListener listener) {
+        this.mOnCancelClickListener = listener;
+    }
+
     public static class Builder {
         private Context context;
         private int title;
         private int confirm;
         private int confirmColor;
         private OnConfirmClickListener mOnConfirmClickListener;
+        private OnCancelClickListener mOnCancelClickListener;
 
         public Builder(Context context) {
             this.context = context;
@@ -122,6 +141,11 @@ public class SimpleDialogFragment extends DemoDialogFragment {
             return this;
         }
 
+        public Builder setOnCancelClickListener(OnCancelClickListener listener) {
+            this.mOnCancelClickListener = listener;
+            return this;
+        }
+
         public SimpleDialogFragment build() {
             SimpleDialogFragment dialog = new SimpleDialogFragment();
             if(title != 0) {
@@ -135,6 +159,9 @@ public class SimpleDialogFragment extends DemoDialogFragment {
             }
             if(mOnConfirmClickListener != null) {
                 dialog.setOnConfirmClickListener(mOnConfirmClickListener);
+            }
+            if(mOnCancelClickListener != null) {
+                dialog.setOnCancelClickListener(mOnCancelClickListener);
             }
             return dialog;
         }

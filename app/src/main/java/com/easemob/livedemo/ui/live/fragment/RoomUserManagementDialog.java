@@ -16,10 +16,12 @@ import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.reponsitories.Resource;
+import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseDialogFragment;
 import com.easemob.livedemo.ui.base.BaseLiveDialogFragment;
 import com.easemob.livedemo.ui.live.adapter.FragmentAdapter;
 import com.easemob.livedemo.ui.base.BaseActivity;
+import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.live.viewmodels.UserManageViewModel;
 import com.google.android.material.tabs.TabLayout;
 import android.view.Gravity;
@@ -72,11 +74,12 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     @Override
     public void initViewModel() {
         viewModel = new ViewModelProvider(mContext).get(UserManageViewModel.class);
-        viewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
+        LivingViewModel livingViewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
+        livingViewModel.getMemberNumberObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
-                public void onSuccess(List<String> data) {
-                    String title = getString(R.string.em_live_user_manage_users, data.size());
+                public void onSuccess(LiveRoom data) {
+                    String title = getString(R.string.em_live_user_manage_users, data.getAudienceNum() + 1);
                     adapter.getTitles().remove(0);
                     adapter.getTitles().add(0, title);
                     adapter.notifyDataSetChanged();
@@ -130,7 +133,7 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     private void setupViewPager() {
         adapter = new FragmentAdapter(getChildFragmentManager());
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
-                RoomUserManagementFragment.ManagementType.MEMBER), "观众");
+                RoomUserManagementFragment.ManagementType.MEMBER), "成员");
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
                 RoomUserManagementFragment.ManagementType.BLACKLIST), "白名单");
         adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,

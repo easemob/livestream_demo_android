@@ -24,9 +24,6 @@ import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
-import com.easemob.qiniu_sdk.OnCallBack;
-import com.easemob.qiniu_sdk.PushStreamHelper;
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -222,7 +219,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                     if(DemoHelper.isLiving(liveRoom.getStatus())) {
                         //直播正在进行
                         if(liveListener != null) {
-                            liveListener.onLiveOngoing();
+                            liveListener.onLiveOngoing(data);
                         }
                         messageView.getInputView().requestFocus();
                         messageView.getInputView().requestFocusFromTouch();
@@ -244,7 +241,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             });
         });
 
-        viewModel.getLiveRoomDetails(liveId);
     }
 
     private void joinChatRoom() {
@@ -256,6 +252,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         chatroom = emChatRoom;
                         addChatRoomChangeListener();
                         onMessageListInit();
+                        startCycleRefresh();
                         //postUserChangeEvent(StatisticsType.JOIN, EMClient.getInstance().getCurrentUser());
                     }
 
@@ -297,12 +294,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
 
                 //postUserChangeEvent(StatisticsType.LEAVE, EMClient.getInstance().getCurrentUser());
             }
-
-            if (presenter != null) {
-                EMClient.getInstance()
-                        .chatroomManager()
-                        .removeChatRoomListener(presenter);
-            }
         }
     }
 
@@ -317,7 +308,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     }
 
     public interface OnLiveListener {
-        void onLiveOngoing();
+        void onLiveOngoing(LiveRoom data);
         void onLiveClosed();
     }
 }

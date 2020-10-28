@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,9 +27,14 @@ public class LiveRoom extends BaseBean implements Serializable {
     @SerializedName("mobile_pull_url")
     private String livePullUrl;
     private String status;
-    private Map ext;
+    private ExtBean ext;
     private Integer maxusers;
-    private String[] members;
+    @SerializedName("affiliations")
+    private List<MemberBean> members;
+    //是否持续
+    private boolean persistent;
+    private String video_type;
+    private boolean mute;
     //@SerializedName("liveshow_id")
     //private String showId;
 
@@ -111,11 +118,11 @@ public class LiveRoom extends BaseBean implements Serializable {
         this.status = status;
     }
 
-    public Map getExt() {
+    public ExtBean getExt() {
         return ext;
     }
 
-    public void setExt(Map ext) {
+    public void setExt(ExtBean ext) {
         this.ext = ext;
     }
 
@@ -127,12 +134,56 @@ public class LiveRoom extends BaseBean implements Serializable {
         this.maxusers = maxusers;
     }
 
-    public String[] getMembers() {
+    public List<MemberBean> getMembers() {
         return members;
     }
 
-    public void setMembers(String[] members) {
+    public void setMembers(List<MemberBean> members) {
         this.members = members;
+    }
+
+    public boolean isPersistent() {
+        return persistent;
+    }
+
+    public void setPersistent(boolean persistent) {
+        this.persistent = persistent;
+    }
+
+    public String getVideo_type() {
+        return video_type;
+    }
+
+    public void setVideo_type(String video_type) {
+        this.video_type = video_type;
+    }
+
+    public boolean isMute() {
+        return mute;
+    }
+
+    public void setMute(boolean mute) {
+        this.mute = mute;
+    }
+
+    public LinkedList<String> getMemberList(int max_size) {
+        if(members == null) {
+            return null;
+        }
+        List<MemberBean> newList = null;
+        if(members.size() > max_size) {
+            newList = members.subList(0, max_size);
+        }else {
+            newList = members;
+        }
+        LinkedList<String> list = new LinkedList<>();
+        for(int i = 0; i < members.size(); i++) {
+            MemberBean memberBean = members.get(i);
+            if(!memberBean.isOwner()) {
+                list.add(memberBean.getMember());
+            }
+        }
+        return list;
     }
 
     //public String getShowId() {
@@ -145,5 +196,9 @@ public class LiveRoom extends BaseBean implements Serializable {
 
     public boolean isLiving() {
         return !TextUtils.isEmpty(status) && TextUtils.equals(status, "ongoing");
+    }
+
+    public enum Type {
+        live, vod
     }
 }

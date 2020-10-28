@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
+import com.easemob.livedemo.data.model.MemberBean;
 import com.easemob.livedemo.data.model.User;
 import com.easemob.livedemo.ui.base.BaseLiveFragment;
 import com.easemob.livedemo.ui.live.ChatRoomPresenter;
@@ -64,6 +66,8 @@ import butterknife.OnClick;
 public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnCustomMsgReceiveListener {
     private static final int MAX_SIZE = 10;
     protected static final String TAG = "LiveActivity";
+    protected static final int CYCLE_REFRESH = 100;
+    protected static final int CYCLE_REFRESH_TIME = 30000;
     @BindView(R.id.iv_icon)
     EaseImageView ivIcon;
     @BindView(R.id.message_view)
@@ -115,7 +119,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected int watchedCount;
     LinkedList<String> memberList = new LinkedList<>();
     protected int membersCount;
-    protected Handler handler = new Handler();
     private LinearLayoutManager layoutManager;
     private MemberAvatarAdapter avatarAdapter;
     protected boolean isMessageListInited;
@@ -123,6 +126,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected LivingViewModel viewModel;
     private UserManageViewModel userManageViewModel;
     private long joinTime;
+
+    public Handler handler = new Handler() {
+        @Override public void handleMessage(Message msg) {
+            handleHandlerMessage(msg);
+        }
+    };
+    private boolean isStartCycleRefresh;
+
 
     @Override
     protected void initArgument() {
@@ -146,7 +157,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         liveIdView.setText(getString(R.string.em_live_room_id, liveId));
         audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
         watchedCount = liveRoom.getAudienceNum();
-        tvMemberNum.setText(String.valueOf(watchedCount));
+        tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
 
         presenter = new ChatRoomPresenter(mContext, chatroomId);
     }
@@ -154,13 +165,41 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        viewModel = new ViewModelProvider(this).get(LivingViewModel.class);
+        viewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
         userManageViewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT, Boolean.class).observe(getViewLifecycleOwner(), event -> {
             if(event != null && event) {
-                userManageViewModel.getMembers(chatroomId);
+                viewModel.getRoomMemberNumber(chatroomId);
             }
         });
+        viewModel.getMemberNumberObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoom>() {
+                @Override
+                public void onSuccess(LiveRoom data) {
+                    liveRoom = data;
+                    handler.removeMessages(CYCLE_REFRESH);
+                    handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
+                    LiveDataBus.get().with(DemoConstants.LIVING_STATUS).postValue(data.getStatus());
+                    onRoomMemberChange(data);
+                    checkLiveStatus(data);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    handler.removeMessages(CYCLE_REFRESH);
+                    handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
+                }
+            });
+        });
+    }
+
+    /**
+     * 检查直播状态
+     * @param data
+     */
+    protected void checkLiveStatus(LiveRoom data) {
+
     }
 
     @Override
@@ -192,6 +231,59 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 break;
             case R.id.live_receive_gift :
                 onGiftClick();
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(isStartCycleRefresh) {
+            startCycleRefresh();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(isStartCycleRefresh) {
+            stopCycleRefresh();
+        }
+    }
+
+    protected void startCycleRefresh() {
+        if(handler != null) {
+            handler.removeMessages(CYCLE_REFRESH);
+            handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
+        }
+    }
+
+    protected void stopCycleRefresh() {
+        if(handler != null) {
+            handler.removeMessages(CYCLE_REFRESH);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mContext != null && mContext.isFinishing()) {
+            handler.removeCallbacksAndMessages(null);
+            isStartCycleRefresh = false;
+        }
+    }
+
+    /**
+     * 处理handler消息
+     * @param msg
+     */
+    public void handleHandlerMessage(Message msg) {
+        switch (msg.what) {
+            case CYCLE_REFRESH :
+                if(!TextUtils.isEmpty(chatroomId)) {
+                    isStartCycleRefresh = true;
+                    viewModel.getRoomMemberNumber(chatroomId);
+                }
                 break;
         }
     }
@@ -236,6 +328,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if(dialog == null) {
             dialog = new RoomUserManagementDialog(chatroomId);
         }
+        if(dialog.isAdded()) {
+            return;
+        }
         dialog.show(getChildFragmentManager(), "RoomUserManagementDialog");
     }
 
@@ -254,6 +349,15 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void addChatRoomChangeListener() {
         EMClient.getInstance().chatroomManager().addChatRoomChangeListener(presenter);
     }
+    
+    private synchronized void onRoomMemberChange(LiveRoom room) {
+        watchedCount = room.getAudienceNum();
+        memberList = room.getMemberList(MAX_SIZE);
+        ThreadManager.getInstance().runOnMainThread(() -> {
+            tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
+            notifyDataSetChanged();
+        });
+    }
 
     private synchronized void onRoomMemberAdded(String name) {
         watchedCount++;
@@ -264,7 +368,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             memberList.addFirst(name);
             presenter.showMemberChangeEvent(name, getString(R.string.em_live_msg_member_add));
             EMLog.d(TAG, name + "added");
-            requireActivity().runOnUiThread(new Runnable() {
+            ThreadManager.getInstance().runOnMainThread(new Runnable() {
                 @Override public void run() {
                     audienceNumView.setText(String.valueOf(membersCount));
                     tvMemberNum.setText(String.valueOf(watchedCount));
@@ -288,15 +392,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
 
     private synchronized void onRoomMemberExited(final String name) {
-        memberList.remove(name);
-        membersCount--;
-        watchedCount--;
         EMLog.e(TAG, name + "exited");
-        requireActivity().runOnUiThread(new Runnable() {
+        ThreadManager.getInstance().runOnMainThread(new Runnable() {
             @Override public void run() {
-                audienceNumView.setText(String.valueOf(membersCount));
-                tvMemberNum.setText(String.valueOf(watchedCount));
-                horizontalRecyclerView.getAdapter().notifyDataSetChanged();
                 if(name.equals(chatroom.getOwner())){
                     mContext.showLongToast("主播已结束直播");
                     LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
@@ -435,7 +533,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     membersCount = size;
                     //观看人数不包含主播
                     watchedCount = membersCount;
-                    tvMemberNum.setText(String.valueOf(watchedCount));
+                    tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
                     notifyDataSetChanged();
                 }
             });

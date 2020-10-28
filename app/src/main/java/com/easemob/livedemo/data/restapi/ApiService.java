@@ -44,7 +44,7 @@ public interface ApiService {
      * @return
      */
     @GET("liverooms/ongoing")
-    LiveData<ResponseModule<List<LiveRoom>>> getLivingRoomList(@Query("limit") int limit, @Query("cursor") String cursor);
+    LiveData<ResponseModule<List<LiveRoom>>> getLivingRoomList(@Query("limit") int limit, @Query("cursor") String cursor, @Query("video_type") String videoType);
 
     /**
      * 更新直播室

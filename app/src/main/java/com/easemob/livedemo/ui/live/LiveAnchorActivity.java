@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.text.TextUtils;
@@ -18,16 +19,22 @@ import android.view.WindowManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.LiveDataBus;
+import com.easemob.livedemo.common.OnCancelClickListener;
+import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
+import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.qiniu_sdk.LiveCameraView;
 import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
+import com.pili.pldroid.player.common.Util;
 
-public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
+public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener, PushStreamHelper.OnPushStageChange {
 
     @BindView(R.id.container)
     LiveCameraView cameraView;
@@ -38,6 +45,9 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
 
     private PushStreamHelper streamHelper;
     private boolean isStartCamera;
+    private boolean is_disconnected;
+    private String url;
+    private StreamViewModel viewModel;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent starter = new Intent(context, LiveAnchorActivity.class);
@@ -80,7 +90,7 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     }
 
     private void initViewModel() {
-        StreamViewModel viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
+        viewModel = new ViewModelProvider(this).get(StreamViewModel.class);
         viewModel.getPublishUrl(liveRoom.getId());
 
         viewModel.getPublishUrlObservable().observe(this, response -> {
@@ -90,6 +100,27 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
                     getStreamUrlSuccess(data.getData());
                 }
             });
+        });
+
+        viewModel.getNewPublishUrlObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<LiveRoomUrlBean>() {
+                @Override
+                public void onSuccess(LiveRoomUrlBean data) {
+                    url = data.getData();
+                    Log.e("TAG", "url = "+url);
+                    streamHelper.setPublishUrl(url);
+                    streamHelper.startStreamingInternal();
+                }
+            });
+        });
+
+        LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED, Boolean.class).observe(this, response -> {
+            if(response != null && response && is_disconnected) {
+                Log.e("PushStreamHelper", "网络重新连接，重新开始推流");
+                if(liveRoom != null) {
+                    viewModel.getNewPublishUrl(liveRoom.getId());
+                }
+            }
         });
     }
 
@@ -110,11 +141,13 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
         Log.e("TAG", "publishUrl = "+publishUrl);
         streamHelper = PushStreamHelper.getInstance();
         streamHelper.initPublishVideo(cameraView, publishUrl);
+        streamHelper.setOnPushStageChange(this);
     }
 
     protected void getStreamUrlSuccess(String url) {
+        this.url = url;
         Log.e("TAG", "url = "+url);
-        streamHelper.setPublishUrl(url);
+        streamHelper.setPublishUrl(this.url);
     }
 
 //    /**
@@ -144,10 +177,13 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     @Override
     protected void onResume() {
         super.onResume();
+        rePushStream();
+    }
+
+    private void rePushStream() {
         if(isStartCamera) {
             streamHelper.resume();
         }
-
     }
 
     @Override
@@ -172,4 +208,44 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
         streamHelper.destroy();
     }
 
+    @Override
+    public void ioError() {
+        is_disconnected = true;
+        if(!Util.isNetworkConnected(mContext)) {
+            showToast(getString(R.string.em_live_network_connect_fail));
+        }
+    }
+
+    @Override
+    public void openCameraFail() {
+        runOnUiThread(()-> {
+            showDialog(R.string.em_live_open_camera_fail, new OnConfirmClickListener() {
+                @Override
+                public void onConfirmClick(View view, Object bean) {
+                    LiveDataBus.get().with(DemoConstants.FINISH_LIVE).postValue(true);
+                }
+            }, new OnCancelClickListener() {
+                @Override
+                public void onCancelClick(View view, Object bean) {
+
+                }
+            });
+        });
+    }
+
+    @Override
+    public void disconnected() {
+
+    }
+
+    private void showDialog(@StringRes int title, OnConfirmClickListener listener, OnCancelClickListener cancelListener) {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(title)
+                .setConfirmButtonTxt(R.string.ok)
+                .setConfirmColor(R.color.em_color_warning)
+                .setOnConfirmClickListener(listener)
+                .setOnCancelClickListener(cancelListener)
+                .build()
+                .show(getSupportFragmentManager(), "dialog");
+    }
 }

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 作为推流的帮助类
  * 推流SDK设置参考：https://developer.qiniu.com/pili/sdk/3719/PLDroidMediaStreaming-function-using
- * {@link RTMP_PUBLISH_DOMAIN}和{@link RTMP_PLAY_DOMAIN}需要替换为自己的域名，{@link HUB}为直播空间名
+ * {@link #RTMP_PUBLISH_DOMAIN}和{@link #RTMP_PLAY_DOMAIN}需要替换为自己的域名，{@link #HUB}为直播空间名
  */
 public class PushStreamHelper implements StreamingStateChangedListener, StreamingSessionListener, StreamStatusCallback, AudioSourceCallback/*, PLAuthenticationResultCallback*/ {
     private static final String GENERATE_STREAM_TEXT = "https://api-demo.qnsdk.com/v1/live/stream/";
@@ -42,6 +42,8 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     private CameraStreamingSetting cameraStreamingSetting;
     private String publishUrl = DEFAULT_PUBLISH_URL;
     private EncodingConfig config;
+
+    private OnPushStageChange stageChange;
 
     private PushStreamHelper(){}
 
@@ -168,6 +170,9 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
                 mProfile.setPictureStreamingFilePath(config.mPictureStreamingFilePath);
             }
         }
+        //开启QUIC推流
+        //QUIC 是基于 UDP 开发的可靠传输协议，在弱网下拥有更好的推流效果，相比于 TCP 拥有更低的延迟，可抵抗更高的丢包率。
+        mProfile.setQuicEnable(true);
         mProfile.setVideoQuality(config.mVideoQualityPreset)              // 设置视频质量
                 .setAudioQuality(config.mAudioQualityPreset)            // 设置音频质量
                 .setEncodingSizeLevel(config.mVideoSizePreset)
@@ -237,6 +242,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      */
     public void pause() {
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media pause");
             mMediaStreamingManager.pause();
         }
     }
@@ -246,6 +252,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      */
     public void resume() {
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media resume");
             mMediaStreamingManager.resume();
         }
     }
@@ -256,6 +263,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     public void destroy() {
         this.publishUrl = DEFAULT_PUBLISH_URL;
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media destroy");
             mMediaStreamingManager.destroy();
         }
     }
@@ -265,6 +273,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
      */
     public void switchCamera() {
         if(mMediaStreamingManager != null) {
+            Log.e(TAG, "media switchCamera");
             mMediaStreamingManager.switchCamera();
         }
     }
@@ -305,14 +314,23 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
             case IOERROR:
                 // Network connect error.
                 Log.e(TAG, "网络连接失败");
+                if(stageChange != null) {
+                    stageChange.ioError();
+                }
                 break;
             case OPEN_CAMERA_FAIL:
                 Log.e(TAG, "摄像头打开失败");
                 // Failed to open camera.
+                if(stageChange != null) {
+                    stageChange.openCameraFail();
+                }
                 break;
             case DISCONNECTED:
                 Log.e(TAG, "已经断开连接");
                 // The socket is broken while streaming
+                if(stageChange != null) {
+                    stageChange.disconnected();
+                }
                 break;
             case TORCH_INFO:
                 Log.e(TAG, "开启闪光灯");
@@ -354,7 +372,7 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
 
     }
 
-    private void startStreamingInternal() {
+    public void startStreamingInternal() {
         new Thread(()-> {
             if (mMediaStreamingManager != null) {
                 mMediaStreamingManager.startStreaming();
@@ -366,4 +384,25 @@ public class PushStreamHelper implements StreamingStateChangedListener, Streamin
     public void onAuthorizationResult(int result) {
         Log.e("TAG", "result = "+result);
     }*/
+
+    public void setOnPushStageChange(OnPushStageChange change) {
+        this.stageChange = change;
+    }
+
+    public interface OnPushStageChange {
+        /**
+         * 网络连接失败
+         */
+        void ioError();
+
+        /**
+         * 摄像头打开失败
+         */
+        void openCameraFail();
+
+        /**
+         * The socket is broken while streaming
+         */
+        void disconnected();
+    }
 }

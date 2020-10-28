@@ -14,7 +14,7 @@
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarTitle="@string/em_live_list_all_title"
         app:titleBarRightTitle="新建"
-        app:titleBarRightVisible="false"/>
+        app:titleBarRightVisible="true"/>
 
     <FrameLayout
         android:id="@+id/fl_fragment"

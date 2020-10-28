@@ -24,6 +24,7 @@ import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.ui.base.BaseFragment;
+import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.live.viewmodels.UserManageViewModel;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
@@ -52,6 +53,7 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
     protected EMChatRoom chatRoom;
     protected boolean isAllMuted;
     protected List<String> muteList;
+    protected LivingViewModel livingViewModel;
 
     public RoomUserManagementFragment() {
         // Required empty public constructor
@@ -112,6 +114,7 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
 
     protected void initViewModel() {
         viewModel = new ViewModelProvider(mContext).get(UserManageViewModel.class);
+        livingViewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
 
         viewModel.getChatRoomObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<EMChatRoom>() {

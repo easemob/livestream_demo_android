@@ -36,6 +36,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
     @Override
     public void onChatRoomDestroyed(String roomId, String roomName) {
         if (roomId.equals(chatroomId)) {
+            mContext.showToast("房间已销毁！");
             mContext.finish();
         }
     }

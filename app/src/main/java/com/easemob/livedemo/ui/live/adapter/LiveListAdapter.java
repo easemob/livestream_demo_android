@@ -89,7 +89,7 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
                 }
             }
             author.setText(liveRoom.getName());
-            audienceNum.setText(getMemberNum(liveRoom.getAudienceNum()) + "正在看");
+            audienceNum.setText(liveRoom.getAudienceNum() + "正在看");
             Glide.with(mContext)
                     .load(liveRoom.getCover())
                     .placeholder(R.drawable.em_live_default_bg)
