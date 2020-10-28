@@ -216,7 +216,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void checkLiveStatus(LiveRoom data) {
         super.checkLiveStatus(data);
-        if(DemoHelper.isOwner(data.getOwner()) && !data.isLiving()) {
+        //页面没有销毁，直播一直在进行，但是直播状态不是"ongoing"状态
+        if(mContext != null && !mContext.isFinishing() && isOnGoing && DemoHelper.isOwner(data.getOwner()) && !data.isLiving()) {
             restartAnchorLive();
         }
     }
@@ -403,6 +404,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             cameraListener.onStopCamera();
         }
         if(isOnGoing) {
+            isOnGoing = false;
             leaveRoom();
         }
     }
