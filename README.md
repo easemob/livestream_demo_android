@@ -115,16 +115,16 @@ public boolean isBarrageMsg(EMMessage msg); //弹幕消息判断
 ## 集成视频直播SDK
 环信聊天室提供了两种直播类型：**传统直播**和**极速直播**
 
-#### [极速直播](https://github.com/easemob/livestream_demo_android/fastlive/fastlive.md)
+#### [极速直播](https://github.com/easemob/livestream_demo_android/blob/master/fastlive/fastlive.md)
 直播延时小于3秒，适用于直播答题、互动大班课等对延迟有较高要求的场景。</br>
 环信聊天室在极速直播中以集成声网极速直播为例，展示了集成极速直播与聊天室结合的场景。</br>
-声网极速直播集成文档：[声网极速直播](https://github.com/easemob/livestream_demo_android/fastlive/fastlive.md)
+声网极速直播集成文档：[声网极速直播](https://github.com/easemob/livestream_demo_android/blob/master/fastlive/fastlive.md)
 
 
-#### [传统直播](https://github.com/easemob/livestream_demo_android/qiniu_sdk/qiniu.md)
+#### [传统直播](https://github.com/easemob/livestream_demo_android/blob/master/qiniu_sdk/qiniu.md)
 单直播间可达百万观众，适合弱互动，对延迟没有要求的场景。</br>
 环信聊天室在传统直播中以集成七牛直播SDK为例，展示了集成传统直播与聊天室结合的场景。</br>
-七牛直播集成文档：[七牛直播](https://github.com/easemob/livestream_demo_android/qiniu_sdk/qiniu.md)
+七牛直播集成文档：[七牛直播](https://github.com/easemob/livestream_demo_android/blob/master/qiniu_sdk/qiniu.md)
 
 ## 文档
 - [环信直播聊天室集成介绍](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
