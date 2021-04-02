@@ -63,6 +63,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     private LivingViewModel viewModel;
     private boolean isOnGoing;
     private boolean reChangeLiveStatus;
+    //是否将owner移交给其他人，此种场景，不进行退出聊天室的操作。
+    private boolean isSwitchOwnerToOther;
 
     @Override
     protected int getLayoutId() {
@@ -184,6 +186,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     @Override
     protected void showUserDetailsDialog(String username) {
+        if(TextUtils.equals(username, liveRoom.getOwner())) {
+            return;
+        }
         RoomManageUserDialog fragment = (RoomManageUserDialog) getChildFragmentManager().findFragmentByTag("RoomManageUserDialog");
         if(fragment == null) {
             fragment = RoomManageUserDialog.getNewInstance(chatroomId, username);
@@ -197,9 +202,14 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
         super.onChatRoomOwnerChanged(chatRoomId, newOwner, oldOwner);
+        EMLog.d(TAG, "onChatRoomOwnerChanged oldOwner: "+oldOwner + " newOwner: "+newOwner + " current user: "+EMClient.getInstance().getCurrentUser());
         if(TextUtils.equals(chatroomId, chatRoomId) && !TextUtils.equals(newOwner, EMClient.getInstance().getCurrentUser())) {
-            LiveAudienceActivity.actionStart(mContext, liveRoom);
-            mContext.finish();
+            isSwitchOwnerToOther = true;
+            DemoHelper.removeTarget(chatRoomId);
+            DemoHelper.removeSaveLivingId();
+            if(cameraListener != null) {
+                cameraListener.onRoomOwnerChangedToOtherUser(chatRoomId, newOwner);
+            }
         }
     }
 
@@ -286,28 +296,36 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .chatroomManager()
                 .joinChatRoom(chatroomId, new EMValueCallBack<EMChatRoom>() {
                     @Override public void onSuccess(EMChatRoom emChatRoom) {
+                        EMLog.d(TAG, "joinChatRoom success room id: "+emChatRoom.getId() + " owner: "+emChatRoom.getOwner());
                         chatroom = emChatRoom;
                         ThreadManager.getInstance().runOnMainThread(LiveAnchorFragment.this::getLiveRoomDetail);
                     }
 
                     @Override public void onError(int i, String s) {
+                        EMLog.d(TAG, "joinChatRoom fail message: "+s);
                         mContext.showToast("加入聊天室失败");
                         mContext.finish();
                     }
                 });
     }
 
+    /**
+     * 这里判断是否是owner，需要使用上一步的chatroom对象进行判断，防止通过rest接口获取的数据不是最新的，导致判断出错。
+     */
     private void getLiveRoomDetail() {
         viewModel.getRoomDetailObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    if(data.isLiving() && !DemoHelper.isOwner(data.getOwner())) {
+                    //需要保证聊天室和直播间的主播均不是当前用户
+                    if(data.isLiving() && (!DemoHelper.isOwner(chatroom.getOwner()) && !DemoHelper.isOwner(data.getOwner()))) {
+                        EMLog.d(TAG, "getLiveRoomDetails 主播正在直播 owner: "+chatroom.getOwner());
                         //退出房间
                         mContext.showToast(getString(R.string.em_live_list_warning));
                         exitRoom();
                     }else {
-                        LiveAnchorFragment.this.liveRoom = liveRoom;
+                        EMLog.d(TAG, "getLiveRoomDetails 准备开始直播");
+                        LiveAnchorFragment.this.liveRoom = data;
                         changeAnchorLive();
                     }
 
@@ -318,6 +336,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void exitRoom() {
+        DemoHelper.removeTarget(liveId);
+        DemoHelper.removeSaveLivingId();
         mContext.finish();
     }
 
@@ -337,11 +357,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    //开始直播，则开始统计点赞及礼物统计，实际开发中，应该由服务器进行统计，此处仅为展示用
-                    DemoHelper.saveLikeNum(data.getId(), 0);
-                    DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
+                    EMLog.d(TAG, "changeLiveStatus success");
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                     if(!reChangeLiveStatus) {
+                        //开始直播，则开始统计点赞及礼物统计，实际开发中，应该由服务器进行统计，此处仅为展示用
+                        DemoHelper.saveLikeNum(data.getId(), 0);
+                        DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
                         startAnchorLive(liveRoom);
                     }
                 }
@@ -414,8 +435,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    DemoHelper.saveLivingId("");
-                    DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
+                    DemoHelper.removeTarget(data.getId());
+                    DemoHelper.removeSaveLivingId();
+                    if(DemoHelper.getReceiveGiftDao() != null) {
+                        DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
+                    }
                     DemoHelper.saveLikeNum(data.getId(), 0);
                     mContext.finish();
                 }
@@ -452,6 +476,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         // 把此activity 从foreground activity 列表里移除
         if(mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
+            if(isMessageListInited && !isSwitchOwnerToOther) {
+                EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+                isMessageListInited = false;
+                EMLog.d(TAG, "leave chat room id: "+chatroomId);
+            }
         }
     }
 
@@ -464,7 +493,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     .chatroomManager()
                     .removeChatRoomListener(presenter);
         }
-        EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+
     }
 
     @Override
@@ -481,5 +510,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         void onStartCamera();
         void switchCamera();
         void onStopCamera();
+        void onRoomOwnerChangedToOtherUser(String chatRoomId, String newOwner);
     }
 }

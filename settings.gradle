@@ -1,3 +1,4 @@
+include ':fastlive'
 include ':app', ':qiniu_sdk', /*':emclient-android',*/ ':custommessage'/*, ':ulive-android-sdk'*//*, ':easeui'*/
 //include ':emclient-android'//引入项目
 //project(':emclient-android').projectDir = new File('../emclient-android')  //最关键的代码

@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.easemob.custommessage.EmCustomMsgType;
 import com.easemob.custommessage.MsgConstant;
+import com.easemob.fastlive.FastLiveHelper;
+import com.easemob.fastlive.FastPrefManager;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -14,6 +16,7 @@ import com.easemob.livedemo.common.db.entity.ReceiveGiftEntity;
 import com.easemob.livedemo.data.TestGiftRepository;
 import com.easemob.livedemo.data.UserRepository;
 import com.easemob.livedemo.data.model.GiftBean;
+import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.User;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
@@ -54,6 +57,14 @@ public class DemoHelper {
 
     public static String getLivingId() {
         return PreferenceManager.getInstance().getLivingId();
+    }
+
+    public static void removeTarget(String key) {
+        FastLiveHelper.getInstance().getFastSPreferences().edit().remove(key).commit();
+    }
+
+    public static void removeSaveLivingId() {
+        PreferenceManager.getInstance().removeLivingId();
     }
 
     /**
@@ -247,5 +258,23 @@ public class DemoHelper {
             return String.valueOf((int) num);
         }
         return new DecimalFormat("#0.0").format(num / 10000) + "万";
+    }
+
+    /**
+     * 判断是否是极速直播
+     * @param videoType
+     * @return
+     */
+    public static boolean isFastLiveType(String videoType) {
+        return TextUtils.equals(videoType, LiveRoom.Type.agora_speed_live.name());
+    }
+
+    /**
+     * 判断是否是点播
+     * @param videoType
+     * @return
+     */
+    public static boolean isVod(String videoType) {
+        return TextUtils.equals(videoType, LiveRoom.Type.vod.name()) || TextUtils.equals(videoType, LiveRoom.Type.agora_vod.name());
     }
 }

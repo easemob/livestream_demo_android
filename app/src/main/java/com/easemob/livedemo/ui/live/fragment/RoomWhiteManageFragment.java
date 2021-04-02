@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 
 import java.util.ArrayList;
@@ -42,6 +43,9 @@ public class RoomWhiteManageFragment extends RoomUserManagementFragment {
         holder.managerButton.setVisibility(View.VISIBLE);
         holder.managerButton.setText(getString(R.string.em_live_anchor_remove_white));
         holder.managerButton.setBackground(null);
+        if(DemoHelper.isOwner(userList.get(position))) {
+            holder.managerButton.setVisibility(View.GONE);
+        }
 
         holder.managerButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,6 +26,7 @@ import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.runtimepermissions.PermissionsManager;
 import com.easemob.livedemo.runtimepermissions.PermissionsResultAction;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
+import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
 import com.easemob.livedemo.ui.live.LiveAllActivity;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveListFragment;
@@ -105,14 +106,20 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
             parseResource(response, new OnResourceParseCallback<LiveRoom>(true) {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    LiveAnchorActivity.actionStart(mContext, data);
+                    if(DemoHelper.isFastLiveType(data.getVideo_type())) {
+                        FastLiveHostActivity.actionStart(mContext, data);
+                    }else {
+                        LiveAnchorActivity.actionStart(mContext, data);
+                    }
+
                 }
 
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
                     if(code == 404) {
-                        DemoHelper.saveLivingId("");
+                        DemoHelper.removeTarget(liveId);
+                        DemoHelper.removeSaveLivingId();
                     }
                 }
             });
@@ -157,11 +164,8 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
         mHomeFragment = getSupportFragmentManager().findFragmentByTag("home");
         if(mHomeFragment == null) {
-            mHomeFragment = new LivingListFragment();
+            mHomeFragment = new VideoTypeFragment();
         }
-        Bundle bundle = new Bundle();
-        bundle.putString("status", "ongoing");
-        mHomeFragment.setArguments(bundle);
         replace(mHomeFragment, "home");
     }
 
@@ -231,7 +235,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         switch (position) {
             case 0 :
                 switchToHome();
-                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
+                mTitleBar.setTitle(getResources().getString(R.string.em_set_live_room));
                 break;
 //            case 1 :
 //                switchToLiveList();

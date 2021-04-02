@@ -393,10 +393,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     private synchronized void onRoomMemberExited(final String name) {
         EMLog.e(TAG, name + "exited");
+        if (memberList.contains(name)) {
+            memberList.remove(name);
+        }
         ThreadManager.getInstance().runOnMainThread(new Runnable() {
             @Override public void run() {
                 if(name.equals(chatroom.getOwner())){
-                    mContext.showLongToast("主播已结束直播");
+                    //mContext.showLongToast("主播已结束直播");
                     LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                 }
@@ -639,7 +642,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onMessageSelectLast() {
-        messageView.refreshSelectLast();
+        if(mContext != null && !mContext.isFinishing()) {
+            mContext.runOnUiThread(()-> messageView.refreshSelectLast());
+        }
     }
 
     @Override

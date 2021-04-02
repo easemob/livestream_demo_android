@@ -9,11 +9,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,19 +20,15 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseActivity;
+import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
 import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.fragment.DemoListDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
-import com.easemob.qiniu_sdk.OnCallBack;
-import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -42,6 +37,10 @@ import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CreateLiveRoomActivity extends BaseActivity {
 
@@ -65,13 +64,16 @@ public class CreateLiveRoomActivity extends BaseActivity {
     private File cacheFile;
     private CreateLiveViewModel viewmodel;
     protected File cameraFile;
+    private String name;
+    private String desc;
 
     public static void actionStart(Context context) {
         Intent starter = new Intent(context, CreateLiveRoomActivity.class);
         context.startActivity(starter);
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_live_room);
         ButterKnife.bind(this);
@@ -83,49 +85,20 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+        initViewModel();
+    }
+
+    private void initViewModel() {
         viewmodel = new ViewModelProvider(this).get(CreateLiveViewModel.class);
-    }
-
-    private void adjustTitle() {
-        RelativeLayout rightLayout = titleBar.getRightLayout();
-        ViewGroup.LayoutParams params = rightLayout.getLayoutParams();
-        if(params instanceof RelativeLayout.LayoutParams) {
-            ((RelativeLayout.LayoutParams) params).rightMargin = (int) EaseCommonUtils.dip2px(mContext, 5);
-        }
-    }
-
-
-    @OnClick(R.id.img_live_cover) void setLiveCover(){
-        showSelectDialog();
-    }
-
-    @OnClick(R.id.txt_associate_room) void associateRoom(){
-        startActivity(new Intent(this, AssociateLiveRoomActivity.class));
-    }
-
-    String name = null;
-    String desc = null;
-    @OnClick(R.id.btn_start_live) void startLive() {
-
-        if (!TextUtils.isEmpty(liveNameView.getText())){
-            name = liveNameView.getText().toString();
-        }
-        if (!TextUtils.isEmpty(liveDescView.getText())){
-            desc = liveDescView.getText().toString();
-        }
-        
-        if(TextUtils.isEmpty(name)) {
-            showToast(getResources().getString(R.string.em_live_create_room_check_info));
-            return;
-        }
-
-        viewmodel.createLiveRoom(name, desc, coverPath);
-
         viewmodel.getCreateObservable().observe(mContext, response -> {
             parseResource(response, new OnResourceParseCallback<LiveRoom>(true) {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    LiveAnchorActivity.actionStart(mContext, data);
+                    if(DemoHelper.isFastLiveType(data.getVideo_type())) {
+                        FastLiveHostActivity.actionStart(mContext, data);
+                    }else {
+                        LiveAnchorActivity.actionStart(mContext, data);
+                    }
                     finish();
                 }
 
@@ -148,10 +121,59 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 }
             });
         });
-
     }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    private void adjustTitle() {
+        RelativeLayout rightLayout = titleBar.getRightLayout();
+        ViewGroup.LayoutParams params = rightLayout.getLayoutParams();
+        if (params instanceof RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams) params).rightMargin = (int) EaseCommonUtils.dip2px(mContext, 5);
+        }
+    }
+
+
+    @OnClick(R.id.img_live_cover)
+    void setLiveCover() {
+        showSelectDialog();
+    }
+
+    @OnClick(R.id.txt_associate_room)
+    void associateRoom() {
+        startActivity(new Intent(this, AssociateLiveRoomActivity.class));
+    }
+
+    @OnClick(R.id.btn_start_live)
+    void startLive() {
+        if (!TextUtils.isEmpty(liveNameView.getText())) {
+            name = liveNameView.getText().toString();
+        }
+        if (!TextUtils.isEmpty(liveDescView.getText())) {
+            desc = liveDescView.getText().toString();
+        }
+        if (TextUtils.isEmpty(name)) {
+            showToast(getResources().getString(R.string.em_live_create_room_check_info));
+            return;
+        }
+        viewmodel.createLiveRoom(name, desc, coverPath);
+    }
+
+    @OnClick(R.id.btn_start_fast_live)
+    void startFastLive() {
+        if (!TextUtils.isEmpty(liveNameView.getText())) {
+            name = liveNameView.getText().toString();
+        }
+        if (!TextUtils.isEmpty(liveDescView.getText())) {
+            desc = liveDescView.getText().toString();
+        }
+        if (TextUtils.isEmpty(name)) {
+            showToast(getResources().getString(R.string.em_live_create_room_check_info));
+            return;
+        }
+        viewmodel.createLiveRoom(name, desc, coverPath, LiveRoom.Type.agora_speed_live.name());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_PICK:
                 if (data == null || data.getData() == null) {
@@ -185,10 +207,10 @@ public class CreateLiveRoomActivity extends BaseActivity {
                     @Override
                     public void OnItemClick(View view, int position) {
                         switch (position) {
-                            case 0 :
+                            case 0:
                                 selectPicFromCamera();
                                 break;
-                            case 1 :
+                            case 1:
                                 selectImageFromLocal();
                                 break;
                         }
@@ -199,10 +221,10 @@ public class CreateLiveRoomActivity extends BaseActivity {
 
     private void selectImageFromLocal() {
         Intent intent = null;
-        if(VersionUtils.isTargetQ(mContext)) {
+        if (VersionUtils.isTargetQ(mContext)) {
             intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-        }else {
+        } else {
             if (Build.VERSION.SDK_INT < 19) {
                 intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -218,7 +240,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
      * select picture from camera
      */
     private void selectPicFromCamera() {
-        if(!checkSdCardExist()) {
+        if (!checkSdCardExist()) {
             return;
         }
         cameraFile = new File(PathUtil.getInstance().getImagePath(), EMClient.getInstance().getCurrentUser()
@@ -240,6 +262,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
 
     /**
      * 检查sd卡是否挂载
+     *
      * @return
      */
     private boolean checkSdCardExist() {
@@ -269,7 +292,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
     private void setPicToView(Intent picdata) {
         //Uri uri = picdata.getData();
         coverPath = cacheFile.getAbsolutePath();
-        if(coverPath != null){
+        if (coverPath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
             coverView.setImageBitmap(bitmap);
             hintView.setVisibility(View.INVISIBLE);

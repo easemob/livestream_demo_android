@@ -93,6 +93,20 @@ public class PreferenceManager {
 		return mSharedPreferences.getString(KEY_LIVING_ID, null);
 	}
 
+	public void saveInt(String key, int value) {
+		editor.putInt(key, value);
+		editor.commit();
+	}
+
+	public int getInt(String key) {
+		return mSharedPreferences.getInt(key, -1);
+	}
+
+	public void remove(String key) {
+		editor.remove(key);
+		editor.commit();
+	}
+
 	/**
 	 * 设置是否显示登陆注册页面
 	 * @param canRegister
@@ -135,5 +149,9 @@ public class PreferenceManager {
 	 */
 	public int getLikeNum(String roomId) {
 		return mSharedPreferences.getInt(roomId, 0);
+	}
+
+	public void removeLivingId() {
+		remove(KEY_LIVING_ID);
 	}
 }

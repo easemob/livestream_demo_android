@@ -2,9 +2,11 @@ package com.easemob.livedemo.ui.live.fragment;
 
 import android.view.View;
 
+import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
+import com.easemob.livedemo.ui.fast.FastLiveAudienceActivity;
 import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 
 import java.util.List;
@@ -16,7 +18,11 @@ public class LivingListFragment extends LiveListFragment {
     @Override
     public void onItemClick(View view, int position) {
         LiveRoom liveRoom = adapter.getItem(position);
-        LiveAudienceActivity.actionStart(mContext, liveRoom);
+        if(DemoHelper.isFastLiveType(liveRoom.getVideo_type())) {
+            FastLiveAudienceActivity.actionStart(mContext, liveRoom);
+        }else {
+            LiveAudienceActivity.actionStart(mContext, liveRoom);
+        }
     }
 
     @Override

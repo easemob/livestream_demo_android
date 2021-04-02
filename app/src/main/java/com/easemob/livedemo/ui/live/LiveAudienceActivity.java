@@ -142,7 +142,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
             //只有非点播模式下，才会去关闭播放器
             if(liveRoom != null
                     && !TextUtils.isEmpty(liveRoom.getVideo_type())
-                    && !liveRoom.getVideo_type().equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+                    && !DemoHelper.isVod(liveRoom.getVideo_type())) {
                 stopVideo();
             }
         });
@@ -180,7 +180,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         }
         if(DemoHelper.isLiving(liveRoom.getStatus())) {
             String videoType = liveRoom.getVideo_type();
-            if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+            if(!TextUtils.isEmpty(videoType) && (videoType.equalsIgnoreCase(LiveRoom.Type.vod.name()) || videoType.equalsIgnoreCase(LiveRoom.Type.agora_vod.name()))) {
                 ExtBean ext = liveRoom.getExt();
                 if(ext != null && ext.getPlay() != null && ext.getPlay() != null && ext.getPlay().size() > 0) {
                     //隐藏背景图
@@ -276,6 +276,13 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
     }
 
     @Override
+    public void onRoomOwnerChangedToCurrentUser(String chatRoomId, String newOwner) {
+        // 如果直播间主播被调整为自己
+        LiveAnchorActivity.actionStart(mContext, liveRoom);
+        finish();
+    }
+
+    @Override
     public void onPrepared(int preparedTime) {
         Log.e("TAG", "onPrepared");
         videoview.setVisibility(View.VISIBLE);
@@ -289,7 +296,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements LiveAudien
         Log.e("TAG", "onCompletion");
         if(liveRoom != null) {
             String videoType = liveRoom.getVideo_type();
-            if(!TextUtils.isEmpty(videoType) && videoType.equalsIgnoreCase(LiveRoom.Type.vod.name())) {
+            if(!TextUtils.isEmpty(videoType) && (videoType.equalsIgnoreCase(LiveRoom.Type.vod.name()) || videoType.equalsIgnoreCase(LiveRoom.Type.agora_vod.name()))) {
                 stopVideo();
                 startVideo();
             }

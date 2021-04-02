@@ -3,6 +3,8 @@ package com.easemob.livedemo.common.reponsitories;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.easemob.livedemo.BuildConfig;
+import com.easemob.livedemo.data.model.AgoraTokenBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.data.restapi.ApiService;
@@ -93,6 +95,15 @@ public class AppServerRepository {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LiveRoomUrlBean>> callBack) {
                 callBack.onSuccess(apiService.getLiveRoomPlayUrl(roomId));
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<AgoraTokenBean>> getAgoraToken(String userId, String channel, String hxAppkey, int uid) {
+        return new NetworkOnlyResource<AgoraTokenBean, AgoraTokenBean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<AgoraTokenBean>> callBack) {
+                callBack.onSuccess(apiService.getAgoraToken(userId, channel, hxAppkey, uid));
             }
         }.asLiveData();
     }

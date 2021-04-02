@@ -12,6 +12,7 @@ import com.easemob.livedemo.ui.base.BaseActivity;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 public class SimpleDialogFragment extends DemoDialogFragment {
@@ -62,7 +63,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
             mBtnDialogConfirm.setText(confirmTitle);
         }
         if(confirmColor != 0) {
-            mBtnDialogConfirm.setTextColor(confirmColor);
+            mBtnDialogConfirm.setTextColor(ContextCompat.getColor(mContext, confirmColor));
         }
     }
 

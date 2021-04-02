@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.easemob.livedemo.BuildConfig;
 import com.easemob.livedemo.common.LoggerInterceptor;
+import com.easemob.livedemo.data.model.AgoraTokenBean;
+import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.hyphenate.chat.EMClient;
 
 import java.io.IOException;
@@ -74,6 +76,9 @@ public class LiveManager {
         return apiService;
     }
 
+    public Response<AgoraTokenBean> getAgoraToken(String hxId, String channel, String hxAppkey, int uid) throws LiveException {
+        return handleResponseCall(apiService.getAgoraTokenByHx(hxId, channel, hxAppkey, uid));
+    }
 
     private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException{
         try {

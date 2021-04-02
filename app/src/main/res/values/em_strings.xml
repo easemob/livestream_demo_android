@@ -9,7 +9,13 @@
 
     <string name="ease_list_no_data_text">暂无数据</string>
 
+    <string name="em_live_type_normal_title">传统直播</string>
+    <string name="em_live_type_normal_introduction">单直播间百万观众，适合弱互动，对延迟没有要求的场景</string>
+    <string name="em_live_type_fast_title">极速直播</string>
+    <string name="em_live_type_fast_introduction">直播延时小于 3 秒，适用于直播答题，互动大班课</string>
+
     <string name="em_live_list_all_title">选择聊天室开始直播</string>
+    <string name="em_live_list_living">直播大厅</string>
 
     <string name="em_live_list_item_living">正在直播</string>
     <string name="em_live_list_item_open">立即开播</string>
@@ -100,5 +106,6 @@
     <string name="prompt">提示</string>
     <string name="em_create_room_name_hint">请输入直播间名称</string>
     <string name="em_create_room_cover_hint">设置一个吸引人的封面</string>
-    <string name="em_create_room">开始直播</string>
+    <string name="em_create_room">传统直播</string>
+    <string name="em_create_fast_room">极速直播</string>
 </resources>
