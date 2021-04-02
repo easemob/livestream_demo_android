@@ -22,3 +22,6 @@
 #七牛-客户端
 -keep class com.pili.pldroid.player.** { *; }
 -keep class com.qiniu.qplayer.mediaEngine.MediaPlayer{*;}
+
+#声网
+-keep class io.agora.**{*;}

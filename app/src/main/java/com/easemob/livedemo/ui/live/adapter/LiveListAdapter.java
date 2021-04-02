@@ -1,6 +1,9 @@
 package com.easemob.livedemo.ui.live.adapter;
 
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
@@ -89,7 +93,11 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
                 }
             }
             author.setText(liveRoom.getName());
-            audienceNum.setText(liveRoom.getAudienceNum() + "正在看");
+            String content = liveRoom.getAudienceNum() + "正在看";
+            SpannableStringBuilder builder = new SpannableStringBuilder(content);
+            builder.setSpan(new AbsoluteSizeSpan((int) EaseCommonUtils.dip2px(mContext, 18)), 0, content.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            audienceNum.setText(builder);
+
             Glide.with(mContext)
                     .load(liveRoom.getCover())
                     .placeholder(R.drawable.em_live_default_bg)

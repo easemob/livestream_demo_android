@@ -14,7 +14,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/fl_main_fragment"
-        app:titleBarTitle="直播大厅"
+        app:titleBarTitle="@string/em_set_live_room"
         app:titleBarDisplayHomeAsUpEnabled="false"/>
 
     <FrameLayout

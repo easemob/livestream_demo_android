@@ -6,6 +6,7 @@ ext {
 
     ax_lifecycle_version = '2.2.0'
     ax_room_version = '2.2.5'
+    appcompat_version = '1.2.0'
 
     retrofit2_version = '2.4.0'
     butterknife_version = '10.0.0'

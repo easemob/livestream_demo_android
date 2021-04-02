@@ -19,6 +19,8 @@ public class LiveListViewModel extends AndroidViewModel {
     private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> AllObservable;
     private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> livingRoomsObservable;
     private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> vodRoomsObservable;
+    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> fastRoomsObservable;
+    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> fastVodRoomsObservable;
 
 
     public LiveListViewModel(@NonNull Application application) {
@@ -27,6 +29,8 @@ public class LiveListViewModel extends AndroidViewModel {
         AllObservable = new MediatorLiveData<>();
         livingRoomsObservable = new MediatorLiveData<>();
         vodRoomsObservable = new MediatorLiveData<>();
+        fastRoomsObservable = new MediatorLiveData<>();
+        fastVodRoomsObservable = new MediatorLiveData<>();
     }
 
     public LiveData<Resource<ResponseModule<List<LiveRoom>>>> getAllObservable() {
@@ -42,7 +46,7 @@ public class LiveListViewModel extends AndroidViewModel {
     }
 
     public void getLivingRoomList(int limit, String cursor) {
-        livingRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, "live"), response -> livingRoomsObservable.postValue(response));
+        livingRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, LiveRoom.Type.live.name()), response -> livingRoomsObservable.postValue(response));
     }
 
     public MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> getVodRoomsObservable() {
@@ -50,6 +54,22 @@ public class LiveListViewModel extends AndroidViewModel {
     }
 
     public void getVodRoomList(int limit, String cursor) {
-        vodRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, "vod"), response -> vodRoomsObservable.postValue(response));
+        vodRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, LiveRoom.Type.vod.name()), response -> vodRoomsObservable.postValue(response));
+    }
+
+    public MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> getFastRoomsObservable() {
+        return fastRoomsObservable;
+    }
+
+    public void getFastRoomList(int limit, String cursor) {
+        fastRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, LiveRoom.Type.agora_speed_live.name()), response -> fastRoomsObservable.postValue(response));
+    }
+
+    public MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> getFastVodRoomsObservable() {
+        return fastVodRoomsObservable;
+    }
+
+    public void getFastVodRoomList(int limit, String cursor) {
+        fastVodRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, LiveRoom.Type.agora_vod.name()), response -> fastVodRoomsObservable.postValue(response));
     }
 }

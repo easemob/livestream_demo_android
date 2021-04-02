@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fast_live_audience_loading">加载中...</string>
+    <string name="fast_live_host_fail">网络连接失败，是否停止直播？</string>
+    <string name="fast_live_host_local_video_fail">本地视频出错，是否重新尝试？</string>
+</resources>

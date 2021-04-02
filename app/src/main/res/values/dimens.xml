@@ -7,4 +7,6 @@
     <dimen name="item_normal_height">54dp</dimen>
 
     <dimen name="item_small_avatar_size">32dp</dimen>
+
+    <dimen name="home_item_width_margin">15dp</dimen>
 </resources>

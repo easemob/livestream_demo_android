@@ -20,7 +20,7 @@ import com.easemob.livedemo.ui.live.viewmodels.StreamViewModel;
  */
 public abstract class LiveBaseActivity extends BaseActivity {
     protected static final String TAG = "LiveActivity";
-    ImageView coverImage;
+    protected ImageView coverImage;
     protected LiveRoom liveRoom;
 
     @Override protected void onCreate(@Nullable Bundle savedInstanceState) {

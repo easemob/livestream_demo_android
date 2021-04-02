@@ -11,8 +11,8 @@ android {
         applicationId "com.easemob.livedemo"
         minSdkVersion rootProject.ext.min_sdk_version
         targetSdkVersion rootProject.ext.target_skd_version
-        versionCode 108
-        versionName "1.0.8"
+        versionCode 109
+        versionName "1.0.9"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a","x86","arm64-v8a"
@@ -38,12 +38,12 @@ android {
             debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             // base url为http://a1.easemob.com/，为了方便使用将appserver放置到base url中
-            buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/appserver/"')
+            buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/"')
             signingConfig signingConfigs.release
         }
         debug {
-            //buildConfigField("String", "BASE_URL", '"http://a1-hsb.easemob.com/appserver/"')
-            buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/appserver/"')
+            buildConfigField("String", "BASE_URL", '"http://a1-hsb.easemob.com/"')
+            //buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/"')
             signingConfig signingConfigs.release
         }
     }
@@ -97,4 +97,6 @@ dependencies {
     implementation project(path: ':custommessage')
     // qiniu
     implementation project(path: ':qiniu_sdk')
+    // agora
+    implementation project(path: ':fastlive')
 }

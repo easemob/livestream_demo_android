@@ -203,6 +203,12 @@ public class LiveAnchorActivity extends LiveBaseActivity implements LiveAnchorFr
     }
 
     @Override
+    public void onRoomOwnerChangedToOtherUser(String chatRoomId, String newOwner) {
+        LiveAudienceActivity.actionStart(mContext, liveRoom);
+        mContext.finish();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         streamHelper.destroy();

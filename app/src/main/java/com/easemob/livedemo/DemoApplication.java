@@ -10,6 +10,7 @@ import android.os.Process;
 import android.util.Log;
 
 import com.easemob.custommessage.EmCustomMsgHelper;
+import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
 import com.easemob.qiniu_sdk.PushStreamHelper;
@@ -46,12 +47,19 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     registerActivityLifecycleCallbacks();
     registerUncaughtExceptionHandler();
     initChatSdk();
+    initAgora();
 
     //UEasyStreaming.initStreaming("publish3-key");
 
     PushStreamHelper.getInstance().init(this);
 
 //    UStreamingContext.init(getApplicationContext(), "publish3-key");
+  }
+
+  private void initAgora() {
+    //第二个参数为声网appId
+    FastLiveHelper.getInstance().init(this, getString(R.string.agora_app_id));
+    FastLiveHelper.getInstance().getEngineConfig().setLowLatency(false);
   }
 
   private void registerUncaughtExceptionHandler() {
@@ -66,7 +74,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     EMOptions options = new EMOptions();
 //    options.enableDNSConfig(false);
 //    options.setRestServer("a1-hsb.easemob.com");
-//    options.setIMServer("116.85.43.118");
+//    options.setIMServer("106.75.100.247");
 //    options.setImPort(6717);
 
     EmClientInit(this, options);

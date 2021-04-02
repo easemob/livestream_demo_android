@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -52,5 +53,15 @@ public class BaseFragment extends Fragment {
         if(mContext != null) {
             mContext.parseResource(response, callback);
         }
+    }
+
+    /**
+     * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
+     * @param id
+     * @param <T>
+     * @return
+     */
+    protected <T extends View> T findViewById(@IdRes int id) {
+        return getView().findViewById(id);
     }
 }
