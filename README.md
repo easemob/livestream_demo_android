@@ -9,6 +9,10 @@
 - LiveAudienceFragment：集成观众端聊天室相关逻辑</br>
 - LiveAnchorFragment：集成主播端聊天室相关逻辑</br>
 
+**其他端开源地址：**
+- iOS:    https://github.com/easemob/livestream_demo_ios
+- App Server:     https://github.com/easemob/easemob-im-app-server
+
 ## 集成环信IM SDK
 ### 开发环境要求
 - Android Studio 3.2或更高版本。</br>
@@ -117,16 +121,18 @@ public boolean isBarrageMsg(EMMessage msg); //弹幕消息判断
 
 #### [极速直播](https://github.com/easemob/livestream_demo_android/blob/master/fastlive/fastlive.md)
 直播延时小于3秒，适用于直播答题、互动大班课等对延迟有较高要求的场景。</br>
-环信聊天室在极速直播中以集成声网极速直播为例，展示了集成极速直播与聊天室结合的场景。</br>
+环信聊天室在极速直播中以集成声网极速直播为例，展示了极速直播与聊天室结合的场景。</br>
 声网极速直播集成文档：[声网极速直播](https://github.com/easemob/livestream_demo_android/blob/master/fastlive/fastlive.md)
 
 
 #### [传统直播](https://github.com/easemob/livestream_demo_android/blob/master/qiniu_sdk/qiniu.md)
 单直播间可达百万观众，适合弱互动，对延迟没有要求的场景。</br>
-环信聊天室在传统直播中以集成七牛直播SDK为例，展示了集成传统直播与聊天室结合的场景。</br>
+环信聊天室在传统直播中以集成七牛直播SDK为例，展示了传统直播与聊天室结合的场景。</br>
 七牛直播集成文档：[七牛直播](https://github.com/easemob/livestream_demo_android/blob/master/qiniu_sdk/qiniu.md)
 
 ## 文档
+- [iOS端开源地址](https://github.com/easemob/livestream_demo_ios)
+- [App Server开源地址](https://github.com/easemob/easemob-im-app-server)
 - [环信直播聊天室集成介绍](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
 - [环信Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)
 - [声网极速直播快速集成](https://docs.agora.io/cn/live-streaming/start_live_standard_android?platform=Android)
