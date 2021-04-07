@@ -11,8 +11,8 @@ android {
         applicationId "com.easemob.livedemo"
         minSdkVersion rootProject.ext.min_sdk_version
         targetSdkVersion rootProject.ext.target_skd_version
-        versionCode 109
-        versionName "1.0.9"
+        versionCode 110
+        versionName "1.1.0"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a","x86","arm64-v8a"
