@@ -13,7 +13,6 @@ import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;
-import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.easemob.livedemo.ui.MainActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -50,8 +49,6 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     initAgora();
 
     //UEasyStreaming.initStreaming("publish3-key");
-
-    PushStreamHelper.getInstance().init(this);
 
 //    UStreamingContext.init(getApplicationContext(), "publish3-key");
   }

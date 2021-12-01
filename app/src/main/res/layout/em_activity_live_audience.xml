@@ -15,12 +15,6 @@
         android:visibility="visible"
         tools:src="@drawable/em_live_default_bg"/>
 
-    <com.easemob.qiniu_sdk.LiveVideoView
-        android:id="@+id/videoview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"/>
-
     <FrameLayout
         android:id="@+id/fl_fragment"
         android:layout_width="match_parent"

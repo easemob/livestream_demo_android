@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseActivity;
 import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
-import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.fragment.DemoListDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
 import com.hyphenate.chat.EMClient;
@@ -97,7 +95,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
                     if(DemoHelper.isFastLiveType(data.getVideo_type())) {
                         FastLiveHostActivity.actionStart(mContext, data);
                     }else {
-                        LiveAnchorActivity.actionStart(mContext, data);
+                        // LiveAnchorActivity.actionStart(mContext, data);
                     }
                     finish();
                 }

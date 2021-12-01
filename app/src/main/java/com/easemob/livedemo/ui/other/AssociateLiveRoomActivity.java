@@ -16,19 +16,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.bumptech.glide.Glide;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.ThreadPoolManager;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.data.restapi.LiveManager;
 import com.easemob.livedemo.ui.base.BaseActivity;
-import com.easemob.livedemo.ui.live.LiveAnchorActivity;
-import com.hyphenate.chat.EMClient;
 //import com.hyphenate.cloud.HttpFileManager;
-import com.hyphenate.exceptions.HyphenateException;
 import com.weigan.loopview.LoopView;
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AssociateLiveRoomActivity extends BaseActivity {
 

@@ -92,27 +92,27 @@
             android:screenOrientation="portrait">
         </activity>
         <!-- 直播（观众）页面 -->
-        <activity
-            android:name=".ui.live.LiveAudienceActivity"
-            android:parentActivityName=".ui.MainActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity"/>
-        </activity>
+<!--        <activity-->
+<!--            android:name=".ui.live.LiveAudienceActivity"-->
+<!--            android:parentActivityName=".ui.MainActivity"-->
+<!--            android:windowSoftInputMode="stateHidden"-->
+<!--            android:launchMode="singleTask"-->
+<!--            android:screenOrientation="portrait">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".ui.MainActivity"/>-->
+<!--        </activity>-->
         <!-- 直播（主播）页面 -->
-        <activity
-            android:name=".ui.live.LiveAnchorActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".ui.MainActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity"/>
-        </activity>
+<!--        <activity-->
+<!--            android:name=".ui.live.LiveAnchorActivity"-->
+<!--            android:windowSoftInputMode="stateHidden"-->
+<!--            android:parentActivityName=".ui.MainActivity"-->
+<!--            android:launchMode="singleTask"-->
+<!--            android:screenOrientation="portrait">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".ui.MainActivity"/>-->
+<!--        </activity>-->
         <!-- 注册页面 -->
         <activity
             android:name=".ui.other.RegisterActivity"
@@ -157,8 +157,8 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <!-- 正在直播的房间列表 -->
-        <activity android:name=".ui.live.LivingListActivity"
-            android:screenOrientation="portrait"/>
+<!--        <activity android:name=".ui.live.LivingListActivity"-->
+<!--            android:screenOrientation="portrait"/>-->
         <!-- 正在极速直播的房间列表 -->
         <activity android:name=".ui.fast.FastLivingListActivity"
             android:screenOrientation="portrait"/>

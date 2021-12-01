@@ -95,8 +95,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
     implementation project(path: ':custommessage')
-    // qiniu
-    implementation project(path: ':qiniu_sdk')
     // agora
     implementation project(path: ':fastlive')
+    // agora cdn live
+//    implementation project(path: ':cdn_live')
 }

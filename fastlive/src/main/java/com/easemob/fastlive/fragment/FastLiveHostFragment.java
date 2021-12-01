@@ -17,19 +17,19 @@ import com.easemob.fastlive.presenter.FastHostPresenter;
 import com.easemob.fastlive.presenter.IFastHostView;
 import com.easemob.fastlive.stats.LocalStatsData;
 
-import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
 import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 
 /**
  * 一、主播开始直播的流程如下：
  * （1）初始化 RtcEngine。一般放置在程序入口处即可，见DemoApplication中的initAgora()方法，具体调用为{@link FastLiveHelper#init(Context, String)}
- * （2）设置频道场景。本demo中此逻辑在{@link FastLiveHelper#init(Context, String)}中，具体在{@link io.agora.rtc.RtcEngine#setChannelProfile(int)},
+ * （2）设置频道场景。本demo中此逻辑在{@link FastLiveHelper#init(Context, String)}中，具体在{@link io.agora.rtc2.RtcEngine#setChannelProfile(int)},
  *      直播场景设置为{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
  * （3）获取声网token。这个一般调用app server相关接口，从服务器获取。如果在声网console中设置为不校验token可以不进行此步。
  * （4）加入channel并设置用户角色。这里涉及到channel的生成，本demo中channel是从服务端随房间信息返回的。
- *      加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc.RtcEngine#setClientRole(int)}
+ *      加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc2.RtcEngine#setClientRole(int)}
  * （5）在满足下面的开播的两个条件后，可以开始直播{@link FastLiveHelper#startBroadcast(VideoGridContainer)} 。
  *      上述方法中的有如下逻辑：（1）设置用户角色。（2）设置本地视图。
  * 二、开始直播的两个条件：

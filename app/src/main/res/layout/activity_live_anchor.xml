@@ -12,14 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <com.easemob.qiniu_sdk.LiveCameraView
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            >
-
-        </com.easemob.qiniu_sdk.LiveCameraView>
 
         <!-- top layout -->
         <include layout="@layout/layout_live_toolbar"/>

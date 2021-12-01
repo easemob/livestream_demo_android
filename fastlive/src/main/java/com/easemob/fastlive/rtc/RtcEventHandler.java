@@ -2,7 +2,7 @@ package com.easemob.fastlive.rtc;
 
 import android.util.Log;
 
-import io.agora.rtc.IRtcEngineEventHandler;
+import io.agora.rtc2.IRtcEngineEventHandler;
 
 public interface RtcEventHandler {
     String TAG = "fast";

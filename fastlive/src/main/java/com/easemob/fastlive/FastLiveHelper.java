@@ -9,11 +9,10 @@ import com.easemob.fastlive.rtc.RtcEventHandler;
 import com.easemob.fastlive.stats.StatsManager;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 
-import io.agora.rtc.Constants;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.models.ClientRoleOptions;
-import io.agora.rtc.video.VideoCanvas;
-import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 /**
  * Agora极速直播的帮助类
@@ -148,9 +147,9 @@ public class FastLiveHelper {
      */
     public void setClientRole(int role) {
         if(role == Constants.CLIENT_ROLE_AUDIENCE) {
-            ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
-            clientRoleOptions.audienceLatencyLevel = getEngineConfig().isLowLatency() ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
-            rtcEngine().setClientRole(role, clientRoleOptions);
+            // ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
+            // clientRoleOptions.audienceLatencyLevel = getEngineConfig().isLowLatency() ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
+            rtcEngine().setClientRole(role);
         }else {
             rtcEngine().setClientRole(role);
         }
@@ -185,7 +184,7 @@ public class FastLiveHelper {
                 VideoEncoderConfiguration.STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
         );
-        configuration.mirrorMode = FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorEncodeIndex()];
+        // configuration.mirrorMode = FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorEncodeIndex()];
         rtcEngine().setVideoEncoderConfiguration(configuration);
     }
 

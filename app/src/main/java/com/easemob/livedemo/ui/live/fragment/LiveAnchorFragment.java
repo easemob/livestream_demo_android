@@ -26,7 +26,6 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;

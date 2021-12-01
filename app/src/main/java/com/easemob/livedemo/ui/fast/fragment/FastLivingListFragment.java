@@ -7,7 +7,6 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.ui.fast.FastLiveAudienceActivity;
-import com.easemob.livedemo.ui.live.LiveAudienceActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveListFragment;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class FastLivingListFragment extends LiveListFragment {
         if(DemoHelper.isFastLiveType(liveRoom.getVideo_type())) {
             FastLiveAudienceActivity.actionStart(mContext, liveRoom);
         }else {
-            LiveAudienceActivity.actionStart(mContext, liveRoom);
+            // LiveAudienceActivity.actionStart(mContext, liveRoom);
         }
     }
 
