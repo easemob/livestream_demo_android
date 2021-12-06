@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FastLivingListFragment extends LiveListFragment {
     private List<LiveRoom> vodList;
-    private static final int MAX_VOD_COUNT = 2;
+    private static final int MAX_VOD_COUNT = 10;
 
     @Override
     public void onItemClick(View view, int position) {

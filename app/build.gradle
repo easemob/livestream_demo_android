@@ -42,8 +42,8 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField("String", "BASE_URL", '"http://a1-hsb.easemob.com/"')
-            //buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/"')
+            // buildConfigField("String", "BASE_URL", '"http://a1-hsb.easemob.com/"')
+            buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/"')
             signingConfig signingConfigs.release
         }
     }
