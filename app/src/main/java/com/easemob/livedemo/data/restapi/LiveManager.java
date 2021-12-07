@@ -77,7 +77,7 @@ public class LiveManager {
     }
 
     public Response<AgoraTokenBean> getAgoraToken(String hxId, String channel, String hxAppkey, int uid) throws LiveException {
-        return handleResponseCall(apiService.getAgoraTokenByHx(hxId, channel, hxAppkey, uid));
+        return handleResponseCall(apiService.getAgoraTokenByHx(hxId, channel, hxAppkey));
     }
 
     private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException{

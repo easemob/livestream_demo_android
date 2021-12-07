@@ -197,7 +197,8 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     }
 
     @Override
-    public void onGetTokenSuccess(String token, boolean isRenew) {
+    public void onGetTokenSuccess(String token, int uid, boolean isRenew) {
+        this.uid = uid;
         rtcToken = token;
         if(isRenew) {
             renewToken(token);

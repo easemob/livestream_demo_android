@@ -9,10 +9,13 @@ import com.easemob.fastlive.rtc.RtcEventHandler;
 import com.easemob.fastlive.stats.StatsManager;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 
+import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
+
+import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
 
 /**
  * Agora极速直播的帮助类
@@ -166,7 +169,12 @@ public class FastLiveHelper {
         setClientRole(role);
         rtcEngine().enableVideo();
         configVideo();
-        rtcEngine().joinChannel(token, getEngineConfig().getChannelName(), null, uid);
+        // rtcEngine().joinChannel(token, getEngineConfig().getChannelName(), null, uid);
+        ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();
+        channelMediaOptions.publishAudioTrack = true;
+        channelMediaOptions.publishCameraTrack = true;
+        channelMediaOptions.clientRoleType = role;
+        rtcEngine().joinChannel(token, getEngineConfig().getChannelName(), uid, channelMediaOptions);
     }
 
     /**

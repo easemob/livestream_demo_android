@@ -1,7 +1,7 @@
 package com.easemob.fastlive.presenter;
 
 public interface IFastHostView extends IBaseDataView{
-    void onGetTokenSuccess(String token, boolean isRenew);
+    void onGetTokenSuccess(String token, int uid, boolean isRenew);
 
     void onGetTokenFail(String message);
 

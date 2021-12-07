@@ -113,7 +113,8 @@ public interface ApiService {
      * @param hxAppkey 环信的appkey
      * @return
      */
-    @GET("token/liveToken/")
-    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey, @Query("uid") int uid);
+    @GET("token/rtcToken/v1")
+    // Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey, @Query("uid") int uid);
+    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey);
 
 }
