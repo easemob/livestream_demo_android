@@ -200,12 +200,13 @@ public class FastLiveHelper {
      * 主播开始直播
      * @param container
      */
-    public void startBroadcast(VideoGridContainer container) {
+    public void startBroadcast(VideoGridContainer container, int uid) {
         rtcEngine().enableVideo();
         setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        SurfaceView surfaceView = prepareRtcVideo(0, true);
+        SurfaceView surfaceView = prepareRtcVideo(uid, true);
         surfaceView.setZOrderMediaOverlay(true);
-        container.addUserVideoSurface(0, surfaceView, true);
+        container.addUserVideoSurface(uid, surfaceView, true);
+        rtcEngine().startPreview();
         isLiving = true;
     }
 
@@ -283,21 +284,23 @@ public class FastLiveHelper {
         SurfaceView surface = RtcEngine.CreateRendererView(mContext);
         if (local) {
             rtcEngine().setupLocalVideo(
-                    new VideoCanvas(
-                            surface,
-                            VideoCanvas.RENDER_MODE_HIDDEN,
-                            0,
-                            FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorLocalIndex()]
-                    )
+                    // new VideoCanvas(
+                    //         surface,
+                    //         VideoCanvas.RENDER_MODE_HIDDEN,
+                    //         0,
+                    //         FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorLocalIndex()]
+                    // )
+                    new VideoCanvas(surface, VideoCanvas.RENDER_MODE_HIDDEN, uid)
             );
         } else {
             rtcEngine().setupRemoteVideo(
-                    new VideoCanvas(
-                            surface,
-                            VideoCanvas.RENDER_MODE_HIDDEN,
-                            uid,
-                            FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorRemoteIndex()]
-                    )
+                    // new VideoCanvas(
+                    //         surface,
+                    //         VideoCanvas.RENDER_MODE_HIDDEN,
+                    //         uid,
+                    //         FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorRemoteIndex()]
+                    // )
+                    new VideoCanvas(surface, VideoCanvas.RENDER_MODE_HIDDEN, uid)
             );
         }
         return surface;

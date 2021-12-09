@@ -8,6 +8,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.easemob.fastlive.FastLiveHelper;
+import com.easemob.fastlive.FastPrefManager;
 import com.easemob.fastlive.R;
 import com.easemob.fastlive.presenter.FastAudiencePresenter;
 import com.easemob.fastlive.presenter.IFastAudienceView;
@@ -16,8 +18,6 @@ import com.easemob.fastlive.stats.LocalStatsData;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.video.VideoCanvas;
-
-import com.easemob.fastlive.FastLiveHelper;
 
 /**
  * 观看视频直播的流程如下：
@@ -90,7 +90,12 @@ public class FastLiveAudienceFragment extends FastLiveBaseFragment implements IF
 
     @Override
     public void onRtcJoinChannelSuccess(String channel, int uid, int elapsed) {
-        Log.i(TAG, "onRtcJoinChannelSuccess channel: "+channel + " uid: "+uid);
+        Log.i("gaoyuan", "onRtcJoinChannelSuccess channel: "+channel + " uid: "+uid);
+        try {
+            FastPrefManager.getPreferences(mContext).edit().putInt(roomId, uid).commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -108,7 +113,7 @@ public class FastLiveAudienceFragment extends FastLiveBaseFragment implements IF
      */
     @Override
     public void onRtcRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
-        Log.i(TAG, "onRtcRemoteVideoStateChanged uid: "+uid + " state: "+state);
+        Log.i("gaoyuan", "onRtcRemoteVideoStateChanged uid: "+uid + " state: "+state);
         if(state == Constants.REMOTE_VIDEO_STATE_STOPPED || state == Constants.REMOTE_VIDEO_STATE_FAILED) {
             if(this.presenter.isActive()) {
                 this.presenter.runOnUI(()-> mVideoGridContainer.removeAllVideo());
@@ -121,10 +126,14 @@ public class FastLiveAudienceFragment extends FastLiveBaseFragment implements IF
     @Override
     public void onRtcStats(IRtcEngineEventHandler.RtcStats stats) {
         Log.i(TAG, "onRtcStats");
-        if (!helper.getStatsManager().isEnabled()) return;
+        if (!helper.getStatsManager().isEnabled()) {
+            return;
+        }
 
         LocalStatsData data = (LocalStatsData) helper.getStatsManager().getStatsData(0);
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
 
         data.setLastMileDelay(stats.lastmileDelay);
         data.setVideoSendBitrate(stats.txVideoKBitRate);
@@ -162,7 +171,9 @@ public class FastLiveAudienceFragment extends FastLiveBaseFragment implements IF
     }
 
     @Override
-    public void onGetTokenSuccess(String token, boolean isRenew) {
+    public void onGetTokenSuccess(String token, int uid, boolean isRenew) {
+        this.uid = uid;
+        Log.i("gaoyuan", "uid: " + uid);
         rtcToken = token;
         if(isRenew) {
             renewToken(token);

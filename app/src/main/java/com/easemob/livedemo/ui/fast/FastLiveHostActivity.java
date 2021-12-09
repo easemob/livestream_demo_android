@@ -3,7 +3,6 @@ package com.easemob.livedemo.ui.fast;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -29,7 +28,7 @@ import io.agora.rtc2.Constants;
  * （3）获取声网token。这个一般调用app server相关接口，从服务器获取。如果在声网console中设置为不校验token可以不进行此步。
  * （4）加入channel并设置用户角色。这里涉及到channel的生成，本demo中channel是从服务端随房间信息返回的。
  *      加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc2.RtcEngine#setClientRole(int)}
- * （5）在满足下面的开播的两个条件后，可以开始直播{@link FastLiveHelper#startBroadcast(VideoGridContainer)} 。
+ * （5）在满足下面的开播的两个条件后，可以开始直播{@link FastLiveHelper#startBroadcast(VideoGridContainer, int)} 。
  *      上述方法中的有如下逻辑：（1）设置用户角色。（2）设置本地视图。
  * 二、开始直播的两个条件：
  * （1）加入直播间并将状态置为直播状态，回调方法为{@link #onStartCamera()}
