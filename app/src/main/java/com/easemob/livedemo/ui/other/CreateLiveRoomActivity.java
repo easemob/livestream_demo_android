@@ -24,6 +24,7 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseActivity;
+import com.easemob.livedemo.ui.cdn.CdnLiveHostActivity;
 import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
 import com.easemob.livedemo.ui.live.fragment.DemoListDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
@@ -96,6 +97,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
                         FastLiveHostActivity.actionStart(mContext, data);
                     }else {
                         // LiveAnchorActivity.actionStart(mContext, data);
+                        CdnLiveHostActivity.actionStart(mContext, data);
                     }
                     finish();
                 }
@@ -152,7 +154,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
             showToast(getResources().getString(R.string.em_live_create_room_check_info));
             return;
         }
-        viewmodel.createLiveRoom(name, desc, coverPath);
+        viewmodel.createLiveRoom(name, desc, coverPath, LiveRoom.Type.agora_cdn_live.name());
     }
 
     @OnClick(R.id.btn_start_fast_live)

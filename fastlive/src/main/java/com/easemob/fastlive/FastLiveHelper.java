@@ -9,13 +9,20 @@ import com.easemob.fastlive.rtc.RtcEventHandler;
 import com.easemob.fastlive.stats.StatsManager;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 
+import java.util.Locale;
+
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
+import io.agora.rtc2.DirectCdnStreamingMediaOptions;
+import io.agora.rtc2.IDirectCdnStreamingEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * Agora极速直播的帮助类
@@ -28,6 +35,12 @@ public class FastLiveHelper {
     private boolean isPaused;//是否暂停了
     private boolean isLiving;//是否正在直播
     private int lastUid = -1;
+    private final VideoEncoderConfiguration encoderConfiguration = new VideoEncoderConfiguration(
+            VD_640x360,
+            FRAME_RATE_FPS_15,
+            700,
+            ORIENTATION_MODE_FIXED_PORTRAIT
+    );
 
     private static class FastLiveHelperInstance {
         private static final FastLiveHelper instance = new FastLiveHelper();
@@ -208,6 +221,29 @@ public class FastLiveHelper {
         container.addUserVideoSurface(uid, surfaceView, true);
         rtcEngine().startPreview();
         isLiving = true;
+    }
+
+    public void startCdnBroadcast(VideoGridContainer container, int uid, String url, IDirectCdnStreamingEventHandler handler) {
+        rtcEngine().enableVideo();
+        rtcEngine().setDirectCdnStreamingVideoConfiguration(encoderConfiguration);
+        DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
+        directCdnStreamingMediaOptions.publishCameraTrack = true;
+        directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
+        setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        SurfaceView surfaceView = prepareRtcVideo(uid, true);
+        surfaceView.setZOrderMediaOverlay(true);
+        container.addUserVideoSurface(uid, surfaceView, true);
+        rtcEngine().startPreview();
+        rtcEngine().startDirectCdnStreaming(handler, url, directCdnStreamingMediaOptions);
+    }
+
+    public void stopDirectCDNStreaming(Runnable onDirectCDNStopped) {
+        if (rtcEngine() == null) {
+            return;
+        }
+        rtcEngine().disableVideo();
+        // pendingDirectCDNStoppedRun = onDirectCDNStopped;
+        rtcEngine().stopDirectCdnStreaming();
     }
 
     /**

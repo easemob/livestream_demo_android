@@ -6,7 +6,6 @@ import android.util.Log;
 import com.easemob.custommessage.EmCustomMsgType;
 import com.easemob.custommessage.MsgConstant;
 import com.easemob.fastlive.FastLiveHelper;
-import com.easemob.fastlive.FastPrefManager;
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
@@ -267,6 +266,15 @@ public class DemoHelper {
      */
     public static boolean isFastLiveType(String videoType) {
         return TextUtils.equals(videoType, LiveRoom.Type.agora_speed_live.name());
+    }
+
+    /**
+     * 判断是否是CDN直播
+     * @param videoType
+     * @return
+     */
+    public static boolean isCdnLiveType(String videoType) {
+        return TextUtils.equals(videoType, LiveRoom.Type.agora_cdn_vod.name());
     }
 
     /**

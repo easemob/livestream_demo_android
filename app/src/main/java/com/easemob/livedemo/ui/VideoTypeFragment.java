@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ui.base.BaseFragment;
+import com.easemob.livedemo.ui.cdn.CdnLivingListActivity;
 import com.easemob.livedemo.ui.fast.FastLivingListActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
@@ -77,6 +78,7 @@ public class VideoTypeFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cl_live :
+                CdnLivingListActivity.actionStart(mContext);
                 // LivingListActivity.actionStart(mContext);
                 break;
             case R.id.cl_fast_live :

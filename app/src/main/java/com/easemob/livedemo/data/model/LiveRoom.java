@@ -208,6 +208,6 @@ public class LiveRoom extends BaseBean implements Serializable {
     }
 
     public enum Type {
-        live, vod, agora_speed_live, agora_vod
+        live, vod, agora_speed_live, agora_cdn_vod, agora_cdn_live, agora_vod
     }
 }

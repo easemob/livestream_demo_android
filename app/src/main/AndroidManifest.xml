@@ -162,6 +162,12 @@
         <!-- 正在极速直播的房间列表 -->
         <activity android:name=".ui.fast.FastLivingListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.cdn.CdnLivingListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.cdn.CdnLiveHostActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.cdn.CdnLiveAudienceActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

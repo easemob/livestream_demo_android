@@ -1,4 +1,4 @@
-package com.easemob.livedemo.ui.fast;
+package com.easemob.livedemo.ui.cdn;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,14 +7,15 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.easemob.fastlive.fragment.FastLiveHostFragment;
+import com.easemob.cdn.fragment.CdnLiveHostFragment;
+import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ui.fast.presenter.FastLiveHostPresenterImpl;
+import com.easemob.livedemo.ui.cdn.presenter.CdnLiveHostPresenterImpl;
+import com.easemob.livedemo.ui.fast.FastLiveAudienceActivity;
 import com.easemob.livedemo.ui.live.LiveBaseActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
-import com.easemob.fastlive.FastLiveHelper;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.EMLog;
 
@@ -34,15 +35,15 @@ import io.agora.rtc2.Constants;
  * （1）加入直播间并将状态置为直播状态，回调方法为{@link #onStartCamera()}
  *  (2) 获取声网token(如果需要的话)成功，并加入channel
  */
-public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
-    private static final String TAG = FastLiveHostActivity.class.getSimpleName();
+public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
+    private static final String TAG = CdnLiveHostActivity.class.getSimpleName();
 
     private LiveAnchorFragment fragment;
-    private FastLiveHostFragment fastFragment;
-    private FastLiveHostPresenterImpl presenter;
+    private CdnLiveHostFragment fastFragment;
+    private CdnLiveHostPresenterImpl presenter;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
-        Intent starter = new Intent(context, FastLiveHostActivity.class);
+        Intent starter = new Intent(context, CdnLiveHostActivity.class);
         starter.putExtra("liveroom", liveRoom);
         context.startActivity(starter);
     }
@@ -62,7 +63,7 @@ public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchor
     }
 
     private void initFragment() {
-        fragment = (LiveAnchorFragment) getSupportFragmentManager().findFragmentByTag("fast_live_host");
+        fragment = (LiveAnchorFragment) getSupportFragmentManager().findFragmentByTag("cdn_live_host");
         if (fragment == null) {
             fragment = new LiveAnchorFragment();
             Bundle bundle = new Bundle();
@@ -70,15 +71,15 @@ public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchor
             fragment.setArguments(bundle);
         }
         fragment.setOnCameraListener(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "fast_live_host").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "cdn_live_host").commit();
     }
 
     private void initVideoFragment() {
-        fastFragment = (FastLiveHostFragment) getSupportFragmentManager().findFragmentByTag("fast_live_host_video");
-        presenter = new FastLiveHostPresenterImpl();
+        fastFragment = (CdnLiveHostFragment) getSupportFragmentManager().findFragmentByTag("cdn_live_host_video");
+        presenter = new CdnLiveHostPresenterImpl();
         if(fastFragment == null) {
             EMLog.d(TAG, "not have CdnLiveHostFragment");
-            fastFragment = new FastLiveHostFragment(presenter);
+            fastFragment = new CdnLiveHostFragment(presenter);
             Bundle bundle = new Bundle();
             bundle.putString("channel", liveRoom.getChannel());
             bundle.putString("roomId", liveRoom.getId());
@@ -89,7 +90,7 @@ public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchor
             EMLog.d(TAG, "already have CdnLiveHostFragment");
             fastFragment.setPresenter(presenter);
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_video_fragment, fastFragment, "fast_live_host_video").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_video_fragment, fastFragment, "cdn_live_host_video").commit();
     }
 
     @Override
