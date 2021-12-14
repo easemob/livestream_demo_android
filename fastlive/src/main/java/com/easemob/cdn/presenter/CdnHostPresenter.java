@@ -1,13 +1,11 @@
-package com.easemob.cdn.presenter.presenter;
+package com.easemob.cdn.presenter;
 
-import android.util.Log;
-
-public abstract class FastAudiencePresenter extends CdnTokenPresenter {
-    public IFastAudienceView mView;
+public abstract class CdnHostPresenter extends CdnTokenPresenter {
+    public ICdnHostView mView;
 
     @Override
     public void attachView(IBaseDataView view) {
-        mView = (IFastAudienceView) view;
+        mView = (ICdnHostView) view;
     }
 
     @Override
@@ -18,14 +16,18 @@ public abstract class FastAudiencePresenter extends CdnTokenPresenter {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("TAG", "FastAudiencePresenter onDestroy");
         detachView();
     }
 
     /**
-     * 直播关闭
+     * 开始推流
      */
-    public abstract void onLiveClosed();
+    public abstract void onStartCamera();
+
+    /**
+     * 切换摄像头
+     */
+    public abstract void switchCamera();
 
     /**
      * 离开频道

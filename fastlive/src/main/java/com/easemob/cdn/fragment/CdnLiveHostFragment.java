@@ -11,8 +11,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.easemob.cdn.presenter.presenter.CdnHostPresenter;
-import com.easemob.cdn.presenter.presenter.ICdnHostView;
+import com.easemob.cdn.presenter.CdnHostPresenter;
+import com.easemob.cdn.presenter.ICdnHostView;
 import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.FastPrefManager;
 import com.easemob.fastlive.R;
@@ -213,7 +213,7 @@ public class CdnLiveHostFragment extends CdnLiveBaseFragment implements ICdnHost
             renewToken(token);
         }else {
             // joinRtcChannel(token);
-            getCdnUrl(token);
+            getCdnUrl(channel);
         }
     }
 
@@ -229,7 +229,7 @@ public class CdnLiveHostFragment extends CdnLiveBaseFragment implements ICdnHost
 
     @Override
     public void onGetCdnUrlSuccess(String cdnUrl) {
-        Log.i(TAG, "getCdnUrl: " + cdnUrl);
+        Log.i(TAG, "getCdnUrlSucess: " + cdnUrl);
         this.cdnUrl = cdnUrl;
         joinRtcChannel(rtcToken);
     }

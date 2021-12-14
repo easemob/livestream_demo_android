@@ -74,6 +74,6 @@ public class LiveListViewModel extends AndroidViewModel {
     }
 
     public void getFastCdnRoomList(int limit, String cursor) {
-        fastVodRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, LiveRoom.Type.agora_cdn_vod.name()), response -> fastVodRoomsObservable.postValue(response));
+        fastVodRoomsObservable.addSource(repository.getLivingRoomLists(limit, cursor, LiveRoom.Type.agora_cdn_live.name()), response -> fastVodRoomsObservable.postValue(response));
     }
 }

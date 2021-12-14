@@ -86,6 +86,11 @@ public class LiveManager {
                 "live", channelId, 86400));
     }
 
+    public Response<CdnUrlBean> getCdnPullUrl(String channelId) throws LiveException {
+        return handleResponseCall(apiService.getCdnPullUrl("rtmp", "ws1-rtmp-push.easemob.com",
+                "live", channelId));
+    }
+
     private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException{
         try {
             Response<T> response = responseCall.execute();

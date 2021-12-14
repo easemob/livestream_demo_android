@@ -1,6 +1,7 @@
-package com.easemob.cdn.presenter.presenter;
+package com.easemob.cdn.presenter;
 
-public interface ICdnHostView extends IBaseDataView {
+public interface ICdnAudienceView extends IBaseDataView {
+
     void onGetTokenSuccess(String token, int uid, boolean isRenew);
 
     void onGetTokenFail(String message);
@@ -9,9 +10,7 @@ public interface ICdnHostView extends IBaseDataView {
 
     void onGetCdnUrlFail(String msg);
 
-    void onStartBroadcast();
-
-    void switchCamera();
+    void onLiveClosed();
 
     void onLeaveChannel();
 }

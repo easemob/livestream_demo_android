@@ -274,7 +274,7 @@ public class DemoHelper {
      * @return
      */
     public static boolean isCdnLiveType(String videoType) {
-        return TextUtils.equals(videoType, LiveRoom.Type.agora_cdn_vod.name());
+        return TextUtils.equals(videoType, LiveRoom.Type.agora_cdn_live.name());
     }
 
     /**

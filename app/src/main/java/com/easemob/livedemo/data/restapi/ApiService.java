@@ -121,4 +121,6 @@ public interface ApiService {
     @GET("appserver/agora/cdn/streams/url/push")
     Call<CdnUrlBean> getCdnPushUrl(@Query("domain")String domain, @Query("pushPoint")String pushPoint, @Query("streamKey")String streamKey, @Query("expire")int expire);
 
+    @GET("appserver/agora/cdn/streams/url/play")
+    Call<CdnUrlBean> getCdnPullUrl(@Query("protocol")String protocol, @Query("domain")String domain, @Query("pushPoint")String pushPoint, @Query("streamKey")String streamKey);
 }

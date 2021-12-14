@@ -8,11 +8,11 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.easemob.cdn.presenter.CdnAudiencePresenter;
+import com.easemob.cdn.presenter.ICdnAudienceView;
 import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.FastPrefManager;
 import com.easemob.fastlive.R;
-import com.easemob.fastlive.presenter.FastAudiencePresenter;
-import com.easemob.fastlive.presenter.IFastAudienceView;
 import com.easemob.fastlive.stats.LocalStatsData;
 
 import io.agora.rtc2.Constants;
@@ -40,11 +40,11 @@ import io.agora.rtc2.video.VideoCanvas;
  *      这里需要注意的是{@link IRtcEngineEventHandler#onFirstRemoteVideoDecoded(int, int, int, int)}已在2.9.0版本后废弃，
  *      需要调用{@link IRtcEngineEventHandler#onRemoteVideoStateChanged(int, int, int, int)}。具体详见第（5）点用法。
  */
-public class FastLiveAudienceFragment extends CdnLiveBaseFragment implements IFastAudienceView {
-    public FastAudiencePresenter presenter;
+public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdnAudienceView {
+    public CdnAudiencePresenter presenter;
     private View loading;
 
-    public FastLiveAudienceFragment(FastAudiencePresenter presenter) {
+    public CdnLiveAudienceFragment(CdnAudiencePresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -96,6 +96,12 @@ public class FastLiveAudienceFragment extends CdnLiveBaseFragment implements IFa
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.presenter.runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                // startCdnPull();
+            }
+        });
     }
 
     /**
@@ -120,7 +126,17 @@ public class FastLiveAudienceFragment extends CdnLiveBaseFragment implements IFa
             }
         }else {
             this.presenter.runOnUI(()-> helper.setupRemoteVideo(uid, mVideoGridContainer, true));
+            this.presenter.runOnUI(new Runnable() {
+                @Override
+                public void run() {
+                    // startCdnPull();
+                }
+            });
         }
+    }
+
+    private void startCdnPull() {
+        helper.startPullCdn(mVideoGridContainer, this.uid, this.cdnUrl);
     }
 
     @Override
@@ -178,7 +194,8 @@ public class FastLiveAudienceFragment extends CdnLiveBaseFragment implements IFa
         if(isRenew) {
             renewToken(token);
         }else {
-            joinRtcChannel(token);
+            presenter.getCdnUrl(channel);
+            // joinRtcChannel(token);
         }
     }
 
@@ -186,6 +203,18 @@ public class FastLiveAudienceFragment extends CdnLiveBaseFragment implements IFa
     public void onGetTokenFail(String message) {
         Log.e(TAG, "onGetTokenFail: "+message);
         joinRtcChannel(null);
+    }
+
+    @Override
+    public void onGetCdnUrlSuccess(String cdnUrl) {
+        Log.i(TAG, "onGetCdnUrlSuccess: " + cdnUrl);
+        this.cdnUrl = cdnUrl;
+        joinRtcChannel(rtcToken);
+    }
+
+    @Override
+    public void onGetCdnUrlFail(String msg) {
+        Log.e(TAG, "onGetCdnUrlFail: " + msg);
     }
 
     @Override
@@ -214,7 +243,7 @@ public class FastLiveAudienceFragment extends CdnLiveBaseFragment implements IFa
         return mContext;
     }
 
-    public void setPresenter(FastAudiencePresenter presenter) {
+    public void setPresenter(CdnAudiencePresenter presenter) {
         this.presenter = presenter;
         if(presenter != null && mContext != null && !mContext.isFinishing()) {
             if(mContext instanceof AppCompatActivity) {

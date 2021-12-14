@@ -1,8 +1,7 @@
 package com.easemob.livedemo.ui.cdn.presenter;
 
 
-import com.easemob.cdn.presenter.presenter.CdnHostPresenter;
-import com.easemob.fastlive.presenter.FastHostPresenter;
+import com.easemob.cdn.presenter.CdnHostPresenter;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.AgoraTokenBean;
 import com.easemob.livedemo.data.model.CdnUrlBean;

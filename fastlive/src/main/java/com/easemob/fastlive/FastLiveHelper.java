@@ -11,6 +11,10 @@ import com.easemob.fastlive.widgets.VideoGridContainer;
 
 import java.util.Locale;
 
+import io.agora.mediaplayer.IMediaPlayer;
+import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.PlayerUpdatedInfo;
+import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.DirectCdnStreamingMediaOptions;
@@ -19,6 +23,7 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
+import static android.content.ContentValues.TAG;
 import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
@@ -41,6 +46,7 @@ public class FastLiveHelper {
             700,
             ORIENTATION_MODE_FIXED_PORTRAIT
     );
+    private IMediaPlayer mMediaPlayer;
 
     private static class FastLiveHelperInstance {
         private static final FastLiveHelper instance = new FastLiveHelper();
@@ -235,6 +241,91 @@ public class FastLiveHelper {
         container.addUserVideoSurface(uid, surfaceView, true);
         rtcEngine().startPreview();
         rtcEngine().startDirectCdnStreaming(handler, url, directCdnStreamingMediaOptions);
+        isLiving = true;
+    }
+
+    public void startPullCdn(VideoGridContainer container, int uid, String url) {
+        setClientRole(Constants.CLIENT_ROLE_AUDIENCE);
+        rtcEngine().enableVideo();
+        if(mMediaPlayer == null){
+            mMediaPlayer = rtcEngine().createMediaPlayer();
+            mMediaPlayer.registerPlayerObserver(new IMediaPlayerObserver() {
+                @Override
+                public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
+                    Log.d(TAG, "MediaPlayer onPlayerStateChanged -- url=" + mMediaPlayer.getPlaySrc() + "state=" + mediaPlayerState + ", error=" + mediaPlayerError);
+                    if (mediaPlayerState == io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED) {
+                        if (mMediaPlayer != null) {
+                            mMediaPlayer.play();
+                        }
+                    }
+                }
+
+                @Override
+                public void onPositionChanged(long l) {
+
+                }
+
+                @Override
+                public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent, long l, String s) {
+
+                }
+
+                @Override
+                public void onMetaData(io.agora.mediaplayer.Constants.MediaPlayerMetadataType mediaPlayerMetadataType, byte[] bytes) {
+
+                }
+
+                @Override
+                public void onPlayBufferUpdated(long l) {
+
+                }
+
+                @Override
+                public void onPreloadEvent(String s, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
+
+                }
+
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onAgoraCDNTokenWillExpire() {
+
+                }
+
+                @Override
+                public void onPlayerSrcInfoChanged(SrcInfo srcInfo, SrcInfo srcInfo1) {
+
+                }
+
+                @Override
+                public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+                }
+
+            });
+            rtcEngine().setDefaultAudioRoutetoSpeakerphone(true);
+        }
+        // mMediaPlayer.stop();
+        // mMediaPlayer.openWithAgoraCDNSrc(url, uid);
+
+        if(lastUid != -1 && lastUid != uid) {
+            removeRemoteVideo(lastUid, container);
+        }
+        if(!container.containUid(uid)) {
+            SurfaceView surface = RtcEngine.CreateRendererView(mContext);
+            rtcEngine().setupRemoteVideo(new VideoCanvas(
+                    surface,
+                    VideoCanvas.RENDER_MODE_HIDDEN,
+                    // mMediaPlayer.getMediaPlayerId(),
+                    uid
+            ));
+            container.addUserVideoSurface(uid, surface, false);
+        }
+        lastUid = uid;
+        isLiving = true;
     }
 
     public void stopDirectCDNStreaming(Runnable onDirectCDNStopped) {

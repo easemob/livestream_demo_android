@@ -1,4 +1,4 @@
-package com.easemob.cdn.presenter.presenter;
+package com.easemob.cdn.presenter;
 
 import android.content.Context;
 

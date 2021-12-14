@@ -7,15 +7,14 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
+import com.easemob.cdn.fragment.CdnLiveAudienceFragment;
 import com.easemob.fastlive.FastLiveHelper;
-import com.easemob.fastlive.fragment.FastLiveAudienceFragment;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
-import com.easemob.livedemo.ui.fast.presenter.FastLiveAudiencePresenterImpl;
+import com.easemob.livedemo.ui.cdn.presenter.CdnLiveAudiencePresenterImpl;
 import com.easemob.livedemo.ui.live.LiveBaseActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveAudienceFragment;
 import com.hyphenate.chat.EMClient;
@@ -49,8 +48,8 @@ import io.agora.rtc2.video.VideoCanvas;
 public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener {
     private static final String TAG = CdnLiveAudienceActivity.class.getSimpleName();
     private LiveAudienceFragment fragment;
-    private FastLiveAudienceFragment fastFragment;
-    private FastLiveAudiencePresenterImpl presenter;
+    private CdnLiveAudienceFragment cdnFragment;
+    private CdnLiveAudiencePresenterImpl presenter;
 
     public static void actionStart(Context context, LiveRoom liveRoom) {
         Intent starter = new Intent(context, CdnLiveAudienceActivity.class);
@@ -99,22 +98,22 @@ public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAud
     }
 
     private void initVideoFragment() {
-        fastFragment = (FastLiveAudienceFragment) getSupportFragmentManager().findFragmentByTag("fast_live_audience_video");
-        presenter = new FastLiveAudiencePresenterImpl();
-        if(fastFragment == null) {
-            EMLog.d(TAG, "not have FastLiveAudienceFragment");
-            fastFragment = new FastLiveAudienceFragment(presenter);
+        cdnFragment = (CdnLiveAudienceFragment) getSupportFragmentManager().findFragmentByTag("fast_live_audience_video");
+        presenter = new CdnLiveAudiencePresenterImpl();
+        if(cdnFragment == null) {
+            EMLog.d(TAG, "not have CdnLiveAudienceFragment");
+            cdnFragment = new CdnLiveAudienceFragment(presenter);
             Bundle bundle = new Bundle();
             bundle.putString("channel", liveRoom.getChannel());
             bundle.putString("roomId", liveRoom.getId());
             bundle.putString("hxId", EMClient.getInstance().getCurrentUser());
             bundle.putString("hxAppkey", EMClient.getInstance().getOptions().getAppKey());
-            fastFragment.setArguments(bundle);
+            cdnFragment.setArguments(bundle);
         }else {
-            EMLog.d(TAG, "already have FastLiveAudienceFragment");
-            fastFragment.setPresenter(presenter);
+            EMLog.d(TAG, "already have CdnLiveAudienceFragment");
+            cdnFragment.setPresenter(presenter);
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_video_fragment, fastFragment, "fast_live_audience_video").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_video_fragment, cdnFragment, "fast_live_audience_video").commit();
     }
 
     @Override
@@ -139,7 +138,7 @@ public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAud
             presenter.leaveChannel();
         }
         EMLog.d(TAG, "onRoomOwnerChangedToCurrentUser newOwner: "+newOwner);
-        FastLiveHostActivity.actionStart(mContext, liveRoom);
+        CdnLiveHostActivity.actionStart(mContext, liveRoom);
         finish();
     }
 }
