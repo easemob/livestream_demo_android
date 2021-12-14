@@ -231,15 +231,16 @@ public class FastLiveHelper {
 
     public void startCdnBroadcast(VideoGridContainer container, int uid, String url, IDirectCdnStreamingEventHandler handler) {
         rtcEngine().enableVideo();
-        rtcEngine().setDirectCdnStreamingVideoConfiguration(encoderConfiguration);
-        DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
-        directCdnStreamingMediaOptions.publishCameraTrack = true;
-        directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
         setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         SurfaceView surfaceView = prepareRtcVideo(uid, true);
         surfaceView.setZOrderMediaOverlay(true);
         container.addUserVideoSurface(uid, surfaceView, true);
         rtcEngine().startPreview();
+
+        rtcEngine().setDirectCdnStreamingVideoConfiguration(encoderConfiguration);
+        DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
+        directCdnStreamingMediaOptions.publishCameraTrack = true;
+        directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
         rtcEngine().startDirectCdnStreaming(handler, url, directCdnStreamingMediaOptions);
         isLiving = true;
     }
@@ -308,8 +309,8 @@ public class FastLiveHelper {
             });
             rtcEngine().setDefaultAudioRoutetoSpeakerphone(true);
         }
-        // mMediaPlayer.stop();
-        // mMediaPlayer.openWithAgoraCDNSrc(url, uid);
+        mMediaPlayer.stop();
+        mMediaPlayer.openWithAgoraCDNSrc(url, uid);
 
         if(lastUid != -1 && lastUid != uid) {
             removeRemoteVideo(lastUid, container);
@@ -319,7 +320,7 @@ public class FastLiveHelper {
             rtcEngine().setupRemoteVideo(new VideoCanvas(
                     surface,
                     VideoCanvas.RENDER_MODE_HIDDEN,
-                    // mMediaPlayer.getMediaPlayerId(),
+                    mMediaPlayer.getMediaPlayerId(),
                     uid
             ));
             container.addUserVideoSurface(uid, surface, false);

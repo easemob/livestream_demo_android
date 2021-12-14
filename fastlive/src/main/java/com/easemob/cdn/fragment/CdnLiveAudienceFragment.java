@@ -99,7 +99,7 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
         this.presenter.runOnUI(new Runnable() {
             @Override
             public void run() {
-                // startCdnPull();
+                startCdnPull();
             }
         });
     }
@@ -125,11 +125,11 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
                 this.presenter.runOnUI(()-> mVideoGridContainer.removeAllVideo());
             }
         }else {
-            this.presenter.runOnUI(()-> helper.setupRemoteVideo(uid, mVideoGridContainer, true));
+            // this.presenter.runOnUI(()-> helper.setupRemoteVideo(uid, mVideoGridContainer, true));
             this.presenter.runOnUI(new Runnable() {
                 @Override
                 public void run() {
-                    // startCdnPull();
+                    startCdnPull();
                 }
             });
         }

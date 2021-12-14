@@ -229,7 +229,7 @@ public class CdnLiveHostFragment extends CdnLiveBaseFragment implements ICdnHost
 
     @Override
     public void onGetCdnUrlSuccess(String cdnUrl) {
-        Log.i(TAG, "getCdnUrlSucess: " + cdnUrl);
+        Log.i(TAG, "getCdnUrlSuccess: " + cdnUrl);
         this.cdnUrl = cdnUrl;
         joinRtcChannel(rtcToken);
     }
@@ -343,12 +343,12 @@ public class CdnLiveHostFragment extends CdnLiveBaseFragment implements ICdnHost
 
     @Override
     public void onDirectCdnStreamingStateChanged(DirectCdnStreamingState directCdnStreamingState, DirectCdnStreamingError directCdnStreamingError, String s) {
-        Log.i(TAG, "onDirectCdnStreamingStateChanged");
+        Log.i(TAG, "onDirectCdnStreamingStateChanged: " + directCdnStreamingState + ", error: " + directCdnStreamingError + ", s: " + s);
     }
 
     @Override
     public void onDirectCdnStreamingStats(DirectCdnStreamingStats directCdnStreamingStats) {
-        Log.i(TAG, "onDirectCdnStreamingStats");
+        Log.i(TAG, "onDirectCdnStreamingStats: " + directCdnStreamingStats);
     }
 }
 
