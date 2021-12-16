@@ -20,6 +20,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 public class VideoTypeFragment extends BaseFragment implements View.OnClickListener {
     private ConstraintLayout clLive;
     private ConstraintLayout clFastLive;
+    private ConstraintLayout clInteractionLive;
 
     @Nullable
     @Override
@@ -38,6 +39,7 @@ public class VideoTypeFragment extends BaseFragment implements View.OnClickListe
     private void initView() {
         clLive = findViewById(R.id.cl_live);
         clFastLive = findViewById(R.id.cl_fast_live);
+        clInteractionLive = findViewById(R.id.cl_interaction_live);
 
         setImageDimen();
     }
@@ -72,6 +74,7 @@ public class VideoTypeFragment extends BaseFragment implements View.OnClickListe
     private void initListener() {
         clLive.setOnClickListener(this);
         clFastLive.setOnClickListener(this);
+        clInteractionLive.setOnClickListener(this);
     }
 
     @Override
@@ -79,10 +82,14 @@ public class VideoTypeFragment extends BaseFragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.cl_live :
                 CdnLivingListActivity.actionStart(mContext);
-                // LivingListActivity.actionStart(mContext);
                 break;
             case R.id.cl_fast_live :
-                FastLivingListActivity.actionStart(mContext);
+                FastLivingListActivity.actionStart(mContext, true);
+                break;
+            case R.id.cl_interaction_live:
+                FastLivingListActivity.actionStart(mContext, false);
+                break;
+            default:
                 break;
         }
     }

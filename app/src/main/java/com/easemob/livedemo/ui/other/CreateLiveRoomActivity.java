@@ -172,6 +172,21 @@ public class CreateLiveRoomActivity extends BaseActivity {
         viewmodel.createLiveRoom(name, desc, coverPath, LiveRoom.Type.agora_speed_live.name());
     }
 
+    @OnClick(R.id.btn_start_interaction_live)
+    void startInteractionLive() {
+        if (!TextUtils.isEmpty(liveNameView.getText())) {
+            name = liveNameView.getText().toString();
+        }
+        if (!TextUtils.isEmpty(liveDescView.getText())) {
+            desc = liveDescView.getText().toString();
+        }
+        if (TextUtils.isEmpty(name)) {
+            showToast(getResources().getString(R.string.em_live_create_room_check_info));
+            return;
+        }
+        viewmodel.createLiveRoom(name, desc, coverPath, LiveRoom.Type.agora_interaction_live.name());
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {

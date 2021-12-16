@@ -241,7 +241,7 @@ public class FastLiveHelper {
         DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
         directCdnStreamingMediaOptions.publishCameraTrack = true;
         directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
-        rtcEngine().startDirectCdnStreaming(handler, url, directCdnStreamingMediaOptions);
+        // rtcEngine().startDirectCdnStreaming(handler, url, directCdnStreamingMediaOptions);
         isLiving = true;
     }
 

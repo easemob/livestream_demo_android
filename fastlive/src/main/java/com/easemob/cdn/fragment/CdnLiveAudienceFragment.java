@@ -90,7 +90,7 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
 
     @Override
     public void onRtcJoinChannelSuccess(String channel, int uid, int elapsed) {
-        Log.i("gaoyuan", "onRtcJoinChannelSuccess channel: "+channel + " uid: "+uid);
+        Log.i(TAG, "onRtcJoinChannelSuccess channel: "+channel + " uid: "+uid);
         try {
             FastPrefManager.getPreferences(mContext).edit().putInt(roomId, uid).commit();
         } catch (Exception e) {
@@ -119,13 +119,13 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
      */
     @Override
     public void onRtcRemoteVideoStateChanged(int uid, int state, int reason, int elapsed) {
-        Log.i("gaoyuan", "onRtcRemoteVideoStateChanged uid: "+uid + " state: "+state);
+        Log.i(TAG, "onRtcRemoteVideoStateChanged uid: "+uid + " state: "+state);
         if(state == Constants.REMOTE_VIDEO_STATE_STOPPED || state == Constants.REMOTE_VIDEO_STATE_FAILED) {
             if(this.presenter.isActive()) {
                 this.presenter.runOnUI(()-> mVideoGridContainer.removeAllVideo());
             }
         }else {
-            // this.presenter.runOnUI(()-> helper.setupRemoteVideo(uid, mVideoGridContainer, true));
+            this.presenter.runOnUI(()-> helper.setupRemoteVideo(uid, mVideoGridContainer, true));
             this.presenter.runOnUI(new Runnable() {
                 @Override
                 public void run() {
@@ -136,7 +136,7 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
     }
 
     private void startCdnPull() {
-        helper.startPullCdn(mVideoGridContainer, this.uid, this.cdnUrl);
+        // helper.startPullCdn(mVideoGridContainer, this.uid, this.cdnUrl);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
     @Override
     public void onGetTokenSuccess(String token, int uid, boolean isRenew) {
         this.uid = uid;
-        Log.i("gaoyuan", "uid: " + uid);
+        Log.i(TAG, "uid: " + uid);
         rtcToken = token;
         if(isRenew) {
             renewToken(token);

@@ -269,6 +269,15 @@ public class DemoHelper {
     }
 
     /**
+     * 判断是否是互动直播
+     * @param videoType
+     * @return
+     */
+    public static boolean isInteractionLiveType(String videoType) {
+        return TextUtils.equals(videoType, LiveRoom.Type.agora_interaction_live.name());
+    }
+
+    /**
      * 判断是否是CDN直播
      * @param videoType
      * @return

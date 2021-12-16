@@ -82,7 +82,6 @@
                 android:layout_marginRight="46dp"
                 android:layout_marginEnd="46dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="18dp"
                 android:background="@drawable/em_create_room_cover_bg_shape"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -179,6 +178,24 @@
                 android:layout_marginRight="46dp"
                 android:layout_marginEnd="46dp"
                 android:text="@string/em_create_fast_room"
+                android:background="@drawable/em_live_create_room_btn_bg_shape"
+                android:textColor="@color/common_white"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btn_start_interaction_live"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_fast_live"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="26dp"
+                android:layout_marginLeft="46dp"
+                android:layout_marginStart="46dp"
+                android:layout_marginRight="46dp"
+                android:layout_marginEnd="46dp"
+                android:text="@string/em_create_interaction_room"
                 android:background="@drawable/em_live_create_room_btn_bg_shape"
                 android:textColor="@color/common_white"
                 android:textSize="18sp" />
