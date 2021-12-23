@@ -213,7 +213,6 @@
         android:foreground="@drawable/em_ripple_click_gray"
         android:text="@string/em_live_user_attentions"
         android:drawableLeft="@drawable/em_live_plus_white"
-        android:drawableStart="@drawable/em_live_plus_white"
         android:paddingLeft="@dimen/em_margin_25"
         android:paddingStart="@dimen/em_margin_25"
         android:textColor="@color/white"

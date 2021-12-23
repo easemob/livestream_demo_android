@@ -301,7 +301,6 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
                     callBack.onError(messageId, code, error);
                 }
                 deleteMuteMsg(messageId, code);
-                mContext.showToast("消息发送失败！errorCode = "+code+"; errorMsg = "+error);
             }
 
             @Override
@@ -324,6 +323,7 @@ public class ChatRoomPresenter implements EMChatRoomChangeListener, EMMessageLis
                 conversation = EMClient.getInstance().chatManager().getConversation(chatroomId, EMConversation.EMConversationType.ChatRoom, true);
             }
             conversation.removeMessage(messageId);
+            mContext.showToast("您已被禁言");
         }
     }
 

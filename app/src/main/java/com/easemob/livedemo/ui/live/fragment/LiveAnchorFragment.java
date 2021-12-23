@@ -157,6 +157,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     @Override
+    protected void AnchorClick() {
+        super.AnchorClick();
+        showUserDetailsDialog(chatroom.getOwner());
+    }
+
+    @Override
     protected void onGiftClick() {
         super.onGiftClick();
         showGiftDialog();
