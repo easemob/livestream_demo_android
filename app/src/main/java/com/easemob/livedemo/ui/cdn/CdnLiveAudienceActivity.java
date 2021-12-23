@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
@@ -66,6 +67,7 @@ public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAud
     @Override
     protected void initView() {
         super.initView();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initFragment();
         initVideoFragment();
     }

@@ -77,6 +77,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         initData();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshList();
+    }
+
     private void initArgument() {
         Bundle bundle = getArguments();
         if(bundle != null) {
