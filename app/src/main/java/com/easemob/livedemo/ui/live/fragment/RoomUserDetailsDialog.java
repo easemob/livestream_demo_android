@@ -174,17 +174,11 @@ public class RoomUserDetailsDialog extends DialogFragment {
 
     private void showLikeNum() {
         String text = DemoHelper.formatNum(DemoHelper.getLikeNum(liveId));
-        if ("0".equals(text)) {
-            text = "900";
-        }
         tvAttentionNum.setText(text);
     }
 
     private void showGiftNum() {
         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-        if (totalNum == 0) {
-            totalNum = 900;
-        }
         tvGiftNum.setText(DemoHelper.formatNum(totalNum));
     }
 
