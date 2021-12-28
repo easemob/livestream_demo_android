@@ -9,12 +9,12 @@
 
     <string name="ease_list_no_data_text">暂无数据</string>
 
-    <string name="em_live_type_normal_title">传统直播</string>
+    <string name="em_live_type_normal_title">融合CDN直播</string>
     <string name="em_live_type_interaction_title">互动直播</string>
-    <string name="em_live_type_normal_introduction">单直播间百万观众，适合弱互动，对延迟没有要求的场景</string>
+    <string name="em_live_type_normal_introduction">超低卡顿、全链路质量透明的标准 CDN 直播</string>
     <string name="em_live_type_fast_title">极速直播</string>
-    <string name="em_live_type_fast_introduction">直播延时小于 3 秒，适用于直播答题，互动大班课</string>
-    <string name="em_live_type_interaction_introduction">快速实现超低延时互动直播功能，支持 17 人实时连麦，百万人大频道实时互动</string>
+    <string name="em_live_type_fast_introduction">低延时、强同步、高质量直播，观众与主播进行低频音视频互动</string>
+    <string name="em_live_type_interaction_introduction">超低延时直播，观众频繁上麦与主播进行实时音视频互动</string>
 
     <string name="em_live_list_all_title">选择聊天室开始直播</string>
     <string name="em_live_list_living">直播大厅</string>
