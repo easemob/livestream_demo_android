@@ -69,6 +69,10 @@ public class VideoTypeFragment extends BaseFragment implements View.OnClickListe
         ViewGroup.LayoutParams FastParams = clFastLive.getLayoutParams();
         FastParams.height = (int) itemRealHeight;
         FastParams.width = (int) itemRealWidth;
+
+        ViewGroup.LayoutParams interactionParams = clInteractionLive.getLayoutParams();
+        interactionParams.height = (int) itemRealHeight;
+        interactionParams.width = (int) itemRealWidth;
     }
 
     private void initListener() {
