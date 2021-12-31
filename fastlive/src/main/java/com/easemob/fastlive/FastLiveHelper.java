@@ -9,11 +9,25 @@ import com.easemob.fastlive.rtc.RtcEventHandler;
 import com.easemob.fastlive.stats.StatsManager;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 
-import io.agora.rtc.Constants;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.models.ClientRoleOptions;
-import io.agora.rtc.video.VideoCanvas;
-import io.agora.rtc.video.VideoEncoderConfiguration;
+import java.util.Locale;
+
+import io.agora.mediaplayer.IMediaPlayer;
+import io.agora.mediaplayer.IMediaPlayerObserver;
+import io.agora.mediaplayer.data.PlayerUpdatedInfo;
+import io.agora.mediaplayer.data.SrcInfo;
+import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.DirectCdnStreamingMediaOptions;
+import io.agora.rtc2.IDirectCdnStreamingEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
+
+import static android.content.ContentValues.TAG;
+import static io.agora.rtc2.Constants.CLIENT_ROLE_BROADCASTER;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * Agora极速直播的帮助类
@@ -26,6 +40,13 @@ public class FastLiveHelper {
     private boolean isPaused;//是否暂停了
     private boolean isLiving;//是否正在直播
     private int lastUid = -1;
+    private final VideoEncoderConfiguration encoderConfiguration = new VideoEncoderConfiguration(
+            VD_640x360,
+            FRAME_RATE_FPS_15,
+            700,
+            ORIENTATION_MODE_FIXED_PORTRAIT
+    );
+    private IMediaPlayer mMediaPlayer;
 
     private static class FastLiveHelperInstance {
         private static final FastLiveHelper instance = new FastLiveHelper();
@@ -148,9 +169,9 @@ public class FastLiveHelper {
      */
     public void setClientRole(int role) {
         if(role == Constants.CLIENT_ROLE_AUDIENCE) {
-            ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
-            clientRoleOptions.audienceLatencyLevel = getEngineConfig().isLowLatency() ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
-            rtcEngine().setClientRole(role, clientRoleOptions);
+            // ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
+            // clientRoleOptions.audienceLatencyLevel = getEngineConfig().isLowLatency() ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
+            rtcEngine().setClientRole(role);
         }else {
             rtcEngine().setClientRole(role);
         }
@@ -167,7 +188,12 @@ public class FastLiveHelper {
         setClientRole(role);
         rtcEngine().enableVideo();
         configVideo();
-        rtcEngine().joinChannel(token, getEngineConfig().getChannelName(), null, uid);
+        // rtcEngine().joinChannel(token, getEngineConfig().getChannelName(), null, uid);
+        ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();
+        channelMediaOptions.publishAudioTrack = true;
+        channelMediaOptions.publishCameraTrack = true;
+        channelMediaOptions.clientRoleType = role;
+        rtcEngine().joinChannel(token, getEngineConfig().getChannelName(), uid, channelMediaOptions);
     }
 
     /**
@@ -185,7 +211,7 @@ public class FastLiveHelper {
                 VideoEncoderConfiguration.STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
         );
-        configuration.mirrorMode = FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorEncodeIndex()];
+        // configuration.mirrorMode = FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorEncodeIndex()];
         rtcEngine().setVideoEncoderConfiguration(configuration);
     }
 
@@ -193,13 +219,123 @@ public class FastLiveHelper {
      * 主播开始直播
      * @param container
      */
-    public void startBroadcast(VideoGridContainer container) {
+    public void startBroadcast(VideoGridContainer container, int uid) {
         rtcEngine().enableVideo();
         setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
-        SurfaceView surfaceView = prepareRtcVideo(0, true);
+        SurfaceView surfaceView = prepareRtcVideo(uid, true);
         surfaceView.setZOrderMediaOverlay(true);
-        container.addUserVideoSurface(0, surfaceView, true);
+        container.addUserVideoSurface(uid, surfaceView, true);
+        rtcEngine().startPreview();
         isLiving = true;
+    }
+
+    public void startCdnBroadcast(VideoGridContainer container, int uid, String url, IDirectCdnStreamingEventHandler handler) {
+        rtcEngine().enableVideo();
+        setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
+        SurfaceView surfaceView = prepareRtcVideo(uid, true);
+        surfaceView.setZOrderMediaOverlay(true);
+        container.addUserVideoSurface(uid, surfaceView, true);
+        rtcEngine().startPreview();
+
+        rtcEngine().setDirectCdnStreamingVideoConfiguration(encoderConfiguration);
+        DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
+        directCdnStreamingMediaOptions.publishCameraTrack = true;
+        directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
+        // rtcEngine().startDirectCdnStreaming(handler, url, directCdnStreamingMediaOptions);
+        isLiving = true;
+    }
+
+    public void startPullCdn(VideoGridContainer container, int uid, String url) {
+        setClientRole(Constants.CLIENT_ROLE_AUDIENCE);
+        rtcEngine().enableVideo();
+        if(mMediaPlayer == null){
+            mMediaPlayer = rtcEngine().createMediaPlayer();
+            mMediaPlayer.registerPlayerObserver(new IMediaPlayerObserver() {
+                @Override
+                public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
+                    Log.d(TAG, "MediaPlayer onPlayerStateChanged -- url=" + mMediaPlayer.getPlaySrc() + "state=" + mediaPlayerState + ", error=" + mediaPlayerError);
+                    if (mediaPlayerState == io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED) {
+                        if (mMediaPlayer != null) {
+                            mMediaPlayer.play();
+                        }
+                    }
+                }
+
+                @Override
+                public void onPositionChanged(long l) {
+
+                }
+
+                @Override
+                public void onPlayerEvent(io.agora.mediaplayer.Constants.MediaPlayerEvent mediaPlayerEvent, long l, String s) {
+
+                }
+
+                @Override
+                public void onMetaData(io.agora.mediaplayer.Constants.MediaPlayerMetadataType mediaPlayerMetadataType, byte[] bytes) {
+
+                }
+
+                @Override
+                public void onPlayBufferUpdated(long l) {
+
+                }
+
+                @Override
+                public void onPreloadEvent(String s, io.agora.mediaplayer.Constants.MediaPlayerPreloadEvent mediaPlayerPreloadEvent) {
+
+                }
+
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onAgoraCDNTokenWillExpire() {
+
+                }
+
+                @Override
+                public void onPlayerSrcInfoChanged(SrcInfo srcInfo, SrcInfo srcInfo1) {
+
+                }
+
+                @Override
+                public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+                }
+
+            });
+            rtcEngine().setDefaultAudioRoutetoSpeakerphone(true);
+        }
+        mMediaPlayer.stop();
+        mMediaPlayer.openWithAgoraCDNSrc(url, uid);
+
+        if(lastUid != -1 && lastUid != uid) {
+            removeRemoteVideo(lastUid, container);
+        }
+        if(!container.containUid(uid)) {
+            SurfaceView surface = RtcEngine.CreateRendererView(mContext);
+            rtcEngine().setupRemoteVideo(new VideoCanvas(
+                    surface,
+                    VideoCanvas.RENDER_MODE_HIDDEN,
+                    mMediaPlayer.getMediaPlayerId(),
+                    uid
+            ));
+            container.addUserVideoSurface(uid, surface, false);
+        }
+        lastUid = uid;
+        isLiving = true;
+    }
+
+    public void stopDirectCDNStreaming(Runnable onDirectCDNStopped) {
+        if (rtcEngine() == null) {
+            return;
+        }
+        rtcEngine().disableVideo();
+        // pendingDirectCDNStoppedRun = onDirectCDNStopped;
+        rtcEngine().stopDirectCdnStreaming();
     }
 
     /**
@@ -276,21 +412,23 @@ public class FastLiveHelper {
         SurfaceView surface = RtcEngine.CreateRendererView(mContext);
         if (local) {
             rtcEngine().setupLocalVideo(
-                    new VideoCanvas(
-                            surface,
-                            VideoCanvas.RENDER_MODE_HIDDEN,
-                            0,
-                            FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorLocalIndex()]
-                    )
+                    // new VideoCanvas(
+                    //         surface,
+                    //         VideoCanvas.RENDER_MODE_HIDDEN,
+                    //         0,
+                    //         FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorLocalIndex()]
+                    // )
+                    new VideoCanvas(surface, VideoCanvas.RENDER_MODE_HIDDEN, uid)
             );
         } else {
             rtcEngine().setupRemoteVideo(
-                    new VideoCanvas(
-                            surface,
-                            VideoCanvas.RENDER_MODE_HIDDEN,
-                            uid,
-                            FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorRemoteIndex()]
-                    )
+                    // new VideoCanvas(
+                    //         surface,
+                    //         VideoCanvas.RENDER_MODE_HIDDEN,
+                    //         uid,
+                    //         FastConstants.VIDEO_MIRROR_MODES[getEngineConfig().getMirrorRemoteIndex()]
+                    // )
+                    new VideoCanvas(surface, VideoCanvas.RENDER_MODE_HIDDEN, uid)
             );
         }
         return surface;

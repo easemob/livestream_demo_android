@@ -5,6 +5,7 @@ import android.util.Log;
 import com.easemob.livedemo.BuildConfig;
 import com.easemob.livedemo.common.LoggerInterceptor;
 import com.easemob.livedemo.data.model.AgoraTokenBean;
+import com.easemob.livedemo.data.model.CdnUrlBean;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.hyphenate.chat.EMClient;
 
@@ -77,7 +78,17 @@ public class LiveManager {
     }
 
     public Response<AgoraTokenBean> getAgoraToken(String hxId, String channel, String hxAppkey, int uid) throws LiveException {
-        return handleResponseCall(apiService.getAgoraTokenByHx(hxId, channel, hxAppkey, uid));
+        return handleResponseCall(apiService.getAgoraTokenByHx(hxId, channel, hxAppkey));
+    }
+
+    public Response<CdnUrlBean> getCdnPushUrl(String channelId) throws LiveException {
+        return handleResponseCall(apiService.getCdnPushUrl("ws1-rtmp-push.easemob.com",
+                "live", channelId, 86400));
+    }
+
+    public Response<CdnUrlBean> getCdnPullUrl(String channelId) throws LiveException {
+        return handleResponseCall(apiService.getCdnPullUrl("rtmp", "ws1-rtmp-push.easemob.com",
+                "live", channelId));
     }
 
     private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException{

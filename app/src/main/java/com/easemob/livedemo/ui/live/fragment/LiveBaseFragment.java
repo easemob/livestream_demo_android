@@ -711,6 +711,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if(barrageLayout != null) {
             barrageLayout.destroy();
         }
+        RoomUserDetailsDialog.sAttentionClicked = false;
         DemoMsgHelper.getInstance().removeCustomMsgLisenter();
     }
 }

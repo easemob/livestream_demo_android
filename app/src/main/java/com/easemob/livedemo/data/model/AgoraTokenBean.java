@@ -3,6 +3,7 @@ package com.easemob.livedemo.data.model;
 public class AgoraTokenBean {
     private String code;
     private String accessToken;
+    private int agoraUserId;
     private double expireTime;
 
     public String getCode() {
@@ -27,6 +28,14 @@ public class AgoraTokenBean {
 
     public void setExpireTime(double expireTime) {
         this.expireTime = expireTime;
+    }
+
+    public int getAgoraUserId() {
+        return agoraUserId;
+    }
+
+    public void setAgoraUserId(int agoraUserId) {
+        this.agoraUserId = agoraUserId;
     }
 }
 

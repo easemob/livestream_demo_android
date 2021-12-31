@@ -11,26 +11,26 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.FastPrefManager;
 import com.easemob.fastlive.R;
 import com.easemob.fastlive.presenter.FastHostPresenter;
 import com.easemob.fastlive.presenter.IFastHostView;
 import com.easemob.fastlive.stats.LocalStatsData;
-
-import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
-import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.widgets.VideoGridContainer;
+
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
 
 /**
  * 一、主播开始直播的流程如下：
  * （1）初始化 RtcEngine。一般放置在程序入口处即可，见DemoApplication中的initAgora()方法，具体调用为{@link FastLiveHelper#init(Context, String)}
- * （2）设置频道场景。本demo中此逻辑在{@link FastLiveHelper#init(Context, String)}中，具体在{@link io.agora.rtc.RtcEngine#setChannelProfile(int)},
+ * （2）设置频道场景。本demo中此逻辑在{@link FastLiveHelper#init(Context, String)}中，具体在{@link io.agora.rtc2.RtcEngine#setChannelProfile(int)},
  *      直播场景设置为{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
  * （3）获取声网token。这个一般调用app server相关接口，从服务器获取。如果在声网console中设置为不校验token可以不进行此步。
  * （4）加入channel并设置用户角色。这里涉及到channel的生成，本demo中channel是从服务端随房间信息返回的。
- *      加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc.RtcEngine#setClientRole(int)}
- * （5）在满足下面的开播的两个条件后，可以开始直播{@link FastLiveHelper#startBroadcast(VideoGridContainer)} 。
+ *      加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc2.RtcEngine#setClientRole(int)}
+ * （5）在满足下面的开播的两个条件后，可以开始直播{@link FastLiveHelper#startBroadcast(VideoGridContainer, int)} 。
  *      上述方法中的有如下逻辑：（1）设置用户角色。（2）设置本地视图。
  * 二、开始直播的两个条件：
  * （1）加入直播间并将状态置为直播状态，回调方法为{@link #onStartBroadcast()}
@@ -145,10 +145,14 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     @Override
     public void onRtcStats(IRtcEngineEventHandler.RtcStats stats) {
         Log.i(TAG, "onRtcStats");
-        if (!helper.getStatsManager().isEnabled()) return;
+        if (!helper.getStatsManager().isEnabled()) {
+            return;
+        }
 
         LocalStatsData data = (LocalStatsData) helper.getStatsManager().getStatsData(0);
-        if (data == null) return;
+        if (data == null) {
+            return;
+        }
 
         data.setLastMileDelay(stats.lastmileDelay);
         data.setVideoSendBitrate(stats.txVideoKBitRate);
@@ -197,7 +201,8 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     }
 
     @Override
-    public void onGetTokenSuccess(String token, boolean isRenew) {
+    public void onGetTokenSuccess(String token, int uid, boolean isRenew) {
+        this.uid = uid;
         rtcToken = token;
         if(isRenew) {
             renewToken(token);
@@ -246,7 +251,7 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     private void startBroadcast() {
         isRoomReady = false;
         isTokenReady = false;
-        helper.startBroadcast(mVideoGridContainer);
+        helper.startBroadcast(mVideoGridContainer, uid);
     }
 
     public void setPresenter(FastHostPresenter presenter) {

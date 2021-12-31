@@ -30,10 +30,7 @@ import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.ui.base.GridMarginDecoration;
 import com.easemob.livedemo.ui.live.adapter.LiveListAdapter;
 import com.easemob.livedemo.ui.base.BaseFragment;
-import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.viewmodels.LiveListViewModel;
-import com.easemob.qiniu_sdk.OnCallBack;
-import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
@@ -78,6 +75,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         super.onActivityCreated(savedInstanceState);
         initListener();
         initData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshList();
     }
 
     private void initArgument() {
@@ -216,13 +219,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         boolean living = DemoHelper.isLiving(status);
         if(living) {
             if(TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
-                LiveAnchorActivity.actionStart(mContext, liveRoom);
+                // LiveAnchorActivity.actionStart(mContext, liveRoom);
             }else {
                 showDialog();
             }
-
         }else {
-            LiveAnchorActivity.actionStart(mContext, liveRoom);
+            // LiveAnchorActivity.actionStart(mContext, liveRoom);
         }
     }
 

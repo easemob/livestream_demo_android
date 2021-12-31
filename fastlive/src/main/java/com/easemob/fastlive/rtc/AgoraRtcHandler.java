@@ -3,7 +3,7 @@ package com.easemob.fastlive.rtc;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.agora.rtc.IRtcEngineEventHandler;
+import io.agora.rtc2.IRtcEngineEventHandler;
 
 /**
  * Agora {@link IRtcEngineEventHandler}接口参考文档：

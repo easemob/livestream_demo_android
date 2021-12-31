@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import com.easemob.fastlive.rtc.AgoraRtcHandler;
 import com.easemob.fastlive.rtc.RtcEventHandler;
 
-import io.agora.rtc.Constants;
-import io.agora.rtc.RtcEngine;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.RtcEngine;
 
 public class AgoraEngine {
     private static final String TAG = AgoraEngine.class.getSimpleName();

@@ -7,7 +7,7 @@ import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.rtc.RtcEventHandler;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 
-import io.agora.rtc.Constants;
+import io.agora.rtc2.Constants;
 
 public abstract class FastLiveBaseFragment extends FastBaseFragment implements RtcEventHandler {
     protected String channel;

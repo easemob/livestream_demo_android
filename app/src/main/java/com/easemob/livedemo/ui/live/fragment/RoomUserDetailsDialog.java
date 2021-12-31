@@ -3,6 +3,7 @@ package com.easemob.livedemo.ui.live.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,6 +40,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
@@ -50,6 +52,7 @@ import butterknife.Unbinder;
  * Created by wei on 2016/7/25.
  */
 public class RoomUserDetailsDialog extends DialogFragment {
+    static boolean sAttentionClicked;
 
     Unbinder unbinder;
     @BindView(R.id.tv_username)
@@ -72,6 +75,8 @@ public class RoomUserDetailsDialog extends DialogFragment {
     TextView tvWhiteStatus;
     @BindView(R.id.iv_close)
     ImageView ivClose;
+    @BindView(R.id.btn_attention)
+    Button btnAttention;
 
     private BaseActivity mContext;
     private String username;
@@ -137,16 +142,39 @@ public class RoomUserDetailsDialog extends DialogFragment {
 
         if(TextUtils.equals(username, liveRoom.getOwner())) {
             //设置礼物及点赞数
+            showFansNum();
             showGiftNum();
-
             showLikeNum();
         }
 
         //mentionBtn.setText("@TA");
+        btnAttention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sAttentionClicked = true;
+                setBtnAttentionChecked();
+            }
+        });
+        if (sAttentionClicked) {
+            setBtnAttentionChecked();
+        }
+    }
+
+    private void setBtnAttentionChecked() {
+        btnAttention.setText("已关注");
+        btnAttention.setTextColor(getResources().getColor(R.color.author_background));
+        btnAttention.setBackgroundColor(Color.TRANSPARENT);
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_done_24, null);
+        btnAttention.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+    }
+
+    private void showFansNum() {
+        tvFanNum.setText("200");
     }
 
     private void showLikeNum() {
-        tvAttentionNum.setText(DemoHelper.formatNum(DemoHelper.getLikeNum(liveId)));
+        String text = DemoHelper.formatNum(DemoHelper.getLikeNum(liveId));
+        tvAttentionNum.setText(text);
     }
 
     private void showGiftNum() {

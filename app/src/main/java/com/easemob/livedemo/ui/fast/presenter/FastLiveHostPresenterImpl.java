@@ -43,7 +43,7 @@ public class FastLiveHostPresenterImpl extends FastHostPresenter {
                 Response<AgoraTokenBean> response = LiveManager.getInstance().getAgoraToken(hxId, channel, hxAppkey, uid);
                 runOnUI(()-> {
                     if(isActive()) {
-                        mView.onGetTokenSuccess(response.body().getAccessToken(), isRenew);
+                        mView.onGetTokenSuccess(response.body().getAccessToken(), response.body().getAgoraUserId(), isRenew);
                     }
                 });
             } catch (LiveException e) {

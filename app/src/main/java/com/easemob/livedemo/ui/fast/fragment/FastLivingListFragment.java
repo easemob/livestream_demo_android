@@ -7,22 +7,24 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.ui.fast.FastLiveAudienceActivity;
-import com.easemob.livedemo.ui.live.LiveAudienceActivity;
+import com.easemob.livedemo.ui.fast.FastLivingListActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveListFragment;
 
 import java.util.List;
 
 public class FastLivingListFragment extends LiveListFragment {
     private List<LiveRoom> vodList;
-    private static final int MAX_VOD_COUNT = 2;
+    private static final int MAX_VOD_COUNT = 10;
+    private boolean isFast;
 
     @Override
     public void onItemClick(View view, int position) {
         LiveRoom liveRoom = adapter.getItem(position);
-        if(DemoHelper.isFastLiveType(liveRoom.getVideo_type())) {
+        if (DemoHelper.isFastLiveType(liveRoom.getVideo_type())
+                || DemoHelper.isInteractionLiveType(liveRoom.getVideo_type())) {
             FastLiveAudienceActivity.actionStart(mContext, liveRoom);
-        }else {
-            LiveAudienceActivity.actionStart(mContext, liveRoom);
+        } else {
+            // LiveAudienceActivity.actionStart(mContext, liveRoom);
         }
     }
 
@@ -52,13 +54,13 @@ public class FastLivingListFragment extends LiveListFragment {
                     cursor = data.cursor;
                     hasMoreData = true;
                     List<LiveRoom> livingRooms = data.data;
-                    if(livingRooms.size() < pageSize) {
+                    if (livingRooms.size() < pageSize) {
                         hasMoreData = false;
                     }
-                    if(isLoadMore) {
+                    if (isLoadMore) {
                         adapter.addData(livingRooms);
-                    }else {
-                        if(vodList != null && livingRooms != null) {
+                    } else {
+                        if (vodList != null && livingRooms != null) {
                             livingRooms.addAll(0, vodList);
                         }
                         adapter.setData(livingRooms);
@@ -76,13 +78,24 @@ public class FastLivingListFragment extends LiveListFragment {
 
     @Override
     protected void initData() {
+        if (getArguments() != null) {
+            isFast = getArguments().getBoolean(FastLivingListActivity.EXTRA_IS_FAST);
+        }
         swipeRefreshLayout.setRefreshing(true);
-        viewModel.getFastVodRoomList(MAX_VOD_COUNT, null);
+        if (isFast) {
+            viewModel.getFastVodRoomList(MAX_VOD_COUNT, null);
+        } else {
+            viewModel.getInteractionVodRoomList(MAX_VOD_COUNT, null);
+        }
     }
 
     @Override
     protected void refreshList() {
-        viewModel.getFastVodRoomList(MAX_VOD_COUNT, null);
+        if (isFast) {
+            viewModel.getFastVodRoomList(MAX_VOD_COUNT, null);
+        } else {
+            viewModel.getInteractionVodRoomList(MAX_VOD_COUNT, null);
+        }
     }
 
     @Override

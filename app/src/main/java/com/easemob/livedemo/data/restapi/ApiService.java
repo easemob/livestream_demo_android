@@ -3,6 +3,7 @@ package com.easemob.livedemo.data.restapi;
 import androidx.lifecycle.LiveData;
 
 import com.easemob.livedemo.data.model.AgoraTokenBean;
+import com.easemob.livedemo.data.model.CdnUrlBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.model.LiveRoomUrlBean;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
@@ -113,7 +114,13 @@ public interface ApiService {
      * @param hxAppkey 环信的appkey
      * @return
      */
-    @GET("token/liveToken/")
-    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey, @Query("uid") int uid);
+    @GET("token/rtcToken/v1")
+    // Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey, @Query("uid") int uid);
+    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey);
 
+    @GET("appserver/agora/cdn/streams/url/push")
+    Call<CdnUrlBean> getCdnPushUrl(@Query("domain")String domain, @Query("pushPoint")String pushPoint, @Query("streamKey")String streamKey, @Query("expire")int expire);
+
+    @GET("appserver/agora/cdn/streams/url/play")
+    Call<CdnUrlBean> getCdnPullUrl(@Query("protocol")String protocol, @Query("domain")String domain, @Query("pushPoint")String pushPoint, @Query("streamKey")String streamKey);
 }

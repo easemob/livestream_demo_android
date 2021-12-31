@@ -7,11 +7,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,8 +25,8 @@ import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.base.BaseActivity;
+import com.easemob.livedemo.ui.cdn.CdnLiveHostActivity;
 import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
-import com.easemob.livedemo.ui.live.LiveAnchorActivity;
 import com.easemob.livedemo.ui.live.fragment.DemoListDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
 import com.hyphenate.chat.EMClient;
@@ -37,6 +37,8 @@ import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +68,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
     protected File cameraFile;
     private String name;
     private String desc;
+    private Uri mCacheUri;
 
     public static void actionStart(Context context) {
         Intent starter = new Intent(context, CreateLiveRoomActivity.class);
@@ -97,7 +100,8 @@ public class CreateLiveRoomActivity extends BaseActivity {
                     if(DemoHelper.isFastLiveType(data.getVideo_type())) {
                         FastLiveHostActivity.actionStart(mContext, data);
                     }else {
-                        LiveAnchorActivity.actionStart(mContext, data);
+                        // LiveAnchorActivity.actionStart(mContext, data);
+                        CdnLiveHostActivity.actionStart(mContext, data);
                     }
                     finish();
                 }
@@ -154,7 +158,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
             showToast(getResources().getString(R.string.em_live_create_room_check_info));
             return;
         }
-        viewmodel.createLiveRoom(name, desc, coverPath);
+        viewmodel.createLiveRoom(name, desc, coverPath, LiveRoom.Type.agora_cdn_live.name());
     }
 
     @OnClick(R.id.btn_start_fast_live)
@@ -172,6 +176,21 @@ public class CreateLiveRoomActivity extends BaseActivity {
         viewmodel.createLiveRoom(name, desc, coverPath, LiveRoom.Type.agora_speed_live.name());
     }
 
+    @OnClick(R.id.btn_start_interaction_live)
+    void startInteractionLive() {
+        if (!TextUtils.isEmpty(liveNameView.getText())) {
+            name = liveNameView.getText().toString();
+        }
+        if (!TextUtils.isEmpty(liveDescView.getText())) {
+            desc = liveDescView.getText().toString();
+        }
+        if (TextUtils.isEmpty(name)) {
+            showToast(getResources().getString(R.string.em_live_create_room_check_info));
+            return;
+        }
+        viewmodel.createLiveRoom(name, desc, coverPath, LiveRoom.Type.agora_interaction_live.name());
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -182,9 +201,9 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 startPhotoZoom(data.getData());
                 break;
             case REQUEST_CODE_CUTTING:
-                if (data != null) {
+                // if (data != null) {
                     setPicToView(data);
-                }
+                // }
                 break;
             case REQUEST_CODE_CAMERA:
                 if (cameraFile != null && cameraFile.exists()) {
@@ -270,7 +289,8 @@ public class CreateLiveRoomActivity extends BaseActivity {
     }
 
     private void startPhotoZoom(Uri uri) {
-        cacheFile = new File(getExternalCacheDir(), "cover_temp.jpg");
+        // cacheFile = new File(getCacheDir(), "cover_temp.jpg");
+        mCacheUri = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + System.currentTimeMillis() + ".jpg");
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setDataAndType(uri, "image/*");
@@ -279,7 +299,8 @@ public class CreateLiveRoomActivity extends BaseActivity {
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", 450);
         intent.putExtra("outputY", 450);
-        intent.putExtra("output", Uri.fromFile(cacheFile));
+        // intent.putExtra("output", Uri.fromFile(cacheFile));
+        intent.putExtra("output", mCacheUri);
         intent.putExtra("outputFormat", "JPEG");
         intent.putExtra("return-data", false);
         intent.putExtra("noFaceDetection", true);
@@ -291,11 +312,17 @@ public class CreateLiveRoomActivity extends BaseActivity {
      */
     private void setPicToView(Intent picdata) {
         //Uri uri = picdata.getData();
-        coverPath = cacheFile.getAbsolutePath();
-        if (coverPath != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
-            coverView.setImageBitmap(bitmap);
-            hintView.setVisibility(View.INVISIBLE);
+        try {
+            coverPath = new File(new URI(mCacheUri.toString())).getPath();
+            if (coverPath != null) {
+                Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
+                coverView.setImageBitmap(bitmap);
+                hintView.setVisibility(View.INVISIBLE);
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

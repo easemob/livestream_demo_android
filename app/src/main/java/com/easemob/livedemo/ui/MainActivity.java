@@ -27,16 +27,9 @@ import com.easemob.livedemo.runtimepermissions.PermissionsManager;
 import com.easemob.livedemo.runtimepermissions.PermissionsResultAction;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
 import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
-import com.easemob.livedemo.ui.live.LiveAllActivity;
-import com.easemob.livedemo.ui.live.LiveAnchorActivity;
-import com.easemob.livedemo.ui.live.fragment.LiveListFragment;
-import com.easemob.livedemo.ui.live.fragment.LivingListFragment;
-import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.ui.other.CreateLiveRoomActivity;
 import com.easemob.livedemo.ui.other.LoginActivity;
 import com.easemob.livedemo.ui.other.fragment.AboutMeFragment;
-import com.easemob.qiniu_sdk.OnCallBack;
-import com.easemob.qiniu_sdk.PushStreamHelper;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -79,7 +72,6 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         skipToTarget(position);
         Log.e("TAG", "user = "+EMClient.getInstance().getCurrentUser());
         requestPermissions();
-        checkoutLiving();
     }
 
     private void requestPermissions() {
@@ -94,37 +86,6 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
                 //Toast.makeText(MainActivity.this, "Permission " + permission + " has been denied", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void checkoutLiving() {
-        String liveId = DemoHelper.getLivingId();
-        if(TextUtils.isEmpty(liveId)) {
-            return;
-        }
-        LivingViewModel viewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
-        viewModel.getRoomDetailObservable().observe(mContext, response -> {
-            parseResource(response, new OnResourceParseCallback<LiveRoom>(true) {
-                @Override
-                public void onSuccess(LiveRoom data) {
-                    if(DemoHelper.isFastLiveType(data.getVideo_type())) {
-                        FastLiveHostActivity.actionStart(mContext, data);
-                    }else {
-                        LiveAnchorActivity.actionStart(mContext, data);
-                    }
-
-                }
-
-                @Override
-                public void onError(int code, String message) {
-                    super.onError(code, message);
-                    if(code == 404) {
-                        DemoHelper.removeTarget(liveId);
-                        DemoHelper.removeSaveLivingId();
-                    }
-                }
-            });
-        });
-        viewModel.getLiveRoomDetails(liveId);
     }
 
     @Override
@@ -167,20 +128,6 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
             mHomeFragment = new VideoTypeFragment();
         }
         replace(mHomeFragment, "home");
-    }
-
-    private void switchToLiveList() {
-        startAnimation(1f, 0.9f, 1f, 0.9f);
-        ivHomeHome.setImageResource(R.drawable.em_live_home_unselected);
-        ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
-        mLiveListFragment = getSupportFragmentManager().findFragmentByTag("live_list");
-        if(mLiveListFragment == null) {
-            mLiveListFragment = new LiveListFragment();
-        }
-        Bundle bundle = new Bundle();
-        bundle.putString("status", "all");
-        mLiveListFragment.setArguments(bundle);
-        replace(mLiveListFragment, "live_list");
     }
 
     private void switchToAboutMe() {

@@ -12,10 +12,12 @@ import com.easemob.livedemo.ui.other.CreateLiveRoomActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class FastLivingListActivity extends BaseLiveActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener {
+    public static final String EXTRA_IS_FAST = "isFast";
     private EaseTitleBar titleBar;
 
-    public static void actionStart(Context context) {
+    public static void actionStart(Context context, boolean isFast) {
         Intent intent = new Intent(context, FastLivingListActivity.class);
+        intent.putExtra(EXTRA_IS_FAST, isFast);
         context.startActivity(intent);
     }
 
@@ -28,7 +30,12 @@ public class FastLivingListActivity extends BaseLiveActivity implements EaseTitl
     protected void initView() {
         super.initView();
         titleBar = findViewById(R.id.title_bar);
-        titleBar.setTitle(getString(R.string.em_live_type_fast_title));
+        boolean isFast = getIntent().getBooleanExtra(EXTRA_IS_FAST, true);
+        if (isFast) {
+            titleBar.setTitle(getString(R.string.em_live_type_fast_title));
+        } else {
+            titleBar.setTitle(getString(R.string.em_live_type_interaction_title));
+        }
     }
 
     @Override
@@ -41,9 +48,11 @@ public class FastLivingListActivity extends BaseLiveActivity implements EaseTitl
     @Override
     protected void initData() {
         super.initData();
+        boolean isFast = getIntent().getBooleanExtra(EXTRA_IS_FAST, true);
         FastLivingListFragment fragment = new FastLivingListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("status", "ongoing");
+        bundle.putBoolean(EXTRA_IS_FAST, isFast);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment).commit();
     }
