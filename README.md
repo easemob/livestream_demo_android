@@ -117,28 +117,22 @@ public boolean isBarrageMsg(EMMessage msg); //弹幕消息判断
 环信聊天室中有两个repository，EmClientRepository及AppServerRepository。其中EmClientRepository用户处理环信SDK提供     的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管    理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。</br>
 
 ## 集成视频直播SDK
-环信聊天室提供了两种直播类型：**传统直播**和**极速直播**
+环信聊天室提供了多种直播类型：
 
-#### [极速直播](https://github.com/easemob/livestream_demo_android/blob/master/fastlive/fastlive.md)
-直播延时小于3秒，适用于直播答题、互动大班课等对延迟有较高要求的场景。</br>
-环信聊天室在极速直播中以集成声网极速直播为例，展示了极速直播与聊天室结合的场景。</br>
-声网极速直播集成文档：[声网极速直播](https://github.com/easemob/livestream_demo_android/blob/master/fastlive/fastlive.md)
+#### [融合CDN直播](https://docs.agora.io/cn/fusion-cdn-streaming/landing-page?platform=RESTful)
+超低卡顿、全链路质量透明的标准 CDN 直播
 
+#### [极速直播](https://docs.agora.io/cn/live-streaming/landing-page?platform=Android)
+低延时、强同步、高质量直播，观众与主播进行低频音视频互动
 
-#### [传统直播](https://github.com/easemob/livestream_demo_android/blob/master/qiniu_sdk/qiniu.md)
-单直播间可达百万观众，适合弱互动，对延迟没有要求的场景。</br>
-环信聊天室在传统直播中以集成七牛直播SDK为例，展示了传统直播与聊天室结合的场景。</br>
-七牛直播集成文档：[七牛直播](https://github.com/easemob/livestream_demo_android/blob/master/qiniu_sdk/qiniu.md)
+#### [互动直播](https://docs.agora.io/cn/Interactive%20Broadcast/landing-page?platform=Android)
+超低延时直播，观众频繁上麦与主播进行实时音视频互动
 
 ## 文档
 - [iOS端开源地址](https://github.com/easemob/livestream_demo_ios)
 - [App Server开源地址](https://github.com/easemob/easemob-im-app-server)
 - [环信直播聊天室集成介绍](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
 - [环信Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)
-- [声网极速直播快速集成](https://docs.agora.io/cn/live-streaming/start_live_standard_android?platform=Android)
-- [七牛Android播放端SDK介绍](https://developer.qiniu.com/pili/1210/the-android-client-sdk)
-- [七牛Android推流端SDK介绍](https://developer.qiniu.com/pili/3718/PLDroidMediaStreaming-quick-start)
-
 
 ## 针对非AndroidX构建的方案 ##
 ### 一、在非AndroidX构建的情况下运行demo，可进行如下工作：
