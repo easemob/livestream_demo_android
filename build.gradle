@@ -2,9 +2,10 @@
 apply from: "config.gradle"
 buildscript {
   repositories {
-    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
-    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+//    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
+//    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
     google()
+    mavenCentral()
     jcenter()
   }
   dependencies {
@@ -18,9 +19,10 @@ buildscript {
 
 allprojects {
   repositories {
-    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
-    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+//    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
+//    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
     google()
+    mavenCentral()
     jcenter()
   }
 }
