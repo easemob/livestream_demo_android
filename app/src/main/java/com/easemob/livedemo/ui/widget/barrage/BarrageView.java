@@ -249,8 +249,8 @@ public class BarrageView extends ViewGroup implements IBarrageView {
     @Override
     public void addBarrageItem(final View view) {
         // 获取高度和宽度
-        int w = View.MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-        int h = View.MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        int w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        int h = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         view.measure(w, h);
         final int itemWidth = view.getMeasuredWidth();
         final int itemHeight = view.getMeasuredHeight();
