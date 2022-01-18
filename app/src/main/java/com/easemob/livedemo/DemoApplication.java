@@ -96,7 +96,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
   }
 
   private void EmClientInit(DemoApplication context, EMOptions options) {
-      int pid = android.os.Process.myPid();
+      int pid = Process.myPid();
       String processAppName = getAppName(context, pid);
 
       Log.d("", "process app name : " + processAppName);

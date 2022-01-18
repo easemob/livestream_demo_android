@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.easemob.fastlive.fragment.FastLiveHostFragment;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.fast.presenter.FastLiveHostPresenterImpl;
 import com.easemob.livedemo.ui.live.LiveBaseActivity;
@@ -34,7 +35,7 @@ import io.agora.rtc2.Constants;
  * （1）加入直播间并将状态置为直播状态，回调方法为{@link #onStartCamera()}
  *  (2) 获取声网token(如果需要的话)成功，并加入channel
  */
-public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
+public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener, OnConfirmClickListener {
     private static final String TAG = FastLiveHostActivity.class.getSimpleName();
 
     private LiveAnchorFragment fragment;
@@ -65,6 +66,7 @@ public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchor
         fragment = (LiveAnchorFragment) getSupportFragmentManager().findFragmentByTag("fast_live_host");
         if (fragment == null) {
             fragment = new LiveAnchorFragment();
+            fragment.setOnStopLiveClickListener(this);
             Bundle bundle = new Bundle();
             bundle.putSerializable("liveroom", liveRoom);
             fragment.setArguments(bundle);
@@ -117,5 +119,19 @@ public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchor
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null && liveRoom != null) {
+            presenter.deleteRoom(liveRoom.getChatroomId());
+        }
+    }
+
+    @Override
+    public void onConfirmClick(View view, Object bean) {
+        if (fastFragment != null) {
+            fastFragment.onLeaveChannel();
+        }
+    }
 }
 

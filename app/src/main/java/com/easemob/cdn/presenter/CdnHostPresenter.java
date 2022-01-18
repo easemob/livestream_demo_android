@@ -1,11 +1,13 @@
-package com.easemob.fastlive.presenter;
+package com.easemob.cdn.presenter;
 
-public abstract class FastHostPresenter extends FastTokenPresenter{
-    public IFastHostView mView;
+import com.easemob.livedemo.data.model.LiveRoom;
+
+public abstract class CdnHostPresenter extends CdnTokenPresenter {
+    public ICdnHostView mView;
 
     @Override
     public void attachView(IBaseDataView view) {
-        mView = (IFastHostView) view;
+        mView = (ICdnHostView) view;
     }
 
     @Override
@@ -34,5 +36,5 @@ public abstract class FastHostPresenter extends FastTokenPresenter{
      */
     public abstract void leaveChannel();
 
-    public abstract void deleteRoom(String chatroomId);
+    public abstract void deleteRoom(String roomId);
 }
