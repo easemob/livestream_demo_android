@@ -116,7 +116,7 @@ public boolean isBarrageMsg(EMMessage msg); //弹幕消息判断
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)</br>
 环信聊天室中有两个repository，EmClientRepository及AppServerRepository。其中EmClientRepository用户处理环信SDK提供     的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管    理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。</br>
 
-## 集成视频直播SDK
+# 集成视频直播SDK
 环信聊天室提供了多种直播类型：
 
 #### [融合CDN直播](https://docs.agora.io/cn/fusion-cdn-streaming/landing-page?platform=RESTful)
@@ -133,6 +133,10 @@ public boolean isBarrageMsg(EMMessage msg); //弹幕消息判断
 - [App Server开源地址](https://github.com/easemob/easemob-im-app-server)
 - [环信直播聊天室集成介绍](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
 - [环信Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)
+- [声网融合CDN直播快速集成](https://docs.agora.io/cn/fusion-cdn-streaming/landing-page?platform=RESTful)
+- [声网极速直播快速集成](https://docs.agora.io/cn/live-streaming-standard-4.x-beta/landing-page?platform=iOS)
+- [声网互动直播快速集成](https://docs.agora.io/cn/live-streaming-premium-4.x-beta/landing-page?platform=iOS)
+
 
 ## 针对非AndroidX构建的方案 ##
 ### 一、在非AndroidX构建的情况下运行demo，可进行如下工作：

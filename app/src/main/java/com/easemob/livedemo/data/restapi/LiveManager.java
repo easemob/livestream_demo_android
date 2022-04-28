@@ -6,7 +6,6 @@ import com.easemob.livedemo.BuildConfig;
 import com.easemob.livedemo.common.LoggerInterceptor;
 import com.easemob.livedemo.data.model.AgoraTokenBean;
 import com.easemob.livedemo.data.model.CdnUrlBean;
-import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.hyphenate.chat.EMClient;
 
@@ -84,16 +83,12 @@ public class LiveManager {
 
     public Response<CdnUrlBean> getCdnPushUrl(String channelId) throws LiveException {
         return handleResponseCall(apiService.getCdnPushUrl("ws1-rtmp-push.easemob.com",
-                "live", channelId, 3600));
+                "live", channelId, 86400));
     }
 
     public Response<CdnUrlBean> getCdnPullUrl(String channelId) throws LiveException {
-        return handleResponseCall(apiService.getCdnPullUrl("rtmp", "ws-rtmp-pull.easemob.com",
+        return handleResponseCall(apiService.getCdnPullUrl("rtmp", "ws1-rtmp-push.easemob.com",
                 "live", channelId));
-    }
-
-    public void deleteRoom(String roomId) {
-        apiService.deleteLiveRoom(roomId);
     }
 
     private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException{

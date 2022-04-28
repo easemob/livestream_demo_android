@@ -17,10 +17,7 @@ import io.agora.mediaplayer.data.PlayerUpdatedInfo;
 import io.agora.mediaplayer.data.SrcInfo;
 import io.agora.rtc2.ChannelMediaOptions;
 import io.agora.rtc2.Constants;
-import io.agora.rtc2.DirectCdnStreamingError;
 import io.agora.rtc2.DirectCdnStreamingMediaOptions;
-import io.agora.rtc2.DirectCdnStreamingState;
-import io.agora.rtc2.DirectCdnStreamingStats;
 import io.agora.rtc2.IDirectCdnStreamingEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.video.VideoCanvas;
@@ -50,26 +47,6 @@ public class FastLiveHelper {
             ORIENTATION_MODE_FIXED_PORTRAIT
     );
     private IMediaPlayer mMediaPlayer;
-    private Runnable pendingDirectCDNStoppedRun = null;
-    private final IDirectCdnStreamingEventHandler iDirectCdnStreamingEventHandler = new IDirectCdnStreamingEventHandler() {
-        @Override
-        public void onDirectCdnStreamingStateChanged(DirectCdnStreamingState directCdnStreamingState, DirectCdnStreamingError directCdnStreamingError, String s) {
-            Log.d(TAG, String.format("Stream Publish(DirectCdnStreaming): onDirectCdnStreamingStateChanged directCdnStreamingState=%s directCdnStreamingError=%s", directCdnStreamingState.toString(), directCdnStreamingError.toString()));
-            switch (directCdnStreamingState){
-                case STOPPED:
-                    if(pendingDirectCDNStoppedRun != null){
-                        pendingDirectCDNStoppedRun.run();
-                        pendingDirectCDNStoppedRun = null;
-                    }
-                    break;
-            }
-        }
-
-        @Override
-        public void onDirectCdnStreamingStats(DirectCdnStreamingStats directCdnStreamingStats) {
-
-        }
-    };
 
     private static class FastLiveHelperInstance {
         private static final FastLiveHelper instance = new FastLiveHelper();
@@ -183,7 +160,6 @@ public class FastLiveHelper {
     public void onDestroy(RtcEventHandler handler) {
         Log.i("fast", "removeRtcHandler and leave channel");
         removeRtcHandler(handler);
-        rtcEngine().stopPreview();
         rtcEngine().leaveChannel();
     }
 
@@ -244,7 +220,6 @@ public class FastLiveHelper {
      * @param container
      */
     public void startBroadcast(VideoGridContainer container, int uid) {
-        rtcEngine().enableAudio();
         rtcEngine().enableVideo();
         setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         SurfaceView surfaceView = prepareRtcVideo(uid, true);
@@ -255,7 +230,6 @@ public class FastLiveHelper {
     }
 
     public void startCdnBroadcast(VideoGridContainer container, int uid, String url, IDirectCdnStreamingEventHandler handler) {
-        rtcEngine().enableAudio();
         rtcEngine().enableVideo();
         setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         SurfaceView surfaceView = prepareRtcVideo(uid, true);
@@ -267,20 +241,19 @@ public class FastLiveHelper {
         DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
         directCdnStreamingMediaOptions.publishCameraTrack = true;
         directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
-        rtcEngine().startDirectCdnStreaming(iDirectCdnStreamingEventHandler , url, directCdnStreamingMediaOptions);
+        // rtcEngine().startDirectCdnStreaming(handler, url, directCdnStreamingMediaOptions);
         isLiving = true;
     }
 
     public void startPullCdn(VideoGridContainer container, int uid, String url) {
         setClientRole(Constants.CLIENT_ROLE_AUDIENCE);
-        rtcEngine().enableAudio();
         rtcEngine().enableVideo();
         if(mMediaPlayer == null){
             mMediaPlayer = rtcEngine().createMediaPlayer();
             mMediaPlayer.registerPlayerObserver(new IMediaPlayerObserver() {
                 @Override
                 public void onPlayerStateChanged(io.agora.mediaplayer.Constants.MediaPlayerState mediaPlayerState, io.agora.mediaplayer.Constants.MediaPlayerError mediaPlayerError) {
-                    // Log.d(TAG, "MediaPlayer onPlayerStateChanged -- url=" + mMediaPlayer.getPlaySrc() + "state=" + mediaPlayerState + ", error=" + mediaPlayerError);
+                    Log.d(TAG, "MediaPlayer onPlayerStateChanged -- url=" + mMediaPlayer.getPlaySrc() + "state=" + mediaPlayerState + ", error=" + mediaPlayerError);
                     if (mediaPlayerState == io.agora.mediaplayer.Constants.MediaPlayerState.PLAYER_STATE_OPEN_COMPLETED) {
                         if (mMediaPlayer != null) {
                             mMediaPlayer.play();
@@ -342,32 +315,26 @@ public class FastLiveHelper {
         if(lastUid != -1 && lastUid != uid) {
             removeRemoteVideo(lastUid, container);
         }
-        lastUid = uid;
         if(!container.containUid(uid)) {
             SurfaceView surface = RtcEngine.CreateRendererView(mContext);
-            rtcEngine().setupLocalVideo(new VideoCanvas(surface, Constants.RENDER_MODE_HIDDEN,
-                    Constants.VIDEO_MIRROR_MODE_AUTO,
-                    Constants.VIDEO_SOURCE_MEDIA_PLAYER,
+            rtcEngine().setupRemoteVideo(new VideoCanvas(
+                    surface,
+                    VideoCanvas.RENDER_MODE_HIDDEN,
                     mMediaPlayer.getMediaPlayerId(),
                     uid
             ));
             container.addUserVideoSurface(uid, surface, false);
         }
-    }
-
-    public void stopPullCdn() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-        }
+        lastUid = uid;
+        isLiving = true;
     }
 
     public void stopDirectCDNStreaming(Runnable onDirectCDNStopped) {
         if (rtcEngine() == null) {
             return;
         }
-        rtcEngine().disableAudio();
         rtcEngine().disableVideo();
-        pendingDirectCDNStoppedRun = onDirectCDNStopped;
+        // pendingDirectCDNStoppedRun = onDirectCDNStopped;
         rtcEngine().stopDirectCdnStreaming();
     }
 

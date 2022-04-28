@@ -5,7 +5,7 @@ ext {
     build_tools_version = '29.0.3'
 
     ax_lifecycle_version = '2.2.0'
-    ax_room_version = '2.4.0-alpha04'
+    ax_room_version = '2.2.5'
     appcompat_version = '1.2.0'
 
     retrofit2_version = '2.4.0'
