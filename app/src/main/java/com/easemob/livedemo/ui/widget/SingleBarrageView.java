@@ -44,7 +44,7 @@ public class SingleBarrageView extends BarrageView {
 
 
     public void initBarrage() {
-        Options options = new Options()
+        BarrageView.Options options = new BarrageView.Options()
                 .setGravity(BarrageView.GRAVITY_TOP)                // 设置弹幕的位置
                 .setInterval(100)                                     // 设置弹幕的发送间隔
                 .setSpeed(200,29)                   // 设置速度和波动值
@@ -56,7 +56,7 @@ public class SingleBarrageView extends BarrageView {
         mAdapter = new BarrageAdapter<MessageBean>(null, getContext()) {
             @Override
             protected BarrageViewHolder<MessageBean> onCreateViewHolder(View root, int type) {
-                return new ViewHolder(root);
+                return new SingleBarrageView.ViewHolder(root);
             }
 
             @Override
