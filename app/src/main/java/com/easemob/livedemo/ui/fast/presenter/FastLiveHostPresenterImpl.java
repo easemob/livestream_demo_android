@@ -56,5 +56,12 @@ public class FastLiveHostPresenterImpl extends FastHostPresenter {
             }
         });
     }
+
+    @Override
+    public void deleteRoom(String chatroomId) {
+        ThreadManager.getInstance().runOnIOThread(()-> {
+            LiveManager.getInstance().deleteRoom(chatroomId);
+        });
+    }
 }
 

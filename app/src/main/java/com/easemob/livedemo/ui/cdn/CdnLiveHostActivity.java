@@ -11,6 +11,7 @@ import com.easemob.cdn.fragment.CdnLiveHostFragment;
 import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.fastlive.widgets.VideoGridContainer;
 import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.OnConfirmClickListener;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.ui.cdn.presenter.CdnLiveHostPresenterImpl;
 import com.easemob.livedemo.ui.fast.FastLiveAudienceActivity;
@@ -35,7 +36,7 @@ import io.agora.rtc2.Constants;
  * （1）加入直播间并将状态置为直播状态，回调方法为{@link #onStartCamera()}
  *  (2) 获取声网token(如果需要的话)成功，并加入channel
  */
-public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener {
+public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener, OnConfirmClickListener {
     private static final String TAG = CdnLiveHostActivity.class.getSimpleName();
 
     private LiveAnchorFragment fragment;
@@ -66,6 +67,7 @@ public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorF
         fragment = (LiveAnchorFragment) getSupportFragmentManager().findFragmentByTag("cdn_live_host");
         if (fragment == null) {
             fragment = new LiveAnchorFragment();
+            fragment.setOnStopLiveClickListener(this);
             Bundle bundle = new Bundle();
             bundle.putSerializable("liveroom", liveRoom);
             fragment.setArguments(bundle);
@@ -118,5 +120,19 @@ public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorF
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null && liveRoom != null) {
+            presenter.deleteRoom(liveRoom.getChatroomId());
+        }
+    }
+
+    @Override
+    public void onConfirmClick(View view, Object bean) {
+        if (fastFragment != null) {
+            fastFragment.onLeaveChannel();
+        }
+    }
 }
 
