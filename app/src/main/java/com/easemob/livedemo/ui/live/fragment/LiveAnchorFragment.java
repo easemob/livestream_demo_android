@@ -26,7 +26,6 @@ import com.easemob.livedemo.common.OnResourceParseCallback;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
 import com.easemob.livedemo.data.model.LiveRoom;
-import com.easemob.livedemo.ui.cdn.CdnLiveHostActivity;
 import com.easemob.livedemo.ui.other.fragment.SimpleDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.hyphenate.EMValueCallBack;
@@ -65,7 +64,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     private boolean reChangeLiveStatus;
     //是否将owner移交给其他人，此种场景，不进行退出聊天室的操作。
     private boolean isSwitchOwnerToOther;
-    private OnConfirmClickListener mStopLiveClickListener;
 
     @Override
     protected int getLayoutId() {
@@ -137,7 +135,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.img_bt_close :
-                showDialog(this.mStopLiveClickListener);
+                showDialog(new OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view, Object bean) {
+
+                    }
+                });
                 break;
         }
     }
@@ -506,10 +509,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 mContext.onBackPressed();
             }
         });
-    }
-
-    public void setOnStopLiveClickListener(OnConfirmClickListener onStopLiveClickListener) {
-        this.mStopLiveClickListener = onStopLiveClickListener;
     }
 
     public interface OnCameraListener {

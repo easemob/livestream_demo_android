@@ -33,6 +33,4 @@ public abstract class FastHostPresenter extends FastTokenPresenter{
      * 离开频道
      */
     public abstract void leaveChannel();
-
-    public abstract void deleteRoom(String chatroomId);
 }

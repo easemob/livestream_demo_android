@@ -5,7 +5,6 @@ import com.easemob.cdn.presenter.CdnHostPresenter;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.AgoraTokenBean;
 import com.easemob.livedemo.data.model.CdnUrlBean;
-import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.LiveManager;
 
@@ -78,13 +77,6 @@ public class CdnLiveHostPresenterImpl extends CdnHostPresenter {
                     }
                 });
             }
-        });
-    }
-
-    @Override
-    public void deleteRoom(String roomId) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
-            LiveManager.getInstance().deleteRoom(roomId);
         });
     }
 }
