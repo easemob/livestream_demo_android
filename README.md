@@ -1,212 +1,145 @@
-# Introduction to AgoraChat Livestream
+# 环信直播聊天室简介
 
-## Introduction
+## 简介
 
-**AgoraChat Livestream (hereinafter referred to as Livestream) demonstrates the ability of AgoraChat SDK to provide Livestream. In addition to providing basic chat, it also provides custom messages for gift giving, and developers can add new custom messages according to their actual needs. **
+**环信直播聊天室（以下简称直播聊天室）展示了环信 IM SDK直播聊天室的能力。除了提供基本的聊天外，还提供了赠送礼物的自定义消息，开发者可以根据自己的实际需求添加新的自定义消息。**
 
-**Introduction to core classes:**
+**核心类介绍：**
 
-- CdnLiveAudienceActivity: Audience live room page</br>
-- CdnLiveHostActivity: host live page</br>
-- LiveAudienceFragment: Integrate audience chat room related logic</br>
-- LiveAnchorFragment: Integrate the logic related to the chat room on the anchor side</br>
+- CdnLiveAudienceActivity：观众直播间页面</br>
+- CdnLiveHostActivity：主播直播页面</br>
+- LiveAudienceFragment：集成观众端聊天室相关逻辑</br>
+- LiveAnchorFragment：集成主播端聊天室相关逻辑</br>
 
-**Other side open source address:**
+**其他端开源地址：**
 
 - iOS:    https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/livestream-ios
 - Web:    https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/livestream-web
 - App Server:     https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/backend
 
-## Integrate AgoraChat SDK
+## 集成环信 Chat SDK
 
-### Development Environment Requirements
+### 开发环境要求
 
-- Android Studio 3.2 or higher. </br>
-- SDK targetVersion is at least 26.
+- Android Studio 3.6或更高版本。</br>
+- SDK targetVersion至少为26。
 
-### Add remote dependencies
+### 添加远程依赖
 
 ```
-implementation 'io.agora.rtc:chat-sdk:1.0.6'
-implementation 'io.agora.rtc:chat-uikit:1.0.6'
+implementation 'io.hyphenate:hyphenate-chat:3.9.9'
+implementation 'io.hyphenate:ease-im-kit:3.9.9'
 ```
+可通过一下地址查看最新SDK版本号：
+- [hyphenate-chat](https://search.maven.org/search?q=g:io.hyphenate%20AND%20a:hyphenate-chat)；</br>
+- [ease-im-kit](https://search.maven.org/search?q=g:io.hyphenate%20AND%20a:ease-im-kit)；
 
-**Integration Documentation:**</br>
+**集成文档：**</br>
 
-- [Android SDK integrated](https://docs-preprod.agora.io/en/agora-chat/enable_agora_chat?platform=Android);</br>
-- [Android UIKit integrated](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android);
+- [Android SDK 集成](http://docs-im-beta.easemob.com/document/android/quickstart.html)；</br>
+- [Android UIKit 集成](http://docs-im-beta.easemob.com/document/android/easeimkit.html)；
 
-## Use AgoraChat-UIKit
+## 使用环信聊天室
 
-**In order to facilitate developers to use custom messages, Livestream encapsulates the logic related to custom messages into the AgoraChat-UIKit-android library. **
+为方便开发者使用，项目中将聊天室相关逻辑放到了`chatroom` library 中，开发者可以根据自己的需求对这个库进行更改。
 
-Developers can make changes to this UIKit library according to their needs.
+### 核心类介绍
 
-### Core class introduction
+- EaseChatRoomMessagesView：直播聊天室消息UI，用户可以自定义相关属性设置UI显示。</br>
+- EaseLiveMessageHelper：用于监听接收自定义消息，发送自定义消息。</br>
+- EaseLiveMessageType：用户定义了demo中用到的自定义消息类型（礼物消息）。</br>
+- OnLiveMessageListener：监听聊天室消息接受相关事件。
 
-- EaseChatRoomMessagesView: Livestream chatroom message UI, users can customize related properties to set UI display. </br>
-- EaseLiveMessageHelper: used to monitor and receive custom messages and send custom messages. </br>
-- EaseLiveMessageType: The user defines the custom message type (gift message) used in the demo. </br>
-- OnLiveMessageListener: Listen to chatroom messages to receive related events.
+### 具体用法
 
-### Specific usage
-
-#### 1. After the chatroom is loaded, initialize it and set the room information.
+#### 1. 在聊天室加载后，进行初始化，设置房间信息。
 
 ```Java
 EaseLiveMessageHelper.getInstance().init(chatroomId);
 ```
 
-#### 2. add and remove chatroom custom message monitoring
+#### 2. 增加和取消聊天室自定义消息监听
 
 ```Java
 EaseLiveMessageHelper.getInstance().addLiveMessageListener(new OnLiveMessageListener() {
     @Override
     public void onGiftMessageReceived(EMMessage message) {
-
+        
     }
 });
 EaseLiveMessageHelper.getInstance().removeLiveMessageListener(this);
 ```
 
-#### 3. To send a chatroom message, you can call the following method
+#### 3. 发送聊天室消息可以调用如下方法
 
 ```Java
-public void sendTxtMsg(String content, OnSendLiveMessageCallBack callBack);                                                       //text message
+public void sendTxtMsg(String content, OnSendLiveMessageCallBack callBack);                                                       //文本消息
 
-public void sendGiftMsg(String chatRoomId, String giftId, int num, OnSendLiveMessageCallBack callBack);                           //gift message
+public void sendGiftMsg(String chatRoomId, String giftId, int num, OnSendLiveMessageCallBack callBack);                           //礼物消息
 
-public void sendCustomMsg(String chatRoomId, String event, Map<String, String> params, final OnSendLiveMessageCallBack callBack); //custom message
+public void sendCustomMsg(String chatRoomId, String event, Map<String, String> params, final OnSendLiveMessageCallBack callBack); //自定义消息
 ```
 
-#### 4. Parse message related parameters</br>
+#### 4. 解析消息相关参数</br>
 
-(1) If the sent custom parameters are the same as those in UIKit, you can directly call the following method to get the transmitted data
+（1）如果发送的自定义参数与library中相同，可以直接调用如下方法，获得所传的数据
 
 ```Java
-//Get the id of the gift in the gift message
+//获取礼物消息中礼物的id
 public String getMsgGiftId(EMMessage msg);
-// Get the number of gifts in the gift message
+//获取礼物消息中礼物的数量
 public int getMsgGiftNum(EMMessage msg);
 ```
 
-(2) If the custom message parameters are different from those in UIKit, you can call the following method to get the parameters in the message
+（2）如果自定义消息参数与library中不同，可以调用如下方法，获取消息中的参数
 
 ```Java
 public Map<String, String> getCustomMsgParams(EMMessage message);
 ```
 
-#### 5. UIKit also provides a method to determine the type of custom message
+#### 5. library中还提供了，判断自定义消息类型的方法
 
 ```Java
-public boolean isGiftMsg(EMMessage msg);    // gift message judgment
+public boolean isGiftMsg(EMMessage msg);    //礼物消息判断
 ```
 
-## AgoraChat Livestream Architecture Introduction
+## 环信直播聊天室架构介绍
 
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)</br>
-There are two repositories in  Livestream, ClientRepository and AppServerRepository. Where ClientRepository user handles Agora SDK provides
-For related requests, the AppServerRepository user handles the interface provided by the app server. Each page has a corresponding ViewModel to store and manage in a life cycle manner
-Manage UI-related data. LiveData is an observable data retention class with lifecycle awareness, generally located in ViewModel, for observing data changes. </br>
+环信聊天室中有两个repository，ClientRepository及AppServerRepository。其中ClientRepository用户处理环信 SDK提供
+的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管
+理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。</br>
 
-## Integrate Agora Live Streaming SDK
+## 集成Agora视频直播SDK
 
-Livestream provides Agora CDN live streaming capability (https://docs.agora.io/en/live-streaming/landing-page?platform=Android).
+环信聊天室提供了Agora CDN直播能力(https://docs.agora.io/cn/live-streaming/landing-page?platform=Android)。
 
-## Run the sample project
 
-Follow these steps to run the sample project:\
-### 1. Clone the repository to your local machine.
+## 运行DEMO工程
+
+按照以下步骤运行示例项目：project:\
+### 1. 克隆repo到本地。
 ```java
-    git clone git@github.com:AgoraIO-Usecase/AgoraChat-Livestream.git
+    git clone git@github.com:easemob/livestream_demo_android.git
 ```
 
-### 2. Open the Android project with Android Studio(AgoraChat-Livestream/livestream-android).
+### 2. 使用 Android Studio 打开 Android 项目(livestream_demo_android)。
 
-### 3. Configure APPKEY.
-Configure AGORA_CHAT_APPKEY and AGORA_APP_ID in local.properties, you can apply for the corresponding APPKEY in the [Agora Developer Console](https://console.agora.io/).
+### 3. 配置APPKEY。
+在local.properties中配置 `CHAT_APPKEY` 和 `AGORA_APP_ID`，你可以在[开发者控制台](https://console.easemob.com/user/login/)申请相应的APPKEY。
 
 ```Java
-AGORA_CHAT_APPKEY=*******
+CHAT_APPKEY=*******
 
 AGORA_APP_ID=*******
 ```
-### 4. Use AndroidStudio to run.
+### 4. 使用AndroidStudio运行即可。
 
-## Documentation
+## 文档
 
-- [iOS open source address](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/livestream-ios)
-- [Web open source address](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/livestream-web)
-- [App Server open source address](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/backend)
-- [Android SDK integrated](https://docs-preprod.agora.io/cn/agora-chat/enable_agora_chat?platform=Android);</br>
-- [Android UIKit integrated](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android);
+- [iOS端开源地址](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/livestream-ios)
+- [Web端开源地址](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/livestream-web)
+- [App Server开源地址](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/tree/main/backend)
+- [Android SDK 集成](https://docs-preprod.agora.io/cn/agora-chat/enable_agora_chat?platform=Android)</br>
+- [Android UIKit 集成](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)
 
-## For non-AndroidX builds ##
-
-### 1. Running the demo without AndroidX builds, the following work can be done:
-
-#### 1. Comment out the following settings in gradle.properties in the demo:
-
-````Java
-#android.enableJetifier=true //Android plugin will automatically migrate existing third-party libraries to use AndroidX by rewriting their binaries
-#android.useAndroidX=true //Android plugin will use the corresponding AndroidX library instead of the support library
-````
-
-#### 2. Replace AndroidX build artifacts with old build artifacts
-
-```Java
-dependencies {
-        ...
-        implementation "com.jakewharton:butterknife:$butterknife_version"
-        annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
-        implementation 'com.google.android.material:material:1.1.0'
-        implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-        implementation "androidx.lifecycle:lifecycle-livedata:$ax_lifecycle_version"
-        implementation "androidx.lifecycle:lifecycle-viewmodel:$ax_lifecycle_version"
-        implementation "androidx.lifecycle:lifecycle-extensions:$ax_lifecycle_version"
-        implementation "androidx.room:room-runtime:$ax_room_version"
-        annotationProcessor "androidx.room:room-compiler:$ax_room_version"
-        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-        ...
-        }
-```
-
-change into:
-
-```Java
-dependencies {
-        ...
-        implementation "com.jakewharton:butterknife:9.0.0"
-        annotationProcessor "com.jakewharton:butterknife-compiler:9.0.0"
-        implementation 'com.android.support:design:28.0.0'
-        implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-        implementation "android.arch.lifecycle:livedata:$ax_lifecycle_version"
-        implementation "android.arch.lifecycle:viewmodel:$ax_lifecycle_version"
-        implementation "android.arch.lifecycle:extensions:$ax_lifecycle_version"
-        implementation "android.arch.persistence.room:runtime:$ax_room_version"
-        annotationProcessor "android.arch.persistence.room:compiler:$ax_room_version"
-        implementation 'com.android.support:support-v4:28.0.0'
-        ...
-        }
-```
-
-Note:
-
-- Butterknife needs to be downgraded to 9.0.0 because it supports androidX above 10.0.0.
-- The version number of ax_lifecycle_version, etc., can be searched through Add Library Dependency of Android Stuido. File ->Project Structure ->
-  app ->Dependencies ->Click Add + in the upper right corner ->Library dependency ->Enter the name of the remote library to be searched, such as design.
-
-If you encounter migration-related issues, please refer to these tables to determine the correct mapping from support libraries to corresponding AndroidX artifacts and classes:</br>
-
-- [Maven Artifact Mappings](https://developer.android.google.cn/jetpack/androidx/migrate/artifact-mappings)</br>
-- [Class Mappings](https://developer.android.google.cn/jetpack/androidx/migrate/class-mappings)</br>
-
-#### 3. Globally replace the reference path of the control under androidX and the control path in xml, such as androidx.recyclerview.widget.RecyclerView -> android.support.v7.widget.RecyclerView. </br>
-
-#### 4. Replace ViewPager2 with ViewPager, refer to: [Migrate from ViewPager to ViewPager2](https://developer.android.google.cn/training/animation/vp2-migration?hl=zh_cn)</br>
-
-#### 5. Other matters not mentioned. </br>
-
-### Second, only use the core classes in the demo
-
-> If you only plan to use the core classes of the demo, it is recommended that you focus on the related classes in the io.agora.livedemo.ui.cdn directory. The core classes are CdnLiveHostActivity and CdnLiveAudienceActivity, and their corresponding fragments. Then start from these two activities, and gradually replace the androidX-related controls in the required classes.
