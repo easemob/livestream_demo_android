@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#80000000"
+    android:minHeight="300dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/gift_icon"
+        android:drawablePadding="6dp"
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
+        android:paddingStart="@dimen/em_margin_20"
+        android:text="@string/live_gift_history"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableStartCompat="@drawable/gift_icon" />
+
+    <TextView
+        android:id="@+id/tv_gift_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/em_margin_10"
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintRight_toLeftOf="@id/tv_sender_num"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_sender_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/em_margin_20"
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_normal"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

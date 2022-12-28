@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/login_color_btn_enable_left"
+                android:centerColor="@color/login_color_btn_enable_right"
+                android:endColor="@color/login_color_btn_enable_right"
+                android:angle="315"/>
+            <corners android:radius="@dimen/login_bg_radius"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/login_color_btn_enable_left"
+                android:centerColor="@color/login_color_btn_enable_right"
+                android:endColor="@color/login_color_btn_enable_right"
+                android:angle="315"/>
+            <corners android:radius="@dimen/login_bg_radius"/>
+        </shape>
+    </item>
+
+</selector>

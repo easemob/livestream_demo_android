@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.easemob.livedemo.ui.widget.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/photo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:ease_radius="16dp"
+            app:ease_shape_type="rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_living_audience_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/live_living_bg_shape"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:minHeight="16dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/living_icon"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/live_list_item_lived_bg_shape"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/live_room_name" />
+
+        <TextView
+            android:id="@+id/live_room_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/author"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/author_lsr"
+            android:layout_width="20dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/author_lsr"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginBottom="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/placeholder"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/author_lsr"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.easemob.livedemo.ui.widget.SquareLayout>

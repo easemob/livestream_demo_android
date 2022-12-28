@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_title"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ease_default_avatar" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/color_main_text"
+        android:textSize="@dimen/size_big"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/avatar"
+        app:layout_constraintRight_toLeftOf="@id/tv_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="@dimen/margin_20"
+        tools:text="" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:textColor="@color/color_second_text"
+        android:textSize="@dimen/size_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tv_title"
+        app:layout_constraintRight_toLeftOf="@id/iv_arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginRight="@dimen/margin_20"
+        tools:text="" />
+
+    <ImageView
+        android:id="@+id/iv_arrow"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:src="@drawable/arrow_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tv_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/margin_15"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_15"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:textColor="@color/group_blue_154dfe"
+        android:textSize="@dimen/size_big"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Add" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

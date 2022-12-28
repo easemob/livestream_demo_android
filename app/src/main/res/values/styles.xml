@@ -1,0 +1,104 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/color_black_333333</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/splash_bg_color</item>
+        <item name="android:textColorSecondary">@color/common_black</item>
+        <item name="android:textColorPrimary">@color/common_black</item>
+    </style>
+
+    <style name="ToolbarNormal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="TitleNormal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@color/common_black</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+    <style name="em_live_user_tv_num_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/em_size_normal</item>
+        <item name="android:textColor">@color/common_black</item>
+    </style>
+
+    <style name="em_live_user_tv_num">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:textSize">@dimen/em_size_normal</item>
+        <item name="android:textColor">@color/common_black</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TabLayout.Gift" parent="Base.Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/em_size_normal</item>
+        <item name="tabTextColor">@color/common_white</item>
+        <item name="android:textColor">@color/common_white</item>
+    </style>
+
+    <style name="ThemeOverlay.App.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- just override the colors used in the default style -->
+        <item name="colorPrimary">#2F80ED</item>
+        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSurface">#212121</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="login_et_input">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_marginLeft">@dimen/login_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/login_margin_right</item>
+        <item name="android:maxWidth">400dp</item>
+        <item name="android:background">@drawable/login_et_bg</item>
+        <item name="android:paddingLeft">@dimen/login_padding_left</item>
+        <item name="android:paddingRight">@dimen/login_padding_right</item>
+        <item name="android:textSize">@dimen/login_text_size</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textColorHint">@color/login_color_edit_text_hint</item>
+    </style>
+
+    <style name="login_btn_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:layout_marginLeft">@dimen/login_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/login_margin_right</item>
+        <item name="android:background">@drawable/login_btn_bg</item>
+        <item name="android:foreground">@drawable/ripple_click_gray</item>
+        <item name="android:textColor">@color/login_btn_text_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingStart">5dp</item>
+    </style>
+
+</resources>

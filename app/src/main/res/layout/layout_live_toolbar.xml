@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_anchor"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginStart="@dimen/em_margin_15"
+        android:background="@drawable/live_bg_shape"
+        android:padding="1dp"
+        android:paddingStart="1dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="@dimen/item_small_avatar_size"
+            android:layout_height="@dimen/item_small_avatar_size"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ease_default_avatar"
+            app:ease_shape_type="round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxEms="4"
+            android:maxLines="1"
+            android:textColor="@color/common_white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toRightOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/layout_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_marginStart="@dimen/margin_5"
+            android:orientation="horizontal"
+            android:paddingStart="2dp"
+            android:paddingEnd="3dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_username"
+            app:layout_constraintLeft_toRightOf="@id/tv_username"
+            app:layout_constraintTop_toTopOf="@id/tv_username">
+
+            <ImageView
+                android:id="@+id/sex_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/sex_male_icon" />
+
+            <TextView
+                android:id="@+id/age_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@id/sex_icon"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/gold_icon"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/coin_small"
+            app:layout_constraintLeft_toLeftOf="@id/tv_username"
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:text="8,420"
+            android:textColor="#BDFFFFFF"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@id/gold_icon"
+            app:layout_constraintLeft_toRightOf="@id/gold_icon"
+            app:layout_constraintTop_toTopOf="@id/gold_icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:padding="2dp"
+        app:layout_constraintLeft_toLeftOf="@id/layout_anchor"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_anchor">
+
+        <RelativeLayout
+            android:id="@+id/layout_attention"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:background="@drawable/live_attention_bg_shape"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/attention_icon"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/speaker" />
+
+            <com.easemob.livedemo.ui.widget.MarqueeText
+                android:id="@+id/tv_attention"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_5"
+                android:layout_marginEnd="8dp"
+                android:layout_toEndOf="@id/attention_icon"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/margin_5"
+                android:paddingEnd="@dimen/margin_5"
+                android:singleLine="true"
+                android:text="@string/live_attention"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/tv_gift_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/em_margin_20"
+        android:layout_marginTop="@dimen/em_margin_5"
+        android:textColor="#ffffc700"
+        android:textSize="@dimen/em_size_smaller"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_anchor"
+        tools:text="200" />
+
+    <TextView
+        android:id="@+id/tv_like_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/em_margin_10"
+        android:layout_marginTop="@dimen/em_margin_5"
+        android:textColor="#ffffc700"
+        android:textSize="@dimen/em_size_smaller"
+        app:layout_constraintLeft_toRightOf="@id/tv_gift_num"
+        app:layout_constraintTop_toBottomOf="@id/layout_anchor" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/horizontal_recycle_view"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
+        app:layout_constraintRight_toLeftOf="@id/layout_member_num"
+        app:layout_constraintTop_toTopOf="@id/layout_anchor" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_member_num"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:background="@drawable/live_bg_shape"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
+        app:layout_constraintRight_toLeftOf="@id/close_iv"
+        app:layout_constraintTop_toTopOf="@id/layout_anchor">
+
+        <ImageView
+            android:id="@+id/people_icon"
+            android:layout_width="@dimen/margin_20"
+            android:layout_height="@dimen/margin_20"
+            android:src="@drawable/people_alt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_member_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/em_size_normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/people_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="500" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/close_iv"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:background="@drawable/live_bg_shape"
+        android:padding="5dp"
+        android:src="@drawable/xmark"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layout_anchor" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_toolbar_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="layout_anchor,layout_member_num,horizontal_recycle_view" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_gift_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tv_gift_num,tv_like_num" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

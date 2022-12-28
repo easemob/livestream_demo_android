@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LiveDialogFragment.Animation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/bottom_anim_enter</item>
+        <item name="android:windowExitAnimation">@anim/bottom_anim_exit</item>
+    </style>
+
+    <style name="animate_dialog">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_in_out_bottom</item>
+    </style>
+
+</resources>

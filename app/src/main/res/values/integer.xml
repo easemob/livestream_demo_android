@@ -1,0 +1,4 @@
+<resources>
+    <integer name="default_blur_radius">11</integer>
+    <integer name="default_downsample_factor">6</integer>
+</resources>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/back_layout"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/title_bar"
+            android:layout_width="10dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/margin_20"
+            android:scaleType="fitCenter"
+            android:src="@drawable/titlebar_back"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/titlebar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_10"
+        android:text="@string/setting_about_title"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/back_layout"
+        app:layout_constraintLeft_toRightOf="@id/back_layout"
+        app:layout_constraintTop_toTopOf="@id/back_layout" />
+
+    <com.easemob.livedemo.ui.widget.ArrowItemView
+        android:id="@+id/item_sdk_version"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemContentColor="@color/color_light_gray_999999"
+        app:arrowItemContentSize="@dimen/size_big"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/about_sdk_version"
+        app:arrowItemTitleColor="@color/white"
+        app:arrowItemTitleSize="@dimen/size_big"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_layout"
+        tools:arrowItemContent="AgoraChatv3.8.7" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_sdk_version" />
+
+    <com.easemob.livedemo.ui.widget.ArrowItemView
+        android:id="@+id/item_lib_version"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemContentColor="@color/color_light_gray_999999"
+        app:arrowItemContentSize="@dimen/size_big"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/about_lib_version"
+        app:arrowItemTitleColor="@color/white"
+        app:arrowItemTitleSize="@dimen/size_big"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view1"
+        tools:arrowItemContent="AgoraChatv3.8.7" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_lib_version" />
+
+    <com.easemob.livedemo.ui.widget.ArrowItemView
+        android:id="@+id/item_policy"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:visibility="gone"
+        app:arrowItemContentColor="@color/color_light_gray_999999"
+        app:arrowItemContentSize="@dimen/size_big"
+        app:arrowItemShowArrow="true"
+        app:arrowItemTitle="@string/about_policy"
+        app:arrowItemTitleColor="@color/white"
+        app:arrowItemTitleSize="@dimen/size_big"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view2" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_policy" />
+
+    <com.easemob.livedemo.ui.widget.ArrowItemView
+        android:id="@+id/item_more"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemContent="@string/about_net_addr"
+        app:arrowItemContentColor="@color/group_blue_154dfe"
+        app:arrowItemContentSize="@dimen/size_big"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/about_more"
+        app:arrowItemTitleColor="@color/white"
+        app:arrowItemTitleSize="@dimen/size_big"
+        app:layout_constraintTop_toBottomOf="@id/view3" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_more" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

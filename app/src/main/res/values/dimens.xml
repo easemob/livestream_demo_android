@@ -1,0 +1,45 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="item_small_avatar_size">32dp</dimen>
+
+    <dimen name="em_common_title_bar_height">44dp</dimen>
+
+    <dimen name="em_size_smaller">10sp</dimen>
+    <dimen name="em_size_normal">14sp</dimen>
+    <dimen name="em_size_big">16sp</dimen>
+    <dimen name="em_size_big_notify">18sp</dimen>
+
+    <dimen name="size_avatar">48dp</dimen>
+
+    <dimen name="em_margin_5">5dp</dimen>
+    <dimen name="em_margin_10">10dp</dimen>
+    <dimen name="em_margin_15">15dp</dimen>
+    <dimen name="em_margin_20">20dp</dimen>
+    <dimen name="em_margin_25">25dp</dimen>
+    <dimen name="em_margin_30">30dp</dimen>
+    <dimen name="em_margin_40">40dp</dimen>
+
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+
+    <dimen name="size_smaller">10sp</dimen>
+    <dimen name="size_small">12sp</dimen>
+    <dimen name="size_normal">14sp</dimen>
+    <dimen name="size_big">16sp</dimen>
+
+    <dimen name="common_item_height">54dp</dimen>
+
+    <dimen name="login_bg_radius">57dp</dimen>
+    <dimen name="login_margin_left">33dp</dimen>
+    <dimen name="login_margin_right">33dp</dimen>
+    <dimen name="login_margin_top">20dp</dimen>
+    <dimen name="login_padding_left">18dp</dimen>
+    <dimen name="login_padding_right">18dp</dimen>
+
+    <dimen name="login_text_size">@dimen/em_size_big</dimen>
+</resources>

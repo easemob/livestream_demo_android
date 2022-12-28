@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/splash_bg_color">
+
+
+    <TextView
+        android:id="@+id/tv_login_im"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/et_login_phone"
+        app:layout_constraintBottom_toTopOf="@id/et_login_phone"
+        android:layout_marginBottom="27dp"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:text="@string/login_im"/>
+
+    <EditText
+        android:id="@+id/et_login_phone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        android:hint="@string/register_phone_number"
+        style="@style/login_et_input"
+        android:inputType="phone"/>
+
+    <LinearLayout
+        android:id="@+id/ll_login_code"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_login_phone"
+        app:layout_constraintBottom_toTopOf="@id/btn_login"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        style="@style/login_et_input">
+
+        <EditText
+            android:id="@+id/et_login_code"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/login_input_verification_code"
+            android:textColorHint="@color/login_color_edit_text_hint"
+            android:inputType="number"
+            android:textSize="@dimen/login_text_size"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:background="@color/transparent"/>
+
+        <TextView
+            android:id="@+id/tv_get_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingEnd="2dp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:text="@string/login_get_verification_code" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_login_code"
+        android:text="@string/login_btn"
+        style="@style/login_btn_style"
+        android:layout_marginTop="24dp"/>
+
+    <CheckBox
+        android:id="@+id/cb_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:button="@drawable/cb_agreement_select"
+        android:padding="3dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/tv_agreement"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_login" />
+
+    <TextView
+        android:id="@+id/tv_agreement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toTopOf="@id/cb_select"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_select"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="40dp"
+        android:lineSpacingExtra="10dp"
+        android:textColor="@color/white"
+        android:text="@string/login_agreement"
+        android:textSize="12sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

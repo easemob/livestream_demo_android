@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@id/et_search"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_search" />
+
+
+    <com.easemob.livedemo.ui.widget.SearchEditText
+        android:id="@+id/et_search"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="9dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
+        android:textCursorDrawable="@drawable/search_cursor"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:search_edit_drawable_left_height="18dp"
+        app:search_edit_drawable_left_width="18dp" />
+
+    <ImageView
+        android:id="@+id/search_delete_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@drawable/search_delete"
+        app:layout_constraintBottom_toBottomOf="@id/et_search"
+        app:layout_constraintRight_toRightOf="@+id/et_search"
+        app:layout_constraintTop_toTopOf="@id/et_search" />
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="@string/search_empty_result"
+        android:textColor="@color/gray_normal"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_search" />
+
+    <com.hyphenate.easeui.widget.EaseRecyclerView
+        android:id="@+id/recycleview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/margin_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_search" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

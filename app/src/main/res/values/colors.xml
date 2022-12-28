@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#2F80ED</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="colorPrimary">#2F80ED</color>
+    <color name="colorTextPrimary">#ffffff</color>
+    <color name="textColorSecondary">@color/gray</color>
+
+    <color name="placeholder">#ddd</color>
+    <color name="author_background">#66000000</color>
+
+    <color name="common_bg">#E6E6EB</color>
+    <color name="tab_indicator">#323232</color>
+
+    <color name="white">#feffffff</color>
+    <color name="whiteblack">#ff000000</color>
+
+    <color name="common_white">#fff</color>
+    <color name="common_black">#3B3B3B</color>
+    <color name="common_text_gray">#ff999999</color>
+
+    <color name="common_btn_white_normal">@color/common_white</color>
+    <color name="common_btn_white_pressed">#ccc</color>
+
+    <color name="common_btn_black_normal">#1A1A1A</color>
+    <color name="common_btn_black_pressed">#111010</color>
+    <color name="common_btn_blue_normal">#19A3FF</color>
+    <color name="common_btn_blue_pressed">#1887cd</color>
+    <color name="common_btn_blue_disabled">#B9B9B9</color>
+
+    <color name="color_room_manager_orange">#FF8042</color>
+
+    <color name="gray_normal">#666667</color>
+
+    <color name="btn_blue_normal">#1e90ff</color>
+
+    <color name="holo_blue_bright">#ff00ddff</color>
+    <color name="holo_green_light">#ff99cc00</color>
+    <color name="holo_orange_light">#ffffbb33</color>
+    <color name="holo_red_light">#ffff4444</color>
+
+    <color name="gray">#ffe9e9e9</color>
+
+    <color name="em_color_warning">#ffff2b2b</color>
+    <color name="em_color_disable">#ff999999</color>
+
+
+    <color name="em_switch_color_checked">#ff04aef0</color>
+    <color name="em_switch_color_unchecked">#ffe9e9e9</color>
+
+    <color name="color_search_bg">#212226</color>
+    <color name="color_search_hint">#5CFFFFFF</color>
+    <color name="color_search_text">#FFFFFF</color>
+
+    <color name="create_live_name_numbers_tip">#99FFFFFF</color>
+    <color name="translucent_bg">#70000000</color>
+    <color name="color_black_333333">#333333</color>
+    <color name="color_light_gray_999999">#999999</color>
+    <color name="group_blue_154dfe">#154dfe</color>
+    <color name="group_blue_20154dfe">#20154dfe</color>
+
+    <color name="color_second_text">#666666</color>
+    <color name="color_main_text">#0D0D0D</color>
+
+
+    <color name="change_avatar_divider_bg">#333333</color>
+    <color name="change_avatar_bg">#212121</color>
+
+    <color name="button_color">#037BFD</color>
+    <color name="dialog_list_item_color">#DE000000</color>
+    <color name="user_detail_item_text_color">#99000000</color>
+
+    <color name="change_cover_divider_bg">#14000000</color>
+    <color name="change_cover_content_color">#99000000</color>
+
+    <color name="default_overlay_color">#FFFFFF</color>
+
+    <color name="change_username_bg">#212121</color>
+
+    <color name="item_pressed_bg">#F5F5F5</color>
+    <color name="navigation_bar_color">#212226</color>
+
+    <color name="splash_bg_color">#000000</color>
+    <color name="splash_name_color">#FF008A</color>
+    <color name="splash_powered_info_color">#BDBDBD</color>
+
+    <color name="login_color_btn_text_unable">#ffffffff</color>
+    <color name="login_color_btn_text_enable">#FFF4F4F4</color>
+    <color name="login_color_edit_text_bg">#333333</color>
+    <color name="login_color_edit_text_hint">#5c5c5c</color>
+    <color name="login_color_btn_unable">#44000000</color>
+    <color name="login_color_btn_enable_left">#ffFF8D00</color>
+    <color name="login_color_btn_enable_right">#ffFF00DA</color>
+</resources>

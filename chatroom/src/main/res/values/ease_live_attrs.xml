@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EaseChatRoomMessagesView">
+        <attr name="ease_live_input_edit_margin_bottom" format="dimension" />
+        <attr name="ease_live_input_edit_margin_end" format="dimension" />
+        <attr name="ease_live_message_list_margin_end" format="dimension" />
+        <attr name="ease_live_message_list_background" format="reference|color" />
+        <attr name="ease_live_message_item_text_color" format="reference|color" />
+        <attr name="ease_live_message_item_text_size" format="dimension" />
+        <attr name="ease_live_message_item_bubbles_background" format="reference|color" />
+        <attr name="ease_live_message_nickname_text_color" format="reference|color" />
+        <attr name="ease_live_message_nickname_text_size" format="dimension" />
+        <attr name="ease_live_message_show_nickname" format="boolean" />
+        <attr name="ease_live_message_show_avatar" format="boolean" />
+        <attr name="ease_live_message_avatar_shape_type" format="enum">
+            <enum name="none" value="0" />
+            <enum name="round" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

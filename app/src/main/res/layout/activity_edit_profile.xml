@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/back_layout"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/title_bar"
+            android:layout_width="10dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/margin_20"
+            android:scaleType="fitCenter"
+            android:src="@drawable/titlebar_back"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/titlebar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_10"
+        android:text="@string/setting_edit_profile"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/back_layout"
+        app:layout_constraintLeft_toRightOf="@id/back_layout"
+        app:layout_constraintTop_toTopOf="@id/back_layout" />
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/user_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ease_default_avatar"
+        app:ease_shape_type="round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_layout" />
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/change_avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/change_avatar"
+        app:layout_constraintBottom_toBottomOf="@id/user_icon"
+        app:layout_constraintLeft_toLeftOf="@id/user_icon"
+        app:layout_constraintRight_toRightOf="@id/user_icon"
+        app:layout_constraintTop_toTopOf="@id/user_icon" />
+
+    <TextView
+        android:id="@+id/change_avatar_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_15"
+        android:text="@string/setting_change_avatar"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_icon" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_30"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/change_avatar_tip">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.easemob.livedemo.ui.widget.ArrowItemView
+                android:id="@+id/item_username"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_30"
+                android:layout_marginTop="@dimen/margin_10"
+                app:arrowItemAvatarHeight="@dimen/margin_30"
+                app:arrowItemContentColor="#BDFFFFFF"
+                app:arrowItemContentSize="16sp"
+                app:arrowItemTitle="@string/setting_username_title"
+                app:arrowItemTitleColor="@color/white"
+                app:arrowItemTitleSize="16sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view_divider_username"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="#333333"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_username" />
+
+            <com.easemob.livedemo.ui.widget.ArrowItemView
+                android:id="@+id/item_gender"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_30"
+                android:layout_marginTop="@dimen/margin_10"
+                app:arrowItemAvatarHeight="@dimen/margin_30"
+                app:arrowItemContentColor="#BDFFFFFF"
+                app:arrowItemContentSize="16sp"
+                app:arrowItemTitle="@string/setting_gender_title"
+                app:arrowItemTitleColor="@color/white"
+                app:arrowItemTitleSize="16sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_divider_username" />
+
+            <View
+                android:id="@+id/view_divider_gender"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="#333333"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_gender" />
+
+            <com.easemob.livedemo.ui.widget.ArrowItemView
+                android:id="@+id/item_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_30"
+                android:layout_marginTop="@dimen/margin_10"
+                app:arrowItemAvatarHeight="@dimen/margin_30"
+                app:arrowItemContentColor="#BDFFFFFF"
+                app:arrowItemContentSize="16sp"
+                app:arrowItemTitle="@string/setting_birthday_title"
+                app:arrowItemTitleColor="@color/white"
+                app:arrowItemTitleSize="16sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_divider_gender" />
+
+            <View
+                android:id="@+id/view_divider_birthday"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="#333333"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_birthday" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

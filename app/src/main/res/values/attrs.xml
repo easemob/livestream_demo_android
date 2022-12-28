@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageGroupView">
+        <attr name="image_group_src" format="reference" />
+        <attr name="image_group_width" format="dimension">
+            <!-- The view should be as big as its parent (minus padding).
+                 This constant is deprecated starting from API Level 8 and
+                 is replaced by {@code match_parent}. -->
+            <enum name="fill_parent" value="-1" />
+            <!-- The view should be as big as its parent (minus padding).
+                 Introduced in API Level 8. -->
+            <enum name="match_parent" value="-1" />
+            <!-- The view should be only big enough to enclose its content (plus padding). -->
+            <enum name="wrap_content" value="-2" />
+        </attr>
+        <attr name="image_group_height" format="dimension">
+            <!-- The view should be as big as its parent (minus padding).
+                 This constant is deprecated starting from API Level 8 and
+                 is replaced by {@code match_parent}. -->
+            <enum name="fill_parent" value="-1" />
+            <!-- The view should be as big as its parent (minus padding).
+                 Introduced in API Level 8. -->
+            <enum name="match_parent" value="-1" />
+            <!-- The view should be only big enough to enclose its content (plus padding). -->
+            <enum name="wrap_content" value="-2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ArrowItemView">
+        <attr name="arrowItemTitle" format="string|reference" />
+        <attr name="arrowItemTitleColor" format="color|reference" />
+        <attr name="arrowItemTitleSize" format="dimension|reference" />
+        <attr name="arrowItemContent" format="string|reference" />
+        <attr name="arrowItemContentColor" format="color|reference" />
+        <attr name="arrowItemContentSize" format="dimension|reference" />
+        <attr name="arrowItemShowDivider" format="boolean" />
+        <attr name="arrowItemShowArrow" format="boolean" />
+        <attr name="arrowItemShowAvatar" format="boolean" />
+        <attr name="arrowItemAvatarSrc" format="reference" />
+        <attr name="arrowItemArrowSrc" format="reference" />
+        <attr name="arrowItemAvatarHeight" format="dimension|reference" />
+        <attr name="arrowItemAvatarWidth" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MagicTextView">
+        <attr name="innerShadowColor" format="color" />
+        <attr name="innerShadowRadius" format="float" />
+        <attr name="innerShadowDx" format="float" />
+        <attr name="innerShadowDy" format="float" />
+        <attr name="outerShadowColor" format="color" />
+        <attr name="outerShadowRadius" format="float" />
+        <attr name="outerShadowDx" format="float" />
+        <attr name="outerShadowDy" format="float" />
+        <attr name="m_typeface" format="string" />
+        <attr name="m_foreground" format="reference|color" />
+        <attr name="m_strokeWidth" format="float" />
+        <attr name="m_strokeMiter" format="float" />
+        <attr name="m_strokeColor" format="color" />
+        <attr name="m_strokeJoinStyle">
+            <enum name="miter" value="0" />
+            <enum name="bevel" value="1" />
+            <enum name="round" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SearchEditText">
+        <attr name="search_edit_drawable_left_width" format="dimension" />
+        <attr name="search_edit_drawable_left_height" format="dimension" />
+        <attr name="search_edit_drawable_right_width" format="dimension" />
+        <attr name="search_edit_drawable_right_height" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="SwitchItemView">
+        <attr name="switchItemTitle" format="string|reference" />
+        <attr name="switchItemTitleColor" format="color|reference" />
+        <attr name="switchItemTitleSize" format="dimension|reference" />
+        <attr name="switchItemShowDivider" format="boolean" />
+        <attr name="switchItemHint" format="string|reference" />
+        <attr name="switchItemCheckEnable" format="boolean" />
+        <attr name="switchItemClickable" format="boolean" />
+        <attr name="switchItemShowAvatar" format="boolean" />
+        <attr name="switchItemAvatarSrc" format="reference" />
+        <attr name="switchItemAvatarHeight" format="dimension|reference" />
+        <attr name="switchItemAvatarWidth" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PxBlurringView">
+        <attr name="blurRadius" format="integer" />
+        <attr name="downsampleFactor" format="integer" />
+        <attr name="overlayColor" format="reference|color" />
+    </declare-styleable>
+</resources>

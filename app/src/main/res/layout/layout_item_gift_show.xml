@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/live_gift_show_bg_shape">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ease_default_avatar"
+            app:ease_shape_type="round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_username"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxEms="8"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toRightOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_icon" />
+
+        <TextView
+            android:id="@+id/send_gift_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/gift_show_send"
+            android:textColor="#BDFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+            app:layout_constraintLeft_toRightOf="@id/iv_icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_gift"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        app:layout_constraintBottom_toBottomOf="@id/cl_content"
+        app:layout_constraintLeft_toRightOf="@id/cl_content"
+        app:layout_constraintTop_toTopOf="@id/cl_content"
+        tools:src="@drawable/gift_default_1" />
+
+
+    <com.easemob.livedemo.ui.widget.MagicTextView
+        android:id="@+id/tv_gift_num"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:gravity="left|center_vertical"
+        android:paddingEnd="12dp"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_gift"
+        app:layout_constraintLeft_toRightOf="@id/iv_gift"
+        app:layout_constraintTop_toTopOf="@id/iv_gift"
+        tools:text="12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

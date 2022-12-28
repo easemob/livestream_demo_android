@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/view_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.hyphenate.easeui.widget.EaseRecyclerView
+        android:id="@+id/room_message_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/unread_message_view"
+        android:layout_marginBottom="5dp" />
+
+    <TextView
+        android:id="@+id/unread_message_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/message_input_tip"
+        android:layout_marginStart="15dp"
+        android:background="@drawable/ease_live_unread_message_bg"
+        android:drawableEnd="@drawable/ease_live_unread_message_icon"
+        android:drawablePadding="4dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="7dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/message_input_tip"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ease_live_message_input_tip_bg_shape"
+        android:gravity="center_vertical"
+        android:paddingStart="13dp"
+        android:paddingEnd="13dp"
+        android:textColor="#BDFFFFFF"
+        android:textSize="14sp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/message_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/message_input_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/ease_live_message_input_bg_shape"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:maxLines="3"
+            android:minHeight="35dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textColor="#323232"
+            android:textColorHint="#999999"
+            android:textCursorDrawable="@drawable/ease_live_input_cursor_bg"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

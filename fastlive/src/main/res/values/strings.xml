@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fast_live_host_fail">Network connection failed, do you want to stop streaming?</string>
+    <string name="fast_live_host_local_video_fail">Local video error, do you want to try again?</string>
+</resources>

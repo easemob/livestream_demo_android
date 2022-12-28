@@ -1,0 +1,140 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    // Read local.properties
+    Properties properties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream();
+    properties.load(inputStream)
+
+    compileSdkVersion rootProject.ext.compile_sdk_version
+    buildToolsVersion rootProject.ext.build_tools_version
+    //use legacy for android > 6.0
+    //useLibrary 'org.apache.http.legacy'
+
+    defaultConfig {
+        applicationId "com.easemob.livedemo"
+        minSdkVersion rootProject.ext.min_sdk_version
+        targetSdkVersion rootProject.ext.target_skd_version
+        versionCode 100
+        versionName "1.0.0"
+        multiDexEnabled true
+
+        renderscriptTargetApi rootProject.ext.target_skd_version
+        renderscriptSupportModeEnabled true
+
+        vectorDrawables.useSupportLibrary = true
+
+        buildConfigField("String", "APP_SERVER_PROTOCOL", "\"https\"")
+        buildConfigField("String", "APP_SERVER_DOMAIN", "\"a1.easemob.com\"")
+        buildConfigField("String", "APP_SERVER_URL", "\"/app/chat/user/login\"")
+        buildConfigField("String", "APP_BASE_USER", "\"/inside/app/user/\"")
+        buildConfigField ("String", "APP_SEND_SMS_FROM_SERVER", "\"/inside/app/sms/send\"")
+        buildConfigField("String", "APP_SERVER_LOGIN", "\"login/V1\"")
+        buildConfigField("String", "BASE_URL", '"http://a1.easemob.com/"')
+        buildConfigField("String", "AGORA_APP_ID", "\"${properties.getProperty("AGORA_APP_ID", "******")}\"")
+
+        manifestPlaceholders = [CHAT_APPKEY: properties.getProperty("CHAT_APPKEY", "******")]
+
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('./keystore/live.jks')
+            storePassword '123456'
+            keyAlias = 'China'
+            keyPassword '123456'
+        }
+        debug {
+            storeFile file('./keystore/debug.keystore')
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                outputFileName = "livestream_v${defaultConfig.versionName}_${buildType.name}_${releaseTime()}.apk"
+            }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+        disable 'MissingTranslation'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+static def releaseTime() {
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("CTT"))
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation "com.jakewharton:butterknife:$butterknife_version"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation "androidx.lifecycle:lifecycle-livedata:$ax_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$ax_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$ax_lifecycle_version"
+    implementation "androidx.room:room-runtime:$ax_room_version"
+    annotationProcessor "androidx.room:room-compiler:$ax_room_version"
+    implementation 'com.github.florent37:viewanimator:1.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.weigan:loopView:0.1.1'
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
+    // RecyclerView
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    // Use the most recent version of CameraX, currently that is alpha04
+    def camerax_version = "1.0.0-alpha06"
+    //noinspection GradleDependency
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    //noinspection GradleDependency
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
+
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'
+    implementation 'io.github.scwang90:refresh-header-classics:2.0.5'
+
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+
+    // agora cdn live
+    implementation project(path: ':fastlive')
+    // chat room
+    implementation project(path: ':chatroom')
+}

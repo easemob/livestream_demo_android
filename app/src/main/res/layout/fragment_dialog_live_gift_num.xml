@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="80dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/rv_list"
+    tools:showIn="@layout/fragment_live_gift_list">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/num_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_gift_minus"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/live_minus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_gift_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:text="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_big"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/iv_gift_minus"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_gift_plus"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/margin_10"
+            android:src="@drawable/live_plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_gift_num"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_gift_gold_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/margin_10"
+        android:src="@drawable/coin_large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@id/num_layout"
+        app:layout_constraintRight_toLeftOf="@id/gift_total_values"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/gift_total_values"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@id/iv_gift_gold_icon"
+        app:layout_constraintRight_toLeftOf="@id/btn_send"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:background="@drawable/live_gift_send_bg_shape"
+        android:text="@string/gift_send"
+        android:textColor="@color/white"
+        android:textSize="@dimen/em_size_big"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

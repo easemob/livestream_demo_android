@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="3dp">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="9dp"
+        android:src="@drawable/ease_default_avatar"
+        android:visibility="gone"
+        app:ease_shape_type="round" />
+
+    <RelativeLayout
+        android:id="@+id/join_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:background="@drawable/ease_live_message_bg_shape"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/joined_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#BDFFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/joined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_toRightOf="@id/joined_nickname"
+            android:maxLines="1"
+            android:text="@string/ease_live_message_member_add"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/iv_join_welcome"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toRightOf="@id/joined"
+            android:src="@drawable/ease_live_member_join_welcome"
+            app:ease_shape_type="none" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/text_message_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:background="@drawable/ease_live_message_bg_shape"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/txt_message_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="#BDFFFFFF"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/txt_message_nickname_role"
+            android:layout_width="44dp"
+            android:layout_height="12dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="-4dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toRightOf="@id/txt_message_nickname"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/txt_message_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_message_nickname"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="500"
+            android:scrollHorizontally="false"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</RelativeLayout>

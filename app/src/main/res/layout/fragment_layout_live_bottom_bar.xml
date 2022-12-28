@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/user_manager_image"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="12dp"
+        android:background="@drawable/live_button_bg_shape"
+        android:padding="@dimen/em_margin_10"
+        android:src="@drawable/live_user_manager"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/comment_image"
+        app:layout_constraintLeft_toRightOf="@id/comment_image"
+        app:layout_constraintTop_toTopOf="@id/comment_image" />
+
+
+    <ImageView
+        android:id="@+id/like_image"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="@dimen/em_margin_10"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:background="@drawable/live_like_bg_selector"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/live_receive_gift"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/comment_image"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/live_bg_shape"
+        android:clickable="true"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/message_slash"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/switch_camera_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/switch_camera_image"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/live_bg_shape"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/live_switch_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/img_bt_close"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_bt_close"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/live_bg_shape"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/power"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/live_receive_gift"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/live_receive_gift"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/gift"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/live_user_manager_bg_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginTop="52dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:includeFontPadding="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/layout_sex"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:paddingStart="2dp"
+            android:paddingEnd="3dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_username"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@id/tv_username"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_username">
+
+            <ImageView
+                android:id="@+id/sex_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/sex_male_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/age_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="2dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:text="18"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/sex_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/role_type"
+            android:layout_width="60dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="4dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/item_timeout_all"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/mute_state"
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/mute_state"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/mute"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/item_timeout_all"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@id/role_type"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
+
+        <com.easemob.livedemo.ui.widget.SwitchItemView
+            android:id="@+id/item_timeout_all"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/role_type"
+            app:switchItemShowDivider="false"
+            app:switchItemTitle="@string/timeout_all"
+            app:switchItemTitleColor="@color/user_detail_item_text_color"
+            app:switchItemTitleSize="@dimen/size_normal" />
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_remove_from_allowed_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_remove_from_allowed_list"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_timeout_all"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_move_to_allowed_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_move_to_allowed_list"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_remove_from_allowed_list"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_remove_as_moderator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_remove_as_moderator"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_move_to_allowed_list"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_assign_as_moderator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_assign_as_moderator"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_remove_as_moderator"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_timeout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_timeout"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_assign_as_moderator"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_remove_timeout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_remove_timeout"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_timeout"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_ban"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_ban"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_remove_timeout"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+        <com.easemob.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_unban"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@drawable/item_click_bg_change"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_unban"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_ban"
+            app:switchItemTitleColor="@color/user_detail_item_text_color" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/user_icon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/ease_default_avatar"
+        app:ease_border_color="@color/white"
+        app:ease_border_width="4dp"
+        app:ease_shape_type="round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

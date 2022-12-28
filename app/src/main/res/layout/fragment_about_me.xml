@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/user_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ease_default_avatar"
+        app:ease_shape_type="round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginTop="@dimen/em_margin_15"
+        android:layout_marginRight="@dimen/margin_5"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_icon" />
+
+    <TextView
+        android:id="@+id/setting_title_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginTop="@dimen/em_margin_15"
+        android:text="@string/setting_title"
+        android:textColor="#999999"
+        android:textSize="@dimen/size_small"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username" />
+
+    <com.easemob.livedemo.ui.widget.ArrowItemView
+        android:id="@+id/item_about"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_30"
+        android:layout_marginTop="@dimen/margin_10"
+        app:arrowItemAvatarHeight="@dimen/margin_30"
+        app:arrowItemAvatarSrc="@drawable/about_icon"
+        app:arrowItemContentColor="#898989"
+        app:arrowItemContentSize="16sp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemShowDivider="false"
+        app:arrowItemTitle="@string/setting_about_title"
+        app:arrowItemTitleColor="@color/white"
+        app:arrowItemTitleSize="16sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setting_title_label" />
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_10"
+        android:background="#333333"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_about" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

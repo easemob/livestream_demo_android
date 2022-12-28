@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.easemob.livedemo">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- qiniu need permission start -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <!-- qiniu need permission end -->
+
+    <!--agora need start -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+    <!-- agora need end -->
+
+    <uses-sdk tools:overrideLibrary="androidx.camera.camera2,androidx.camera.core" />
+
+    <application
+        android:name="com.easemob.livedemo.DemoApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/live_logo"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/live_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <!--Solve the problem of forcing the use of https in Android 9.0 and add android:usesCleartextTraffic="true" in the application tag-->
+        <!--<uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
+
+        <!-- Set your agora chat AppKey -->
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="${CHAT_APPKEY}" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="io.agora.livedemo.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name="com.easemob.livedemo.ui.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.easemob.livedemo.ui.MainActivity"
+            android:launchMode="singleTask"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="com.easemob.livedemo.ui.other.SearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.easemob.livedemo.ui.other.CreateLiveRoomActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name="com.easemob.livedemo.ui.cdn.CdnLivingListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.easemob.livedemo.ui.cdn.CdnLiveHostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name="com.easemob.livedemo.ui.other.AboutActivity"
+            android:exported="false"/>
+        <activity
+            android:name="com.easemob.livedemo.ui.fast.FastLiveHostActivity"
+            android:launchMode="singleTop"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.easemob.livedemo.ui.fast.FastLiveAudienceActivity"
+            android:launchMode="singleTop"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.easemob.livedemo.ui.fast.FastLivingListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.easemob.livedemo.ui.cdn.CdnLiveAudienceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.easemob.livedemo.ui.other.EditProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity android:name="com.easemob.livedemo.ui.LoginActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+    </application>
+
+</manifest>

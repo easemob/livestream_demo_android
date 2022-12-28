@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="54dp"
+    android:background="@drawable/item_click_bg_change">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/iv_user_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        app:ease_shape_type="round" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/iv_user_avatar"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#0D0D0D"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/iv_role_type"
+        android:layout_width="60dp"
+        android:layout_height="16dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/tv_user_name" />
+
+    <ImageView
+        android:id="@+id/iv_state_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="9dp"
+        android:layout_toEndOf="@id/iv_role_type" />
+</RelativeLayout>
