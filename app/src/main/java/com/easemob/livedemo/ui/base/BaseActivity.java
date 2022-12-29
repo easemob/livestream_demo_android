@@ -20,6 +20,7 @@ import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.common.repository.Resource;
 import com.easemob.livedemo.common.utils.DemoHelper;
 import com.easemob.livedemo.common.utils.ThreadManager;
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.easemob.livedemo.utils.StatusBarCompat;
 import com.easemob.livedemo.utils.ThreadPoolManager;
 import com.easemob.livedemo.utils.Utils;
@@ -35,7 +36,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        DemoHelper.setDefaultLanguage(mContext,"en");
+        LanguageUtils.setDefaultLanguage(mContext, "zh");
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);

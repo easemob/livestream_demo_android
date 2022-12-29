@@ -9,21 +9,19 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.easemob.livedemo.DemoConstants;
+import com.easemob.livedemo.R;
+import com.easemob.livedemo.common.livedata.LiveDataBus;
 import com.easemob.livedemo.ui.LoginActivity;
+import com.easemob.livedemo.ui.base.BaseLiveFragment;
 import com.easemob.livedemo.ui.other.AboutActivity;
+import com.easemob.livedemo.ui.widget.ArrowItemView;
+import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.EMLog;
-
-import com.easemob.livedemo.DemoConstants;
-import com.easemob.livedemo.R;
-import com.easemob.livedemo.common.livedata.LiveDataBus;
-import com.easemob.livedemo.common.utils.DemoHelper;
-import com.easemob.livedemo.ui.base.BaseLiveFragment;
-import com.easemob.livedemo.ui.widget.ArrowItemView;
-import com.easemob.livedemo.utils.Utils;
 
 public class AboutMeFragment extends BaseLiveFragment {
     private EaseImageView userIcon;
@@ -42,9 +40,9 @@ public class AboutMeFragment extends BaseLiveFragment {
         username = findViewById(R.id.username);
         itemAbout = findViewById(R.id.item_about);
 
-        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), userIcon);
+        EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), userIcon);
 
-        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), username);
+        EaseUserUtils.setUserNick(EMClient.getInstance().getCurrentUser(), username);
 
         itemAbout.setContent("V" + Utils.getAppVersionName(mContext));
     }
@@ -115,7 +113,7 @@ public class AboutMeFragment extends BaseLiveFragment {
         LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE, Boolean.class)
                 .observe(getViewLifecycleOwner(), response -> {
                     EMLog.i("lives","AVATAR_CHANGE");
-                    EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), userIcon);
+                    EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), userIcon);
                 });
     }
 }

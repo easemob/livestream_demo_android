@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 
 import com.easemob.livedemo.common.utils.DemoHelper;
 import com.easemob.livedemo.common.utils.PreferenceManager;
-import com.easemob.livedemo.data.repository.UserRepository;
 import com.easemob.livedemo.databinding.ActivitySplashBinding;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
 import com.hyphenate.chat.EMClient;
@@ -49,7 +48,6 @@ public class SplashActivity extends BaseLiveActivity {
         super.initData();
         PreferenceManager.init(mContext);
         DemoHelper.init();
-        UserRepository.getInstance().init(mContext);
 
         skipToTarget();
     }

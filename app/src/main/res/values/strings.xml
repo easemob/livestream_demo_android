@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">环信直播房</string>
+    <string name="application_name">环信直播房</string>
 
     <string name="live_type_interaction_title">互动直播</string>
     <string name="live_type_fast_title">快速直播</string>

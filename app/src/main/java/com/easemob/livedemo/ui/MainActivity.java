@@ -19,7 +19,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.livedata.LiveDataBus;
-import com.easemob.livedemo.common.utils.DemoHelper;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.databinding.ActivityMainBinding;
 import com.easemob.livedemo.runtimepermissions.PermissionsManager;
@@ -55,7 +54,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         super.initView();
         Utils.hideKeyboard(mBinding.title);
         mBinding.title.setTypeface(Utils.getRobotoBlackTypeface(this.getApplicationContext()));
-        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.ivHomeSet);
+        EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), mBinding.ivHomeSet);
     }
 
     @Override
@@ -91,7 +90,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
 
         LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE, Boolean.class)
                 .observe(mContext, response -> {
-                    EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.ivHomeSet);
+                    EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), mBinding.ivHomeSet);
                 });
     }
 

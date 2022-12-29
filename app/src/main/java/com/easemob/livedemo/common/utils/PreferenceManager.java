@@ -93,37 +93,6 @@ public class PreferenceManager {
         editor.commit();
     }
 
-    /**
-     * save agora id
-     *
-     * @param id
-     */
-    public void saveAgoraId(String id) {
-        editor.putString(KEY_AGORA_ID, id);
-        editor.apply();
-    }
-
-    public String getAgoraId() {
-        if (null != mSharedPreferences) {
-            return mSharedPreferences.getString(KEY_AGORA_ID, null);
-        } else {
-            return "";
-        }
-    }
-
-    public void savePwd(String pwd) {
-        editor.putString(KEY_PWD, pwd);
-        editor.apply();
-    }
-
-    public String getPwd() {
-        if (null != mSharedPreferences) {
-            return mSharedPreferences.getString(KEY_PWD, null);
-        } else {
-            return "";
-        }
-    }
-
     public void saveLikeNum(String roomId, int num) {
         if (TextUtils.isEmpty(roomId)) {
             return;

@@ -1,11 +1,14 @@
 package com.easemob.livedemo.data.repository;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.easemob.livedemo.DemoApplication;
+import com.easemob.livedemo.common.db.DemoDbHelper;
+import com.easemob.livedemo.common.db.dao.UserDao;
+import com.easemob.livedemo.common.db.entity.UserEntity;
+import com.easemob.livedemo.common.inf.OnUpdateUserInfoListener;
 import com.easemob.livedemo.data.model.HeadImageInfo;
-import com.easemob.livedemo.data.model.User;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
@@ -18,22 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.easemob.livedemo.DemoApplication;
-import com.easemob.livedemo.R;
-import com.easemob.livedemo.common.db.DemoDbHelper;
-import com.easemob.livedemo.common.db.dao.UserDao;
-import com.easemob.livedemo.common.db.entity.UserEntity;
-import com.easemob.livedemo.common.inf.OnUpdateUserInfoListener;
-import com.easemob.livedemo.common.utils.DemoHelper;
-import com.easemob.livedemo.utils.Utils;
-
 public class UserRepository {
     private static volatile UserRepository mInstance;
     private static final String DEFAULT_BIRTHDAY = "2004-01-01";
     private static final String DEFAULT_GENDER = "1";
     private static final long USER_INFO_EXPIRED_TIME = 0;//60 * 1000;
-
-    private User mCurrentUser;
 
     private List<HeadImageInfo> mHeadImageList;
 
@@ -49,55 +41,6 @@ public class UserRepository {
             }
         }
         return mInstance;
-    }
-
-    public void init(Context context) {
-        String agoraId = DemoHelper.getAgoraId();
-        String pwd = DemoHelper.getPwd();
-        EaseUser user = getUserInfo(agoraId);
-        if (!TextUtils.isEmpty(agoraId) && !TextUtils.isEmpty(pwd)) {
-            mCurrentUser = new User();
-            mCurrentUser.setId(agoraId);
-            mCurrentUser.setPwd(pwd);
-            mCurrentUser.setNickName(user.getNickname());
-            mCurrentUser.setAvatarDefaultResource(R.drawable.ease_default_avatar);
-            mCurrentUser.setAvatarUrl(user.getAvatar());
-        }
-    }
-
-    /**
-     * get random user
-     *
-     * @return
-     */
-    public User getRandomUser() {
-        mCurrentUser = new User();
-        mCurrentUser.setId(Utils.getStringRandom(8));
-        mCurrentUser.setPwd(Utils.getStringRandom(12));
-        mCurrentUser.setNickName(mCurrentUser.getId());
-        mCurrentUser.setAvatarUrl(String.valueOf(R.drawable.ease_default_avatar));
-        mCurrentUser.setBirthday(DEFAULT_BIRTHDAY);
-        mCurrentUser.setGender(DEFAULT_GENDER);
-        saveCurrentUserInfoToDb();
-        return mCurrentUser;
-    }
-
-    private void saveCurrentUserInfoToDb() {
-        EaseUser easeUser = new EaseUser(mCurrentUser.getId());
-        easeUser.setNickname(mCurrentUser.getNickName());
-        easeUser.setAvatar(mCurrentUser.getAvatarUrl());
-        easeUser.setBirth(mCurrentUser.getBirthday());
-        try {
-            easeUser.setGender(Integer.parseInt(mCurrentUser.getGender()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        saveUserInfoToDb(easeUser);
-    }
-
-    public User getCurrentUser() {
-        return mCurrentUser;
     }
 
     public void setHeadImageList(List<HeadImageInfo> headImageList) {
@@ -128,7 +71,7 @@ public class UserRepository {
             return;
         }
         //avoid fetch self info
-        usernameList.remove(DemoHelper.getAgoraId());
+        usernameList.remove(EMClient.getInstance().getCurrentUser());
 
         Iterator<String> iterator = usernameList.iterator();
         UserEntity user;

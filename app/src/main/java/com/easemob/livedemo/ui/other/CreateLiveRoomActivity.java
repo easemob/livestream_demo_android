@@ -77,7 +77,7 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
     private String mCoverPath;
 
     private final int REQUEST_CODE_PERMISSIONS = 10; //arbitrary number, can be changed accordingly
-    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
+    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.READ_EXTERNAL_STORAGE"};
 
     protected File mCameraFile;
     private Uri mCacheUri;
@@ -117,7 +117,7 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
             }
         });
 
-        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.coverImage);
+        EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), mBinding.coverImage);
 
         setEditTextEnable(false, mBinding.liveName);
 

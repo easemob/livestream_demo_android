@@ -9,16 +9,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.hyphenate.chat.EMClient;
-
 import com.easemob.livedemo.common.enums.Status;
 import com.easemob.livedemo.common.livedata.SingleSourceLiveData;
 import com.easemob.livedemo.common.repository.AppServerRepository;
 import com.easemob.livedemo.common.repository.ClientRepository;
 import com.easemob.livedemo.common.repository.Resource;
-import com.easemob.livedemo.common.utils.DemoHelper;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.repository.UserRepository;
+import com.hyphenate.chat.EMClient;
 
 public class CreateLiveViewModel extends AndroidViewModel {
     private final AppServerRepository repository;
@@ -74,7 +72,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
     public void createLiveRoom(String name, String description, String localPath, String videoType) {
         LiveData<Resource<LiveRoom>> liveData = null;
         if (TextUtils.isEmpty(localPath)) {
-            LiveRoom liveRoom = getLiveRoom(name, description, videoType, UserRepository.getInstance().getUserInfo(DemoHelper.getAgoraId()).getAvatar());
+            LiveRoom liveRoom = getLiveRoom(name, description, videoType, UserRepository.getInstance().getUserInfo(EMClient.getInstance().getCurrentUser()).getAvatar());
             liveData = repository.createLiveRoom(liveRoom);
         } else {
             liveData = Transformations.switchMap(clientRepository.updateRoomCover(localPath), input -> {

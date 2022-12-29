@@ -1,15 +1,18 @@
 package com.easemob.livedemo.common.utils;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 
+import com.easemob.chatroom.EaseLiveMessageConstant;
+import com.easemob.chatroom.EaseLiveMessageType;
+import com.easemob.live.FastLiveHelper;
+import com.easemob.livedemo.DemoApplication;
+import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.common.db.DemoDbHelper;
 import com.easemob.livedemo.common.db.dao.ReceiveGiftDao;
 import com.easemob.livedemo.common.db.dao.UserDao;
 import com.easemob.livedemo.common.db.entity.ReceiveGiftEntity;
 import com.easemob.livedemo.common.db.entity.UserEntity;
+import com.easemob.livedemo.common.livedata.LiveDataBus;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.repository.GiftRepository;
@@ -18,8 +21,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
-import com.easemob.chatroom.EaseLiveMessageConstant;
-import com.easemob.chatroom.EaseLiveMessageType;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
@@ -27,14 +28,8 @@ import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import com.easemob.live.FastLiveHelper;
-import com.easemob.livedemo.DemoApplication;
-import com.easemob.livedemo.DemoConstants;
-import com.easemob.livedemo.common.livedata.LiveDataBus;
 
 public class DemoHelper {
 
@@ -79,29 +74,6 @@ public class DemoHelper {
         PreferenceManager.getInstance().removeLivingId();
     }
 
-    /**
-     * save current user
-     */
-    public static void saveCurrentUser() {
-        PreferenceManager.getInstance().saveAgoraId(UserRepository.getInstance().getCurrentUser().getId());
-        PreferenceManager.getInstance().savePwd(UserRepository.getInstance().getCurrentUser().getPwd());
-    }
-
-    /**
-     * clear agora id
-     */
-    public static void clearUser() {
-        PreferenceManager.getInstance().saveAgoraId("");
-        PreferenceManager.getInstance().savePwd("");
-    }
-
-    public static String getAgoraId() {
-        return PreferenceManager.getInstance().getAgoraId();
-    }
-
-    public static String getPwd() {
-        return PreferenceManager.getInstance().getPwd();
-    }
 
     /**
      * get gift
@@ -275,12 +247,4 @@ public class DemoHelper {
         return map;
     }
 
-    public static void setDefaultLanguage(Context context, String language) {
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Configuration config = context.getResources().getConfiguration();
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        config.locale = Locale.ENGLISH;
-        context.getResources().updateConfiguration(config, metrics);
-    }
 }

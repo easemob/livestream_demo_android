@@ -17,19 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMClient;
 import com.easemob.chatroom.EaseLiveMessageHelper;
-import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.hyphenate.util.EMLog;
-
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.callback.OnResourceParseCallback;
@@ -44,6 +32,18 @@ import com.easemob.livedemo.data.repository.UserRepository;
 import com.easemob.livedemo.ui.live.viewmodels.LivingViewModel;
 import com.easemob.livedemo.utils.NumberUtils;
 import com.easemob.livedemo.utils.Utils;
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.util.EMLog;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class LiveAnchorFragment extends LiveBaseFragment {
     public static final int MSG_UPDATE_COUNTDOWN = 1;
@@ -92,7 +92,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), ivIcon);
+        EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), ivIcon);
         viewGroup.setVisibility(View.GONE);
         btEnd.setVisibility(View.VISIBLE);
         countdownView.setTypeface(Utils.getRobotoBlackTypeface(getActivity().getApplicationContext()));
@@ -111,7 +111,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     @Override
     protected void initLiveStreamerUser() {
-        mLiveStreamerUser = UserRepository.getInstance().getUserInfo(DemoHelper.getAgoraId());
+        mLiveStreamerUser = UserRepository.getInstance().getUserInfo(EMClient.getInstance().getCurrentUser());
         initLiveStreamView();
     }
 

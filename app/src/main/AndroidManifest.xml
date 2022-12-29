@@ -36,7 +36,7 @@
         android:name="com.easemob.livedemo.DemoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/live_logo"
-        android:label="@string/app_name"
+        android:label="@string/application_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/live_logo"
         android:supportsRtl="true"
@@ -126,6 +126,7 @@
         <activity
             android:name="com.easemob.livedemo.ui.other.EditProfileActivity"
             android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:screenOrientation="portrait" />
 
         <activity android:name="com.easemob.livedemo.ui.LoginActivity"

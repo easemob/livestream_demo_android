@@ -5,9 +5,9 @@ import android.text.TextUtils;
 
 import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.R;
-import com.easemob.livedemo.common.utils.DemoHelper;
 import com.easemob.livedemo.data.model.GiftBean;
 import com.easemob.livedemo.data.model.User;
+import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class GiftRepository {
             bean.setId("gift_" + (i + 1));
             bean.setValue(giftValues[i]);
             user = new User();
-            user.setId(DemoHelper.getAgoraId());
+            user.setId(EMClient.getInstance().getCurrentUser());
             bean.setUser(user);
             bean.setLeftTime(0);
             gifts.add(bean);

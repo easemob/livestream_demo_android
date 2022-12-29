@@ -26,7 +26,6 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.callback.OnResourceParseCallback;
 import com.easemob.livedemo.common.livedata.LiveDataBus;
 import com.easemob.livedemo.common.repository.Resource;
-import com.easemob.livedemo.common.utils.DemoHelper;
 import com.easemob.livedemo.data.repository.UserRepository;
 import com.easemob.livedemo.databinding.ActivityEditProfileBinding;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
@@ -84,10 +83,10 @@ public class EditProfileActivity extends BaseLiveActivity {
     @Override
     protected void initView() {
         super.initView();
-        mUser = UserRepository.getInstance().getUserInfo(DemoHelper.getAgoraId());
+        mUser = UserRepository.getInstance().getUserInfo(EMClient.getInstance().getCurrentUser());
         initDatePicker();
-        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.userIcon);
-        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), mBinding.itemUsername.getTvContent());
+        EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), mBinding.userIcon);
+        EaseUserUtils.setUserNick(EMClient.getInstance().getCurrentUser(), mBinding.itemUsername.getTvContent());
         mBinding.titlebarTitle.setTypeface(Utils.getRobotoBlackTypeface(this.getApplicationContext()));
 
         mBinding.userIcon.setAlpha(0.6f);
@@ -249,7 +248,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                                     public void run() {
                                         mUser.setAvatar(data);
                                         UserRepository.getInstance().saveUserInfoToDb(mUser);
-                                        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.userIcon);
+                                        EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), mBinding.userIcon);
                                         LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE).postValue(true);
                                     }
                                 });
@@ -389,7 +388,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                     public void run() {
                         mUser.setNickname(nickname);
                         UserRepository.getInstance().saveUserInfoToDb(mUser);
-                        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), mBinding.itemUsername.getTvContent());
+                        EaseUserUtils.setUserNick(EMClient.getInstance().getCurrentUser(), mBinding.itemUsername.getTvContent());
                         LiveDataBus.get().with(DemoConstants.NICKNAME_CHANGE).postValue(nickname);
                     }
                 });
