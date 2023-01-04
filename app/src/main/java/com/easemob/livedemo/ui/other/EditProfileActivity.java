@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -154,6 +155,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                                 dialog.dismiss();
                             }
                         })
+                        .widgetColorRes(R.color.color_black_333333)
                         .build();
                 if (tipsDialog.getInputEditText() != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -161,7 +163,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                     }
                     tipsDialog.getInputEditText().setPadding(10, 0, 10, 0);
 
-                    tipsDialog.getInputEditText().setBackgroundColor(getResources().getColor(R.color.color_black_333333));
+                    tipsDialog.getInputEditText().setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_black_333333));
                 }
                 tipsDialog.show();
             }
