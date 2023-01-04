@@ -26,7 +26,6 @@
         app:layout_constraintTop_toBottomOf="@id/iv_icon"
         android:layout_marginTop="28dp"
         android:text="@string/splash_name"
-        android:letterSpacing="0.5"
         android:textColor="@color/splash_name_color"
         android:textSize="24sp"/>
 

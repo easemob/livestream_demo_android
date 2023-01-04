@@ -39,6 +39,8 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.util.EMLog;
 
+import java.util.Locale;
+
 public class LoginFragment extends BaseLiveFragment implements TextWatcher, View.OnClickListener, TextView.OnEditorActionListener {
 
     private FragmentLoginBinding binding;
@@ -161,11 +163,21 @@ public class LoginFragment extends BaseLiveFragment implements TextWatcher, View
     }
 
     private SpannableString getSpannable() {
+        String language = Locale.getDefault().getLanguage();
+        boolean isZh = language.startsWith("zh");
         SpannableString spanStr = new SpannableString(getString(R.string.login_agreement));
-        int start1 = 5;
-        int end1 = 13;
-        int start2 = 14;
+        int start1 = 29;
+        int end1 = 45;
+        int start2 = 50;
         int end2 = spanStr.length();
+        if(isZh) {
+            start1 = 5;
+            end1 = 13;
+            start2 = 14;
+            end2 = spanStr.length();
+        }
+        //设置下划线
+        //spanStr.setSpan(new UnderlineSpan(), 3, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         spanStr.setSpan(new MyClickableSpan() {
             @Override

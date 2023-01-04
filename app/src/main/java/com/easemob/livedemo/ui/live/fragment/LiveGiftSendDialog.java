@@ -75,7 +75,7 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
 
     @Override
     public void onConfirmClick(View v) {
-        super.onConfirmClick(v);
+        //super.onConfirmClick(v);
         dismiss();
         if (this.listener != null) {
             listener.onConfirmClick(v, gift);

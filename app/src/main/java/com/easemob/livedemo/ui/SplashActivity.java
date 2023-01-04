@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,7 +16,10 @@ import com.easemob.livedemo.common.utils.DemoHelper;
 import com.easemob.livedemo.common.utils.PreferenceManager;
 import com.easemob.livedemo.databinding.ActivitySplashBinding;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.hyphenate.chat.EMClient;
+
+import java.util.Locale;
 
 
 public class SplashActivity extends BaseLiveActivity {
@@ -41,6 +45,9 @@ public class SplashActivity extends BaseLiveActivity {
     @Override
     protected void initView() {
         super.initView();
+        if(TextUtils.equals(LanguageUtils.getDefaultLanguage(mContext), new Locale("zh").getLanguage())) {
+            mBinding.tvName.setLetterSpacing(0.5f);
+        }
     }
 
     @Override

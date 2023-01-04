@@ -2,10 +2,10 @@
 <resources>
 
     <string-array name="gender_types">
-        <item>Male</item>
-        <item>Female</item>
-        <item>Other</item>
-        <item>Secret</item>
+        <item>@string/profile_gender_male</item>
+        <item>@string/profile_gender_female</item>
+        <item>@string/profile_gender_other</item>
+        <item>@string/profile_gender_secret</item>
     </string-array>
 
     <string-array name="gift_res_names">

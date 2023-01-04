@@ -58,7 +58,7 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
 
     @Override
     public void onConfirmClick(View v) {
-        super.onConfirmClick(v);
+        //super.onConfirmClick(v);
         String num = etInputNum.getText().toString().trim();
         if (TextUtils.isEmpty(num)) {
             Toast.makeText(mContext, "input number", Toast.LENGTH_SHORT).show();

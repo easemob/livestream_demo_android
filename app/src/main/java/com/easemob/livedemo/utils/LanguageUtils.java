@@ -37,4 +37,13 @@ public class LanguageUtils {
 
         context.getResources().updateConfiguration(configuration, displayMetrics);
     }
+
+    /**
+     * 获取系统默认语言
+     * @param context
+     * @return
+     */
+    public static String getDefaultLanguage(Context context) {
+        return context.getResources().getConfiguration().locale.getLanguage();
+    }
 }

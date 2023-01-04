@@ -17,6 +17,7 @@ import androidx.multidex.MultiDex;
 
 import com.easemob.livedemo.common.callback.UserActivityLifecycleCallbacks;
 import com.easemob.livedemo.common.livedata.LiveDataBus;
+import com.easemob.livedemo.ui.LoginActivity;
 import com.easemob.livedemo.ui.MainActivity;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -75,12 +76,14 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
 
                 @Override
                 public void onDisconnected(int errorCode) {
-                    if (errorCode == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("conflict", true);
-                        startActivity(intent);
-                    }
+
+                }
+
+                @Override
+                public void onLogout(int errorCode) {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    intent.putExtra("errorCode", errorCode);
+                    getActivityLifecycle().skipToTarget(intent);
                 }
             });
         }

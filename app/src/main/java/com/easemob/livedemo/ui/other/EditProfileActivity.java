@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.easemob.livedemo.DemoApplication;
 import com.easemob.livedemo.DemoConstants;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.callback.OnResourceParseCallback;
@@ -31,6 +32,7 @@ import com.easemob.livedemo.databinding.ActivityEditProfileBinding;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
 import com.easemob.livedemo.ui.live.fragment.ListDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.UserInfoViewModel;
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -47,8 +49,10 @@ import java.io.File;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -57,7 +61,7 @@ public class EditProfileActivity extends BaseLiveActivity {
     private ActivityEditProfileBinding mBinding;
     private String[] mGenderArray;
     private final static int MAX_USERNAME_LENGTH = 24;
-    private static final String[] calls = {"Take Photo", "Upload Photo"};
+    private final List<String> calls = new ArrayList<>();
     private static final int REQUEST_CODE_PICK = 1;
     private static final int REQUEST_CODE_CUTTING = 2;
     private static final int REQUEST_CODE_CAMERA = 100;
@@ -92,6 +96,8 @@ public class EditProfileActivity extends BaseLiveActivity {
         mBinding.userIcon.setAlpha(0.6f);
 
         mGenderArray = getResources().getStringArray(R.array.gender_types);
+        calls.add(getString(R.string.profile_take_photo));
+        calls.add(getString(R.string.profile_upload_photo));
         updateGender(mUser.getGender());
         updateBirthday(mUser.getBirth());
     }
@@ -444,8 +450,9 @@ public class EditProfileActivity extends BaseLiveActivity {
             if (null == date) {
                 date = new Date();
             }
-
-            format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+            if(!TextUtils.equals(LanguageUtils.getDefaultLanguage(mContext), new Locale("zh").getLanguage())) {
+                format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
+            }
             mBinding.itemBirthday.setContent(format.format(date));
         } else {
             mBinding.itemBirthday.setContent(this.getResources().getString(R.string.setting_unknown));

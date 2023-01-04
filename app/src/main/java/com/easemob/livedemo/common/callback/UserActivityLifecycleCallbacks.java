@@ -89,7 +89,18 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
                 activity.finish();
             }
         }
+    }
 
+    public void skipToTarget(Intent intent) {
+        if(intent == null) {
+            return;
+        }
+        if (activityList != null && activityList.size() > 0) {
+            current().startActivity(intent);
+            for (Activity activity : activityList) {
+                activity.finish();
+            }
+        }
     }
 
     /**

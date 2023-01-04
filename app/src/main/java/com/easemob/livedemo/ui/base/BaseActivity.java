@@ -36,7 +36,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        LanguageUtils.setDefaultLanguage(mContext, "zh");
+        //LanguageUtils.setDefaultLanguage(mContext, "zh");
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);

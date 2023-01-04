@@ -1,0 +1,162 @@
+<resources>
+    <string name="application_name">环信直播聊天室</string>
+
+    <string name="live_type_interaction_title">互动直播</string>
+    <string name="live_type_fast_title">快速直播</string>
+    <string name="live_list_living">直播中</string>
+
+    <string name="live_anchor_mute">静音</string>
+    <string name="live_anchor_muted">已静音</string>
+
+    <string name="live_anchor_like_info">喜欢 %1$s</string>
+    <string name="live_anchor_receive_gift_info">打赏 %1$s</string>
+    <string name="live_user_fans">粉丝</string>
+    <string name="live_user_star">关注</string>
+    <string name="live_user_attentions">公告</string>
+    <string name="live_user_send_gift">打赏</string>
+
+    <string name="ok">好的</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="timeout">超时</string>
+    <string name="prompt">提示</string>
+
+    <string name="home_title">直播频道</string>
+    <string name="home_logged_tip">账户已在其他设备登陆</string>
+
+    <string name="live_list_no_streamer_tip">尚无进行中的直播</string>
+    <string name="live_list_start_live_stream_tip">开始你的直播！</string>
+    <string name="live_list_warning">请选择其他房间</string>
+
+    <string name="search_tip">请输入搜索内容</string>
+    <string name="search_empty_result">没有找到 %1$s</string>
+    <string name="search_text_hint">搜索</string>
+
+    <string name="create_live_change">更改</string>
+    <string name="create_live_flip">翻转</string>
+    <string name="create_live_default_name">欢迎来到我的频道!</string>
+    <string name="create_live_go_live">开始直播!</string>
+    <string name="create_live_change_cover">更换封面</string>
+    <string name="create_live_change_avatar">更改头像</string>
+    <string name="create_live_room_check_info">请填写完整</string>
+
+    <string name="live_attention">公告</string>
+
+    <string name="profile_title">个人资料</string>
+
+    <string name="live_type_normal_title">CDN直播</string>
+
+    <string name="live_dialog_quit_title">结束直播？</string>
+    <string name="live_dialog_quit_btn_title">结束</string>
+    <string name="anchor_end_live_stream_tip">你的直播已结束</string>
+
+    <string name="timeout_all">全局禁言</string>
+    <string name="attention_timeout_all">房主禁言了频道</string>
+    <string name="attention_remove_timeout_all">禁言已被解除</string>
+
+    <string name="setting_title">设置</string>
+    <string name="setting_about_title">关于</string>
+    <string name="setting_edit_profile">编辑个人资料</string>
+    <string name="setting_change_avatar">点击更改头像</string>
+    <string name="setting_username_title">用户名</string>
+    <string name="setting_gender_title">性别</string>
+    <string name="setting_birthday_title">生日</string>
+    <string name="setting_unknown">未知</string>
+
+    <string name="about_sdk_version">SDK版本</string>
+    <string name="about_lib_version">UI Library版本</string>
+    <string name="about_policy">法规与政策</string>
+    <string name="about_more">更多</string>
+    <string name="about_net_addr">Easemob.com</string>
+    <string name="about_logout_title">是否退出？</string>
+
+    <string name="live_msg_member_add">加入直播间</string>
+
+    <string name="room_manager_remove_from_allowed_list">移出白名单</string>
+    <string name="room_manager_move_to_allowed_list">移入白名单</string>
+    <string name="room_manager_remove_as_moderator">移除管理员</string>
+    <string name="room_manager_assign_as_moderator">设置为管理员</string>
+    <string name="room_manager_timeout">禁言</string>
+    <string name="room_manager_remove_timeout">解除禁言</string>
+    <string name="room_manager_ban">拉黑</string>
+    <string name="room_manager_unban">解除拉黑</string>
+    <string name="room_manager_timeout_attention_tip">%1$s Anthony 已被禁言 %2$s.</string>
+    <string name="room_manager_ban_tip">是否拉黑 %1$s?</string>
+    <string name="room_manager_ban_attention_tip">%1$s 已被拉黑</string>
+
+    <string name="live_in_timed_out_list">你已被禁言</string>
+    <string name="live_remove_timed_out_list">你已被解除禁言</string>
+    <string name="live_in_admin_list">你已被设置为管理员</string>
+    <string name="live_out_admin_list">你已不再是管理员</string>
+    <string name="live_in_white_list">你已被移入白名单</string>
+    <string name="live_out_white_list">你已被移出白名单</string>
+    <string name="live_anchor_add_white">移入白名单</string>
+    <string name="live_anchor_remove_from_white">移出白名单</string>
+    <string name="live_anchor_timeout_all_attention_tip">房主禁言了频道</string>
+    <string name="live_anchor_remove_timeout_all_attention_tip">已解除禁言</string>
+
+    <string name="live_member_all_viewers">全部观众</string>
+
+    <string name="live_gift_name">礼物</string>
+    <string name="live_gift_history">打赏记录</string>
+    <string name="live_gift_total">总计 %1$d</string>
+    <string name="live_gift_send_total">总计 %1$d</string>
+    <string name="live_gift_gift_info">X %1$d</string>
+    <string name="live_gift_sender_info">%1$s 赠送</string>
+    <string name="gift_send">赠送</string>
+    <string name="gift_send_total_values">小计：%1$s </string>
+    <string name="gift_send_confirm">是否发送</string>
+    <string name="gift_send_info">%1$d X %2$s</string>
+    <string name="gift_input_num_title">输入数量</string>
+    <string name="gift_show_send">赠送 %1$s</string>
+
+    <string name="live_stream_end_tip">直播已结束</string>
+    <string name="share">分享</string>
+
+    <string name="timeout_60s">60 秒</string>
+    <string name="timeout_5min">5 分钟</string>
+    <string name="timeout_10min">10 分钟</string>
+    <string name="timeout_1h">1 小时</string>
+    <string name="timeout_1d">1 天</string>
+    <string name="timeout_forever">永久</string>
+
+    <string name="dialog_list_timeout_title">%1$s\n将被禁言</string>
+    <string name="dialog_timeout_content">禁言 %1$s?</string>
+
+    <string name="message_list_input_tip_anchor">和你的粉丝打个招呼吧&#8230;</string>
+    <string name="message_list_input_tip_audience">打个招呼&#8230;</string>
+    <string name="message_list_input_tip_all_timeout">全部禁言</string>
+    <string name="message_list_input_tip_timeout">你已被禁言</string>
+
+    <string name="show_gift_num">x%1$s</string>
+
+    <string name="splash_name">@string/application_name</string>
+    <string name="splash_powered_info">Powered by Easemob</string>
+
+    <string name="register_phone_number">请输入您的手机号</string>
+
+    <string name="login_btn">登\u0020录</string>
+    <string name="login_agreement">请选择同意《环信服务条款》与《环信隐私协议》</string>
+    <string name="login_im">登录环信直播聊天室</string>
+    <string name="login_input_verification_code">请输入验证码</string>
+    <string name="login_get_verification_code">获取验证码</string>
+    <string name="login_phone_empty">请输入手机号</string>
+    <string name="login_code_empty">请输入验证码</string>
+    <string name="login_phone_illegal">请输入正确的手机号</string>
+    <string name="login_illegal_code">验证码错误</string>
+    <string name="login_post_code">验证码已发送</string>
+    <string name="login_get_code_again">重新获取</string>
+    <string name="login_get_code_again_time">重新获取(%1$ds)</string>
+    <string name="login_not_select_agreement">请选择服务条款和隐私协议</string>
+    <string name="login_error_send_code_later">请稍后再发</string>
+    <string name="login_error_send_code_limit">获取已达上限</string>
+    <string name="login_error_user_authentication_failed">您输入的用户名或验证码不正确</string>
+    <string name="login_again_hint">该账号已在其他设备登陆</string>
+
+    <string name="profile_take_photo">拍照</string>
+    <string name="profile_upload_photo">相册</string>
+    <string name="profile_gender_male">男</string>
+    <string name="profile_gender_female">女</string>
+    <string name="profile_gender_other">其他</string>
+    <string name="profile_gender_secret">保密</string>
+</resources>
