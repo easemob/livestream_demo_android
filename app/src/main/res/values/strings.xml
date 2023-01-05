@@ -159,4 +159,10 @@
     <string name="profile_gender_female">Female</string>
     <string name="profile_gender_other">Other</string>
     <string name="profile_gender_secret">Secret</string>
+    
+    <string name="live_role_type_all">All</string>
+    <string name="live_role_type_moderators">Moderators</string>
+    <string name="live_role_type_allowed">Allowed</string>
+    <string name="live_role_type_timeout">Timed Out</string>
+    <string name="live_role_type_banned">Banned</string>
 </resources>

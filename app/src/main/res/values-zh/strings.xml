@@ -159,4 +159,10 @@
     <string name="profile_gender_female">女</string>
     <string name="profile_gender_other">其他</string>
     <string name="profile_gender_secret">保密</string>
+
+    <string name="live_role_type_all">所有</string>
+    <string name="live_role_type_moderators">管理员</string>
+    <string name="live_role_type_allowed">白名单</string>
+    <string name="live_role_type_timeout">禁言名单</string>
+    <string name="live_role_type_banned">黑名单</string>
 </resources>

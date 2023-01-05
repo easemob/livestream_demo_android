@@ -190,11 +190,11 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment implements 
 
         mRoleTypeIndex = 0;
         mRoleTypeListData = new ArrayList<>(5);
-        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_ALL);
-        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_MODERATORS);
-        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_ALLOWED);
-        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_TIMEOUT);
-        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_BANNED);
+        mRoleTypeListData.add(mContext.getString(R.string.live_role_type_all));
+        mRoleTypeListData.add(mContext.getString(R.string.live_role_type_moderators));
+        mRoleTypeListData.add(mContext.getString(R.string.live_role_type_allowed));
+        mRoleTypeListData.add(mContext.getString(R.string.live_role_type_timeout));
+        mRoleTypeListData.add(mContext.getString(R.string.live_role_type_banned));
 
         mCurrentRoleType = mRoleTypeListData.get(0);
         mRoleTypeAdapter.setCurrentRoleType(mCurrentRoleType);
@@ -229,17 +229,17 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment implements 
         mUserListAdapter.setMuteList(mMuteListData);
 
         mUserListData.clear();
-        if (DemoConstants.ROLE_TYPE_ALL.equals(mCurrentRoleType)) {
+        if (mContext.getString(R.string.live_role_type_all).equals(mCurrentRoleType)) {
             mUserListData.add(mChatRoom.getOwner());
             mUserListData.addAll(mChatRoom.getAdminList());
             mUserListData.addAll(mChatRoom.getMemberList());
-        } else if (DemoConstants.ROLE_TYPE_MODERATORS.equals(mCurrentRoleType)) {
+        } else if (mContext.getString(R.string.live_role_type_moderators).equals(mCurrentRoleType)) {
             mUserListData.addAll(mAdminListData);
-        } else if (DemoConstants.ROLE_TYPE_ALLOWED.equals(mCurrentRoleType)) {
+        } else if (mContext.getString(R.string.live_role_type_allowed).equals(mCurrentRoleType)) {
             mUserListData.addAll(mChatRoom.getWhitelist());
-        } else if (DemoConstants.ROLE_TYPE_TIMEOUT.equals(mCurrentRoleType)) {
+        } else if (mContext.getString(R.string.live_role_type_timeout).equals(mCurrentRoleType)) {
             mUserListData.addAll(mMuteListData);
-        } else if (DemoConstants.ROLE_TYPE_BANNED.equals(mCurrentRoleType)) {
+        } else if (mContext.getString(R.string.live_role_type_banned).equals(mCurrentRoleType)) {
             mUserListData.addAll(mChatRoom.getBlacklist());
         }
         mUserListAdapter.setData(mUserListData);
