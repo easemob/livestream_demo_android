@@ -419,7 +419,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         addChatRoomChangeListener();
         onMessageListInit();
         onWatchedMemberListInit();
-        mContext.showToast("live stream begin");
         if (cameraListener != null) {
             cameraListener.onStartCamera();
         }
