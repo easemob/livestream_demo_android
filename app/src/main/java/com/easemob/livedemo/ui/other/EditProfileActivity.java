@@ -452,7 +452,7 @@ public class EditProfileActivity extends BaseLiveActivity {
             if (null == date) {
                 date = new Date();
             }
-            if(!TextUtils.equals(LanguageUtils.getDefaultLanguage(mContext), new Locale("zh").getLanguage())) {
+            if(!LanguageUtils.isZhLanguage(mContext)) {
                 format = new SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH);
             }
             mBinding.itemBirthday.setContent(format.format(date));

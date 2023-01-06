@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
@@ -29,6 +30,7 @@ import com.jakewharton.rxbinding4.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import com.easemob.livedemo.DemoConstants;
@@ -178,12 +180,13 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
         if (null == mChatRoom) {
             return;
         }
+        boolean isZh = LanguageUtils.isZhLanguage(mContext);
         if (username.equals(mChatRoom.getOwner())) {
             roleType.setVisibility(View.VISIBLE);
-            roleType.setImageResource(R.drawable.live_streamer);
+            roleType.setImageResource(isZh ? R.drawable.live_streamer_zh : R.drawable.live_streamer);
         } else if (mChatRoom.getAdminList().contains(username)) {
             roleType.setVisibility(View.VISIBLE);
-            roleType.setImageResource(R.drawable.live_moderator);
+            roleType.setImageResource(isZh ? R.drawable.live_moderator_zh : R.drawable.live_moderator);
         } else {
             roleType.setVisibility(View.GONE);
         }

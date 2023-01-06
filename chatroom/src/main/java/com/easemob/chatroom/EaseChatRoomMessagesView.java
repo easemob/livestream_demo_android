@@ -50,6 +50,7 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -671,13 +672,13 @@ public class EaseChatRoomMessagesView extends RelativeLayout implements EMMessag
 
             EaseUserUtils.setUserNick(id, txtMessageNickname);
             EaseUserUtils.setUserAvatar(context, id, avatar);
-
+            boolean isZh = TextUtils.equals(context.getResources().getConfiguration().locale.getLanguage(), new Locale("zh").getLanguage());
             if (mChatRoom.getOwner().equals(id)) {
                 txtMessageNicknameRole.setVisibility(View.VISIBLE);
-                txtMessageNicknameRole.setImageResource(R.drawable.live_streamer);
+                txtMessageNicknameRole.setImageResource(isZh ? R.drawable.live_streamer_zh : R.drawable.live_streamer);
             } else if (mChatRoom.getAdminList().contains(id)) {
                 txtMessageNicknameRole.setVisibility(View.VISIBLE);
-                txtMessageNicknameRole.setImageResource(R.drawable.live_moderator);
+                txtMessageNicknameRole.setImageResource(isZh ? R.drawable.live_moderator_zh : R.drawable.live_moderator);
             } else {
                 txtMessageNicknameRole.setVisibility(View.GONE);
             }

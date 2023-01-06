@@ -109,6 +109,14 @@
     <string name="gift_send_info">%1$d X %2$s</string>
     <string name="gift_input_num_title">输入数量</string>
     <string name="gift_show_send">赠送 %1$s</string>
+    <string name="live_gift_pink_heart">甜心</string>
+    <string name="live_gift_plastic_flower">鲜花</string>
+    <string name="live_gift_the_push_box">水晶盒子</string>
+    <string name="live_gift_big_ace">超A</string>
+    <string name="live_gift_star">星星</string>
+    <string name="live_gift_lollipop">棒棒糖</string>
+    <string name="live_gift_diamond">钻石</string>
+    <string name="live_gift_crown">皇冠</string>
 
     <string name="live_stream_end_tip">直播已结束</string>
     <string name="share">分享</string>

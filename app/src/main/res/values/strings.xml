@@ -109,6 +109,14 @@
     <string name="gift_send_info">%1$d X %2$s</string>
     <string name="gift_input_num_title">Input number</string>
     <string name="gift_show_send">sent %1$s</string>
+    <string name="live_gift_pink_heart">PinkHeart</string>
+    <string name="live_gift_plastic_flower">PlasticFlower</string>
+    <string name="live_gift_the_push_box">ThePushBox</string>
+    <string name="live_gift_big_ace">BigAce</string>
+    <string name="live_gift_star">Star</string>
+    <string name="live_gift_lollipop">Lollipop</string>
+    <string name="live_gift_diamond">Diamond</string>
+    <string name="live_gift_crown">Crown</string>
 
     <string name="live_stream_end_tip">The Live Stream has ended</string>
     <string name="share">share</string>

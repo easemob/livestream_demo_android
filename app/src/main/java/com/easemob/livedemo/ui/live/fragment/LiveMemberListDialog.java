@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
@@ -237,12 +238,12 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
             public void setData(String item, int position) {
                 EaseUserUtils.setUserNick(item, tvUserName);
                 EaseUserUtils.setUserAvatar(context, item, ivUserAvatar);
-
+                boolean isZh = LanguageUtils.isZhLanguage(context);
                 if (!TextUtils.isEmpty(owner) && owner.contains(item)) {
-                    ivRoleType.setImageResource(R.drawable.live_streamer);
+                    ivRoleType.setImageResource(isZh ? R.drawable.live_streamer_zh : R.drawable.live_streamer);
                     ivRoleType.setVisibility(View.VISIBLE);
                 } else if (null != adminList && adminList.contains(item)) {
-                    ivRoleType.setImageResource(R.drawable.live_moderator);
+                    ivRoleType.setImageResource(isZh ? R.drawable.live_moderator_zh : R.drawable.live_moderator);
                     ivRoleType.setVisibility(View.VISIBLE);
                 } else {
                     ivRoleType.setVisibility(View.GONE);

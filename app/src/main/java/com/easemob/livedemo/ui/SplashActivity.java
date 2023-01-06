@@ -45,7 +45,7 @@ public class SplashActivity extends BaseLiveActivity {
     @Override
     protected void initView() {
         super.initView();
-        if(TextUtils.equals(LanguageUtils.getDefaultLanguage(mContext), new Locale("zh").getLanguage())) {
+        if(LanguageUtils.isZhLanguage(mContext)) {
             mBinding.tvName.setLetterSpacing(0.5f);
         }
     }

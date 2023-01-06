@@ -46,4 +46,13 @@ public class LanguageUtils {
     public static String getDefaultLanguage(Context context) {
         return context.getResources().getConfiguration().locale.getLanguage();
     }
+
+    /**
+     * 判断当前是否是汉语环境
+     * @param context
+     * @return
+     */
+    public static boolean isZhLanguage(Context context) {
+        return TextUtils.equals(getDefaultLanguage(context), new Locale("zh").getLanguage());
+    }
 }
