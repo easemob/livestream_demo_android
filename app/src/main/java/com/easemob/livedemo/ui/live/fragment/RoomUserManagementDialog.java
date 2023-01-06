@@ -20,7 +20,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.easemob.livedemo.ui.live.ChatRoomPresenter;
 import com.easemob.livedemo.utils.LanguageUtils;
+import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
@@ -45,14 +47,14 @@ import com.easemob.livedemo.ui.live.viewmodels.UserManageViewModel;
 import com.easemob.livedemo.ui.widget.CustomConstraintLayout;
 import com.easemob.livedemo.utils.StatusBarCompat;
 
-public class RoomUserManagementDialog extends BaseLiveDialogFragment implements CustomConstraintLayout.OnGestureChangeListener {
+public class RoomUserManagementDialog extends BaseLiveDialogFragment implements EMChatRoomChangeListener {
     private BaseActivity mContext;
     private String chatroomId;
     private UserManageViewModel viewModel;
     protected EMChatRoomManager mChatRoomManager;
     protected EMChatRoom mChatRoom;
 
-    private CustomConstraintLayout mLayout;
+    private ConstraintLayout mLayout;
     private RecyclerView mRoleTypeView;
     private RecyclerView mUserListView;
     private RoleTypeAdapter mRoleTypeAdapter;
@@ -105,7 +107,6 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment implements 
         super.initView(savedInstanceState);
 
         mLayout = findViewById(R.id.layout);
-        mLayout.setOnGestureChangeListener(this);
 
         mRoleTypeView = findViewById(R.id.rv_role_type_list);
         mUserListView = findViewById(R.id.rv_user_list);
@@ -146,6 +147,12 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment implements 
         mRoleTypeAdapter.setCurrentRoleType(mCurrentRoleType);
         updateUserList();
         mRoleTypeView.smoothScrollToPosition(mRoleTypeIndex);
+    }
+
+    @Override
+    public void initListener() {
+        super.initListener();
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(this);
     }
 
     @Override
@@ -246,21 +253,103 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment implements 
         mUserListAdapter.setData(mUserListData);
     }
 
+    private void updateUserListInMain() {
+        mLayout.postDelayed(this::updateUserList, 1000);
+    }
+
     @Override
-    public void scrollLeft() {
-        if (mRoleTypeIndex >= 0 && mRoleTypeIndex < mRoleTypeListData.size() - 1) {
-            mRoleTypeIndex++;
-            updateRoteType();
+    public void onChatRoomDestroyed(String roomId, String roomName) {
+        if(TextUtils.equals(chatroomId, roomId)) {
+            dismiss();
         }
     }
 
     @Override
-    public void scrollRight() {
-        if (mRoleTypeIndex > 0 && mRoleTypeIndex <= mRoleTypeListData.size() - 1) {
-            mRoleTypeIndex--;
-            updateRoteType();
+    public void onMemberJoined(String roomId, String participant) {
+        if(TextUtils.equals(chatroomId, roomId)) {
+            updateUserListInMain();
         }
+    }
 
+    @Override
+    public void onMemberExited(String roomId, String roomName, String participant) {
+        if(TextUtils.equals(chatroomId, roomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+        if(TextUtils.equals(chatroomId, roomId)) {
+            dismiss();
+        }
+    }
+
+    @Override
+    public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onAdminAdded(String chatRoomId, String admin) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onAdminRemoved(String chatRoomId, String admin) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+        if(TextUtils.equals(chatroomId, chatRoomId)) {
+            updateUserListInMain();
+        }
+    }
+
+    @Override
+    public void onAnnouncementChanged(String chatRoomId, String announcement) {
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EMClient.getInstance().chatroomManager().removeChatRoomListener(this);
     }
 
     private static class RoleTypeAdapter extends EaseBaseRecyclerViewAdapter<String> {
