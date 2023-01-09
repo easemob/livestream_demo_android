@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.easemob.livedemo.ui.live.ChatRoomPresenter;
 import com.easemob.livedemo.ui.live.adapter.MemberAvatarAdapter;
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -543,7 +544,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         messageView.setMessageViewListener(new EaseChatRoomMessagesView.MessageViewListener() {
             @Override
             public void onSendTextMessageError(int code, String msg) {
-                mContext.showToast("send text message fail:" + msg);
+                if(LanguageUtils.isZhLanguage(mContext)) {
+                    msg = "";
+                }
+                showToast(getString(R.string.message_send_text_failed, msg));
             }
 
             @Override

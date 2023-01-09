@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MediatorLiveData;
 
+import com.easemob.livedemo.common.livedata.SingleSourceLiveData;
 import com.hyphenate.chat.EMChatRoom;
 
 import java.util.List;
@@ -20,6 +21,14 @@ public class UserManageViewModel extends AndroidViewModel {
     private final MediatorLiveData<Resource<List<String>>> muteObservable;
     private final MediatorLiveData<Resource<EMChatRoom>> chatRoomObservable;
     private final MediatorLiveData<Resource<Boolean>> checkInWhiteObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> addAdminObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> removeAdminObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> muteSetObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> unmuteSetObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> addWhiteObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> removeWhiteObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> banSetObservable;
+    private final SingleSourceLiveData<Resource<EMChatRoom>> unbanSetObservable;
 
     public UserManageViewModel(@NonNull Application application) {
         super(application);
@@ -29,6 +38,14 @@ public class UserManageViewModel extends AndroidViewModel {
         chatRoomObservable = new MediatorLiveData<>();
         muteObservable = new MediatorLiveData<>();
         checkInWhiteObservable = new MediatorLiveData<>();
+        addAdminObservable = new SingleSourceLiveData<>();
+        removeAdminObservable = new SingleSourceLiveData<>();
+        muteSetObservable = new SingleSourceLiveData<>();
+        unmuteSetObservable = new SingleSourceLiveData<>();
+        addWhiteObservable = new SingleSourceLiveData<>();
+        removeWhiteObservable = new SingleSourceLiveData<>();
+        banSetObservable = new SingleSourceLiveData<>();
+        unbanSetObservable = new SingleSourceLiveData<>();
     }
 
     public MediatorLiveData<Resource<List<String>>> getObservable() {
@@ -59,14 +76,44 @@ public class UserManageViewModel extends AndroidViewModel {
         return chatRoomObservable;
     }
 
+    public SingleSourceLiveData<Resource<EMChatRoom>> getUnbanSetObservable() {
+        return unbanSetObservable;
+    }
+
+    public SingleSourceLiveData<Resource<EMChatRoom>> getBanSetObservable() {
+        return banSetObservable;
+    }
+
+    public SingleSourceLiveData<Resource<EMChatRoom>> getRemoveWhiteObservable() {
+        return removeWhiteObservable;
+    }
+
+    public SingleSourceLiveData<Resource<EMChatRoom>> getAddWhiteObservable() {
+        return addWhiteObservable;
+    }
+
+    public SingleSourceLiveData<Resource<EMChatRoom>> getUnmuteSetObservable() {
+        return unmuteSetObservable;
+    }
+
+    public SingleSourceLiveData<Resource<EMChatRoom>> getMuteSetObservable() {
+        return muteSetObservable;
+    }
+
+    public SingleSourceLiveData<Resource<EMChatRoom>> getRemoveAdminObservable() {
+        return removeAdminObservable;
+    }
+
+    public SingleSourceLiveData<Resource<EMChatRoom>> getAddAdminObservable() {
+        return addAdminObservable;
+    }
+
     public void addToChatRoomWhiteList(String chatRoomId, List<String> members) {
-        chatRoomObservable.addSource(repository.addToChatRoomWhiteList(chatRoomId, members),
-                response -> chatRoomObservable.postValue(response));
+        addWhiteObservable.setSource(repository.addToChatRoomWhiteList(chatRoomId, members));
     }
 
     public void removeFromChatRoomWhiteList(String chatRoomId, List<String> members) {
-        chatRoomObservable.addSource(repository.removeFromChatRoomWhiteList(chatRoomId, members),
-                response -> chatRoomObservable.postValue(response));
+        removeWhiteObservable.setSource(repository.removeFromChatRoomWhiteList(chatRoomId, members));
     }
 
     public MediatorLiveData<Resource<Boolean>> getCheckInWhiteObservable() {
@@ -79,13 +126,11 @@ public class UserManageViewModel extends AndroidViewModel {
     }
 
     public void muteChatRoomMembers(String chatRoomId, List<String> members, long duration) {
-        chatRoomObservable.addSource(repository.MuteChatRoomMembers(chatRoomId, members, duration),
-                response -> chatRoomObservable.postValue(response));
+        muteSetObservable.setSource(repository.MuteChatRoomMembers(chatRoomId, members, duration));
     }
 
     public void unMuteChatRoomMembers(String chatRoomId, List<String> members) {
-        chatRoomObservable.addSource(repository.unMuteChatRoomMembers(chatRoomId, members),
-                response -> chatRoomObservable.postValue(response));
+        unmuteSetObservable.setSource(repository.unMuteChatRoomMembers(chatRoomId, members));
     }
 
 
@@ -100,23 +145,19 @@ public class UserManageViewModel extends AndroidViewModel {
     }
 
     public void banChatRoomMembers(String chatRoomId, List<String> members) {
-        chatRoomObservable.addSource(repository.banChatRoomMembers(chatRoomId, members),
-                response -> chatRoomObservable.postValue(response));
+        banSetObservable.setSource(repository.banChatRoomMembers(chatRoomId, members));
     }
 
     public void unbanChatRoomMembers(String chatRoomId, List<String> members) {
-        chatRoomObservable.addSource(repository.unbanChatRoomMembers(chatRoomId, members),
-                response -> chatRoomObservable.postValue(response));
+        unbanSetObservable.setSource(repository.unbanChatRoomMembers(chatRoomId, members));
     }
 
     public void addChatRoomAdmin(String chatRoomId, String member) {
-        chatRoomObservable.addSource(repository.addChatRoomAdmin(chatRoomId, member),
-                response -> chatRoomObservable.postValue(response));
+        addAdminObservable.setSource(repository.addChatRoomAdmin(chatRoomId, member));
     }
 
     public void removeChatRoomAdmin(String chatRoomId, String member) {
-        chatRoomObservable.addSource(repository.removeChatRoomAdmin(chatRoomId, member),
-                response -> chatRoomObservable.postValue(response));
+        removeAdminObservable.setSource(repository.removeChatRoomAdmin(chatRoomId, member));
     }
 
     public void fetchChatRoom(String chatRoomId) {

@@ -23,6 +23,7 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -30,7 +31,6 @@ import com.jakewharton.rxbinding4.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import com.easemob.livedemo.DemoConstants;
@@ -355,15 +355,87 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
             parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
                 @Override
                 public void onSuccess(EMChatRoom data) {
-                    if (null != RoomUserDetailDialog.this.getActivity()) {
-                        RoomUserDetailDialog.this.getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mChatRoom = data;
-                                updateView(false);
-                            }
-                        });
-                    }
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getAddWhiteObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_set_success));
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getRemoveWhiteObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_remove_success));
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getUnbanSetObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_unblock_success));
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getBanSetObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_block_success));
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getUnmuteSetObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_unmute_success));
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getMuteSetObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_mute_success));
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getAddAdminObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_set_success));
+                    updateChatRoomView(data);
+                }
+            });
+        });
+
+        viewModel.getRemoveAdminObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(EMChatRoom data) {
+                    showToast(getString(R.string.room_manager_result_remove_success));
+                    updateChatRoomView(data);
                 }
             });
         });
@@ -381,6 +453,14 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
         });
     }
 
+    private void updateChatRoomView(EMChatRoom room) {
+        if(!mContext.isFinishing()) {
+            EaseThreadManager.getInstance().runOnMainThread(()-> {
+                mChatRoom = room;
+                updateView(false);
+            });
+        }
+    }
 
     @Override
     public void initListener() {
@@ -392,7 +472,6 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) throws Throwable {
-                        showToast("move to allowed list");
                         viewModel.addToChatRoomWhiteList(roomId, list);
                     }
                 });
@@ -401,7 +480,6 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) throws Throwable {
-                        showToast("remove from allowed list");
                         viewModel.removeFromChatRoomWhiteList(roomId, list);
                     }
                 });
@@ -411,7 +489,6 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) throws Throwable {
-                        showToast("assign as moderator");
                         viewModel.addChatRoomAdmin(roomId, username);
                         viewModel.fetchChatRoom(roomId);
                     }
@@ -421,7 +498,6 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) throws Throwable {
-                        showToast("remove as moderator");
                         viewModel.removeChatRoomAdmin(roomId, username);
                     }
                 });
@@ -477,7 +553,6 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) throws Throwable {
-                        showToast("remove timeout");
                         viewModel.unMuteChatRoomMembers(roomId, list);
                     }
                 });
@@ -514,7 +589,6 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) throws Throwable {
-                        showToast("unban");
                         viewModel.unbanChatRoomMembers(roomId, list);
                     }
                 });

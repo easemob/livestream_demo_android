@@ -51,6 +51,7 @@ import com.easemob.livedemo.ui.base.BaseLiveActivity;
 import com.easemob.livedemo.ui.cdn.CdnLiveHostActivity;
 import com.easemob.livedemo.ui.live.fragment.ListDialogFragment;
 import com.easemob.livedemo.ui.live.viewmodels.CreateLiveViewModel;
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.easemob.livedemo.utils.Utils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -263,6 +264,7 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
                     if (DemoHelper.isCdnLiveType(data.getVideo_type())) {
                         stopCamera();
                         CdnLiveHostActivity.actionStart(mContext, data);
+                        showToast(getString(R.string.create_live_success));
                     }
                     finish();
                 }
@@ -294,7 +296,10 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
-                    showToast("go live fail: " + message);
+                    if(LanguageUtils.isZhLanguage(mContext)) {
+                        message = "";
+                    }
+                    showToast(getString(R.string.create_live_failed, message));
                 }
             });
         });

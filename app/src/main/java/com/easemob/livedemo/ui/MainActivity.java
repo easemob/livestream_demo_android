@@ -103,7 +103,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
 
             @Override
             public void onDenied(String permission) {
-                Toast.makeText(MainActivity.this, "Permission " + permission + " has been denied", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Permission " + permission + " has been denied", Toast.LENGTH_SHORT).show();
             }
         });
     }

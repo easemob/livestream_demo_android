@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.easemob.livedemo.common.callback.OnResourceParseCallback;
 import com.easemob.livedemo.common.repository.Resource;
+import com.easemob.livedemo.utils.Utils;
 
 public class BaseFragment extends Fragment {
     public BaseActivity mContext;
@@ -63,7 +64,7 @@ public class BaseFragment extends Fragment {
     }
 
     protected void showToast(String message) {
-        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        Utils.showLongToast(mContext, message);
     }
 
     /**

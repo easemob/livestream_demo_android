@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.easemob.livedemo.utils.LanguageUtils;
 import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -477,7 +478,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         joinChatRoom();
 
                     } else {
-                        mContext.showLongToast("Live stream End");
+                        showToast(getString(R.string.live_audience_room_finish));
                         if (liveListener != null) {
                             liveListener.onLiveClosed();
                         }
@@ -508,6 +509,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                                 ThreadManager.getInstance().runOnMainThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        showToast(getString(R.string.live_audience_join_success));
                                         addChatRoomChangeListener();
                                         updateUserState();
                                         onMessageListInit();
@@ -529,13 +531,16 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                     public void onError(int i, String s) {
                         EMLog.d(TAG, "audience join chat room fail message: " + s);
                         if (i == EMError.GROUP_PERMISSION_DENIED || i == EMError.CHATROOM_PERMISSION_DENIED) {
-                            mContext.showLongToast("You do not have permission to join this room");
+                            showToast(getString(R.string.room_manager_result_banned));
                             mContext.finish();
                         } else if (i == EMError.CHATROOM_MEMBERS_FULL) {
-                            mContext.showLongToast("Room is full");
+                            showToast(getString(R.string.live_audience_room_full));
                             mContext.finish();
                         } else {
-                            mContext.showLongToast("Failed to join chat room: " + s);
+                            if(LanguageUtils.isZhLanguage(mContext)) {
+                                s = "";
+                            }
+                            showToast(getString(R.string.live_audience_join_fail, s));
                         }
                     }
                 });

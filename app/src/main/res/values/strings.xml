@@ -39,6 +39,8 @@
     <string name="create_live_change_cover">Change Cover</string>
     <string name="create_live_change_avatar">Change Avatar</string>
     <string name="create_live_room_check_info">Please fill in completely</string>
+    <string name="create_live_success">Successfully Created</string>
+    <string name="create_live_failed">Failed to crate room: %1$s</string>
 
     <string name="live_attention">attention</string>
 
@@ -83,6 +85,14 @@
     <string name="room_manager_timeout_attention_tip">%1$s Anthony has been timed out for %2$s.</string>
     <string name="room_manager_ban_tip">Want to ban %1$s?</string>
     <string name="room_manager_ban_attention_tip">%1$s has been banned.</string>
+    <string name="room_manager_result_set_success">Successfully Set</string>
+    <string name="room_manager_result_remove_success">Successfully Removed</string>
+    <string name="room_manager_result_mute_success">Successfully Muted</string>
+    <string name="room_manager_result_unmute_success">Successfully Unmuted</string>
+    <string name="room_manager_result_block_success">Successfully Blocked</string>
+    <string name="room_manager_result_unblock_success">Successfully Unblocked</string>
+    <string name="room_manager_result_blocked">You have been blocked</string>
+    <string name="room_manager_result_banned">You are banned from this room</string>
 
     <string name="live_in_timed_out_list">You have been timed out</string>
     <string name="live_remove_timed_out_list">You have been removed timed out</string>
@@ -117,6 +127,7 @@
     <string name="live_gift_lollipop">Lollipop</string>
     <string name="live_gift_diamond">Diamond</string>
     <string name="live_gift_crown">Crown</string>
+    <string name="live_gift_miss_number">Missing gift quantity</string>
 
     <string name="live_stream_end_tip">The Live Stream has ended</string>
     <string name="share">share</string>
@@ -135,6 +146,9 @@
     <string name="message_list_input_tip_audience">Say Hi&#8230;</string>
     <string name="message_list_input_tip_all_timeout">All timed out</string>
     <string name="message_list_input_tip_timeout">You have been timed out</string>
+
+    <string name="message_send_text_failed">Failed to send text message: %1$s</string>
+    <string name="message_send_gift_failed">Failed to send gift: %1$s</string>
 
     <string name="show_gift_num">x%1$s</string>
 
@@ -173,4 +187,11 @@
     <string name="live_role_type_allowed">Allowed</string>
     <string name="live_role_type_timeout">Timed Out</string>
     <string name="live_role_type_banned">Banned</string>
+
+    <string name="live_audience_join_success">Successfully Joined</string>
+    <string name="live_audience_room_finish">Live stream ended</string>
+    <string name="live_audience_room_full">The room is full</string>
+    <string name="live_audience_join_fail">Failed to join chat room: %1$s</string>
+
+    <string name="permission_deny_hint">Unauthorized</string>
 </resources>

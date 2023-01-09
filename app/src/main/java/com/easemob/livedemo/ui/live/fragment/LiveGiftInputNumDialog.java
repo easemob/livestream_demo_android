@@ -7,10 +7,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.ui.base.DemoDialogFragment;
+import com.easemob.livedemo.utils.Utils;
 
 public class LiveGiftInputNumDialog extends DemoDialogFragment {
     private EditText etInputNum;
@@ -61,7 +61,7 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
         //super.onConfirmClick(v);
         String num = etInputNum.getText().toString().trim();
         if (TextUtils.isEmpty(num)) {
-            Toast.makeText(mContext, "input number", Toast.LENGTH_SHORT).show();
+            Utils.showLongToast(mContext, getString(R.string.live_gift_miss_number));
             return;
         }
         if (this.listener != null) {

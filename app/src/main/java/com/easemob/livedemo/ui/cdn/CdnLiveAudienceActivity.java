@@ -129,7 +129,6 @@ public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAud
         if (presenter != null) {
             presenter.onLiveClosed();
         }
-        showLongToast("Live stream end!");
         finish();
     }
 

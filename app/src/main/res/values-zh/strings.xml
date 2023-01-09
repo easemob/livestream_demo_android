@@ -39,6 +39,8 @@
     <string name="create_live_change_cover">更换封面</string>
     <string name="create_live_change_avatar">更改头像</string>
     <string name="create_live_room_check_info">请填写完整</string>
+    <string name="create_live_success">房间创建成功</string>
+    <string name="create_live_failed">创建房间失败%1$s</string>
 
     <string name="live_attention">公告</string>
 
@@ -83,6 +85,14 @@
     <string name="room_manager_timeout_attention_tip">%1$s Anthony 已被禁言 %2$s.</string>
     <string name="room_manager_ban_tip">是否拉黑 %1$s?</string>
     <string name="room_manager_ban_attention_tip">%1$s 已被拉黑</string>
+    <string name="room_manager_result_set_success">设置成功</string>
+    <string name="room_manager_result_remove_success">移除成功</string>
+    <string name="room_manager_result_mute_success">禁言成功</string>
+    <string name="room_manager_result_unmute_success">解禁成功</string>
+    <string name="room_manager_result_block_success">拉黑成功</string>
+    <string name="room_manager_result_unblock_success">解除成功</string>
+    <string name="room_manager_result_blocked">你已被主播拉黑</string>
+    <string name="room_manager_result_banned">你被禁止加入该房间</string>
 
     <string name="live_in_timed_out_list">你已被禁言</string>
     <string name="live_remove_timed_out_list">你已被解除禁言</string>
@@ -117,6 +127,7 @@
     <string name="live_gift_lollipop">棒棒糖</string>
     <string name="live_gift_diamond">钻石</string>
     <string name="live_gift_crown">皇冠</string>
+    <string name="live_gift_miss_number">缺少礼物数量</string>
 
     <string name="live_stream_end_tip">直播已结束</string>
     <string name="share">分享</string>
@@ -135,6 +146,9 @@
     <string name="message_list_input_tip_audience">打个招呼&#8230;</string>
     <string name="message_list_input_tip_all_timeout">全部禁言</string>
     <string name="message_list_input_tip_timeout">你已被禁言</string>
+
+    <string name="message_send_text_failed">发送文本消息失败%1$s</string>
+    <string name="message_send_gift_failed">发送礼物失败%1$s</string>
 
     <string name="show_gift_num">x%1$s</string>
 
@@ -173,4 +187,11 @@
     <string name="live_role_type_allowed">白名单</string>
     <string name="live_role_type_timeout">禁言名单</string>
     <string name="live_role_type_banned">黑名单</string>
+
+    <string name="live_audience_join_success">加入成功</string>
+    <string name="live_audience_room_finish">直播已结束</string>
+    <string name="live_audience_room_full">房间已满员</string>
+    <string name="live_audience_join_fail">加入房间失败%1$s</string>
+
+    <string name="permission_deny_hint">用户未授权</string>
 </resources>
