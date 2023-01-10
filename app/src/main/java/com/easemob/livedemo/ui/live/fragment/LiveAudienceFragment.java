@@ -129,8 +129,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                     if (liveRoom != null
                             && !TextUtils.isEmpty(liveRoom.getVideo_type())
                             && !DemoHelper.isVod(liveRoom.getVideo_type())) {
-                        liveStreamEndTip.setTypeface(Utils.getRobotoRegularTypeface(mContext));
-                        liveStreamEndTip.setVisibility(View.VISIBLE);
 
                         liveReceiveGift.setEnabled(false);
                         liveReceiveGift.setImageResource(R.drawable.live_gift_disable);

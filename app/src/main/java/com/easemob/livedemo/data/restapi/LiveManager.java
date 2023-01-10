@@ -96,7 +96,7 @@ public class LiveManager {
                 throw new LiveException(response.code(), response.errorBody().string());
             }
             return response;
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new LiveException(e.getMessage());
         }
     }

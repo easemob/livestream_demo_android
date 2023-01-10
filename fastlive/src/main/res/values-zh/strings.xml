@@ -2,5 +2,5 @@
 <resources>
     <string name="fast_live_host_fail">Network connection failed, do you want to stop streaming?</string>
     <string name="fast_live_host_local_video_fail">Local video error, do you want to try again?</string>
-    <string name="live_stream_end_tip">The Live Stream has ended</string>
+    <string name="live_stream_end_tip">直播已结束</string>
 </resources>

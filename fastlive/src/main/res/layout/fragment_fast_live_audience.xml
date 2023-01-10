@@ -44,4 +44,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/live_stream_end_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/live_stream_end_tip"
+        android:textColor="#BDBDBD"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
+
 </RelativeLayout>

@@ -15,6 +15,7 @@ import com.easemob.livedemo.ui.fast.FastLiveAudienceActivity;
 import com.easemob.livedemo.ui.live.LiveBaseActivity;
 import com.easemob.livedemo.ui.live.fragment.LiveAnchorFragment;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.util.EMLog;
 
 import com.easemob.live.FastLiveHelper;
@@ -133,9 +134,11 @@ public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorF
 
     @Override
     public void onConfirmClick(View view, Object bean) {
-        if (fastFragment != null) {
-            fastFragment.onLeaveChannel();
-        }
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
+            if (fastFragment != null) {
+                fastFragment.onLeaveChannel();
+            }
+        });
     }
 }
 

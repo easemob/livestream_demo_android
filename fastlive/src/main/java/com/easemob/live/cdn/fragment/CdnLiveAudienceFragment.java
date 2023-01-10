@@ -7,6 +7,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
     private View loading;
     private ImageView bluePoint;
     private ImageView redPoint;
+    private TextView liveStreamEndTip;
     private final static int MESSAGE_UPDATE_LOADING_STATE = 1;
     private final static int LOADING_UPDATE_INTERVAL_TIME = 250;
     private boolean loadingStateBluePointSmall = true;
@@ -79,6 +81,7 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
         loading = findViewById(R.id.ll_stream_loading);
         bluePoint = findViewById(R.id.blue_point);
         redPoint = findViewById(R.id.red_point);
+        liveStreamEndTip = findViewById(R.id.live_stream_end_tip);
         role = Constants.CLIENT_ROLE_AUDIENCE;
     }
 
@@ -134,11 +137,13 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
         if (state == Constants.REMOTE_VIDEO_STATE_STOPPED || state == Constants.REMOTE_VIDEO_STATE_FAILED) {
             if (this.presenter.isActive()) {
                 this.presenter.runOnUI(() -> {
+                    liveStreamEndTip.setVisibility(View.VISIBLE);
                     mVideoGridContainer.removeAllVideo();
                 });
             }
         } else {
             this.presenter.runOnUI(() -> {
+                liveStreamEndTip.setVisibility(View.GONE);
                 helper.setupRemoteVideo(uid, mVideoGridContainer, true);
             });
         }
