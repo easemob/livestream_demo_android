@@ -134,11 +134,9 @@ public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorF
 
     @Override
     public void onConfirmClick(View view, Object bean) {
-        EaseThreadManager.getInstance().runOnIOThread(()-> {
-            if (fastFragment != null) {
-                fastFragment.onLeaveChannel();
-            }
-        });
+        if (presenter != null) {
+            presenter.leaveChannel();
+        }
     }
 }
 

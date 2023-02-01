@@ -30,6 +30,7 @@ import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.callback.OnResourceParseCallback;
 import com.easemob.livedemo.common.utils.CustomCountDownTimer;
 import com.easemob.livedemo.common.utils.PhoneNumberUtils;
+import com.easemob.livedemo.data.model.LoginResult;
 import com.easemob.livedemo.databinding.FragmentLoginBinding;
 import com.easemob.livedemo.ui.base.BaseLiveFragment;
 import com.easemob.livedemo.ui.other.viewmodels.LoginViewModel;
@@ -87,10 +88,10 @@ public class LoginFragment extends BaseLiveFragment implements TextWatcher, View
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         mViewModel.getLoginFromAppServeObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<String>() {
+            parseResource(response, new OnResourceParseCallback<LoginResult>() {
                 @Override
-                public void onSuccess(String data) {
-                    EMClient.getInstance().loginWithToken(mUserPhone, data, new EMCallBack() {
+                public void onSuccess(LoginResult data) {
+                    EMClient.getInstance().loginWithToken(data.getUsername(), data.getToken(), new EMCallBack() {
                         @Override
                         public void onSuccess() {
                             //跳转到主页

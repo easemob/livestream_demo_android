@@ -9,11 +9,12 @@ import androidx.lifecycle.LiveData;
 import com.easemob.livedemo.common.livedata.SingleSourceLiveData;
 import com.easemob.livedemo.common.repository.ClientRepository;
 import com.easemob.livedemo.common.repository.Resource;
+import com.easemob.livedemo.data.model.LoginResult;
 
 public class LoginViewModel extends AndroidViewModel {
     private final ClientRepository repository;
     private SingleSourceLiveData<Resource<Boolean>> verificationCodeObservable;
-    private SingleSourceLiveData<Resource<String>> loginFromAppServeObservable;
+    private SingleSourceLiveData<Resource<LoginResult>> loginFromAppServeObservable;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -26,7 +27,7 @@ public class LoginViewModel extends AndroidViewModel {
         return verificationCodeObservable;
     }
 
-    public LiveData<Resource<String>> getLoginFromAppServeObservable(){
+    public LiveData<Resource<LoginResult>> getLoginFromAppServeObservable(){
         return loginFromAppServeObservable;
     }
 

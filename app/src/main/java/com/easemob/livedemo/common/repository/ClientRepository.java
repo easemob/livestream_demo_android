@@ -12,6 +12,7 @@ import com.easemob.livedemo.BuildConfig;
 import com.easemob.livedemo.R;
 import com.easemob.livedemo.common.utils.ThreadManager;
 import com.easemob.livedemo.data.model.LoginBean;
+import com.easemob.livedemo.data.model.LoginResult;
 import com.easemob.livedemo.data.model.User;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
@@ -180,13 +181,13 @@ public class ClientRepository extends BaseEMRepository {
         });
     }
 
-    public LiveData<Resource<String>> loginFromServe(String userName, String userPassword){
-        return new NetworkOnlyResource<String, String>() {
+    public LiveData<Resource<LoginResult>> loginFromServe(String userName, String userPassword){
+        return new NetworkOnlyResource<LoginResult, LoginResult>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
-                LoginFromAppServe(userName, userPassword, new ResultCallBack<String>() {
+            protected void createCall(@NonNull ResultCallBack<LiveData<LoginResult>> callBack) {
+                LoginFromAppServe(userName, userPassword, new ResultCallBack<LoginResult>() {
                     @Override
-                    public void onSuccess(String value) {
+                    public void onSuccess(LoginResult value) {
                         callBack.onSuccess(createLiveData(value));
                     }
 
@@ -199,7 +200,7 @@ public class ClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    private void LoginFromAppServe(String userName,String userPassword ,ResultCallBack<String> callBack){
+    private void LoginFromAppServe(String userName,String userPassword ,ResultCallBack<LoginResult> callBack){
         runOnIOThread(() -> {
             try {
                 Map<String, String> headers = new HashMap<>();
@@ -215,9 +216,15 @@ public class ClientRepository extends BaseEMRepository {
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
-                    JSONObject object = new JSONObject(responseInfo);
                     EMLog.d("LoginToAppServer success : ", responseInfo);
-                    callBack.onSuccess(object.getString("token"));
+                    JSONObject object = new JSONObject(responseInfo);
+                    LoginResult result = new LoginResult();
+                    String phoneNumber = object.getString("phoneNumber");
+                    result.setPhone(phoneNumber);
+                    result.setToken(object.getString("token"));
+                    result.setUsername(object.getString("chatUserName"));
+                    result.setCode(code);
+                    callBack.onSuccess(result);
                 } else {
                     if (responseInfo != null && responseInfo.length() > 0) {
                         String errorInfo = null;
