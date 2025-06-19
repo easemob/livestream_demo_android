@@ -124,63 +124,6 @@ public class ClientRepository extends BaseEMRepository {
 
     }
 
-    public LiveData<Resource<Boolean>> getVerificationCode(String phoneNumber){
-        return new NetworkOnlyResource<Boolean, Boolean>() {
-            @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getVerificationCodeFromServe(phoneNumber, new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        callBack.onSuccess(createLiveData(true));
-                    }
-
-                    @Override
-                    public void onError(int code, String error) {
-                        callBack.onError(code, error);
-                    }
-                });
-            }
-        }.asLiveData();
-    }
-
-    private void getVerificationCodeFromServe(String phoneNumber, EMCallBack callBack) {
-        runOnIOThread(() -> {
-            try {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json");
-                String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SEND_SMS_FROM_SERVER + "/" + phoneNumber + "/" ;
-                EMLog.d("getVerificationCodeFromServe url : ", url);
-                HttpResponse response = HttpClientManager.httpExecute(url, headers, null, Method_POST);
-                int code = response.code;
-                String responseInfo = response.content;
-                if (code == 200) {
-                    callBack.onSuccess();
-                } else {
-                    if (responseInfo != null && responseInfo.length() > 0) {
-                        String errorInfo = null;
-                        try {
-                            JSONObject object = new JSONObject(responseInfo);
-                            errorInfo = object.getString("errorInfo");
-                            if(errorInfo.contains("wait a moment while trying to send")) {
-                                errorInfo = getContext().getString(R.string.login_error_send_code_later);
-                            }else if(errorInfo.contains("exceed the limit of")) {
-                                errorInfo = getContext().getString(R.string.login_error_send_code_limit);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            errorInfo = responseInfo;
-                        }
-                        callBack.onError(code, errorInfo);
-                    }else {
-                        callBack.onError(code, responseInfo);
-                    }
-                }
-            } catch (Exception e) {
-                callBack.onError(EMError.NETWORK_ERROR, e.getMessage());
-            }
-        });
-    }
-
     public LiveData<Resource<LoginResult>> loginFromServe(String userName, String userPassword){
         return new NetworkOnlyResource<LoginResult, LoginResult>() {
             @Override

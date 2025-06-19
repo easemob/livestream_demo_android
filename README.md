@@ -19,10 +19,14 @@
 
 ## 集成环信 Chat SDK
 
-### 开发环境要求
+### 开发环境
 
-- Android Studio 3.6或更高版本。</br>
-- SDK targetVersion至少为26。
+- Android Studio Meerkat | 2024.3.1 Patch 2
+- SDK targetVersion 29。
+- Java Verson 11。
+- Gradle Version 6.7.1。
+
+- Demo里登录时获取验证码功能在模拟器上不支持，请使用真机体验[官网APK](https://downloadsdk.easemob.com/downloads/IMDemo/livestream_release_v1.0.1.apk)。
 
 ### 添加远程依赖
 

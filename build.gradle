@@ -2,10 +2,10 @@
 apply from: "config.gradle"
 buildscript {
     repositories {
+        maven { setUrl("https://maven.aliyun.com/repository/public") }
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
-        jcenter()
 
     }
     dependencies {
@@ -19,10 +19,10 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { setUrl("https://maven.aliyun.com/repository/public") }
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
-        jcenter()
 
         configurations.all {
             resolutionStrategy {
