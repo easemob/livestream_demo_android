@@ -40,6 +40,9 @@ android {
 
         manifestPlaceholders = [CHAT_APPKEY: properties.getProperty("CHAT_APPKEY", "******")]
 
+        //请求验证码秘钥,这里是环信公司的，开发者应该用自己的
+        buildConfigField("String", "SECRET_KEY", "\"${properties.getProperty("SECRET_KEY")}\"")
+
     }
 
     signingConfigs {

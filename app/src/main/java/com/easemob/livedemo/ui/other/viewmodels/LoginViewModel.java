@@ -32,13 +32,6 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     /**
-     * 获取短信验证码
-     */
-    public void postVerificationCode(String phoneNumber){
-        verificationCodeObservable.setSource(repository.getVerificationCode(phoneNumber));
-    }
-
-    /**
      * 通过AppServe授权登录
      * @param userName
      * @param userPassword
